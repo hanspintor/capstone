@@ -1,7 +1,9 @@
 # CAPSTONE
 
 Authors : Oduca, Pintor, Reganit
+
 Email : hpintor@gbox.adnu.edu.ph
+
 Course and Year : 4th Year BSIT
 
 ## About
