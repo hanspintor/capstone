@@ -1,6 +1,6 @@
 # CAPSTONE
 
-Authors : Oduca, Pintor, Reganit
+Authors : Anselmo Oduca, Hans Albrich Pintor, Scott Leo Reganit
 
 Email : anoduca@gbox.adnu.edu.ph hpintor@gbox.adnu.edu.ph sreganit@gbox.adnu.edu.ph
 
