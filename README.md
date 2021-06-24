@@ -2,7 +2,7 @@
 
 Authors : Oduca, Pintor, Reganit
 
-Email : hpintor@gbox.adnu.edu.ph
+Email : anoduca@gbox.adnu.edu.ph hpintor@gbox.adnu.edu.ph sreganit@gbox.adnu.edu.ph
 
 Course and Year : 4th Year BSIT
 
