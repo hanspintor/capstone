@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "785329889191",
+    "project_id": "proexpress-ba11c",
+    "storage_bucket": "proexpress-ba11c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:785329889191:android:298c2d813bf5d6dda5a082",
+        "android_client_info": {
+          "package_name": "com.example.proexpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "785329889191-7f9rio2kveiektgvdsl4l6h4ln480i9b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.proexpress",
+            "certificate_hash": "54ec448275b15e7faff295cd08e4636a5b37b943"
+          }
+        },
+        {
+          "client_id": "785329889191-0l9g022nesanddcsfnm3fogn1upm9mrd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzX78LaovME4eMf1BT2B0KVWAT2c30MQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "785329889191-0l9g022nesanddcsfnm3fogn1upm9mrd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

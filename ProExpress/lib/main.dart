@@ -43,7 +43,7 @@ class _LoadScreenState extends State<LoadScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/PROExpress-logo.png',
+              'assets/PROExpress-logo.png', 
               height: 150,
               width: 500,
             ),
