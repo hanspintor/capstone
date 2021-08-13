@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'menu_drawer.dart';
+import 'notif_drawer.dart';
 
 class DashboardCustomer extends StatefulWidget{
   @override
@@ -6,6 +8,9 @@ class DashboardCustomer extends StatefulWidget{
 }
 
 class _DashboardCustomerState extends State<DashboardCustomer> {
+  void _openEndDrawer() {
+    _scaffoldKey.currentState.openEndDrawer();
+  }
 
   Widget _alertmessage(){
     return Center(
@@ -18,7 +23,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
       ),
     );
   }
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget _buildInfo(){
     return Center(
       child: Card(
@@ -51,6 +56,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key:_scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
@@ -59,6 +65,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
               Icons.notifications_none_rounded,
             ),
               onPressed: (){
+                _openEndDrawer();
               },
               iconSize: 25,
             ),
@@ -73,73 +80,8 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
           ),
           //title: Text("PROExpress"),
         ),
-        drawer: Drawer(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    DrawerHeader(
-                      decoration: BoxDecoration(
-                      ),
-                      child: Text('User'),
-                    ),
-                    ListTile(
-                      title: const Text('Home'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Courier Bookmarks'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Delivery Status'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Search Courier'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child:RaisedButton(
-                    child: Text(
-                      'Logout', style: TextStyle(color: Colors.white, fontSize:18),
-                    ),
-                    color: Colors.black,
-                    onPressed: (){
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        drawer: MainDrawer(),
+        endDrawer: NotifDrawer(),
         body: SingleChildScrollView(
           child: Center(
             child: Column(

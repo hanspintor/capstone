@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dashboard_customer.dart';
+import 'menu_drawer.dart';
+import 'notif_drawer.dart';
 
 class DashboardLocation extends StatefulWidget{
   @override
@@ -19,11 +21,16 @@ class _DashboardLocationState extends State<DashboardLocation>{
     print (_dropoff);
   }
 
+  void _openEndDrawer() {
+    _scaffoldKey.currentState.openEndDrawer();
+  }
+
   Widget _alertmessage(){
     return null;
   }
 
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget _buildPickup(){
     return TextFormField(
@@ -58,95 +65,32 @@ class _DashboardLocationState extends State<DashboardLocation>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key:_scaffoldKey,
         appBar: AppBar(
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
-            actions: [
-              IconButton(icon: Icon(
-                Icons.notifications_none_rounded,
-              ),
-                onPressed: (){
-                },
-                iconSize: 25,
-              ),
-            ],
-            flexibleSpace: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Image.asset(
-                "assets/PROExpress-logo.png",
-                height: 120,
-                width: 120,
-              ),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
+          actions: [
+            IconButton(icon: Icon(
+              Icons.notifications_none_rounded,
             ),
-            //title: Text("PROExpress"),
+              onPressed: (){
+              _openEndDrawer();
+              },
+              iconSize: 25,
+            ),
+          ],
+          flexibleSpace: Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Image.asset(
+              "assets/PROExpress-logo.png",
+              height: 120,
+              width: 120,
+            ),
           ),
-        drawer: Drawer(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    DrawerHeader(
-                      decoration: BoxDecoration(
-                      ),
-                      child: Text('User'),
-                    ),
-                    ListTile(
-                      title: const Text('Home', style: TextStyle(color: Color(0xfffb0d0d))),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Courier Bookmarks', style: TextStyle(color: Color(0xfffb0d0d))),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Delivery Status', style: TextStyle(color: Color(0xfffb0d0d))),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Search Courier', style: TextStyle(color: Color(0xfffb0d0d))),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child:RaisedButton(
-                    child: Text(
-                      'Logout', style: TextStyle(color: Colors.white, fontSize:18),
-                    ),
-                    color: Colors.black,
-                    onPressed: (){
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
+          //title: Text("PROExpress"),
         ),
+        drawer: MainDrawer(),
+        endDrawer: NotifDrawer(),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
