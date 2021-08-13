@@ -104,7 +104,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                 child: Text(
                   'OK', style: TextStyle(color: Colors.white, fontSize:15),
                 ),
-                color: Color(0xffA82A2A),
+                color: Color(0xfffb0d0d),
                 onPressed: (){
                   Navigator.pop(context, false);
                 }
@@ -309,7 +309,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                           child: Text(
                             'Signup', style: TextStyle(color: Colors.white, fontSize:18),
                           ),
-                          color: Color(0xffA82A2A),
+                          color: Color(0xfffb0d0d),
                           onPressed: agree ? _validate : null,
                         ),
                       ],

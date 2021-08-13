@@ -1,5 +1,7 @@
 import 'package:ProExpress/reg_landing_page.dart';
 import 'package:flutter/material.dart';
+import 'dashboard_location.dart';
+
 
 class LoginScreen extends StatefulWidget{
   @override
@@ -39,25 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Column(
             children: [
-              // Container(
-              //   margin: EdgeInsets.symmetric(vertical: 50),
-              //   child: Column(
-              //     children: [
-              //       Text(
-              //         "Sign In",
-              //         style: TextStyle(
-              //           fontSize: 30,
-              //         ),
-              //       ),
-              //       Divider(
-              //         color: Color(0xffFD3F40),
-              //         thickness: 5,
-              //         indent: 150,
-              //         endIndent: 150,
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Container(
                   margin: EdgeInsets.only(top: 100),
                 child: Column(
@@ -85,9 +68,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: MediaQuery.of(context).size.width / 8,
                       width: MediaQuery.of(context).size.width / 1.3,
                       child: FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(builder: (context) => new DashboardLocation()));
+                        },
 
-                        color: Color(0xffA82A2A),
+                        color: Color(0xfffb0d0d),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         child: Text(

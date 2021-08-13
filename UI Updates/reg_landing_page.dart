@@ -66,7 +66,7 @@ class _RegLandingPageState extends State<RegLandingPage>{
                           context,
                           new MaterialPageRoute(builder: (context) => new SignupCustomer()));
                     },
-                    color: Color(0xffA82A2A),
+                    color: Color(0xfffb0d0d),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     child: Text(
@@ -88,7 +88,7 @@ class _RegLandingPageState extends State<RegLandingPage>{
                           context,
                           new MaterialPageRoute(builder: (context) => new SignupCourier()));
                     },
-                    color: Color(0xffA82A2A),
+                    color: Color(0xfffb0d0d),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     child: Text(
