@@ -49,7 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       margin: EdgeInsets.symmetric(horizontal: 50),
                       child: TextFormField(
                         decoration: InputDecoration(
-                          hintText: "Email",
+                          labelText: "Email",
+                          prefixIcon: Icon(Icons.email_rounded),
                         ),
                       ),
                     ),
@@ -58,25 +59,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: TextFormField(
                         obscureText: true,
                         decoration: InputDecoration(
-                          hintText: "Password",
+                            labelText: "Password",
+                            prefixIcon: Icon(Icons.lock),
                         ),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 15),
                       //margin: EdgeInsets.only(top: 190),
-                      height: MediaQuery.of(context).size.width / 8,
+                      height: MediaQuery.of(context).size.height / 15,
                       width: MediaQuery.of(context).size.width / 1.3,
-                      child: FlatButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                               context,
                               new MaterialPageRoute(builder: (context) => new DashboardLocation()));
                         },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xfffb0d0d),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        ),
 
-                        color: Color(0xfffb0d0d),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
                         child: Text(
                           "Login",
                           style: TextStyle(
@@ -116,18 +119,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 15),
-                      height: MediaQuery.of(context).size.width / 8,
+                      height: MediaQuery.of(context).size.height / 15,
                       width: MediaQuery.of(context).size.width / 1.8,
-                      child: FlatButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                               context,
                               new MaterialPageRoute(builder: (context) => new RegLandingPage()));
                         },
 
-                        color: Colors.black,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.black,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        ),
+
                         child: Text(
                           "Create a New Account",
                           style: TextStyle(

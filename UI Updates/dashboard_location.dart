@@ -65,7 +65,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key:_scaffoldKey,
+        drawerEnableOpenDragGesture: false,
+        endDrawerEnableOpenDragGesture: false,
+        key:_scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
@@ -153,11 +155,11 @@ class _DashboardLocationState extends State<DashboardLocation>{
                     ),
                   ),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text(
                     'Proceed', style: TextStyle(color: Colors.white, fontSize:18),
                   ),
-                  color: Color(0xfffb0d0d),
+                  style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: (){
                     // _validate();
                     Navigator.push(

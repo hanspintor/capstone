@@ -287,11 +287,13 @@ class _SignupCourierState extends State<SignupCourier> {
                             ),
                           ],
                         ),
-                        RaisedButton(
+                        ElevatedButton(
                           child: Text(
                             'Signup', style: TextStyle(color: Colors.white, fontSize:18),
                           ),
-                          color: Color(0xfffb0d0d),
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xfffb0d0d),
+                          ),
                           onPressed: agree ? _validate : null,
                         ),
                       ],

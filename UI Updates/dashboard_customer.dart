@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'menu_drawer.dart';
 import 'notif_drawer.dart';
@@ -37,7 +38,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
             );
           },
           child: SizedBox(
-            width: 160,
+            width: 110,
             height: 50,
             child: Container(
               margin:EdgeInsets.only(left: 10),
@@ -56,7 +57,9 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key:_scaffoldKey,
+        drawerEnableOpenDragGesture: false,
+        endDrawerEnableOpenDragGesture: false,
+        key:_scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
@@ -110,7 +113,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                   ],
                 ),
                 Card(
-                  margin: EdgeInsets.all(13),
+                  margin: EdgeInsets.all(20),
                   child: Column(
                     children: [
                       Container(
@@ -119,44 +122,13 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                           decoration: InputDecoration(labelText: 'Search', prefixIcon: Icon(Icons.search_rounded)),
                         ),
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Container(
-                              child: _buildInfo(),
-                            ),
-                            Container(
-                              child: _buildInfo(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Container(
-                              child: _buildInfo(),
-                            ),
-                            Container(
-                              child: _buildInfo(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Container(
-                              child: _buildInfo(),
-                            ),
-                            Container(
-                              child: _buildInfo(),
-                            ),
-                          ],
-                        ),
+                      Wrap(
+                        direction: Axis.horizontal,
+                        runSpacing: 0,
+                        children: <Widget>[
+                          _buildInfo(),
+                          _buildInfo(),
+                        ],
                       ),
                     ],
                   ),
