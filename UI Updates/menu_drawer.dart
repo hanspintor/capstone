@@ -18,7 +18,6 @@ class _MainDrawerState extends State<MainDrawer> {
                 DrawerHeader(
                   decoration: BoxDecoration(
                   ),
-                  child: Text('User')
                 ),
                 ListTile(
                   leading: Icon(Icons.home_filled, color: Color(0xfffb0d0d),),
@@ -28,7 +27,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.book, color: Color(0xfffb0d0d),),
+                  leading: Icon(Icons.bookmark, color: Color(0xfffb0d0d),),
                   title: Text('Courier Bookmarks', style: TextStyle(color: Color(0xfffb0d0d))),
                   onTap: () {
                     Navigator.pop(context);

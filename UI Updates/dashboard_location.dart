@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'dashboard_customer.dart';
 import 'menu_drawer.dart';
 import 'notif_drawer.dart';
@@ -163,8 +164,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
                   onPressed: (){
                     // _validate();
                     Navigator.push(
-                        context,
-                        new MaterialPageRoute(builder: (context) => new DashboardCustomer()));
+                      context,
+                      PageTransition(child: DashboardCustomer(), type: PageTransitionType.rightToLeftWithFade),
+                    );
                   },
                 ),
               ],

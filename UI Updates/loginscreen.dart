@@ -1,5 +1,6 @@
 import 'package:ProExpress/reg_landing_page.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'dashboard_location.dart';
 
 
@@ -72,8 +73,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              new MaterialPageRoute(builder: (context) => new DashboardLocation()));
+                            context,
+                            PageTransition(child: DashboardLocation(), type: PageTransitionType.rightToLeftWithFade),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Color(0xfffb0d0d),
@@ -124,8 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              new MaterialPageRoute(builder: (context) => new RegLandingPage()));
+                            context,
+                            PageTransition(child: RegLandingPage(), type: PageTransitionType.rightToLeftWithFade),
+                          );
                         },
 
                         style: ElevatedButton.styleFrom(

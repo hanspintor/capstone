@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'signup_customer.dart';
 import 'signup_courier.dart';
 
@@ -58,18 +59,18 @@ class _RegLandingPageState extends State<RegLandingPage>{
                 ),
                 Container(
                   margin: EdgeInsets.all(25),
-                  height: MediaQuery.of(context).size.width / 2.2,
+                  height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width / 1.1,
-                  child: FlatButton(
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.account_circle_rounded),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          new MaterialPageRoute(builder: (context) => new SignupCustomer()));
+                        context,
+                        PageTransition(child: SignupCustomer(), type: PageTransitionType.rightToLeftWithFade),
+                      );
                     },
-                    color: Color(0xfffb0d0d),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
+                    style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),),
+                    label: Text(
                       "Customer",
                       style: TextStyle(
                           color: Colors.white,
@@ -80,18 +81,18 @@ class _RegLandingPageState extends State<RegLandingPage>{
                 ),
                 Container(
                   margin: EdgeInsets.all(25),
-                  height: MediaQuery.of(context).size.width / 2.2,
+                  height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width / 1.1,
-                  child: FlatButton(
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.local_shipping_rounded),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          new MaterialPageRoute(builder: (context) => new SignupCourier()));
+                        context,
+                        PageTransition(child: SignupCourier(), type: PageTransitionType.rightToLeftWithFade),
+                      );
                     },
-                    color: Color(0xfffb0d0d),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
+                    style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),),
+                    label: Text(
                       "Courier",
                       style: TextStyle(
                           color: Colors.white,
