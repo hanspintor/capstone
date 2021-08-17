@@ -26,6 +26,8 @@ class _SignupCustomerState extends State<SignupCustomer> {
     print (_contactNo);
     print (_password);
     print (_address);
+
+    Navigator.pushNamed(context, '/dashboardLocation');
   }
 
   Widget _alertmessage(){
@@ -314,7 +316,9 @@ class _SignupCustomerState extends State<SignupCustomer> {
                           style: ElevatedButton.styleFrom(
                             primary: Color(0xfffb0d0d),
                           ),
-                          onPressed: agree ? _validate : null,
+                          onPressed: (){
+                            _validate();
+                          },
                         ),
                       ],
                     ),

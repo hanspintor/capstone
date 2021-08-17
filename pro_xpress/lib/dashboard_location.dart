@@ -20,6 +20,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
     locKey.currentState.save();
     print (_pickup);
     print (_dropoff);
+    Navigator.pushNamed(context, '/dashboardCustomer');
   }
 
   void _openEndDrawer() {
@@ -152,8 +153,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                   ),
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: (){
-                    // _validate();
-                    Navigator.pushNamed(context, '/dashboardCustomer');
+                    _validate();
                   },
                 ),
               ],
