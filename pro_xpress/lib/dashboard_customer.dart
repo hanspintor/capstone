@@ -20,8 +20,8 @@ class Couriers {
 
 class _DashboardCustomerState extends State<DashboardCustomer> {
   List<Couriers> couriers = [
-    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
-    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
+    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120),
+    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120),
   ];
 
   void _openEndDrawer() {
@@ -145,9 +145,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                             margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
                             child: ListTile(
                               title: Text(couriers[index].name),
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(couriers[index].icon),
-                              ),
+                              leading: Icon(Icons.local_shipping_rounded, size: 50,),
                               subtitle: Text(
                                   "Vehicle Type: ${couriers[index].vehicleType} \nDescription: ${couriers[index].vehicleType} \nPrice: ${couriers[index].price.toString()}"
                               ),

@@ -20,7 +20,7 @@ class _LoadScreenState extends State<LoadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffA82A2A),
+      backgroundColor: Color(0xfffb0d0d),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,3 +1,4 @@
+import 'package:ProExpress/courier_bookmarks.dart';
 import 'package:ProExpress/dashboard_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:ProExpress/load_screen.dart';
@@ -41,6 +42,9 @@ class PROExporessApp extends StatelessWidget{
             break;
           case '/dashboardCustomer':
             return PageTransition(child: DashboardCustomer(), type: PageTransitionType.rightToLeftWithFade);
+            break;
+          case '/courierBookmarks':
+            return PageTransition(child: CourierBookmarks(), type: PageTransitionType.rightToLeftWithFade);
             break;
           default:
             return null;
