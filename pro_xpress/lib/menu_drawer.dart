@@ -73,9 +73,6 @@ class _MainDrawerState extends State<MainDrawer> {
     switch (index){
       case 0:
         Navigator.pushNamed(context, '/dashboardLocation');
-        if (Navigator.pushNamed(context,'/dashboardLocation') == Navigator.pushNamed(context,'/dashboardLocation'))
-          Navigator.of(context).pop();
-
         break;
       case 1:
         Navigator.pushNamed(context, '/courierBookmarks');
