@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:proxpress/dashboard_customer.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,13 @@ import 'package:proxpress/signup_courier.dart';
 import 'package:proxpress/signup_customer.dart';
 import 'package:proxpress/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
+import 'courier_bookmarks.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(home: PROXpressApp()));
+  runApp(DevicePreview(builder: (context) => PROXpressApp()));
 }
 
 class PROXpressApp extends StatelessWidget{
@@ -49,6 +51,9 @@ class PROXpressApp extends StatelessWidget{
             break;
           case '/dashboardCustomer':
             return PageTransition(child: DashboardCustomer(), type: PageTransitionType.rightToLeftWithFade);
+            break;
+          case '/courierBookmarks':
+            return PageTransition(child: CourierBookmarks(), type: PageTransitionType.rightToLeftWithFade);
             break;
           default:
             return null;

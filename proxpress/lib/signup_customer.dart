@@ -103,15 +103,13 @@ class _SignupCustomerState extends State<SignupCustomer> {
           Container(
             margin: EdgeInsets.only(left: 200, top: 30),
             width: MediaQuery.of(context).size.width / 7,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xfffb0d0d),
-                ),
+            child:ElevatedButton(
                 child: Text(
                   'OK', style: TextStyle(color: Colors.white, fontSize:15),
                 ),
+                style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
                 onPressed: (){
-                  Navigator.pop(context, false);
+                  Navigator.of(context, rootNavigator: true).pop();
                 }
             ),
           ),
@@ -301,6 +299,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                               child: InkWell(
                                 onTap: () {
                                   showDialog(
+                                      barrierDismissible: false,
                                       context: context, builder: (BuildContext context) => AlertDialog(
                                       title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
                                       content: (_alertmessage()),
