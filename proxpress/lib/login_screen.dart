@@ -1,7 +1,7 @@
 import 'package:proxpress/reg_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-
+import 'package:proxpress/services/auth.dart';
 
 class LoginScreen extends StatefulWidget{
   @override
@@ -20,9 +20,11 @@ Widget _alertmessage(){
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  //final AuthService _auth = AuthService();
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -50,114 +52,144 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                   margin: EdgeInsets.only(top: 100),
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Email",
-                          prefixIcon: Icon(Icons.email_rounded),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 50),
+                        child: TextFormField(
+                              validator: (val) => val.isEmpty ? 'Email is Required': null,
+                              decoration: InputDecoration(
+                              labelText: "Email",
+                              prefixIcon: Icon(Icons.email_rounded),
+                            ),
+                            onSaved: (String value){
+                              email = value;
+                            },
+                            onChanged: (val){
+                              setState(() => email = val);
+                            }
                         ),
-                       onChanged: (val){
-                          setState(() => email = val);
-                        }
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 50,),
-                      child: TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            labelText: "Password",
-                            prefixIcon: Icon(Icons.lock),
-                        ),
-                        onChanged: (val){
-                          setState(() => password = val);
-                        }
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15),
-                      //margin: EdgeInsets.only(top: 190),
-                      height: MediaQuery.of(context).size.height / 15,
-                      width: MediaQuery.of(context).size.width / 1.3,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          //Navigator.pushNamed(context, '/dashboardLocation');
-                          print(email);
-                          print(password);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xfffb0d0d),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 50,),
+                        child: TextFormField(
+                            obscureText: true,
+                            validator: (String value){
+                              if(value.length < 8 && value.length > 0){
+                                return 'Password should be 8 char long';
+                              }
+                              else if(value.isEmpty){
+                                return 'Password is Required';
+                              }
+                            },
+                            onSaved: (String value){
+                              password = value;
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              prefixIcon: Icon(Icons.lock),
+                            ),
+                            onChanged: (val){
+                              setState(() => password = val);
+                            }
 
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 15),
+                        //margin: EdgeInsets.only(top: 190),
+                        height: MediaQuery.of(context).size.height / 15,
+                        width: MediaQuery.of(context).size.width / 1.3,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            //Navigator.pushNamed(context, '/dashboardLocation');
+                            if (_formKey.currentState.validate()){
+                              dynamic result = await _auth.SignInCustomer(email, password);
+                              if(result == null){
+                                setState(() => error = 'Invalid email or password');
+                              } else {
+                                Navigator.pushNamed(context, '/dashboardLocation');
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xfffb0d0d),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          ),
+
+                          child: Text(
+                            "Login",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 8),
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context, builder: (BuildContext context) => AlertDialog(
-                            content: (_alertmessage()),
-                          )
-                          );
-                        },
-                        child: Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            color: Color(0xffFD3F40),
-                            fontWeight: FontWeight.bold,
+                      SizedBox(height: 12,),
+                      Text(
+                        error,
+                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 8),
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context, builder: (BuildContext context) => AlertDialog(
+                              content: (_alertmessage()),
+                            )
+                            );
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color: Color(0xffFD3F40),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10, top: 90),
-                      child: Divider(
-                        thickness: 5,
-                        color: Colors.black,
-                        indent: 52,
-                        endIndent: 52,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15),
-                      height: MediaQuery.of(context).size.height / 15,
-                      width: MediaQuery.of(context).size.width / 1.8,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(child: RegLandingPage(), type: PageTransitionType.rightToLeftWithFade),
-                          );
-                        },
-
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10, top: 90),
+                        child: Divider(
+                          thickness: 5,
+                          color: Colors.black,
+                          indent: 52,
+                          endIndent: 52,
                         ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 15),
+                        height: MediaQuery.of(context).size.height / 15,
+                        width: MediaQuery.of(context).size.width / 1.8,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              PageTransition(child: RegLandingPage(), type: PageTransitionType.rightToLeftWithFade),
+                            );
+                          },
 
-                        child: Text(
-                          "Create a New Account",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          ),
+
+                          child: Text(
+                            "Create a New Account",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                )
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

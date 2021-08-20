@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:proxpress/services/auth.dart';
 class MainDrawer extends StatefulWidget {
   @override
   _MainDrawerState createState() => _MainDrawerState();
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -59,7 +61,11 @@ class _MainDrawerState extends State<MainDrawer> {
             child: ElevatedButton.icon(
               icon: Icon(Icons.logout_rounded),
               label: Text('Logout'),
-              onPressed: (){
+              onPressed: () async{
+                dynamic result = await _auth.signOut();
+                if(result == null){
+                  Navigator.pushNamed(context, '/loginScreen');
+                } 
               },
               style: ElevatedButton.styleFrom(primary: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
             ),

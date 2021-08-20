@@ -190,7 +190,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
       obscureText: true,
       validator: (String value){
         if(value.length < 8 && value.length > 0){
-          return 'Password should be 8 chars long';
+          return 'Password should be 8 char long';
         }
         else if(value.isEmpty){
           return 'Password is Required';
