@@ -1,15 +1,16 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:proxpress/dashboard_customer.dart';
+import 'package:proxpress/UI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/load_screen.dart';
-import 'package:proxpress/login_screen.dart';
-import 'package:proxpress/reg_landing_page.dart';
-import 'package:proxpress/signup_courier.dart';
-import 'package:proxpress/signup_customer.dart';
-import 'package:proxpress/dashboard_location.dart';
+import 'package:proxpress/UI/load_screen.dart';
+import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/UI/reg_landing_page.dart';
+import 'package:proxpress/UI/signup_courier.dart';
+import 'package:proxpress/UI/signup_customer.dart';
+import 'package:proxpress/UI/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
-import 'courier_bookmarks.dart';
+import 'UI/courier_bookmarks.dart';
+import 'UI/customer_remarks.dart';
 
 
 Future<void> main() async {
@@ -19,16 +20,14 @@ Future<void> main() async {
 }
 
 class PROXpressApp extends StatelessWidget{
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
+      home: DashboardLocation(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
@@ -54,6 +53,9 @@ class PROXpressApp extends StatelessWidget{
             break;
           case '/courierBookmarks':
             return PageTransition(child: CourierBookmarks(), type: PageTransitionType.rightToLeftWithFade);
+            break;
+          case '/customerRemarks':
+            return PageTransition(child: CustomerRemarks(), type: PageTransitionType.rightToLeftWithFade);
             break;
           default:
             return null;

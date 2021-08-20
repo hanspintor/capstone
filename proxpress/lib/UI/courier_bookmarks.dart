@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'menu_drawer.dart';
 import 'notif_drawer.dart';
 
-class DashboardCustomer extends StatefulWidget{
+class CourierBookmarks extends StatefulWidget{
   @override
-  _DashboardCustomerState createState() => _DashboardCustomerState();
+  _CourierBookmarksState createState() => _CourierBookmarksState();
 }
 
 class Couriers {
@@ -14,13 +14,14 @@ class Couriers {
   String description = '';
   double price = 0;
   String icon = '';
+
   Couriers({ this.name, this.vehicleType, this.description, this.price, this.icon });
 }
 
-class _DashboardCustomerState extends State<DashboardCustomer> {
+class _CourierBookmarksState extends State<CourierBookmarks> {
   List<Couriers> couriers = [
-    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
-    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
+    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120),
+    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120),
   ];
 
   void _openEndDrawer() {
@@ -118,10 +119,10 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 65),
-                      child: Text("Couriers Available",
+                      margin: EdgeInsets.only(left: 35),
+                      child: Text("Bookmarked Couriers",
                         style: TextStyle(
-                        fontSize: 25,
+                          fontSize: 25,
                         ),
                       ),
                     ),
@@ -144,9 +145,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                             margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
                             child: ListTile(
                               title: Text(couriers[index].name),
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(couriers[index].icon),
-                              ),
+                              leading: Icon(Icons.account_circle_rounded, size: 50,),
                               subtitle: Text(
                                   "Vehicle Type: ${couriers[index].vehicleType} \nDescription: ${couriers[index].vehicleType} \nPrice: ${couriers[index].price.toString()}"
                               ),
@@ -157,8 +156,8 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                       ),
                     ],
                   ),
-                shadowColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  shadowColor: Colors.black,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                 ),
               ],
             ),

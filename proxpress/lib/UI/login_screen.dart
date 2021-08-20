@@ -1,4 +1,4 @@
-import 'package:proxpress/reg_landing_page.dart';
+import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/services/auth.dart';
