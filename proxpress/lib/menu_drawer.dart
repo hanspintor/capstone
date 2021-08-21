@@ -65,7 +65,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 dynamic result = await _auth.signOut();
                 if(result == null){
                   Navigator.pushNamed(context, '/loginScreen');
-                } 
+                }
               },
               style: ElevatedButton.styleFrom(primary: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
             ),
