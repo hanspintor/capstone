@@ -77,10 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                             obscureText: true,
                             validator: (String value){
-                              if(value.length < 8 && value.length > 0){
-                                return 'Password should be 8 char long';
-                              }
-                              else if(value.isEmpty){
+                              if(value.isEmpty){
                                 return 'Password is Required';
                               }
                             },

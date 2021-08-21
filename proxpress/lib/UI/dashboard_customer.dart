@@ -104,28 +104,15 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
           child: Center(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      child: IconButton(icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      ),
-                        onPressed: (){
-                          Navigator.pop(context, false);
-                        },
-                        iconSize: 25,
-                      ),
+                SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    "Couriers Available",
+                    style: TextStyle(
+                      fontSize: 25,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 65),
-                      child: Text("Couriers Available",
-                        style: TextStyle(
-                        fontSize: 25,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 Card(
                   margin: EdgeInsets.all(20),

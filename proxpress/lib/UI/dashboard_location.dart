@@ -98,11 +98,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
           child: Center(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.bottomCenter,
                       child: Text(
                         "Welcome User",
                         style: TextStyle(
@@ -110,8 +108,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         ),
                       ),
                     ),
-                  ],
-                ),
                 Container(
                   margin: EdgeInsets.only(right: 40, left: 40, bottom: 40, top: 100),
                   child: Form(

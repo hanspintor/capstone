@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart' as Path;
 
 class SignupCourier extends StatefulWidget{
   @override
@@ -12,6 +15,7 @@ class _SignupCourierState extends State<SignupCourier> {
   String _password;
   String _address;
   bool agree = false;
+  File file;
 
   void _validate(){
     if(!regKey.currentState.validate()){
@@ -163,7 +167,10 @@ class _SignupCourierState extends State<SignupCourier> {
       decoration: InputDecoration(labelText: 'Password'),
       obscureText: true,
       validator: (String value){
-        if(value.isEmpty){
+        if(value.length < 8 && value.length > 0){
+          return 'Password should be 8 char long';
+        }
+        else if(value.isEmpty){
           return 'Password is Required';
         }
       },
@@ -188,54 +195,42 @@ class _SignupCourierState extends State<SignupCourier> {
     );
   }
 
+  Widget _buildUpload(){
+    return ElevatedButton.icon(
+        icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+        label: Text('Add File', style: TextStyle(color: Color(0xfffb0d0d)),),
+        onPressed: () {
+          selectFile();
+        },
+        style: ElevatedButton.styleFrom(primary: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final fileName = file != null ? Path.basename(file.path) : 'No File Selected';
+
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            flexibleSpace: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Image.asset(
-                "assets/PROExpress-logo.png",
-                height: 120,
-                width: 120,
-              ),
-            ),
-            //title: Text("PROExpress"),
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
+            onPressed: (){
+              Navigator.pop(context, false);
+            },
+            iconSize: 25,
+          ),
+          title: Text('Courier Signup', style: TextStyle(color: Colors.black),),
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
         ),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      child: IconButton(icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      ),
-                        onPressed: (){
-                          Navigator.pop(context, false);
-                        },
-                        iconSize: 25,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 50),
-                      child: Text(
-                        "Courier Registration",
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 Container(
                   margin: EdgeInsets.all(50),
                   child: Form(
@@ -248,7 +243,52 @@ class _SignupCourierState extends State<SignupCourier> {
                         _buildContactNo(),
                         _buildPassword(),
                         _buildAddress(),
+                        Container(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text('Driver\'s License',
+                                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: _buildUpload(),
+                              ),
+                              Align(
+                                child: Text(fileName),
+                              ),
+                              SizedBox(height: 20,),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text('Vehicle Registrations',
+                                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: _buildUpload(),
+                              ),
+                              SizedBox(height: 20,),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text('Vehicle Images',
+                                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: _buildUpload(),
+                              ),
+                            ],
+                          ),
+                        ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container (
                               child: Checkbox(
@@ -306,5 +346,16 @@ class _SignupCourierState extends State<SignupCourier> {
           ),
         )
     );
+  }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if(result != null) return;
+
+    final path = result.files.single.path;
+    setState(() {
+      file = File(path);
+    });
   }
 }

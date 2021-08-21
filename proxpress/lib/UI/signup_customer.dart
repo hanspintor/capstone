@@ -220,51 +220,26 @@ class _SignupCustomerState extends State<SignupCustomer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            flexibleSpace: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Image.asset(
-                "assets/PROExpress-logo.png",
-                height: 120,
-                width: 120,
-              ),
-            ),
-            //title: Text("PROExpress"),
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
+            onPressed: (){
+              Navigator.pop(context, false);
+            },
+            iconSize: 25,
+          ),
+          title: Text('Customer Signup', style: TextStyle(color: Colors.black),),
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
         ),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      child: IconButton(icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      ),
-                        onPressed: (){
-                          Navigator.pop(context, false);
-                        },
-                        iconSize: 25,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 34),
-                      child: Text(
-                        "Customer Registration",
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 Container(
                   margin: EdgeInsets.all(50),
                   child: Form(
@@ -279,6 +254,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                         _buildPassword(),
                         _buildAddress(),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container (
                               child: Checkbox(

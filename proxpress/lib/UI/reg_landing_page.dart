@@ -12,51 +12,26 @@ class _RegLandingPageState extends State<RegLandingPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            flexibleSpace: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Image.asset(
-                "assets/PROExpress-logo.png",
-                height: 120,
-                width: 120,
-              ),
-            ),
-            //title: Text("PROExpress"),
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
-        ),
+            onPressed: (){
+              Navigator.pop(context, false);
+            },
+            iconSize: 25,
+          ),
+          title: Text('Create a New Account', style: TextStyle(color: Colors.black),),
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
+          ),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      child: IconButton(icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      ),
-                        onPressed: (){
-                          Navigator.pop(context, false);
-                        },
-                        iconSize: 25,
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 0),
-                      child: Text(
-                        "Choose a Registration Form",
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 Container(
                   margin: EdgeInsets.all(25),
                   height: MediaQuery.of(context).size.height / 3.5,
