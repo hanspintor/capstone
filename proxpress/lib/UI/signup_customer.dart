@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/auth.dart';
 
 class SignupCustomer extends StatefulWidget{
@@ -14,6 +15,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
   String _password;
   String _address;
   bool agree = false;
+  bool loading = false;
   final AuthService _auth = AuthService();
   String error = '';
 
@@ -131,6 +133,9 @@ class _SignupCustomerState extends State<SignupCustomer> {
       onSaved: (String value){
         _fName = value;
       },
+      onChanged: (val){
+        setState(() => _fName = val);
+      },
     );
   }
 
@@ -144,6 +149,9 @@ class _SignupCustomerState extends State<SignupCustomer> {
       },
       onSaved: (String value){
         _lName = value;
+      },
+      onChanged: (val){
+        setState(() => _lName = val);
       },
     );
   }
@@ -178,6 +186,9 @@ class _SignupCustomerState extends State<SignupCustomer> {
       },
       onSaved: (String value){
         _contactNo = value;
+      },
+      onChanged: (val){
+        setState(() => _contactNo = val);
       },
     );
   }
@@ -214,12 +225,15 @@ class _SignupCustomerState extends State<SignupCustomer> {
       onSaved: (String value){
         _address = value;
       },
+      onChanged: (val){
+        setState(() => _address = val);
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? UserLoading() : Scaffold(
         appBar: AppBar(
           centerTitle: true,
           leading: IconButton(icon: Icon(
@@ -247,6 +261,11 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        SizedBox(height: 12,),
+                        Text(
+                          error,
+                          style: TextStyle(color: Colors.red, fontSize: 20.0),
+                        ),
                         _buildFName(),
                         _buildLName(),
                         _buildEmail(),
@@ -303,20 +322,20 @@ class _SignupCustomerState extends State<SignupCustomer> {
                           ),
                           onPressed: () async {
                             if (regKey.currentState.validate()){
-                              dynamic result = await _auth.SignUpCustomer(_email, _password);
+                              setState(() => loading = true); // loading = true;
+                              dynamic result = await _auth.SignUpCustomer(_email, _password, _fName, _lName, _contactNo, _address);
                               if(result == null){
-                                  setState(() => error = 'Kindly Supply Valid Email');
+                                setState((){
+                                  error = 'Email already taken';
+                                  loading = false;
+                                });
                               } else {
                                 Navigator.pushNamed(context, '/dashboardLocation');
                               }
                             }
                           }
                         ),
-                        SizedBox(height: 12,),
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 14.0),
-                        ),
+
                       ],
                     ),
                   ),

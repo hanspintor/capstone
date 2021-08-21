@@ -1,3 +1,4 @@
+import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -25,10 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
   String error = '';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? UserLoading() : Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
@@ -103,9 +105,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () async {
                             //Navigator.pushNamed(context, '/dashboardLocation');
                             if (_formKey.currentState.validate()){
+                              setState(() => loading = true); // loading = true;
                               dynamic result = await _auth.SignInCustomer(email, password);
                               if(result == null){
-                                setState(() => error = 'Invalid email or password');
+                                setState((){
+                                    error = 'Invalid email or password';
+                                    loading = false;
+                                });
                               } else {
                                 Navigator.pushNamed(context, '/dashboardLocation');
                               }

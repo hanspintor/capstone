@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proxpress/models/user.dart';
+import 'package:proxpress/services/database.dart';
 
 class AuthService {
 
@@ -25,12 +26,14 @@ class AuthService {
   }
 
   // Sign Up email and password
-  Future SignUpCustomer(String email, String password) async {
+  Future SignUpCustomer(String email, String password, String Fname, String Lname, String ContactNo, String Address) async {
     try{
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
+
+      await DatabaseService(uid: user.uid).updateCustomerData(Fname, Lname, email, ContactNo, password, Address);
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());
