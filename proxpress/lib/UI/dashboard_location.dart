@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'dashboard_customer.dart';
 import 'menu_drawer.dart';
 import 'notif_drawer.dart';
 

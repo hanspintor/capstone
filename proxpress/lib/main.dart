@@ -27,7 +27,7 @@ class PROXpressApp extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: DashboardLocation(),
+      //home: LoginScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':

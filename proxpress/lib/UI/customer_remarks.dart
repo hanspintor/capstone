@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'menu_drawer.dart';
-import 'notif_drawer.dart';
 
 class CustomerRemarks extends StatefulWidget {
   @override
@@ -16,9 +14,17 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   List<String> _whoCanPay = ['Sender', 'Receiver', 'You'];
   String _whoWillPay;
   String _specificInstructions;
-  List<String> _paymentOptions = ['Gcash', 'PayMaya'];
-  String _paymentOption;
+  String _paymentOption = 'Choose Payment Option';
+  List<String> _onlinePaymentOptions = ['Gcash', 'PayMaya'];
 
+  bool buttonState = true;
+
+  void _buttonChange() {
+    setState(() {
+      buttonState = !buttonState;
+    });
+  }
+  
   void _validate(){
     if(!locKey.currentState.validate()){
       return;
@@ -75,10 +81,26 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
           actions: [
             IconButton(icon: Icon(
-              Icons.notifications_none_rounded,
+              Icons.help_outline,
             ),
               onPressed: () {
-                _openEndDrawer();
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                      return AlertDialog(
+                        title: Text("Help"),
+                        content: Text('nice'),
+                        actions: [
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                );
               },
               iconSize: 25,
             ),
@@ -93,29 +115,17 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           ),
           //title: Text("PROExpress"),
         ),
-        drawer: MainDrawer(),
-        endDrawer: NotifDrawer(),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
+                SizedBox(height: 10),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      child: IconButton(icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      ),
-                        onPressed: (){
-                          Navigator.pop(context, false);
-                        },
-                        iconSize: 25,
-                      ),
-                    ),
                     Expanded(
                       child: Text(
-                        "Customer Remarks dae pa tapos",
+                        "Customer Remarks",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 25,
@@ -170,14 +180,14 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                           // Dapat dropdown ni para sa sender/receiver
                           _buildTextField(
                               'Who Will Pay',
-                              Icons.production_quantity_limits,
+                              Icons.person_search,
                               TextInputType.name,
                               'Who will pay must be specified.',
                               _whoWillPay
                           ),
                           _buildTextField(
                               'Specific Instructions',
-                              Icons.production_quantity_limits,
+                              Icons.integration_instructions_outlined,
                               TextInputType.text,
                               'Item description is required.',
                               _itemDescription
@@ -185,10 +195,61 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                           // Dapat dropdown ni gcash/paymaya
                           _buildTextField(
                               'Payment Option',
-                              Icons.production_quantity_limits,
+                              Icons.payments_outlined,
                               TextInputType.text,
                               'Item description is required.',
                               _itemDescription
+                          ),
+                          DropdownButton<String>(
+                            value: _paymentOption,
+                            icon: const Icon(Icons.arrow_downward),
+                            iconSize: 24,
+                            elevation: 16,
+                            underline: Container(
+                              height: 2,
+                              color: Colors.black,
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                _paymentOption = newValue;
+                              });
+                            },
+                            items: <String>['Choose Payment Option', 'Cash on Delivery', 'Online Payment']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                          Text(
+                            "Online Payment Options",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: buttonState ? _buttonChange : null,
+                                    child: Text(
+                                      "Gcash",
+                                      style: TextStyle(color: Colors.white, fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: buttonState ? null : _buttonChange,
+                                    child: Text(
+                                      "Paymaya",
+                                      style: TextStyle(color: Colors.white, fontSize: 16),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -207,7 +268,6 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: () {
                     // _validate();
-
                   },
                 ),
                 SizedBox(height: 50),

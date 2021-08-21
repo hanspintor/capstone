@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'menu_drawer.dart';
-import 'notif_drawer.dart';
 
 class DashboardCustomer extends StatefulWidget{
   @override
@@ -9,18 +7,20 @@ class DashboardCustomer extends StatefulWidget{
 }
 
 class Couriers {
-  String name = '';
+  String firstName = '';
+  String lastName = '';
   String vehicleType = '';
-  String description = '';
+  String vehicleColor= '';
   double price = 0;
   String icon = '';
-  Couriers({ this.name, this.vehicleType, this.description, this.price, this.icon });
+
+  Couriers({ this.firstName, this.lastName, this.vehicleType, this.vehicleColor, this.price, this.icon });
 }
 
 class _DashboardCustomerState extends State<DashboardCustomer> {
   List<Couriers> couriers = [
-    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
-    Couriers(name: 'Pedro Penduko', vehicleType: 'Sedan', description: 'I can deliver items up to 200kg.', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
+    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
+    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
   ];
 
   void _openEndDrawer() {
@@ -80,10 +80,26 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
           iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
           actions: [
             IconButton(icon: Icon(
-              Icons.notifications_none_rounded,
+              Icons.help_outline,
             ),
               onPressed: (){
-                _openEndDrawer();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return AlertDialog(
+                      title: Text("Help"),
+                      content: Text('nice'),
+                      actions: [
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  }
+                );
               },
               iconSize: 25,
             ),
@@ -98,8 +114,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
           ),
           //title: Text("PROExpress"),
         ),
-        drawer: MainDrawer(),
-        endDrawer: NotifDrawer(),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -133,13 +147,35 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                               onTap: () {
                                 Navigator.pushNamed(context, '/customerRemarks');
                               },
-                              title: Text(couriers[index].name),
+                              title: Text('${couriers[index].firstName} ${couriers[index].lastName}'),
                               leading: CircleAvatar(
                                 backgroundImage: NetworkImage(couriers[index].icon),
                               ),
                               subtitle: Text(
-                                  "Vehicle Type: ${couriers[index].vehicleType} \nDescription: ${couriers[index].vehicleType} \nPrice: ${couriers[index].price.toString()}"
+                                  "Vehicle Type: ${couriers[index].vehicleType} \nVehicle Color: ${couriers[index].vehicleColor} \nPrice: ${couriers[index].price.toString()}"
                               ),
+                              trailing: IconButton(
+                                icon: Icon(Icons.info_outline),
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context){
+                                        return AlertDialog(
+                                          title: Text("Help"),
+                                          content: Text('nice'),
+                                          actions: [
+                                            TextButton(
+                                              child: Text("OK"),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                  );
+                                },
+                              )
                             ),
                           );
                         },
@@ -157,4 +193,3 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
     );
   }
 }
-
