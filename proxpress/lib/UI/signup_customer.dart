@@ -8,12 +8,12 @@ class SignupCustomer extends StatefulWidget{
 }
 
 class _SignupCustomerState extends State<SignupCustomer> {
-  String _fName;
-  String _lName;
-  String _email;
-  String _contactNo;
-  String _password;
-  String _address;
+  String fName;
+  String lName;
+  String email;
+  String contactNo;
+  String password;
+  String address;
   bool agree = false;
   bool loading = false;
   final AuthService _auth = AuthService();
@@ -25,12 +25,12 @@ class _SignupCustomerState extends State<SignupCustomer> {
     }
     regKey.currentState.save();
 
-    print (_fName);
-    print (_lName);
-    print (_email);
-    print (_contactNo);
-    print (_password);
-    print (_address);
+    print (fName);
+    print (lName);
+    print (email);
+    print (contactNo);
+    print (password);
+    print (address);
   }
 
   Widget _alertmessage(){
@@ -131,10 +131,10 @@ class _SignupCustomerState extends State<SignupCustomer> {
         }
       },
       onSaved: (String value){
-        _fName = value;
+        fName = value;
       },
       onChanged: (val){
-        setState(() => _fName = val);
+        setState(() => fName = val);
       },
     );
   }
@@ -148,10 +148,10 @@ class _SignupCustomerState extends State<SignupCustomer> {
         }
       },
       onSaved: (String value){
-        _lName = value;
+        lName = value;
       },
       onChanged: (val){
-        setState(() => _lName = val);
+        setState(() => lName = val);
       },
     );
   }
@@ -168,10 +168,10 @@ class _SignupCustomerState extends State<SignupCustomer> {
         }
       },
       onSaved: (String value){
-        _email = value;
+        email = value;
       },
         onChanged: (val){
-          setState(() => _email = val);
+          setState(() => email = val);
         }
     );
   }
@@ -185,10 +185,10 @@ class _SignupCustomerState extends State<SignupCustomer> {
         }
       },
       onSaved: (String value){
-        _contactNo = value;
+        contactNo = value;
       },
       onChanged: (val){
-        setState(() => _contactNo = val);
+        setState(() => contactNo = val);
       },
     );
   }
@@ -206,10 +206,10 @@ class _SignupCustomerState extends State<SignupCustomer> {
         }
       },
       onSaved: (String value){
-        _password = value;
+        password = value;
       },
       onChanged: (val){
-          setState(() => _password = val);
+          setState(() => password = val);
       },
     );
   }
@@ -223,10 +223,10 @@ class _SignupCustomerState extends State<SignupCustomer> {
         }
       },
       onSaved: (String value){
-        _address = value;
+       address = value;
       },
       onChanged: (val){
-        setState(() => _address = val);
+        setState(() => address = val);
       },
     );
   }
@@ -323,7 +323,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                           onPressed: () async {
                             if (regKey.currentState.validate()){
                               setState(() => loading = true); // loading = true;
-                              dynamic result = await _auth.SignUpCustomer(_email, _password, _fName, _lName, _contactNo, _address);
+                              dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address);
                               if(result == null){
                                 setState((){
                                   error = 'Email already taken';
