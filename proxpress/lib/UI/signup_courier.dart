@@ -205,146 +205,164 @@ class _SignupCourierState extends State<SignupCourier> {
         style: ElevatedButton.styleFrom(primary: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
     );
   }
-
+  Future<bool> _backPressed(){
+    return showDialog(context: context, builder: (context)
+    =>AlertDialog(
+      title: Text("Are you sure you want to go back? All data you placed will be loss."),
+      actions: <Widget> [
+        FlatButton(
+          child: Text("No"),
+          onPressed: ()=>Navigator.pop(context, false),
+        ),
+        FlatButton(
+          child: Text("Yes"),
+          onPressed: ()=>Navigator.pop(context, true),
+        )
+      ],
+    ));
+  }
   @override
   Widget build(BuildContext context) {
     final fileName = file != null ? Path.basename(file.path) : 'No File Selected';
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return WillPopScope(
+      onWillPop: _backPressed,
+      child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            leading: IconButton(icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+              onPressed: (){
+                Navigator.pop(context, false);
+              },
+              iconSize: 25,
+            ),
+            title: Text('Courier Signup', style: TextStyle(color: Colors.black),),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
           ),
-            onPressed: (){
-              Navigator.pop(context, false);
-            },
-            iconSize: 25,
-          ),
-          title: Text('Courier Signup', style: TextStyle(color: Colors.black),),
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(50),
-                  child: Form(
-                    key: regKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        _buildFName(),
-                        _buildLName(),
-                        _buildContactNo(),
-                        _buildPassword(),
-                        _buildAddress(),
-                        Container(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text('Driver\'s License',
-                                  style: TextStyle(fontSize: 15, color: Colors.black54),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(50),
+                    child: Form(
+                      key: regKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          _buildFName(),
+                          _buildLName(),
+                          _buildContactNo(),
+                          _buildPassword(),
+                          _buildAddress(),
+                          Container(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: _buildUpload(),
-                              ),
-                              Align(
-                                child: Text(fileName),
-                              ),
-                              SizedBox(height: 20,),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text('Vehicle Registrations',
-                                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Text('Driver\'s License',
+                                    style: TextStyle(fontSize: 15, color: Colors.black54),
+                                  ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: _buildUpload(),
-                              ),
-                              SizedBox(height: 20,),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text('Vehicle Images',
-                                  style: TextStyle(fontSize: 15, color: Colors.black54),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: _buildUpload(),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: _buildUpload(),
-                              ),
-                            ],
+                                Align(
+                                  child: Text(fileName),
+                                ),
+                                SizedBox(height: 20,),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Text('Vehicle Registrations',
+                                    style: TextStyle(fontSize: 15, color: Colors.black54),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: _buildUpload(),
+                                ),
+                                SizedBox(height: 20,),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Text('Vehicle Images',
+                                    style: TextStyle(fontSize: 15, color: Colors.black54),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: _buildUpload(),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container (
-                              child: Checkbox(
-                                  value: agree,
-                                  onChanged: (value){
-                                    setState(() {
-                                      agree = value;
-                                    });
-                                  }
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container (
+                                child: Checkbox(
+                                    value: agree,
+                                    onChanged: (value){
+                                      setState(() {
+                                        agree = value;
+                                      });
+                                    }
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: Text(
-                                  'I do accept the '
-                              ),
-                            ),
-                            Container(
-                              child: InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    barrierDismissible: false,
-                                      context: context, builder: (BuildContext context) => AlertDialog(
-                                    title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
-                                    content: (_alertmessage()),
-                                  )
-                                  );
-                                },
+                              Container(
                                 child: Text(
-                                  "Terms and Conditions",
-                                  style: TextStyle(
-                                    color: Color(0xffFD3F40),
-                                    decoration: TextDecoration.underline,
-                                    fontWeight: FontWeight.bold,
+                                    'I do accept the '
+                                ),
+                              ),
+                              Container(
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                      barrierDismissible: false,
+                                        context: context, builder: (BuildContext context) => AlertDialog(
+                                      title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      content: (_alertmessage()),
+                                    )
+                                    );
+                                  },
+                                  child: Text(
+                                    "Terms and Conditions",
+                                    style: TextStyle(
+                                      color: Color(0xffFD3F40),
+                                      decoration: TextDecoration.underline,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                          ElevatedButton(
+                            child: Text(
+                              'Signup', style: TextStyle(color: Colors.white, fontSize:18),
                             ),
-                          ],
-                        ),
-                        ElevatedButton(
-                          child: Text(
-                            'Signup', style: TextStyle(color: Colors.white, fontSize:18),
+                            style: ElevatedButton.styleFrom(
+                              primary: Color(0xfffb0d0d),
+                            ),
+                            onPressed: agree ? _validate : null,
                           ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xfffb0d0d),
-                          ),
-                          onPressed: agree ? _validate : null,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        )
+          )
+      ),
     );
   }
 

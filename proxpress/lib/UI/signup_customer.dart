@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/auth.dart';
@@ -230,120 +232,139 @@ class _SignupCustomerState extends State<SignupCustomer> {
       },
     );
   }
+  Future<bool> _backPressed(){
+    return showDialog(context: context, builder: (context)
+    =>AlertDialog(
+      title: Text("Are you sure you want to go back? All data you placed will be loss"),
+      actions: <Widget> [
+        FlatButton(
+          child: Text("No"),
+          onPressed: ()=>Navigator.pop(context, false),
+        ),
+        FlatButton(
+          child: Text("Yes"),
+          onPressed: ()=>Navigator.pop(context, true),
+        )
+      ],
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return loading ? UserLoading() : Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return loading ? UserLoading() : WillPopScope(
+      onWillPop: _backPressed,
+      child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            leading: IconButton(icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+              onPressed: (){
+                Navigator.pop(context, false);
+              },
+              iconSize: 25,
+            ),
+            title: Text('Customer Signup', style: TextStyle(color: Colors.black),),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
           ),
-            onPressed: (){
-              Navigator.pop(context, false);
-            },
-            iconSize: 25,
-          ),
-          title: Text('Customer Signup', style: TextStyle(color: Colors.black),),
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(50),
-                  child: Form(
-                    key: regKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(height: 12,),
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 20.0),
-                        ),
-                        _buildFName(),
-                        _buildLName(),
-                        _buildEmail(),
-                        _buildContactNo(),
-                        _buildPassword(),
-                        _buildAddress(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container (
-                              child: Checkbox(
-                                  value: agree,
-                                  onChanged: (value){
-                                    setState(() {
-                                      agree = value;
-                                    });
-                                  }
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(50),
+                    child: Form(
+                      key: regKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 12,),
+                          Text(
+                            error,
+                            style: TextStyle(color: Colors.red, fontSize: 20.0),
+                          ),
+                          _buildFName(),
+                          _buildLName(),
+                          _buildEmail(),
+                          _buildContactNo(),
+                          _buildPassword(),
+                          _buildAddress(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container (
+                                child: Checkbox(
+                                    value: agree,
+                                    onChanged: (value){
+                                      setState(() {
+                                        agree = value;
+                                      });
+                                    }
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: Text(
-                                  'I do accept the '
-                              ),
-                            ),
-                            Container(
-                              child: InkWell(
-                                onTap: () {
-                                  showDialog(
-                                      barrierDismissible: false,
-                                      context: context, builder: (BuildContext context) => AlertDialog(
-                                      title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
-                                      content: (_alertmessage()),
-                                  )
-                                  );
-                                },
+                              Container(
                                 child: Text(
-                                  "Terms and Conditions",
-                                  style: TextStyle(
-                                    color: Color(0xffFD3F40),
-                                    decoration: TextDecoration.underline,
-                                    fontWeight: FontWeight.bold,
+                                    'I do accept the '
+                                ),
+                              ),
+                              Container(
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        barrierDismissible: false,
+                                        context: context, builder: (BuildContext context) => AlertDialog(
+                                        title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
+                                        content: (_alertmessage()),
+                                    )
+                                    );
+                                  },
+                                  child: Text(
+                                    "Terms and Conditions",
+                                    style: TextStyle(
+                                      color: Color(0xffFD3F40),
+                                      decoration: TextDecoration.underline,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                          ElevatedButton(
+                            child: Text(
+                              'Signup', style: TextStyle(color: Colors.white, fontSize:18),
                             ),
-                          ],
-                        ),
-                        ElevatedButton(
-                          child: Text(
-                            'Signup', style: TextStyle(color: Colors.white, fontSize:18),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xfffb0d0d),
-                          ),
-                          onPressed: () async {
-                            if (regKey.currentState.validate()){
-                              setState(() => loading = true); // loading = true;
-                              dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address);
-                              if(result == null){
-                                setState((){
-                                  error = 'Email already taken';
-                                  loading = false;
-                                });
-                              } else {
-                                Navigator.pushNamed(context, '/dashboardLocation');
+                            style: ElevatedButton.styleFrom(
+                              primary: Color(0xfffb0d0d),
+                            ),
+                            onPressed: () async {
+                              if (regKey.currentState.validate()){
+                                setState(() => loading = true); // loading = true;
+                                dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address);
+                                if(result == null){
+                                  setState((){
+                                    error = 'Email already taken';
+                                    loading = false;
+                                  });
+                                } else {
+                                  Navigator.pushNamed(context, '/dashboardLocation');
+                                }
                               }
                             }
-                          }
-                        ),
+                          ),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        )
+          )
+      ),
     );
   }
 }

@@ -24,12 +24,12 @@ class DatabaseService {
   List<Customer> _customerListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
      return Customer(
-       fName: doc.get('fname') ?? '',
-       lName: doc.get('lName') ?? '',
-       contactNo: doc.get('contactNo') ?? '',
-       password: doc.get('password') ?? '',
-       email: doc.get('email') ?? '',
-       address: doc.get('address') ?? '',
+       fName: (doc.data() as dynamic) ['fName'] ?? '',
+       lName: (doc.data() as dynamic) ['lName'] ?? '',
+       contactNo: (doc.data() as dynamic) ['contactNo'] ?? '',
+       password: (doc.data() as dynamic) ['password'] ?? '',
+       email: (doc.data() as dynamic) ['email'] ?? '',
+       address: (doc.data() as dynamic) ['address']?? '',
 
      );
     }).toList();
