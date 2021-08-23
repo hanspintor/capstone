@@ -7,7 +7,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.2"
+    version: "2.8.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -335,7 +335,7 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.11"
+    version: "0.12.10"
   meta:
     dependency: transitive
     description:
@@ -613,6 +613,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.4.3"
   tuple:
     dependency: transitive
@@ -621,6 +622,9 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+=======
+    version: "0.4.2"
+>>>>>>> db244442090dadb51c9a5679e75ef1d4c8db020e
   typed_data:
     dependency: transitive
     description:
