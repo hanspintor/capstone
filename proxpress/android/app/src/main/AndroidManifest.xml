@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.test_xpress">
    <application
-        android:label="test_xpress"
+        android:label="PROXpress"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:usesCleartextTraffic="true"
