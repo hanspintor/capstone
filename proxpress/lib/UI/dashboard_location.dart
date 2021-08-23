@@ -83,6 +83,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
               if(!snapshot.hasData)
                 return Text('Loading data.. Please wait');
               return Scaffold(
+<<<<<<< HEAD
                   drawerEnableOpenDragGesture: false,
                   endDrawerEnableOpenDragGesture: false,
                   key: _scaffoldKey,
@@ -183,6 +184,99 @@ class _DashboardLocationState extends State<DashboardLocation>{
                       ),
                     ),
                   ));
+=======
+              drawerEnableOpenDragGesture: false,
+              endDrawerEnableOpenDragGesture: false,
+              key:_scaffoldKey,
+                appBar: AppBar(
+                backgroundColor: Colors.white,
+                iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
+                actions: [
+                  IconButton(icon: Icon(
+                    Icons.notifications_none_rounded,
+                  ),
+                    onPressed: (){
+                    _openEndDrawer();
+                    },
+                    iconSize: 25,
+                  ),
+                ],
+                  flexibleSpace: Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Image.asset(
+                    "assets/PROExpress-logo.png",
+                    height: 120,
+                    width: 120,
+                    ),
+                  ),
+                  //title: Text("PROExpress"),
+              ),
+                  drawer: MainDrawer(),
+                  endDrawer: NotifDrawer(),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(
+                          "Welcome ${snapshot.data.docs[0]['First Name']}",
+                          style: TextStyle(
+                          fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 40, left: 40, bottom: 40, top: 100),
+                        child: Form(
+                          key: locKey,
+                          child: Card(
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Text(
+                                "Pin a Location",
+                                style: TextStyle(
+                                fontSize: 20,
+                                ),
+                              ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 35),
+                                child: _buildPickup(),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 35, vertical: 23),
+                                child: _buildDropoff(),
+                              ),
+                            ],
+                            ),
+                            shadowColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10))
+                            ),
+                          ),
+                        ),
+                      ),
+                              ElevatedButton(
+                              child: Text(
+                              'Pin Location', style: TextStyle(color: Colors.white, fontSize:18),
+                              ),
+                              style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                              onPressed: (){
+                              // _validate();
+                              Navigator.pushNamed(context, '/dashboardCustomer');
+                                },
+                              ),
+                            ],
+                          ),
+                      ),
+                )
+              );
+>>>>>>> 980af9af36412b52ce0bf35ad8c8c6947b48c1b7
             }
         ),
       ),
