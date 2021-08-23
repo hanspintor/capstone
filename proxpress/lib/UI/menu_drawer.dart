@@ -23,8 +23,8 @@ class _MainDrawerState extends State<MainDrawer> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.home_filled, color: Color(0xfffb0d0d),),
-                  title: Text('Home', style: TextStyle(color: Color(0xfffb0d0d))),
+                  leading: Icon(Icons.place, color: Color(0xfffb0d0d),),
+                  title: Text('Pin Location', style: TextStyle(color: Color(0xfffb0d0d))),
                   onTap: () {
                     selectedItem(context, 0);
                   },

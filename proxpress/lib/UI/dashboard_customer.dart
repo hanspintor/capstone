@@ -19,8 +19,8 @@ class Couriers {
 
 class _DashboardCustomerState extends State<DashboardCustomer> {
   List<Couriers> couriers = [
-    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
-    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120, icon: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F568%2F366%2Foriginal%2Fsuv-car-icon-vector.jpg&f=1&nofb=1'),
+    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120,),
+    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120,),
   ];
 
   void _openEndDrawer() {
@@ -148,9 +148,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                                 Navigator.pushNamed(context, '/customerRemarks');
                               },
                               title: Text('${couriers[index].firstName} ${couriers[index].lastName}'),
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(couriers[index].icon),
-                              ),
+                              leading: Icon(Icons.local_shipping_rounded),
                               subtitle: Text(
                                   "Vehicle Type: ${couriers[index].vehicleType} \nVehicle Color: ${couriers[index].vehicleColor} \nPrice: ${couriers[index].price.toString()}"
                               ),
