@@ -6,8 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/List/customer_list.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+<<<<<<< HEAD
 import 'package:proxpress/models/customers.dart';
 
+=======
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+>>>>>>> effb237f57b5bc32522b0d988f786e908c830484
 
 class DashboardLocation extends StatefulWidget{
   @override
@@ -17,8 +21,12 @@ class DashboardLocation extends StatefulWidget{
 class _DashboardLocationState extends State<DashboardLocation>{
   String _pickup;
   String _dropoff;
+  PickResult _selectedPickup;
+  PickResult _selectedDropoff;
   final Customer customer;
   _DashboardLocationState({ this.customer});
+
+  final textFieldController = TextEditingController();
 
   void _validate(){
     if(!locKey.currentState.validate()){
@@ -151,7 +159,24 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                     Container(
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 35),
-                                      child: _buildPickup(),
+                                      child: TextFormField(
+                                        controller: textFieldController,
+                                        onTap: () async {
+                                          dynamic _pickupPin = await Navigator.pushNamed(context, '/pinLocationMap');
+                                          print(_pickupPin);
+                                          textFieldController.text = _pickupPin;
+                                        },
+                                        decoration: InputDecoration(labelText: 'Pick up location', prefixIcon: Icon(Icons.location_searching_rounded)),
+                                        keyboardType: TextInputType.streetAddress,
+                                        validator: (String value){
+                                          if(value.isEmpty){
+                                            return 'Pick up location is required';
+                                          }
+                                        },
+                                        onSaved: (String value){
+                                          _pickup = value;
+                                        },
+                                      ),
                                     ),
                                     Container(
                                       margin: EdgeInsets.symmetric(

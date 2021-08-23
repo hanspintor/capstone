@@ -11,7 +11,7 @@ import 'package:proxpress/UI/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'UI/courier_bookmarks.dart';
 import 'UI/customer_remarks.dart';
-
+import 'UI/pin_location_map.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,7 @@ class PROXpressApp extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      //home: LoginScreen(),
+      home: DashboardLocation(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
@@ -56,6 +56,9 @@ class PROXpressApp extends StatelessWidget{
             break;
           case '/customerRemarks':
             return PageTransition(child: CustomerRemarks(), type: PageTransitionType.rightToLeftWithFade);
+            break;
+          case '/pinLocationMap':
+            return PageTransition(child: PinLocationMap(), type: PageTransitionType.rightToLeftWithFade);
             break;
           default:
             return null;
