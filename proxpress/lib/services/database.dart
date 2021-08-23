@@ -22,6 +22,7 @@ class DatabaseService {
 
   // Customer model
   List<Customer> _customerListFromSnapshot(QuerySnapshot snapshot){
+    print("hello $uid");
     return snapshot.docs.map((doc){
      return Customer(
        fName: (doc.data() as dynamic) ['fName'] ?? '',

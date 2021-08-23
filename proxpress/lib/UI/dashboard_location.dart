@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/List/customer_list.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:proxpress/models/customers.dart';
+
 
 class DashboardLocation extends StatefulWidget{
   @override
