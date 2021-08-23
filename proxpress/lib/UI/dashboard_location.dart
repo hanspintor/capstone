@@ -6,12 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/List/customer_list.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-<<<<<<< HEAD
+
 import 'package:proxpress/models/customers.dart';
 
-=======
+
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
->>>>>>> effb237f57b5bc32522b0d988f786e908c830484
 
 class DashboardLocation extends StatefulWidget{
   @override
