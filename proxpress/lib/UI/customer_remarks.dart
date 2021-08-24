@@ -125,7 +125,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                   children: [
                     Expanded(
                       child: Text(
-                        "Request Service",
+                        "Courier Remarks",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 25,
@@ -262,7 +262,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                 ),
                 ElevatedButton(
                   child: Text(
-                    'Send Request',
+                    'Send Remarks',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),

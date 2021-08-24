@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/services/auth.dart';
+import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/services/database.dart';
+import 'package:proxpress/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:proxpress/models/customers.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -11,6 +16,7 @@ class _MainDrawerState extends State<MainDrawer> {
   final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<TheUser>(context);
     return Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -19,7 +25,28 @@ class _MainDrawerState extends State<MainDrawer> {
             child: ListView(
               children: [
                 DrawerHeader(
+                  child: StreamBuilder<Customer>(
+                    stream: DatabaseService(uid: user.uid).customerData,
+                    builder: (context, snapshot){
+                      if(snapshot.hasData){
+                        Customer customerData = snapshot.data;
+                        return Align(
+                          alignment: Alignment.center,
+                          child : InkWell(
+                            child: Text('${customerData.fName} ${customerData.lName}', style: TextStyle(fontSize: 20)),
+                            onTap: (){
+                              Navigator.pushNamed(context, '/customerProfile');
+                            },
+                          ),
+                        );
+                      }
+                      else{
+                        return UserLoading();
+                      }
+                    }
+                  ),
                   decoration: BoxDecoration(
+
                   ),
                 ),
                 ListTile(

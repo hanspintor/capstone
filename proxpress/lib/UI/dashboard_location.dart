@@ -189,7 +189,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                           ),
                           ElevatedButton(
                             child: Text(
-                              'Proceed',
+                              'Pin Location',
                               style:
                               TextStyle(color: Colors.white, fontSize: 18),
                             ),
