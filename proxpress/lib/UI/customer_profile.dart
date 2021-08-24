@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/classes/customer_updating_form.dart';
 import 'notif_drawer.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
@@ -68,7 +69,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 Customer customerData = snapshot.data;
                 return Center(
                   child: SizedBox(
-                    width: 250,
+                    width: 300,
+                    height: 500,
                     child: Card(
                       margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
                       child: Column(
@@ -113,6 +115,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                               label: Text('Edit Profile'),
                               style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                               onPressed: (){
+                                Navigator.pushNamed(context, '/customerUpdate');
                               },
                             ),
                           ),

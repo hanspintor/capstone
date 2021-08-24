@@ -9,6 +9,7 @@ class DatabaseService {
   // Customer Collection Reference
   final CollectionReference customerCollection = FirebaseFirestore.instance.collection('Customers');
 
+  // Creation of a collection reference
   Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address) async {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
@@ -39,7 +40,7 @@ class DatabaseService {
   //   return customerCollection.snapshots().map(_customerListFromSnapshot);
   // }
 
-  // customerdata from snapshot
+  // Get data individually using streambuilder
   Customer _customerDataFromSnapshot(DocumentSnapshot snapshot){
     return Customer(
       uid: uid,
@@ -51,7 +52,6 @@ class DatabaseService {
       address: snapshot['Address'],
     );
   }
-
 
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);

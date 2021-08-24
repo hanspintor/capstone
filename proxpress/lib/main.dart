@@ -17,6 +17,7 @@ import 'UI/pin_location_map.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/wrapper.dart';
+import 'package:proxpress/classes/customer_updating_form.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,6 +73,9 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/wrapper':
               return PageTransition(child: Wrapper(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/customerUpdate':
+              return PageTransition(child:CustomerUpdate(), type: PageTransitionType.rightToLeftWithFade);
               break;
             default:
               return null;
