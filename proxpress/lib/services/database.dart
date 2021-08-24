@@ -21,22 +21,41 @@ class DatabaseService {
   }
 
   // Customer model
-  List<Customer> _customerListFromSnapshot(QuerySnapshot snapshot){
-    print("hello $uid");
-    return snapshot.docs.map((doc){
-     return Customer(
-       fName: (doc.data() as dynamic) ['fName'] ?? '',
-       lName: (doc.data() as dynamic) ['lName'] ?? '',
-       contactNo: (doc.data() as dynamic) ['contactNo'] ?? '',
-       password: (doc.data() as dynamic) ['password'] ?? '',
-       email: (doc.data() as dynamic) ['email'] ?? '',
-       address: (doc.data() as dynamic) ['address']?? '',
+  // List<Customer> _customerListFromSnapshot(QuerySnapshot snapshot){
+  //   return snapshot.docs.map((doc){
+  //    return Customer(
+  //      fName: (doc.data() as dynamic) ['fName'] ?? '',
+  //      lName: (doc.data() as dynamic) ['lName'] ?? '',
+  //      contactNo: (doc.data() as dynamic) ['contactNo'] ?? '',
+  //      password: (doc.data() as dynamic) ['password'] ?? '',
+  //      email: (doc.data() as dynamic) ['email'] ?? '',
+  //      address: (doc.data() as dynamic) ['address']?? '',
+  //
+  //    );
+  //   }).toList();
+  // }
+  // // Get data from the database collection customer
+  // Stream<List<Customer>> get Customers {
+  //   return customerCollection.snapshots().map(_customerListFromSnapshot);
+  // }
 
-     );
-    }).toList();
+  // customerdata from snapshot
+  Customer _customerDataFromSnapshot(DocumentSnapshot snapshot){
+    return Customer(
+      uid: uid,
+      fName: snapshot['First Name'],
+      lName: snapshot['Last Name'],
+      contactNo: snapshot['Contact No'],
+      password: snapshot['Password'],
+      email: snapshot['Email'],
+      address: snapshot['Address'],
+    );
   }
-  // Get data from the database collection customer
-  Stream<List<Customer>> get Customers {
-    return customerCollection.snapshots().map(_customerListFromSnapshot);
+
+
+  Stream<Customer> get customerData{
+    return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
   }
+
+
 }

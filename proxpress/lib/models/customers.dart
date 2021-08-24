@@ -1,4 +1,5 @@
 class Customer{
+  final String uid;
   final String fName;
   final String lName;
   final String email;
@@ -6,5 +7,5 @@ class Customer{
   final String password;
   final String address;
 
-  Customer({ this.fName, this.lName, this.email, this.contactNo, this.password, this.address,});
+  Customer({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address,});
 }

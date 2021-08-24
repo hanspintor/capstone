@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:proxpress/Load/user_load.dart';
 import 'menu_drawer.dart';
 import 'notif_drawer.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/List/customer_list.dart';
 import 'package:proxpress/models/customers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:proxpress/models/customers.dart';
 
 
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
@@ -22,8 +21,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
   String _dropoff;
   PickResult _selectedPickup;
   PickResult _selectedDropoff;
-  final Customer customer;
-  _DashboardLocationState({ this.customer});
 
   final textFieldController = TextEditingController();
 
@@ -40,9 +37,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
     _scaffoldKey.currentState.openEndDrawer();
   }
 
-  Widget _alertmessage(){
-    return null;
-  }
+  // Widget _alertmessage(){
+  //   return null;
+  // }
 
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -79,19 +76,19 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Customer>>.value(
-      value: DatabaseService().Customers,
-      child: WillPopScope(
-        onWillPop: () async {
-          print("Back Button pressed");
-          return false;
-        },
-        child: StreamBuilder(
-            stream: FirebaseFirestore.instance.collection('Customers').snapshots(),
-            builder: (context, snapshot){
-              if(!snapshot.hasData)
-                return Text('Loading data.. Please wait');
-              return Scaffold(
+    final user = Provider.of<TheUser>(context);
+
+    return  StreamBuilder<Customer>(
+      stream: DatabaseService(uid: user.uid).customerData,
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          Customer customerData = snapshot.data;
+          return WillPopScope(
+              onWillPop: () async {
+                print("Back Button pressed");
+                return false;
+              },
+              child: Scaffold(
                   drawerEnableOpenDragGesture: false,
                   endDrawerEnableOpenDragGesture: false,
                   key: _scaffoldKey,
@@ -130,10 +127,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
                           SizedBox(height: 10),
                           Align(
                             alignment: Alignment.bottomCenter,
-                            child: Text(
-                              "Welcome ${snapshot.data.docs[0]['First Name']}",
+                            child: Text("Welcome ${customerData.fName}",
                               style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 20,
                               ),
                             ),
                           ),
@@ -157,7 +153,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                     ),
                                     Container(
                                       margin:
-                                          EdgeInsets.symmetric(horizontal: 35),
+                                      EdgeInsets.symmetric(horizontal: 35),
                                       child: TextFormField(
                                         controller: textFieldController,
                                         onTap: () async {
@@ -187,7 +183,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                 shadowColor: Colors.black,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
+                                    BorderRadius.all(Radius.circular(10))),
                               ),
                             ),
                           ),
@@ -195,7 +191,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                             child: Text(
                               'Proceed',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              TextStyle(color: Colors.white, fontSize: 18),
                             ),
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xfffb0d0d)),
@@ -208,11 +204,13 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         ],
                       ),
                     ),
-                  ));
+                  ))
+          );
+        } else{
+            return UserLoading();
+        }
 
-            }
-        ),
-      ),
+      }
     );
   }
 }
