@@ -60,10 +60,10 @@ class _MainDrawerState extends State<MainDrawer> {
               icon: Icon(Icons.logout_rounded),
               label: Text('Logout'),
               onPressed: () async{
-                dynamic result = await _auth.signOut();
-                if(result == null){
-                  Navigator.pushNamed(context, '/loginScreen');
-                }
+                 await _auth.signOut();
+                // if(result == null){
+                //   Navigator.pushNamed(context, '/loginScreen');
+                // }
               },
               style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
             ),
