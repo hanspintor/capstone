@@ -34,7 +34,7 @@ class PROXpressApp extends StatelessWidget{
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        home: Wrapper(),
+        home: LoadScreen(),
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case '/':
@@ -69,6 +69,9 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/customerProfile':
               return PageTransition(child: CustomerProfile(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/wrapper':
+              return PageTransition(child: Wrapper(), type: PageTransitionType.rightToLeftWithFade);
               break;
             default:
               return null;

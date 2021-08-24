@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/load_screen.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/database.dart';
@@ -89,7 +90,7 @@ class _MainDrawerState extends State<MainDrawer> {
               onPressed: () async{
                  await _auth.signOut();
                 // if(result == null){
-                //   Navigator.pushNamed(context, '/loginScreen');
+                //   return LoadScreen();
                 // }
               },
               style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),

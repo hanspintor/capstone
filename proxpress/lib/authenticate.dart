@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/load_screen.dart';
+import 'package:proxpress/UI/login_screen.dart';
+
 
 
 class Authenticate extends StatefulWidget {
@@ -9,10 +11,12 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
-      child: LoadScreen(),
+      child: LoginScreen(),
     );
   }
 }

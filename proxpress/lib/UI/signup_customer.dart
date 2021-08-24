@@ -349,8 +349,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                     error = 'Email already taken';
                                     loading = false;
                                   });
-                                } else {
-                                  Navigator.pushNamed(context, '/dashboardLocation');
                                 }
                               }
                             }

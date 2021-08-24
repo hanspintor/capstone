@@ -1,10 +1,12 @@
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/dashboard_location.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/services/auth.dart';
 
 class LoginScreen extends StatefulWidget{
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -117,8 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       error = 'Invalid email or password';
                                       loading = false;
                                   });
-                                } else {
-                                  Navigator.pushNamed(context, '/dashboardLocation');
                                 }
                               }
                             },
