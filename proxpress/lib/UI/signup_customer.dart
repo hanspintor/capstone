@@ -181,8 +181,12 @@ class _SignupCustomerState extends State<SignupCustomer> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Contact Number'),
       maxLength: 11,
+      keyboardType: TextInputType.number,
       validator: (String value){
-        if(value.isEmpty){
+        if(value.length < 11 && value.length > 0){
+          return 'Your contact number should be 11 digits';
+        }
+        else if(value.isEmpty){
           return 'Contact Number is Required';
         }
       },
@@ -201,7 +205,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
       obscureText: true,
       validator: (String value){
         if(value.length < 8 && value.length > 0){
-          return 'Password should be 8 char long';
+          return 'Password should be 8 characters long';
         }
         else if(value.isEmpty){
           return 'Password is Required';
@@ -349,6 +353,9 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                     error = 'Email already taken';
                                     loading = false;
                                   });
+                                }
+                                else{
+                                  Navigator.pushNamed(context, '/dashboardLocation');
                                 }
                               }
                             }

@@ -125,7 +125,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                   children: [
                     Expanded(
                       child: Text(
-                        "Courier Remarks",
+                        "Customer Remarks",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 25,

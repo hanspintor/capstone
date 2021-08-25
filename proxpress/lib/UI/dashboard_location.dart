@@ -128,7 +128,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                             alignment: Alignment.bottomCenter,
                             child: Text("Welcome ${customerData.fName}",
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 25,
                               ),
                             ),
                           ),
