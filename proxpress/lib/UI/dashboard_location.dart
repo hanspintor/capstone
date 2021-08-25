@@ -50,6 +50,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
       validator: (String value){
         if(value.isEmpty){
           return 'Pick up location is required';
+        } else {
+          return null;
         }
       },
       onSaved: (String value){
@@ -65,6 +67,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
       validator: (String value){
         if(value.isEmpty){
           return 'Drop off location is required';
+        } else {
+          return null;
         }
       },
       onSaved: (String value){
@@ -165,6 +169,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                         validator: (String value){
                                           if(value.isEmpty){
                                             return 'Pick up location is required';
+                                          } else {
+                                            return null;
                                           }
                                         },
                                         onSaved: (String value){

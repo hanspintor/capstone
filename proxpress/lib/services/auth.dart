@@ -75,5 +75,8 @@ class AuthService {
     var firebaseUser = await _auth.currentUser;
     firebaseUser.updatePassword(password);
   }
-
+  Future<void> updateCustomerEmail(String email) async {
+    var firebaseUser = await _auth.currentUser;
+    firebaseUser.updateEmail(email);
+  }
 }

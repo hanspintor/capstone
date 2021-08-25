@@ -59,6 +59,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
           ),
             onPressed: (){
               Navigator.pop(context, false);
+              // Navigator.pushNamed(context, '/customerProfile');
             },
             iconSize: 25,
           ),
@@ -308,11 +309,13 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 onPressed: () async {
                                   final Customer validCustomer = Customer();
 
-                                  checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
+                                  if(_currentPassword != null)
+                                    checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
                                   setState(() {
 
                                   });
                                   if (_updateKey.currentState.validate() && checkCurrentPassword) {
+                                    validCustomer.updateCurrentEmail(_currentEmail);
                                     validCustomer.updateCurrentPassword(_newPassword);
                                     await DatabaseService(uid: user.uid)
                                         .updateCustomerData(

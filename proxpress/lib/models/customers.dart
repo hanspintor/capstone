@@ -18,5 +18,7 @@ class Customer{
   void updateCurrentPassword(String password){
     _auth.updateCustomerPassword(password);
   }
-
+  void updateCurrentEmail(String email){
+    _auth.updateCustomerEmail(email);
+  }
 }
