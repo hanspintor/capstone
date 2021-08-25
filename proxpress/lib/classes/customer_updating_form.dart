@@ -194,11 +194,12 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 await DatabaseService(uid: user.uid).updateCustomerData(
                                   _currentFName ?? customerData.fName,
                                   _currentLName ?? customerData.lName,
-                                  _currentAddress ?? customerData.address,
                                   _currentEmail ?? customerData.email,
                                   _currentContactNo ?? customerData.contactNo,
                                   _currentPassword ?? customerData.password,
+                                  _currentAddress ?? customerData.address,
                                 );
+                                Navigator.pushNamed(context, '/customerProfile');
                               }
                             }
                         ),

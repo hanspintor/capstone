@@ -14,9 +14,9 @@ class DatabaseService {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
+      'Email' : email,
       'Contact No' : contactNo,
       'Password' : password,
-      'Email' : email,
       'Address' : address,
     });
   }

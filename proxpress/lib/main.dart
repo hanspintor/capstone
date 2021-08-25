@@ -75,7 +75,10 @@ class PROXpressApp extends StatelessWidget{
               return PageTransition(child: Wrapper(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/customerUpdate':
-              return PageTransition(child:CustomerUpdate(), type: PageTransitionType.rightToLeftWithFade);
+              return PageTransition(child:CustomerUpdate(), type: PageTransitionType.bottomToTop);
+              break;
+            case '/customerProfile':
+              return PageTransition(child:CustomerProfile(), type: PageTransitionType.bottomToTop);
               break;
             default:
               return null;
