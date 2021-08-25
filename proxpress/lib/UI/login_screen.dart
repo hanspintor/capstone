@@ -1,5 +1,6 @@
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/dashboard_location.dart';
+import 'package:proxpress/UI/forgot_password.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,11 +13,7 @@ class LoginScreen extends StatefulWidget{
 }
 
 Widget _alertmessage(){
-  return Center(
-    child: Column(
-
-    ),
-  );
+  return ForgotPassword();
 }
 
 
@@ -123,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Color(0xfffb0d0d),
+                              primary: Colors.red,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                             ),
 
@@ -153,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Text(
                               "Forgot Password?",
-                              style: TextStyle(
+                                style: TextStyle(
                                 color: Color(0xffFD3F40),
                                 fontWeight: FontWeight.bold,
                               ),

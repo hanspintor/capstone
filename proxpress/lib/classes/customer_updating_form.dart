@@ -29,8 +29,16 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String _currentEmail;
   String _currentContactNo;
   String _currentPassword;
+  String _newPassword;
   String _confirmPassword;
 
+  String dots(int Dotlength){
+    String dot = "•";
+    for(var i = 0; i<Dotlength; i++){
+      dot += "•";
+    }
+    return dot;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +86,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
               builder: (context,snapshot){
                 if(snapshot.hasData){
                   Customer customerData = snapshot.data;
-
                   return Form(
                     key: _updateKey,
                     child: Column(
@@ -98,32 +105,61 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                         ),
                         Container(
                           child: TextFormField(
-                            decoration: InputDecoration(labelText: 'First Name:'),
+                            decoration: InputDecoration(labelText:
+                            'First Name:',
+                              hintText: "${customerData.fName}",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.redAccent,
+                              ),
+                            ),
                             validator: (String val) => val.isEmpty ? 'Enter your new first name' : null,
-                            initialValue: "${customerData.fName}",
                             onChanged: (val) => setState(() => _currentFName = val),
                           ),
                         ),
                         Container(
                           child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Last Name:'),
+                            decoration: InputDecoration(labelText:
+                            'Last Name:',
+                              hintText: "${customerData.lName}",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.redAccent,
+                              ),
+                            ),
                             validator: (String val) => val.isEmpty ? 'Enter your new last name' : null,
-                            initialValue: "${customerData.lName}",
                             onChanged: (val) => setState(() => _currentLName = val),
                           ),
                         ),
                         Container(
                           child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Address:'),
+                            decoration: InputDecoration(labelText:
+                            'Address:',
+                              hintText: "${customerData.address}",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.redAccent,
+                              ),
+                            ),
                             keyboardType: TextInputType.streetAddress,
                             validator: (String val) => val.isEmpty ? 'Enter your new address' : null,
-                            initialValue: "${customerData.address}",
                             onChanged: (val) => setState(() => _currentAddress = val),
                           ),
                         ),
                         Container(
                           child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Email:'),
+                            decoration: InputDecoration(labelText:
+                            'Email:',
+                              hintText: "${customerData.email}",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.redAccent,
+                              ),
+                            ),
                             validator: (String val){
                               if(val.isEmpty){
                                 return 'Email is Required';
@@ -134,13 +170,20 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               else
                                 return null;
                             },
-                            initialValue: "${customerData.email}",
                             onChanged: (val) => setState(() => _currentEmail = val),
                           ),
                         ),
                         Container(
                           child: TextFormField(
-                            decoration: InputDecoration(labelText: 'Contact No:'),
+                            decoration: InputDecoration(labelText:
+                            'Contact No:',
+                             hintText: "${customerData.contactNo}",
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                             labelStyle: TextStyle(
+                               fontStyle: FontStyle.italic,
+                               color: Colors.redAccent,
+                             ),
+                            ),
                             maxLength: 11,
                             keyboardType: TextInputType.number,
                             validator: (String val){
@@ -153,28 +196,88 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               else
                                 return null;
                             },
-                            initialValue: "${customerData.contactNo}",
                             onChanged: (val) => setState(() => _currentContactNo = val),
+                          ),
+                        ),
+                        Container(
+                          child: Center(
+                            child: Text(
+                              "Manage Password",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black54,
+                              ),
+                            ),
                           ),
                         ),
                         Container(
                           child: TextFormField(
                             obscureText: true,
-                            decoration: InputDecoration(labelText: 'Password:'),
+                            decoration: InputDecoration(labelText:
+                            'Password:',
+                              hintText: dots(customerData.password.length),
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.redAccent,
+                              ),
+                            ),
                             validator: (String val){
                               if(val.length < 8 && val.length > 0){
                                 return 'Password should be 8 characters long';
                               }
-                              else if(val.isEmpty){
-                                return 'Password is Required';
-                              }
                               else
                                 return null;
                             },
-                            initialValue: "${customerData.password}",
+                            //initialValue: "${customerData.password}",
                             onChanged: (val) => setState(() => _currentPassword = val),
                           ),
                         ),
+                        // Container(
+                        //   child: TextFormField(
+                        //     obscureText: true,
+                        //     decoration: InputDecoration(labelText:
+                        //     'New Password:',
+                        //       labelStyle: TextStyle(
+                        //         fontStyle: FontStyle.italic,
+                        //         color: Colors.redAccent,
+                        //       ),
+                        //     ),
+                        //     validator: (String val){
+                        //       if(val.length < 8 && val.length > 0){
+                        //         return 'Password should be 8 characters long';
+                        //       }
+                        //       else
+                        //         return null;
+                        //     },
+                        //     onChanged: (val) => setState(() => _newPassword = val),
+                        //   ),
+                        // ),
+                        // Container(
+                        //   child: TextFormField(
+                        //     obscureText: true,
+                        //     decoration: InputDecoration(labelText:
+                        //     'Confirmation Password:',
+                        //       labelStyle: TextStyle(
+                        //         fontStyle: FontStyle.italic,
+                        //         color: Colors.redAccent,
+                        //       ),
+                        //     ),
+                        //     validator: (String val){
+                        //       if(val.length < 8 && val.length > 0){
+                        //         return 'Password should be 8 characters long';
+                        //       }
+                        //       else if(_currentPassword != null){
+                        //         if(_newPassword != val){
+                        //           return "Password does not match";
+                        //         }
+                        //       }
+                        //       else
+                        //         return null;
+                        //     },
+                        //     onChanged: (val) => setState(() => _confirmPassword = val),
+                        //   ),
+                        // ),
                         // Container(
                         //   child: TextFormField(
                         //     obscureText: true,
@@ -190,8 +293,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               primary: Color(0xfffb0d0d),
                             ),
                             onPressed: () async {
-                              if(_updateKey.currentState.validate()){
-                                await DatabaseService(uid: user.uid).updateCustomerData(
+                              if (_updateKey.currentState.validate()) {
+                                await DatabaseService(uid: user.uid)
+                                    .updateCustomerData(
                                   _currentFName ?? customerData.fName,
                                   _currentLName ?? customerData.lName,
                                   _currentEmail ?? customerData.email,
@@ -199,7 +303,26 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   _currentPassword ?? customerData.password,
                                   _currentAddress ?? customerData.address,
                                 );
-                                Navigator.pushNamed(context, '/customerProfile');
+                                //   if(_currentPassword != null){
+                                //     await DatabaseService(uid: user.uid).updateCustomerData(
+                                //       _currentFName ?? customerData.fName,
+                                //       _currentLName ?? customerData.lName,
+                                //       _currentEmail ?? customerData.email,
+                                //       _currentContactNo ?? customerData.contactNo,
+                                //       _currentPassword ?? customerData.password,
+                                //       _currentAddress ?? customerData.address,
+                                //     );
+                                //   } else{
+                                //     await DatabaseService(uid: user.uid).updateCustomerProfile(
+                                //       _currentFName ?? customerData.fName,
+                                //       _currentLName ?? customerData.lName,
+                                //       _currentEmail ?? customerData.email,
+                                //       _currentContactNo ?? customerData.contactNo,
+                                //       _currentAddress ?? customerData.address,
+                                //     );
+                                //   }
+                                Navigator.pushNamed(
+                                    context, '/customerProfile');
                               }
                             }
                         ),

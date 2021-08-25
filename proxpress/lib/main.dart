@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:proxpress/UI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/forgot_password.dart';
 import 'package:proxpress/UI/load_screen.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';

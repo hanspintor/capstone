@@ -8,6 +8,10 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
+    Future ResetPassword(String email) async{
+      return _auth.sendPasswordResetEmail(email: email);
+    }
+
   // Sign in email and password
   Future SignInCustomer(String email, String password) async {
     try{

@@ -20,7 +20,21 @@ class DatabaseService {
       'Address' : address,
     });
   }
+  Future updateCustomerPassword(String password) async {
+    return await customerCollection.doc(uid).set({
+      'Password' : password,
 
+    });
+  }
+  Future updateCustomerProfile(String fname, String lname, String email, String contactNo, String address) async {
+    return await customerCollection.doc(uid).set({
+      'First Name': fname,
+      'Last Name' : lname,
+      'Email' : email,
+      'Contact No' : contactNo,
+      'Address' : address,
+    });
+  }
   // Customer model
   // List<Customer> _customerListFromSnapshot(QuerySnapshot snapshot){
   //   return snapshot.docs.map((doc){
