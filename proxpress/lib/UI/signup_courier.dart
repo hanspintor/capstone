@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as Path;
+import 'package:proxpress/classes/courier_upload.dart';
+import 'package:proxpress/classes/terms_conditions.dart';
 
 class SignupCourier extends StatefulWidget{
   @override
@@ -195,16 +197,6 @@ class _SignupCourierState extends State<SignupCourier> {
     );
   }
 
-  Widget _buildUpload(){
-    return ElevatedButton.icon(
-        icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-        label: Text('Add File', style: TextStyle(color: Color(0xfffb0d0d)),),
-        onPressed: () {
-          selectFile();
-        },
-        style: ElevatedButton.styleFrom(primary: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
-    );
-  }
   Future<bool> _backPressed(){
     return showDialog(context: context, builder: (context)
     =>AlertDialog(
@@ -223,7 +215,7 @@ class _SignupCourierState extends State<SignupCourier> {
   }
   @override
   Widget build(BuildContext context) {
-    final fileName = file != null ? Path.basename(file.path) : 'No File Selected';
+    //final fileName = file != null ? Path.basename(file.path) : 'No File Selected';
 
     return WillPopScope(
       onWillPop: _backPressed,
@@ -274,10 +266,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: _buildUpload(),
-                                ),
-                                Align(
-                                  child: Text(fileName),
+                                  child: CourierUpload(),
                                 ),
                                 SizedBox(height: 20,),
                                 Align(
@@ -288,7 +277,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: _buildUpload(),
+                                  child: CourierUpload(),
                                 ),
                                 SizedBox(height: 20,),
                                 Align(
@@ -299,13 +288,13 @@ class _SignupCourierState extends State<SignupCourier> {
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: _buildUpload(),
+                                  child: CourierUpload(),
                                 ),
                               ],
                             ),
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container (
                                 child: Checkbox(
@@ -329,7 +318,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                       barrierDismissible: false,
                                         context: context, builder: (BuildContext context) => AlertDialog(
                                       title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
-                                      content: (_alertmessage()),
+                                      content: (AlertTermsConditions()),
                                     )
                                     );
                                   },
@@ -364,16 +353,5 @@ class _SignupCourierState extends State<SignupCourier> {
           )
       ),
     );
-  }
-
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    if(result != null) return;
-
-    final path = result.files.single.path;
-    setState(() {
-      file = File(path);
-    });
   }
 }
