@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proxpress/UI/load_screen.dart';
+import 'package:proxpress/Load/load_screen.dart';
 import 'package:proxpress/UI/login_screen.dart';
 
 

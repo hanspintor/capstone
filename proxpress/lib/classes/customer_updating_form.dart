@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String _currentPassword;
   String _newPassword;
   String _confirmPassword;
+  bool checkCurrentPassword = true;
+  final AuthService _auth = AuthService();
 
   String dots(int Dotlength){
     String dot = "•";
@@ -89,7 +92,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                   return Form(
                     key: _updateKey,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
                           // temporary not yet configured
@@ -105,13 +107,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                         ),
                         Container(
                           child: TextFormField(
+                            initialValue: "${customerData.fName}",
                             decoration: InputDecoration(labelText:
                             'First Name:',
                               hintText: "${customerData.fName}",
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               labelStyle: TextStyle(
                                 fontStyle: FontStyle.italic,
-                                color: Colors.redAccent,
+                                color: Colors.green
                               ),
                             ),
                             validator: (String val) => val.isEmpty ? 'Enter your new first name' : null,
@@ -120,13 +123,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                         ),
                         Container(
                           child: TextFormField(
+                            initialValue: "${customerData.lName}",
                             decoration: InputDecoration(labelText:
                             'Last Name:',
                               hintText: "${customerData.lName}",
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               labelStyle: TextStyle(
                                 fontStyle: FontStyle.italic,
-                                color: Colors.redAccent,
+                                color: Colors.green
                               ),
                             ),
                             validator: (String val) => val.isEmpty ? 'Enter your new last name' : null,
@@ -135,13 +139,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                         ),
                         Container(
                           child: TextFormField(
+                            initialValue: "${customerData.address}",
                             decoration: InputDecoration(labelText:
                             'Address:',
                               hintText: "${customerData.address}",
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               labelStyle: TextStyle(
                                 fontStyle: FontStyle.italic,
-                                color: Colors.redAccent,
+                                color: Colors.green
                               ),
                             ),
                             keyboardType: TextInputType.streetAddress,
@@ -151,13 +156,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                         ),
                         Container(
                           child: TextFormField(
+                            initialValue: "${customerData.email}",
                             decoration: InputDecoration(labelText:
                             'Email:',
                               hintText: "${customerData.email}",
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               labelStyle: TextStyle(
                                 fontStyle: FontStyle.italic,
-                                color: Colors.redAccent,
+                                color: Colors.green
                               ),
                             ),
                             validator: (String val){
@@ -175,13 +181,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                         ),
                         Container(
                           child: TextFormField(
+                            initialValue: "${customerData.contactNo}",
                             decoration: InputDecoration(labelText:
                             'Contact No:',
                              hintText: "${customerData.contactNo}",
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                              labelStyle: TextStyle(
                                fontStyle: FontStyle.italic,
-                               color: Colors.redAccent,
+                               color: Colors.green
                              ),
                             ),
                             maxLength: 11,
@@ -217,9 +224,13 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                             'Password:',
                               hintText: dots(customerData.password.length),
                               floatingLabelBehavior: FloatingLabelBehavior.always,
+                              errorText: (checkCurrentPassword ?
+                              null :
+                              "Please double check your current password"
+                              ),
                               labelStyle: TextStyle(
                                 fontStyle: FontStyle.italic,
-                                color: Colors.redAccent,
+                                color: Colors.green
                               ),
                             ),
                             validator: (String val){
@@ -233,98 +244,92 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                             onChanged: (val) => setState(() => _currentPassword = val),
                           ),
                         ),
-                        // Container(
-                        //   child: TextFormField(
-                        //     obscureText: true,
-                        //     decoration: InputDecoration(labelText:
-                        //     'New Password:',
-                        //       labelStyle: TextStyle(
-                        //         fontStyle: FontStyle.italic,
-                        //         color: Colors.redAccent,
-                        //       ),
-                        //     ),
-                        //     validator: (String val){
-                        //       if(val.length < 8 && val.length > 0){
-                        //         return 'Password should be 8 characters long';
-                        //       }
-                        //       else
-                        //         return null;
-                        //     },
-                        //     onChanged: (val) => setState(() => _newPassword = val),
-                        //   ),
-                        // ),
-                        // Container(
-                        //   child: TextFormField(
-                        //     obscureText: true,
-                        //     decoration: InputDecoration(labelText:
-                        //     'Confirmation Password:',
-                        //       labelStyle: TextStyle(
-                        //         fontStyle: FontStyle.italic,
-                        //         color: Colors.redAccent,
-                        //       ),
-                        //     ),
-                        //     validator: (String val){
-                        //       if(val.length < 8 && val.length > 0){
-                        //         return 'Password should be 8 characters long';
-                        //       }
-                        //       else if(_currentPassword != null){
-                        //         if(_newPassword != val){
-                        //           return "Password does not match";
-                        //         }
-                        //       }
-                        //       else
-                        //         return null;
-                        //     },
-                        //     onChanged: (val) => setState(() => _confirmPassword = val),
-                        //   ),
-                        // ),
-                        // Container(
-                        //   child: TextFormField(
-                        //     obscureText: true,
-                        //     validator: (val) => val.isEmpty ? 'Enter your new name' : null,
-                        //     decoration: InputDecoration(labelText: 'Confirmation Password:'),
-                        //   ),
-                        // ),
-                        ElevatedButton(
-                            child: Text(
-                              'Save Changes', style: TextStyle(color: Colors.white, fontSize:18),
+                        Container(
+                          child: TextFormField(
+                            obscureText: true,
+                            decoration: InputDecoration(labelText:
+                            'New Password:',
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.green,
+                              ),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xfffb0d0d),
-                            ),
-                            onPressed: () async {
-                              if (_updateKey.currentState.validate()) {
-                                await DatabaseService(uid: user.uid)
-                                    .updateCustomerData(
-                                  _currentFName ?? customerData.fName,
-                                  _currentLName ?? customerData.lName,
-                                  _currentEmail ?? customerData.email,
-                                  _currentContactNo ?? customerData.contactNo,
-                                  _currentPassword ?? customerData.password,
-                                  _currentAddress ?? customerData.address,
-                                );
-                                //   if(_currentPassword != null){
-                                //     await DatabaseService(uid: user.uid).updateCustomerData(
-                                //       _currentFName ?? customerData.fName,
-                                //       _currentLName ?? customerData.lName,
-                                //       _currentEmail ?? customerData.email,
-                                //       _currentContactNo ?? customerData.contactNo,
-                                //       _currentPassword ?? customerData.password,
-                                //       _currentAddress ?? customerData.address,
-                                //     );
-                                //   } else{
-                                //     await DatabaseService(uid: user.uid).updateCustomerProfile(
-                                //       _currentFName ?? customerData.fName,
-                                //       _currentLName ?? customerData.lName,
-                                //       _currentEmail ?? customerData.email,
-                                //       _currentContactNo ?? customerData.contactNo,
-                                //       _currentAddress ?? customerData.address,
-                                //     );
-                                //   }
-                                Navigator.pushNamed(
-                                    context, '/customerProfile');
+                            validator: (String val){
+                              if(val.length < 8 && val.length > 0){
+                                return 'Password should be 8 characters long';
+                              } else if(_currentPassword != null){
+                                if(val.isEmpty){
+                                  return 'Kindly provide your new password';
+                                }
                               }
-                            }
+                              else
+                                return null;
+                            },
+                            onChanged: (val) => setState(() => _newPassword = val),
+                          ),
+                        ),
+                        Container(
+                          child: TextFormField(
+                            obscureText: true,
+                            decoration: InputDecoration(labelText:
+                            'Repeat Password:',
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              labelStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.green
+                              ),
+                            ),
+                            validator: (String val){
+                              if(_currentPassword != null){
+                                if(val.isEmpty){
+                                  return "Kindly provide repeat password for verification";
+                                } else if(_newPassword != val){
+                                  return "Password does not match";
+                                }
+                              }
+                              else
+                                return null;
+                            },
+                            onChanged: (val) => setState(() => _confirmPassword = val),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: 20),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: ElevatedButton(
+                                child: Text(
+                                  'Save Changes', style: TextStyle(color: Colors.white, fontSize:15),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xfffb0d0d),
+                                ),
+                                onPressed: () async {
+                                  final Customer validCustomer = Customer();
+
+                                  checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
+                                  setState(() {
+
+                                  });
+                                  if (_updateKey.currentState.validate() && checkCurrentPassword) {
+                                    validCustomer.updateCurrentPassword(_newPassword);
+                                    await DatabaseService(uid: user.uid)
+                                        .updateCustomerData(
+                                      _currentFName ?? customerData.fName,
+                                      _currentLName ?? customerData.lName,
+                                      _currentEmail ?? customerData.email,
+                                      _currentContactNo ?? customerData.contactNo,
+                                      _confirmPassword ?? customerData.password,
+                                      _currentAddress ?? customerData.address,
+                                    );
+
+                                    Navigator.pushNamed(
+                                        context, '/customerProfile');
+                                  }
+                                }
+                            ),
+                          ),
                         ),
                       ],
                     ),

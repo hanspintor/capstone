@@ -49,7 +49,6 @@ class AuthService {
       return null;
     }
   }
-
   // Sign Out
   Future signOut() async {
     try{
@@ -59,4 +58,22 @@ class AuthService {
       return null;
     }
   }
+  Future<bool> validateCustomerPassword(String password) async {
+    var firebaseUser = await _auth.currentUser;
+
+    var authCredentials = EmailAuthProvider.credential(email: firebaseUser.email, password: password);
+    try {
+      var authResult = await firebaseUser
+          .reauthenticateWithCredential(authCredentials);
+      return authResult.user != null;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+  Future<void> updateCustomerPassword(String password) async {
+    var firebaseUser = await _auth.currentUser;
+    firebaseUser.updatePassword(password);
+  }
+
 }
