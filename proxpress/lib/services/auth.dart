@@ -35,7 +35,7 @@ class AuthService {
     return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
-  // Sign Up email and password
+  // Sign Up email and password for Customer
   Future SignUpCustomer(String email, String password, String Fname, String Lname, String ContactNo, String Address) async {
     try{
       // AuthResult before
@@ -43,6 +43,20 @@ class AuthService {
       // FirebaseUser before
       User user = result.user;
       await DatabaseService(uid: user.uid).updateCustomerData(Fname, Lname, email, ContactNo, password, Address);
+      return _userFromFirebaseUser(user);
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+  // Sign Up email and password for Courier
+  Future SignUpCourier(String email, String password, String Fname, String Lname, String ContactNo, String Address) async {
+    try{
+      // AuthResult before
+      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      // FirebaseUser before
+      User user = result.user;
+      await DatabaseService(uid: user.uid).updateCourierData(Fname, Lname, email, ContactNo, password, Address);
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());

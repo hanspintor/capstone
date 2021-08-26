@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/models/customers.dart';
+import 'package:proxpress/models/couriers.dart';
 
 class DatabaseService {
 
@@ -8,10 +9,22 @@ class DatabaseService {
 
   // Customer Collection Reference
   final CollectionReference customerCollection = FirebaseFirestore.instance.collection('Customers');
+  final CollectionReference courierCollection = FirebaseFirestore.instance.collection('Couriers');
 
-  // Creation of a collection reference
+  // Creation of a collection reference for customer data
   Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address) async {
     return await customerCollection.doc(uid).set({
+      'First Name': fname,
+      'Last Name' : lname,
+      'Email' : email,
+      'Contact No' : contactNo,
+      'Password' : password,
+      'Address' : address,
+    });
+  }
+  // Creation of collection reference for courier data
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address) async {
+    return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
       'Email' : email,
@@ -63,12 +76,23 @@ class DatabaseService {
     );
   }
 
-  // Courier _courierDataFromSnapshot(DocumentSnapshot snapshot){
-  //   return Courier();
-  // }
+  Courier _courierDataFromSnapshot(DocumentSnapshot snapshot){
+    return Courier(
+      uid: uid,
+      fName: snapshot['First Name'],
+      lName: snapshot['Last Name'],
+      contactNo: snapshot['Contact No'],
+      password: snapshot['Password'],
+      email: snapshot['Email'],
+      address: snapshot['Address'],
+    );
+  }
 
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
+  }
+  Stream<Courier> get courierData{
+    return courierCollection.doc(uid).snapshots().map(_courierDataFromSnapshot);
   }
 
 

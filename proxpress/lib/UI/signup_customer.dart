@@ -29,6 +29,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
         if(value.isEmpty){
           return 'First Name is Required';
         }
+        else return null;
       },
       onSaved: (String value){
         fName = value;
@@ -46,6 +47,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
         if(value.isEmpty){
           return 'Last Name is Required';
         }
+        else return null;
       },
       onSaved: (String value){
         lName = value;
@@ -66,6 +68,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
         if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
           return 'Please Enter a Valid Email Address';
         }
+        else return null;
       },
       onSaved: (String value){
         email = value;
@@ -87,6 +90,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
         else if(value.isEmpty){
           return 'Contact Number is Required';
         }
+        else return null;
       },
       onSaved: (String value){
         contactNo = value;
@@ -108,6 +112,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
         else if(value.isEmpty){
           return 'Password is Required';
         }
+        else return null;
       },
       onSaved: (String value){
         password = value;
@@ -125,6 +130,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
         if(value.isEmpty){
           return 'Home Address is Required';
         }
+        else return null;
       },
       onSaved: (String value){
        address = value;
