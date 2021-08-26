@@ -63,6 +63,10 @@ class DatabaseService {
     );
   }
 
+  // Courier _courierDataFromSnapshot(DocumentSnapshot snapshot){
+  //   return Courier();
+  // }
+
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
   }
