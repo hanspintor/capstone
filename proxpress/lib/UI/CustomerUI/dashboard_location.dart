@@ -215,7 +215,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
               );
             } else{
               return Container(
-                child: Text("CUTE SI ANSEL"),
+                child: UserLoading(),
               );
             }
           }

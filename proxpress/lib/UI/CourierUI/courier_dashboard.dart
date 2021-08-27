@@ -7,23 +7,14 @@ class CourierDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: ElevatedButton.icon(
+    return  ElevatedButton.icon(
           icon: Icon(Icons.logout_rounded),
           label: Text('Logout'),
           onPressed: () async{
             await _auth.signOut();
-            //Navigator.pushNamed(context, '/loginScreen');
-            // Navigator.pushNamed(context, '/loginScreen');
-            // if(result == null){
-            //   return LoadScreen();
-            // }
+            Navigator.pushNamed(context, '/loginScreen');
           },
           style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
-        ),
-
-      ),
-    );
+        );
   }
 }
