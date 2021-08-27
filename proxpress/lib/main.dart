@@ -10,6 +10,7 @@ import 'package:proxpress/UI/signup_courier.dart';
 import 'package:proxpress/UI/signup_customer.dart';
 import 'package:proxpress/UI/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:proxpress/courier_UI/courier_dashboard.dart';
 import 'package:proxpress/services/auth.dart';
 import 'UI/courier_bookmarks.dart';
 import 'UI/customer_profile.dart';
@@ -80,6 +81,9 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/customerProfile':
               return PageTransition(child:CustomerProfile(), type: PageTransitionType.bottomToTop);
+              break;
+            case '/courierDashboard':
+              return PageTransition(child: CourierDashboard(), type: PageTransitionType.bottomToTop);
               break;
             default:
               return null;
