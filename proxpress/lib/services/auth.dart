@@ -19,6 +19,7 @@ class AuthService {
       // FirebaseUser before
       User user = result.user;
       await DatabaseService(uid: user.uid).AuthupdateCustomerPassword(password);
+      await DatabaseService(uid: user.uid).AuthupdateCourierPassword(password);
       print(user.uid);
       return _userFromFirebaseUser(user);
 

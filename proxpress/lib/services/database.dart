@@ -40,7 +40,13 @@ class DatabaseService {
         .then((value) => print("User Updated"))
         .catchError((error) => print("Failed to update user: $error"));
   }
-
+  Future<void> AuthupdateCourierPassword(String password) {
+    return courierCollection
+        .doc(uid)
+        .update({'Password': password})
+        .then((value) => print("User Updated"))
+        .catchError((error) => print("Failed to update user: $error"));
+  }
 
   // Customer model
   // List<Customer> _customerListFromSnapshot(QuerySnapshot snapshot){
