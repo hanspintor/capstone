@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/models/customers.dart';
+import 'package:proxpress/models/user.dart';
+import 'package:proxpress/services/database.dart';
 import '../menu_drawer.dart';
 import '../notif_drawer.dart';
 
@@ -72,85 +77,95 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        drawerEnableOpenDragGesture: false,
-        endDrawerEnableOpenDragGesture: false,
-        key:_scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
-          actions: [
-            IconButton(icon: Icon(
-              Icons.notifications_none_rounded,
-            ),
-              onPressed: (){
-                _openEndDrawer();
-              },
-              iconSize: 25,
-            ),
-          ],
-          flexibleSpace: Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Image.asset(
-              "assets/PROExpress-logo.png",
-              height: 120,
-              width: 120,
-            ),
-          ),
-          //title: Text("PROExpress"),
-        ),
-        drawer: MainDrawer(),
-        endDrawer: NotifDrawer(),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text(
-                    "Bookmarked Couriers",
-                    style: TextStyle(
-                      fontSize: 25,
+    final user = Provider.of<TheUser>(context);
+      if(user != null){
+        return StreamBuilder<Customer>(
+          stream: DatabaseService(uid: user.uid).customerData,
+          builder: (context, snapshot) {
+            return Scaffold(
+                drawerEnableOpenDragGesture: false,
+                endDrawerEnableOpenDragGesture: false,
+                key:_scaffoldKey,
+                appBar: AppBar(
+                  backgroundColor: Colors.white,
+                  iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
+                  actions: [
+                    IconButton(icon: Icon(
+                      Icons.notifications_none_rounded,
+                    ),
+                      onPressed: (){
+                        _openEndDrawer();
+                      },
+                      iconSize: 25,
+                    ),
+                  ],
+                  flexibleSpace: Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Image.asset(
+                      "assets/PROExpress-logo.png",
+                      height: 120,
+                      width: 120,
                     ),
                   ),
+                  //title: Text("PROExpress"),
                 ),
-                Card(
-                  margin: EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 30, left: 100, right: 100),
-                        child: TextFormField(
-                          decoration: InputDecoration(labelText: 'Search', prefixIcon: Icon(Icons.search_rounded)),
-                        ),
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                            child: ListTile(
-                              title: Text(couriers[index].name),
-                              leading: Icon(Icons.account_circle_rounded, size: 50,),
-                              subtitle: Text(
-                                  "Vehicle Type: ${couriers[index].vehicleType} \nDescription: ${couriers[index].vehicleType} \nPrice: ${couriers[index].price.toString()}"
-                              ),
+                drawer: MainDrawer(),
+                endDrawer: NotifDrawer(),
+                body: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            "Bookmarked Couriers",
+                            style: TextStyle(
+                              fontSize: 25,
                             ),
-                          );
-                        },
-                        itemCount: couriers.length,
-                      ),
-                    ],
+                          ),
+                        ),
+                        Card(
+                          margin: EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top: 10, bottom: 30, left: 100, right: 100),
+                                child: TextFormField(
+                                  decoration: InputDecoration(labelText: 'Search', prefixIcon: Icon(Icons.search_rounded)),
+                                ),
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Card(
+                                    margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                                    child: ListTile(
+                                      title: Text(couriers[index].name),
+                                      leading: Icon(Icons.account_circle_rounded, size: 50,),
+                                      subtitle: Text(
+                                          "Vehicle Type: ${couriers[index].vehicleType} \nDescription: ${couriers[index].vehicleType} \nPrice: ${couriers[index].price.toString()}"
+                                      ),
+                                    ),
+                                  );
+                                },
+                                itemCount: couriers.length,
+                              ),
+                            ],
+                          ),
+                          shadowColor: Colors.black,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                        ),
+                      ],
+                    ),
                   ),
-                  shadowColor: Colors.black,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                ),
-              ],
-            ),
-          ),
-        )
-    );
+                )
+            );
+          }
+        );
+      } else {
+        return LoginScreen();
+      }
   }
 }
 

@@ -25,6 +25,7 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
+      //await FileStorage(uid: user.uid);
       await DatabaseService(uid: user.uid).AuthupdateCustomerPassword(password);
       await DatabaseService(uid: user.uid).AuthupdateCourierPassword(password);
       print(user.uid);
@@ -50,6 +51,7 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
+      //await FileStorage(uid: user.uid);
       await DatabaseService(uid: user.uid).updateCustomerData(Fname, Lname, email, ContactNo, password, Address);
       return _userFromFirebaseUser(user);
     }catch(e){
@@ -64,6 +66,7 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
+      await FileStorage(uid: user.uid);
       await DatabaseService(uid: user.uid).updateCourierData(Fname, Lname, email, ContactNo, password, Address);
       return _userFromFirebaseUser(user);
     }catch(e){
@@ -101,7 +104,7 @@ class AuthService {
     var firebaseUser = await _auth.currentUser;
     firebaseUser.updateEmail(email);
   }
-  Future<void> uploadProfilePicture(File image) async{
-    customer.avatarUrl = await customerStorage.uploadFile(image);
-  }
+  // Future<void> uploadProfilePicture(File image) async{
+  //   customer.avatarUrl = await customerStorage.uploadFile(image);
+  // }
 }

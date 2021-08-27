@@ -149,12 +149,12 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                             iconSize: 16,
                                               icon: Icon(Icons.edit_rounded,color: Colors.white,),
                                               onPressed: () async{
-                                               XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                                               print(image.path);
-                                                await _auth.uploadProfilePicture(File(image.path));
-                                                setState(() {
-
-                                                });
+                                               // XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                                               // print(image.path);
+                                               //  await _auth.uploadProfilePicture(File(image.path));
+                                               //  setState(() {
+                                               //
+                                               //  });
                                               }
                                           ),
                                         ),
