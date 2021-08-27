@@ -15,6 +15,7 @@ class CourierDashboard extends StatelessWidget {
           onPressed: () async{
             await _auth.signOut();
             //Navigator.pushNamed(context, '/loginScreen');
+            // Navigator.pushNamed(context, '/loginScreen');
             // if(result == null){
             //   return LoadScreen();
             // }
