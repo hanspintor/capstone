@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
 
@@ -19,6 +18,7 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
+      await DatabaseService(uid: user.uid).AuthupdateCustomerPassword(password);
       print(user.uid);
       return _userFromFirebaseUser(user);
 

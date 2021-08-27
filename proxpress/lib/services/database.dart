@@ -33,14 +33,12 @@ class DatabaseService {
       'Address' : address,
     });
   }
-  Future updateCustomerProfile(String fname, String lname, String email, String contactNo, String address) async {
-    return await customerCollection.doc(uid).set({
-      'First Name': fname,
-      'Last Name' : lname,
-      'Email' : email,
-      'Contact No' : contactNo,
-      'Address' : address,
-    });
+  Future<void> AuthupdateCustomerPassword(String password) {
+    return customerCollection
+        .doc(uid)
+        .update({'Password': password})
+        .then((value) => print("User Updated"))
+        .catchError((error) => print("Failed to update user: $error"));
   }
 
 
