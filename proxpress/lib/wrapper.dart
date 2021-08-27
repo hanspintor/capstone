@@ -3,9 +3,9 @@ import 'package:proxpress/Load/load_screen.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/UI/dashboard_location.dart';
+import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/courier_UI/courier_dashboard.dart';
+import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/authenticate.dart';
 

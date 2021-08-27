@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'signup_customer.dart';
+import 'CustomerUI/signup_customer.dart';
 import 'signup_courier.dart';
 
 class RegLandingPage extends StatefulWidget{

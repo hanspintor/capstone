@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'menu_drawer.dart';
-import 'notif_drawer.dart';
+import '../menu_drawer.dart';
+import '../notif_drawer.dart';
 
 class CourierBookmarks extends StatefulWidget{
   @override
