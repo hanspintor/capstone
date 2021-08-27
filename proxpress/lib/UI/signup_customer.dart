@@ -258,9 +258,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                     loading = false;
                                   });
                                 }
-                                else{
-                                  Navigator.pushNamed(context, '/dashboardLocation');
-                                }
                               }
                             }
                           ),
