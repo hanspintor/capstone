@@ -126,7 +126,7 @@ class _MainDrawerState extends State<MainDrawer> {
               label: Text('Logout'),
               onPressed: () async{
                 await _auth.signOut();
-                Navigator.pushNamed(context, '/loginScreen');
+                //Navigator.pushNamed(context, '/loginScreen');
                 // if(result == null){
                 //   return LoadScreen();
                 // }

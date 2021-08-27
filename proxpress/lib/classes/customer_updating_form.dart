@@ -106,18 +106,16 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          // temporary not yet configured
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              "Edit Profile",
-                              style: TextStyle(
-                                fontSize: 25,
-                              ),
+                          margin: EdgeInsets.only(top: 10),
+                          child: Text(
+                            "Edit Profile",
+                            style: TextStyle(
+                              fontSize: 25,
                             ),
                           ),
                         ),
                         Container(
+                          margin: EdgeInsets.only(top: 10),
                           child: Stack(
                             children: [
                               ClipOval(
@@ -311,6 +309,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               } else if(_currentPassword != null){
                                 if(val.isEmpty){
                                   return 'Kindly provide your new password';
+                                } else {
+                                  return null;
                                 }
                               }
                               else
@@ -336,6 +336,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   return "Kindly provide repeat password for verification";
                                 } else if(_newPassword != val){
                                   return "Password does not match";
+                                } else {
+                                  return null;
                                 }
                               }
                               else

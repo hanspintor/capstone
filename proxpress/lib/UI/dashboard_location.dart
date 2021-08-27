@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/login_screen.dart';
 import 'menu_drawer.dart';
 import 'notif_drawer.dart';
 import 'package:proxpress/services/database.dart';
@@ -218,7 +219,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
           }
       );
     } else {
-      return UserLoading();
+      return LoginScreen();
     }
   }
 }
