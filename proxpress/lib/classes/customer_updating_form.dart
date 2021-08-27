@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
@@ -8,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
 import  'package:proxpress/UI/notif_drawer.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
+import 'package:proxpress/services/file_storage.dart';
 
 
 
@@ -34,6 +37,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String _newPassword;
   String _confirmPassword;
   bool checkCurrentPassword = true;
+
   final AuthService _auth = AuthService();
 
   String dots(int Dotlength){
@@ -70,6 +74,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
           ),
             onPressed: (){
               Navigator.pop(context, false);
+
               // Navigator.pushNamed(context, '/customerProfile');
             },
             iconSize: 25,
@@ -143,7 +148,13 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                           child: IconButton(
                                             iconSize: 16,
                                               icon: Icon(Icons.edit_rounded,color: Colors.white,),
-                                              onPressed: () {
+                                              onPressed: () async{
+                                               XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                                               print(image.path);
+                                                await _auth.uploadProfilePicture(File(image.path));
+                                                setState(() {
+
+                                                });
                                               }
                                           ),
                                         ),
@@ -377,9 +388,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                       _confirmPassword ?? customerData.password,
                                       _currentAddress ?? customerData.address,
                                     );
-
-                                    Navigator.pushNamed(
-                                        context, '/customerProfile');
+                                    Navigator.pop(context, false);
                                   }
                                 }
                             ),

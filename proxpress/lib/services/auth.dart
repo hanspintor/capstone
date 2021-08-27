@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:proxpress/services/file_storage.dart';
+import 'package:proxpress/models/customers.dart';
 
 class AuthService {
 
+  Customer customer;
+  FileStorage customerStorage = FileStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
@@ -93,5 +100,8 @@ class AuthService {
   Future<void> updateCustomerEmail(String email) async {
     var firebaseUser = await _auth.currentUser;
     firebaseUser.updateEmail(email);
+  }
+  Future<void> uploadProfilePicture(File image) async{
+    customer.avatarUrl = await customerStorage.uploadFile(image);
   }
 }

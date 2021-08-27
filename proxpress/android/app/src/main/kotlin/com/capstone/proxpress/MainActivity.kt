@@ -1,4 +1,4 @@
-package com.capstone.proxpress.proxpress
+package com.capstone.proxpress
 
 import io.flutter.embedding.android.FlutterActivity
 

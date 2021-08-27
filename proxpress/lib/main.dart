@@ -32,6 +32,7 @@ class PROXpressApp extends StatelessWidget{
   Widget build(BuildContext context) {
     return StreamProvider<TheUser>.value(
       value: AuthService().user,
+      initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

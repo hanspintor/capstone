@@ -31,19 +31,6 @@ class Wrapper extends StatelessWidget {
         }
       });
 
-      // FirebaseFirestore.instance
-      //     .collection('Couriers')
-      //     .doc(user.uid)
-      //     .get()
-      //     .then((DocumentSnapshot documentSnapshot) {
-      //   if (documentSnapshot.exists) {
-      //     print('Document data: ${documentSnapshot.data()}');
-      //     print('courier document found');
-      //
-      //   } else {
-      //     print('no courier document found');
-      //   }
-      //});
       return UserLoading();
     } else {
       return Authenticate();

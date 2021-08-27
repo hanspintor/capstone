@@ -8,9 +8,11 @@ class Customer{
   final String password;
   final String address;
 
+  String avatarUrl;
+
   final AuthService _auth = AuthService();
 
-  Customer({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address,});
+  Customer({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.avatarUrl});
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCustomerPassword(password);

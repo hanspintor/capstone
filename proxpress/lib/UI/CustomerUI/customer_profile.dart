@@ -1,8 +1,6 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/classes/customer_updating_form.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
 import '../notif_drawer.dart';
 import 'package:proxpress/services/database.dart';
@@ -36,7 +34,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawerEnableOpenDragGesture: false,
@@ -48,7 +45,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
             Icons.arrow_back,
           ),
             onPressed: (){
-              Navigator.pop(context, false);
+                Navigator.pop(context, false);
+
+
             },
             iconSize: 25,
           ),
