@@ -5,11 +5,39 @@ import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
+import 'package:proxpress/services/default_profile_pic.dart';
 
 
 class MainDrawer extends StatefulWidget {
   @override
   _MainDrawerState createState() => _MainDrawerState();
+}
+void selectedItem(BuildContext context, int index){
+  Navigator.of(context).pop();
+  switch (index){
+    case 0:
+      Navigator.pushNamed(context, '/customerProfile');
+      break;
+    case 1:
+      Navigator.pushNamed(context, '/dashboardLocation');
+      break;
+    case 2:
+      Navigator.pushNamed(context, '/courierBookmarks');
+      break;
+    case 3:
+      Navigator.pop(context);
+      break;
+  }
+}
+Future _getDefaultProfile(BuildContext context, String imageName) async {
+  Image image;
+  await FireStorageService.loadImage(context, imageName).then((value) {
+    image = Image.network(
+      value.toString(),
+      // fit: BoxFit.scaleDown,
+    );
+  });
+  return image;
 }
 
 class _MainDrawerState extends State<MainDrawer> {
@@ -31,14 +59,23 @@ class _MainDrawerState extends State<MainDrawer> {
                     builder: (context, snapshot){
                       if(snapshot.hasData){
                         Customer customerData = snapshot.data;
-                        return Align(
-                          alignment: Alignment.center,
-                          child : InkWell(
-                            child: Text('${customerData.fName} ${customerData.lName}', style: TextStyle(fontSize: 20)),
-                            onTap: (){
-                              Navigator.pushNamed(context, '/customerProfile');
-                            },
-                          ),
+                        return Column(
+                          children: [
+                            Container(
+                              child: FutureBuilder(
+                                  future: _getDefaultProfile(context, "profile-user.png"),
+                                  builder: (context, snapshot) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width / 5,
+                                      height: MediaQuery.of(context).size.width / 5,
+                                      child: snapshot.data,
+                                    );
+                                  }
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                            Text('${customerData.fName} ${customerData.lName}', style: TextStyle(fontSize: 20)),
+                          ],
                         );
                       }
                       else{
@@ -51,29 +88,29 @@ class _MainDrawerState extends State<MainDrawer> {
                   ),
                 ),
                 ListTile(
+                  leading: Icon(Icons.account_circle_rounded, color: Color(0xfffb0d0d),),
+                  title: Text('Profile', style: TextStyle(color: Color(0xfffb0d0d))),
+                  onTap: () {
+                    selectedItem(context, 0);
+                  },
+                ),
+                ListTile(
                   leading: Icon(Icons.place, color: Color(0xfffb0d0d),),
                   title: Text('Pin Location', style: TextStyle(color: Color(0xfffb0d0d))),
                   onTap: () {
-                    selectedItem(context, 0);
+                    selectedItem(context, 1);
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.bookmark, color: Color(0xfffb0d0d),),
                   title: Text('Courier Bookmarks', style: TextStyle(color: Color(0xfffb0d0d))),
                   onTap: () {
-                    selectedItem(context, 1);
+                    selectedItem(context, 2);
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.notification_important_rounded, color: Color(0xfffb0d0d),),
                   title: Text('Delivery Status', style: TextStyle(color: Color(0xfffb0d0d))),
-                  onTap: () {
-                    selectedItem(context, 2);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.local_shipping_rounded, color: Color(0xfffb0d0d),),
-                  title: Text('Search Courier', style: TextStyle(color: Color(0xfffb0d0d))),
                   onTap: () {
                     selectedItem(context, 3);
                   },
@@ -99,22 +136,5 @@ class _MainDrawerState extends State<MainDrawer> {
         ],
       ),
     );
-  }
-  void selectedItem(BuildContext context, int index){
-    Navigator.of(context).pop();
-    switch (index){
-      case 0:
-        Navigator.pushNamed(context, '/dashboardLocation');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/courierBookmarks');
-        break;
-      case 2:
-        Navigator.pop(context);
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/dashboardCustomer');
-        break;
-    }
   }
 }

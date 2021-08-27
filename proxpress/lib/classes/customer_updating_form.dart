@@ -7,6 +7,7 @@ import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
 import  'package:proxpress/UI/notif_drawer.dart';
+import 'package:proxpress/services/default_profile_pic.dart';
 
 
 
@@ -41,6 +42,16 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
       dot += "•";
     }
     return dot;
+  }
+  Future _getDefaultProfile(BuildContext context, String imageName) async {
+    Image image;
+    await FireStorageService.loadImage(context, imageName).then((value) {
+      image = Image.network(
+        value.toString(),
+        // fit: BoxFit.scaleDown,
+      );
+    });
+    return image;
   }
 
   @override
@@ -104,6 +115,44 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 fontSize: 25,
                               ),
                             ),
+                          ),
+                        ),
+                        Container(
+                          child: Stack(
+                            children: [
+                              ClipOval(
+                                child: FutureBuilder(
+                                    future: _getDefaultProfile(context, "profile-user.png"),
+                                    builder: (context, snapshot) {
+                                      return Container(
+                                        width: MediaQuery.of(context).size.width / 4,
+                                        height: MediaQuery.of(context).size.width / 4,
+                                        child: snapshot.data,
+                                      );
+                                    }
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                //right : 10,
+                                left: 70,
+                                child: ClipOval(
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: Container(
+                                          color: Color(0xfffb0d0d),
+                                          child: IconButton(
+                                            iconSize: 16,
+                                              icon: Icon(Icons.edit_rounded,color: Colors.white,),
+                                              onPressed: () {
+                                              }
+                                          ),
+                                        ),
+                                      ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Container(

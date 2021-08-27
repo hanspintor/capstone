@@ -1,7 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/customer_updating_form.dart';
+import 'package:proxpress/services/default_profile_pic.dart';
 import 'notif_drawer.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
@@ -17,6 +19,16 @@ class _CustomerProfileState extends State<CustomerProfile> {
 
   void _openEndDrawer() {
     _scaffoldKey.currentState.openEndDrawer();
+  }
+  Future _getDefaultProfile(BuildContext context, String imageName) async {
+    Image image;
+    await FireStorageService.loadImage(context, imageName).then((value) {
+      image = Image.network(
+        value.toString(),
+        // fit: BoxFit.scaleDown,
+      );
+    });
+    return image;
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -77,8 +89,16 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Icon(Icons.account_circle_rounded, size: 150,),
+                            child: FutureBuilder(
+                              future: _getDefaultProfile(context, "profile-user.png"),
+                              builder: (context, snapshot) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width / 4,
+                                    height: MediaQuery.of(context).size.width / 4,
+                                    child: snapshot.data,
+                                  );
+                              }
+                            ),
                           ),
                           Container(
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
