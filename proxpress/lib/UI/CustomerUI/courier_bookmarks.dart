@@ -7,8 +7,8 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
-import '../menu_drawer.dart';
-import '../notif_drawer.dart';
+import 'menu_drawer_customer.dart';
+import 'notif_drawer_customer.dart';
 
 class CourierBookmarks extends StatefulWidget {
   @override
@@ -128,8 +128,8 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                     ),
                     //title: Text("PROExpress"),
                   ),
-                  drawer: MainDrawer(),
-                  endDrawer: NotifDrawer(),
+                  drawer: MainDrawerCustomer(),
+                  endDrawer: NotifDrawerCustomer(),
                   body: SingleChildScrollView(
                     child: Center(
                       child: Column(

@@ -8,7 +8,7 @@ import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
-import  'package:proxpress/UI/notif_drawer.dart';
+import 'package:proxpress/UI/CustomerUI/notif_drawer_customer.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
 import 'package:proxpress/services/file_storage.dart';
 
@@ -99,7 +99,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
           ),
           //title: Text("PROExpress"),
         ),
-        endDrawer: NotifDrawer(),
+        endDrawer: NotifDrawerCustomer(),
         body: SingleChildScrollView(
           child: StreamBuilder<Customer>(
               stream: DatabaseService(uid: user.uid).customerData,
@@ -398,7 +398,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                     ),
                   );
                 }
-
                 else{
                   return UserLoading();
                 }

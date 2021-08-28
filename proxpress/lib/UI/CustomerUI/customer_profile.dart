@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
-import '../notif_drawer.dart';
+import 'notif_drawer_customer.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +71,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
           ),
           //title: Text("PROExpress"),
         ),
-        endDrawer: NotifDrawer(),
+        endDrawer: NotifDrawerCustomer(),
         body: SingleChildScrollView(
           child: StreamBuilder<Customer>(
             stream: DatabaseService(uid: user.uid).customerData,

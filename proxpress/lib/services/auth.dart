@@ -83,6 +83,7 @@ class AuthService {
       return null;
     }
   }
+  //validates the password of the customer
   Future<bool> validateCustomerPassword(String password) async {
     var firebaseUser = await _auth.currentUser;
 
@@ -96,11 +97,38 @@ class AuthService {
       return false;
     }
   }
+  //validates the password of the courier
+  Future<bool> validateCourierPassword(String password) async {
+    var firebaseUser = await _auth.currentUser;
+
+    var authCredentials = EmailAuthProvider.credential(email: firebaseUser.email, password: password);
+    try {
+      var authResult = await firebaseUser
+          .reauthenticateWithCredential(authCredentials);
+      return authResult.user != null;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  //updates the password of the customer
   Future<void> updateCustomerPassword(String password) async {
     var firebaseUser = await _auth.currentUser;
     firebaseUser.updatePassword(password);
   }
+  //updates the password of the courier
+  Future<void> updateCourierPassword(String password) async {
+    var firebaseUser = await _auth.currentUser;
+    firebaseUser.updatePassword(password);
+  }
+  //updates the email of the customer
   Future<void> updateCustomerEmail(String email) async {
+    var firebaseUser = await _auth.currentUser;
+    firebaseUser.updateEmail(email);
+  }
+  //updates the email of the courier
+  Future<void> updateCourierEmail(String email) async {
     var firebaseUser = await _auth.currentUser;
     firebaseUser.updateEmail(email);
   }

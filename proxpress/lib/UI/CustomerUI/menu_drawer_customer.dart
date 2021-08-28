@@ -8,9 +8,9 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
 
 
-class MainDrawer extends StatefulWidget {
+class MainDrawerCustomer extends StatefulWidget {
   @override
-  _MainDrawerState createState() => _MainDrawerState();
+  _MainDrawerCustomerState createState() => _MainDrawerCustomerState();
 }
 void selectedItem(BuildContext context, int index){
   Navigator.of(context).pop();
@@ -40,7 +40,7 @@ Future _getDefaultProfile(BuildContext context, String imageName) async {
   return image;
 }
 
-class _MainDrawerState extends State<MainDrawer> {
+class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
 
   final AuthService _auth = AuthService();
   @override

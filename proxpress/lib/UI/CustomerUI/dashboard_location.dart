@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import '../menu_drawer.dart';
-import '../notif_drawer.dart';
+import 'menu_drawer_customer.dart';
+import 'notif_drawer_customer.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
@@ -123,8 +123,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         ),
                         //title: Text("PROExpress"),
                       ),
-                      drawer: MainDrawer(),
-                      endDrawer: NotifDrawer(),
+                      drawer: MainDrawerCustomer(),
+                      endDrawer: NotifDrawerCustomer(),
                       body: SingleChildScrollView(
                         child: Center(
                           child: Column(
@@ -218,9 +218,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
             }
           }
       );
-    } else {
+    }
+    else {
       return LoginScreen();
-
 
     }
 
