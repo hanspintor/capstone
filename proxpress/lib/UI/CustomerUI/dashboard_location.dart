@@ -221,12 +221,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
     }
     else {
       return LoginScreen();
-
     }
-
-
-
   }
-
 }
 
