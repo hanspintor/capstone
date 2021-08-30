@@ -36,8 +36,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    if (user != null) {
-      return Scaffold(
+      return user == null ? LoginScreen() : Scaffold(
           drawerEnableOpenDragGesture: false,
           endDrawerEnableOpenDragGesture: false,
           key:_scaffoldKey,
@@ -151,8 +150,5 @@ class _CustomerProfileState extends State<CustomerProfile> {
 
           )
       );
-    } else {
-      return LoginScreen();
-    }
   }
 }

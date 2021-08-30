@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proxpress/models/user.dart';
+
+import '../login_screen.dart';
 
 class NotifDrawerCustomer extends StatefulWidget {
 
@@ -10,7 +14,8 @@ class NotifDrawerCustomer extends StatefulWidget {
 class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    final user = Provider.of<TheUser>(context);
+    return user == null ? LoginScreen() :Drawer(
       child: Column(
         mainAxisSize : MainAxisSize.max,
         children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/database.dart';
@@ -46,7 +47,7 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-    return Drawer(
+    return user == null ? LoginScreen() : Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [

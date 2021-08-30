@@ -1,7 +1,4 @@
-import 'dart:io';
 import 'package:proxpress/services/auth.dart';
-import 'package:proxpress/services/upload_file.dart';
-import 'package:path/path.dart' as Path;
 
 class Courier{
   final String uid;

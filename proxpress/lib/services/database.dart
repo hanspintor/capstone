@@ -68,7 +68,7 @@ class DatabaseService {
   // }
 
   Stream<List<Courier>> get courierList {
-    return customerCollection.snapshots().map(_courierDataListFromSnapshot);
+    return courierCollection.snapshots().map(_courierDataListFromSnapshot);
   }
   // Get data individually using streambuilder
   Customer _customerDataFromSnapshot(DocumentSnapshot snapshot){

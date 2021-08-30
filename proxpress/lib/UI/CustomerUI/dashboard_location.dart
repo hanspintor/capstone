@@ -82,8 +82,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    if (user != null) {
-      return  StreamBuilder<Customer>(
+      return user == null ? LoginScreen() : StreamBuilder<Customer>(
           stream: DatabaseService(uid: user.uid).customerData,
           builder: (context, snapshot) {
             if(snapshot.hasData){
@@ -218,10 +217,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
             }
           }
       );
-    }
-    else {
-      return LoginScreen();
-    }
+
   }
 }
 
