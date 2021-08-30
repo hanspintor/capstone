@@ -17,15 +17,15 @@ class Courier{
 
   Courier({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address,});
 
-  // Future<bool> validateCurrentPassword(String password) async {
-  //   return await _auth.validateCourierPassword(password);
-  // }
-  // void updateCurrentPassword(String password){
-  //   _auth.updateCourierPassword(password);
-  // }
-  // void updateCurrentEmail(String email){
-  //   _auth.updateCourierEmail(email);
-  // }
+  Future<bool> validateCurrentPassword(String password) async {
+    return await _auth.validateCourierPassword(password);
+  }
+  void updateCurrentPassword(String password){
+    _auth.updateCourierPassword(password);
+  }
+  void updateCurrentEmail(String email){
+    _auth.updateCourierEmail(email);
+  }
 
   // Future uploadFile() async {
   //   final fileName = Path.basename(file.path);

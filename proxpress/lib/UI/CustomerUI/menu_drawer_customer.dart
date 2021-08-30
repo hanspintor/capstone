@@ -8,9 +8,9 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
 
 
-class MainDrawer extends StatefulWidget {
+class MainDrawerCustomer extends StatefulWidget {
   @override
-  _MainDrawerState createState() => _MainDrawerState();
+  _MainDrawerCustomerState createState() => _MainDrawerCustomerState();
 }
 void selectedItem(BuildContext context, int index){
   Navigator.of(context).pop();
@@ -29,18 +29,18 @@ void selectedItem(BuildContext context, int index){
       break;
   }
 }
-Future _getDefaultProfile(BuildContext context, String imageName) async {
-  Image image;
-  await FireStorageService.loadImage(context, imageName).then((value) {
-    image = Image.network(
-      value.toString(),
-      // fit: BoxFit.scaleDown,
-    );
-  });
-  return image;
-}
+// Future _getDefaultProfile(BuildContext context, String imageName) async {
+//   Image image;
+//   await FireStorageService.loadImage(context, imageName).then((value) {
+//     image = Image.network(
+//       value.toString(),
+//       // fit: BoxFit.scaleDown,
+//     );
+//   });
+//   return image;
+// }
 
-class _MainDrawerState extends State<MainDrawer> {
+class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
 
   final AuthService _auth = AuthService();
   @override
@@ -62,15 +62,11 @@ class _MainDrawerState extends State<MainDrawer> {
                         return Column(
                           children: [
                             Container(
-                              child: FutureBuilder(
-                                  future: _getDefaultProfile(context, "profile-user.png"),
-                                  builder: (context, snapshot) {
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width / 5,
-                                      height: MediaQuery.of(context).size.width / 5,
-                                      child: snapshot.data,
-                                    );
-                                  }
+                              child: ClipOval(
+                                child: Image.network('https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e',
+                                  width:80,
+                                  height: 80,
+                                ),
                               ),
                             ),
                             SizedBox(height: 20,),

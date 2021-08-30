@@ -7,8 +7,8 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
-import '../menu_drawer.dart';
-import '../notif_drawer.dart';
+import 'menu_drawer_customer.dart';
+import 'notif_drawer_customer.dart';
 
 class CourierBookmarks extends StatefulWidget {
   @override
@@ -154,6 +154,7 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                               prefixIcon: Icon(Icons.search_rounded)),
                         ),
                       ),
+<<<<<<< HEAD
                       ListView.builder(
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
@@ -165,6 +166,24 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                               leading: Icon(
                                 Icons.account_circle_rounded,
                                 size: 50,
+=======
+                    ),
+                    //title: Text("PROExpress"),
+                  ),
+                  drawer: MainDrawerCustomer(),
+                  endDrawer: NotifDrawerCustomer(),
+                  body: SingleChildScrollView(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              "Bookmarked Couriers",
+                              style: TextStyle(
+                                fontSize: 25,
+>>>>>>> b6066b28e97722c69eb910eed61e5286162d7e44
                               ),
                               subtitle: Text(
                                   "Vehicle Type: ${couriers[index].vehicleType} \nDescription: ${couriers[index].vehicleType} \nPrice: ${couriers[index].price.toString()}"),

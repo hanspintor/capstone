@@ -1,20 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/services/default_profile_pic.dart';
-import 'notif_drawer_customer.dart';
+import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/models/customers.dart';
+import 'package:proxpress/services/default_profile_pic.dart';
 
-class CustomerProfile extends StatefulWidget {
 
-  @override
-  _CustomerProfileState createState() => _CustomerProfileState();
-}
-class _CustomerProfileState extends State<CustomerProfile> {
+class CourierProfile extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openEndDrawer() {
     _scaffoldKey.currentState.openEndDrawer();
@@ -29,8 +25,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
   //   });
   //   return image;
   // }
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +43,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
             ),
               onPressed: (){
                 Navigator.pop(context, false);
-
 
               },
               iconSize: 25,
@@ -74,44 +67,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
             ),
             //title: Text("PROExpress"),
           ),
-<<<<<<< HEAD
-          //title: Text("PROExpress"),
-        ),
-        endDrawer: NotifDrawer(),
-        body: SingleChildScrollView(
-          child: StreamBuilder<Customer>(
-            stream: DatabaseService(uid: user.uid).customerData,
-            builder: (context,snapshot){
-              if(snapshot.hasData){
-                Customer customerData = snapshot.data;
-                return Center(
-                  child: SizedBox(
-                    width: 300,
-                    height: 500,
-                    child: Card(
-                      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            // child: FutureBuilder(
-                            //   future: _getDefaultProfile(context, "profile-user.png"),
-                            //   builder: (context, snapshot) {
-                            //       return Container(
-                            //         width: MediaQuery.of(context).size.width / 4,
-                            //         height: MediaQuery.of(context).size.width / 4,
-                            //         child: snapshot.data,
-                            //       );
-                            //   }
-                            // ),
-=======
-          endDrawer: NotifDrawerCustomer(),
+          endDrawer: NotifDrawerCourier(),
           body: SingleChildScrollView(
-            child: StreamBuilder<Customer>(
-                stream: DatabaseService(uid: user.uid).customerData,
+            child: StreamBuilder<Courier>(
+                stream: DatabaseService(uid: user.uid).courierData,
                 builder: (context,snapshot){
                   if(snapshot.hasData){
-                    Customer customerData = snapshot.data;
+                    Courier courierData = snapshot.data;
                     return Center(
                       child: SizedBox(
                         width: 300,
@@ -132,28 +94,28 @@ class _CustomerProfileState extends State<CustomerProfile> {
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Text(
-                                  '${customerData.fName} ${customerData.lName}',
+                                  '${courierData.fName} ${courierData.lName}',
                                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Text(
-                                    customerData.address,
+                                    courierData.address,
                                     style: TextStyle(fontSize: 15)
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Text(
-                                    customerData.email,
+                                    courierData.email,
                                     style: TextStyle(fontSize: 15)
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Text(
-                                    customerData.contactNo,
+                                    courierData.contactNo,
                                     style: TextStyle(fontSize: 15)
                                 ),
                               ),
@@ -164,12 +126,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   label: Text('Edit Profile'),
                                   style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                                   onPressed: (){
-                                    Navigator.pushNamed(context, '/customerUpdate');
+                                    Navigator.pushNamed(context, '/courierUpdate');
                                   },
                                 ),
                               ),
                             ],
->>>>>>> b6066b28e97722c69eb910eed61e5286162d7e44
                           ),
                         ),
                       ),
@@ -180,7 +141,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   }
                 }
             ),
-
           )
       );
     } else {

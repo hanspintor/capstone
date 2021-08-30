@@ -1,5 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:proxpress/UI/CourierUI/courier_profile.dart';
+import 'package:proxpress/UI/CourierUI/pending_deliveries.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
@@ -11,6 +13,7 @@ import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/authenticate.dart';
+import 'package:proxpress/classes/courier_updating_form.dart';
 import 'package:proxpress/services/auth.dart';
 import 'UI/CustomerUI/courier_bookmarks.dart';
 import 'UI/CustomerUI/customer_profile.dart';
@@ -81,13 +84,22 @@ class PROXpressApp extends StatelessWidget{
               return PageTransition(child:CustomerUpdate(), type: PageTransitionType.bottomToTop);
               break;
             case '/customerProfile':
-              return PageTransition(child:CustomerProfile(), type: PageTransitionType.bottomToTop);
+              return PageTransition(child:CustomerProfile(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/courierDashboard':
-              return PageTransition(child: CourierDashboard(), type: PageTransitionType.bottomToTop);
+              return PageTransition(child: CourierDashboard(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/authenticate':
               return PageTransition(child: Authenticate(), type: PageTransitionType.bottomToTop);
+              break;
+            case '/courierProfile':
+              return PageTransition(child: CourierProfile(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/pendingDeliveries':
+              return PageTransition(child: PendingDeliveries(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/courierUpdate':
+              return PageTransition(child: CourierUpdate(), type: PageTransitionType.bottomToTop);
               break;
             default:
               return null;

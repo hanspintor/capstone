@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as Path;
+import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/courier_upload.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/upload_file.dart';
 
@@ -18,6 +21,28 @@ class SignupCourier extends StatefulWidget{
 }
 
 class _SignupCourierState extends State<SignupCourier> {
+  // Future selectFile() async {
+  //   final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+  //
+  //   if (result != null){
+  //   }
+  //   final path = result.files.single.path;
+  //   setState(() {
+  //     file = File(path);
+  //   });
+  //
+  //   return file;
+  //   //SignupCourier(uploadfile: uploadFile);
+  // }
+
+  // Future getFileName() async {
+  //   final fileName = Path.basename(file.path);
+  //   //final destination = 'Courier Credentials/$fileName';
+  //
+  //   //UploadFile.uploadFile(destination, file);
+  //   return fileName;
+  // }
+
   String fName;
   String lName;
   String email;
@@ -30,7 +55,9 @@ class _SignupCourierState extends State<SignupCourier> {
   final Courier _courier = Courier();
 
   String error = '';
-  File file;
+  File driversLicense;
+  File vehicleRegistration;
+  File vehiclePhoto;
 
   void _validate(){
     if(!regKey.currentState.validate()){
@@ -185,6 +212,10 @@ class _SignupCourierState extends State<SignupCourier> {
 
   @override
   Widget build(BuildContext context) {
+    final driversLicenseFileName =  driversLicense != null ? Path.basename(driversLicense.path) : 'No File Selected';
+    final vehicleRegistrationFileName =  vehicleRegistration != null ? Path.basename(vehicleRegistration.path) : 'No File Selected';
+    final vehiclePhotoFileName =  vehiclePhoto != null ? Path.basename(vehiclePhoto.path) : 'No File Selected';
+
     return loading ? UserLoading(): WillPopScope(
       onWillPop: _backPressed,
       child: Scaffold(
@@ -240,7 +271,37 @@ class _SignupCourierState extends State<SignupCourier> {
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: CourierUpload(),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: ElevatedButton.icon(
+                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                                          label: Text(
+                                            'Add File',
+                                            style: TextStyle(color: Color(0xfffb0d0d)),
+                                          ),
+                                          onPressed: () async {
+                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                                            if (result != null){
+                                            }
+                                            final path = result.files.single.path;
+                                            setState(() {
+                                              driversLicense = File(path);
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Text(driversLicenseFileName),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(height: 20,),
                                 Align(
@@ -251,7 +312,37 @@ class _SignupCourierState extends State<SignupCourier> {
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: CourierUpload(),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: ElevatedButton.icon(
+                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                                          label: Text(
+                                            'Add File',
+                                            style: TextStyle(color: Color(0xfffb0d0d)),
+                                          ),
+                                          onPressed: () async {
+                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                                            if (result != null){
+                                            }
+                                            final path = result.files.single.path;
+                                            setState(() {
+                                              vehicleRegistration = File(path);
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Text(vehicleRegistrationFileName),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(height: 20,),
                                 Align(
@@ -262,7 +353,37 @@ class _SignupCourierState extends State<SignupCourier> {
                                 ),
                                 Align(
                                   alignment: Alignment.bottomLeft,
-                                  child: CourierUpload(),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: ElevatedButton.icon(
+                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                                          label: Text(
+                                            'Add File',
+                                            style: TextStyle(color: Color(0xfffb0d0d)),
+                                          ),
+                                          onPressed: () async {
+                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                                            if (result != null){
+                                            }
+                                            final path = result.files.single.path;
+                                            setState(() {
+                                              vehiclePhoto = File(path);
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Text(vehiclePhotoFileName),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -316,18 +437,36 @@ class _SignupCourierState extends State<SignupCourier> {
                                 primary: Color(0xfffb0d0d),
                               ),
                               onPressed: () async {
-                                // if (regKey.currentState.validate()){
-                                //   //setState(() => loading = true); // loading = true;
-                                //   dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address);
-                                //   if(result == null){
-                                //     setState((){
-                                //       error = 'Email already taken';
-                                //       loading = false;
-                                //     });
-                                //   }
-                                // }
+                                if (regKey.currentState.validate()){
+                                  //setState(() => loading = true); // loading = true;
+                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address);
+                                  if(result == null){
+                                    setState((){
+                                      error = 'Email already taken';
+                                      loading = false;
+                                    });
+                                  } else {
+                                    final FirebaseAuth auth = FirebaseAuth.instance;
+
+                                    final User user = auth.currentUser;
+
+                                    if (user != null) {
+                                      final driversLicenseDestination = '${user.uid}/$driversLicenseFileName';
+                                      final vehicleRegistrationDestination = '${user.uid}/$vehicleRegistrationFileName';
+                                      final vehiclePhotoDestination = '${user.uid}/$vehiclePhotoFileName';
+
+                                      try {
+                                        UploadFile.uploadFile(driversLicenseDestination, driversLicense);
+                                        UploadFile.uploadFile(vehicleRegistrationDestination, vehicleRegistration);
+                                        UploadFile.uploadFile(vehiclePhotoDestination, vehiclePhoto);
+                                      } catch(e) {
+                                        print(e.toString());
+                                      }
+                                    }
+                                  }
+                                }
                                 // _courier.uploadFile();
-                                //widget.uploadfile();
+                                // widget.uploadfile();
                               }
                           ),
                         ],

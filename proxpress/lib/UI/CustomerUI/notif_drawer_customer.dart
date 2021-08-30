@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class NotifDrawer extends StatefulWidget {
+class NotifDrawerCustomer extends StatefulWidget {
 
 
   @override
-  _NotifDrawerState createState() => _NotifDrawerState();
+  _NotifDrawerCustomerState createState() => _NotifDrawerCustomerState();
 }
 
-class _NotifDrawerState extends State<NotifDrawer>{
+class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
   @override
   Widget build(BuildContext context) {
     return Drawer(
