@@ -10,7 +10,6 @@ import 'package:proxpress/authenticate.dart';
 
 class Wrapper extends StatelessWidget {
   int count = 0;
-  int count1 = 0;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -34,16 +33,14 @@ class Wrapper extends StatelessWidget {
             count++;
           }
 
-
-
         } else {
           //count = 0;
           print('no customer document found');
-          print("Courier $count1");
-          if(count1 <= 0)
+          print("Courier $count");
+          if(count <= 0)
           {
             Navigator.pushNamed(context, '/courierDashboard');
-            count1++;
+            count++;
           }
 
         }
@@ -51,6 +48,7 @@ class Wrapper extends StatelessWidget {
 
       return UserLoading();
     } else {
+      count = 0;
       return Authenticate();
     }
   }
