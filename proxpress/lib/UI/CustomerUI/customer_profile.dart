@@ -74,37 +74,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
             ),
             //title: Text("PROExpress"),
           ),
-<<<<<<< HEAD
-          //title: Text("PROExpress"),
-        ),
-        endDrawer: NotifDrawer(),
-        body: SingleChildScrollView(
-          child: StreamBuilder<Customer>(
-            stream: DatabaseService(uid: user.uid).customerData,
-            builder: (context,snapshot){
-              if(snapshot.hasData){
-                Customer customerData = snapshot.data;
-                return Center(
-                  child: SizedBox(
-                    width: 300,
-                    height: 500,
-                    child: Card(
-                      margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            // child: FutureBuilder(
-                            //   future: _getDefaultProfile(context, "profile-user.png"),
-                            //   builder: (context, snapshot) {
-                            //       return Container(
-                            //         width: MediaQuery.of(context).size.width / 4,
-                            //         height: MediaQuery.of(context).size.width / 4,
-                            //         child: snapshot.data,
-                            //       );
-                            //   }
-                            // ),
-=======
           endDrawer: NotifDrawerCustomer(),
           body: SingleChildScrollView(
             child: StreamBuilder<Customer>(
@@ -169,7 +138,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                 ),
                               ),
                             ],
->>>>>>> b6066b28e97722c69eb910eed61e5286162d7e44
                           ),
                         ),
                       ),
