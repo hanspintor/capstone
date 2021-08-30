@@ -9,9 +9,12 @@ import 'package:proxpress/models/user.dart';
 import 'package:proxpress/authenticate.dart';
 
 class Wrapper extends StatelessWidget {
+  int count = 0;
+  int count1 = 0;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
+
 
     if (user != null) {
       print("user id is ${user.uid}");
@@ -24,10 +27,25 @@ class Wrapper extends StatelessWidget {
         if (documentSnapshot.exists) {
           print('Document data: ${documentSnapshot.data()}');
           print('customer document found');
-          Navigator.pushNamed(context, '/dashboardLocation');
+
+          print("Customer $count");
+          if(count <= 0){
+            Navigator.pushNamed(context, '/dashboardLocation');
+            count++;
+          }
+
+
+
         } else {
+          //count = 0;
           print('no customer document found');
-          Navigator.pushNamed(context, '/courierDashboard');
+          print("Courier $count1");
+          if(count1 <= 0)
+          {
+            Navigator.pushNamed(context, '/courierDashboard');
+            count1++;
+          }
+
         }
       });
 

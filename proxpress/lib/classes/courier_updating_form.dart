@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -63,7 +64,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<TheUser>(context);
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
 
     if (user != null) {
       return Scaffold(
