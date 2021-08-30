@@ -19,16 +19,16 @@ class _CustomerProfileState extends State<CustomerProfile> {
   void _openEndDrawer() {
     _scaffoldKey.currentState.openEndDrawer();
   }
-  Future _getDefaultProfile(BuildContext context, String imageName) async {
-    Image image;
-    await FireStorageService.loadImage(context, imageName).then((value) {
-      image = Image.network(
-        value.toString(),
-        // fit: BoxFit.scaleDown,
-      );
-    });
-    return image;
-  }
+  // Future _getDefaultProfile(BuildContext context, String imageName) async {
+  //   Image image;
+  //   await FireStorageService.loadImage(context, imageName).then((value) {
+  //     image = Image.network(
+  //       value.toString(),
+  //       // fit: BoxFit.scaleDown,
+  //     );
+  //   });
+  //   return image;
+  // }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -91,15 +91,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                child: FutureBuilder(
-                                    future: _getDefaultProfile(context, "profile-user.png"),
-                                    builder: (context, snapshot) {
-                                      return Container(
-                                        width: MediaQuery.of(context).size.width / 4,
-                                        height: MediaQuery.of(context).size.width / 4,
-                                        child: snapshot.data,
-                                      );
-                                    }
+                                child: ClipOval(
+                                  child: Image.network('https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e',
+                                    width:100,
+                                    height: 100,
+                                  ),
                                 ),
                               ),
                               Container(
