@@ -121,64 +121,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               ),
                             ),
                           ),
-<<<<<<< HEAD
-                        ),
-                        Container(
-                          // margin: EdgeInsets.only(top: 10),
-                          // child: Stack(
-                          //   children: [
-                          //     ClipOval(
-                          //       child: FutureBuilder(
-                          //           future: _getDefaultProfile(context, "profile-user.png"),
-                          //           builder: (context, snapshot) {
-                          //             return Container(
-                          //               width: MediaQuery.of(context).size.width / 4,
-                          //               height: MediaQuery.of(context).size.width / 4,
-                          //               child: snapshot.data,
-                          //             );
-                          //           }
-                          //       ),
-                          //     ),
-                          //     Positioned(
-                          //       bottom: 0,
-                          //       //right : 10,
-                          //       left: 70,
-                          //       child: ClipOval(
-                          //             child: SizedBox(
-                          //               height: 30,
-                          //               width: 30,
-                          //               child: Container(
-                          //                 color: Color(0xfffb0d0d),
-                          //                 child: IconButton(
-                          //                   iconSize: 16,
-                          //                     icon: Icon(Icons.edit_rounded,color: Colors.white,),
-                          //                     onPressed: () async{
-                          //                      // XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                          //                      // print(image.path);
-                          //                      //  await _auth.uploadProfilePicture(File(image.path));
-                          //                      //  setState(() {
-                          //                      //
-                          //                      //  });
-                          //                     }
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                        ),
-                        Container(
-                          child: TextFormField(
-                            initialValue: "${customerData.fName}",
-                            decoration: InputDecoration(labelText:
-                            'First Name:',
-                              hintText: "${customerData.fName}",
-                              floatingLabelBehavior: FloatingLabelBehavior.always,
-                              labelStyle: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: Colors.green
-=======
                           Container(
                             margin: EdgeInsets.only(top: 10),
                             child: Stack(
@@ -231,7 +173,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                     fontStyle: FontStyle.italic,
                                     color: Colors.green
                                 ),
->>>>>>> b6066b28e97722c69eb910eed61e5286162d7e44
                               ),
                               validator: (String val) => val.isEmpty ? 'Enter your new first name' : null,
                               onChanged: (val) => setState(() => _currentFName = val),
