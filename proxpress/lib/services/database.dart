@@ -48,25 +48,28 @@ class DatabaseService {
         .catchError((error) => print("Failed to update user: $error"));
   }
 
-  // Customer model
-  // List<Customer> _customerListFromSnapshot(QuerySnapshot snapshot){
-  //   return snapshot.docs.map((doc){
-  //    return Customer(
-  //      fName: (doc.data() as dynamic) ['fName'] ?? '',
-  //      lName: (doc.data() as dynamic) ['lName'] ?? '',
-  //      contactNo: (doc.data() as dynamic) ['contactNo'] ?? '',
-  //      password: (doc.data() as dynamic) ['password'] ?? '',
-  //      email: (doc.data() as dynamic) ['email'] ?? '',
-  //      address: (doc.data() as dynamic) ['address']?? '',
-  //
-  //    );
-  //   }).toList();
-  // }
-  // // Get data from the database collection customer
-  // Stream<List<Customer>> get Customers {
+  //Customer model
+  List<Courier> _courierDataListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+     return Courier(
+       fName: (doc.data() as dynamic) ['First Name'] ?? '',
+       lName: (doc.data() as dynamic) ['Last Name'] ?? '',
+       contactNo: (doc.data() as dynamic) ['Contact No'] ?? '',
+       password: (doc.data() as dynamic) ['Password'] ?? '',
+       email: (doc.data() as dynamic) ['Email'] ?? '',
+       address: (doc.data() as dynamic) ['Address']?? '',
+
+     );
+    }).toList();
+  }
+  // Get data from the database collection customer
+  // Stream<List<Customer>> get customerList {
   //   return customerCollection.snapshots().map(_customerListFromSnapshot);
   // }
 
+  Stream<List<Courier>> get courierList {
+    return customerCollection.snapshots().map(_courierDataListFromSnapshot);
+  }
   // Get data individually using streambuilder
   Customer _customerDataFromSnapshot(DocumentSnapshot snapshot){
     return Customer(

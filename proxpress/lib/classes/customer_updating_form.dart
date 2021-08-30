@@ -47,16 +47,16 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     }
     return dot;
   }
-  Future _getDefaultProfile(BuildContext context, String imageName) async {
-    Image image;
-    await FireStorageService.loadImage(context, imageName).then((value) {
-      image = Image.network(
-        value.toString(),
-        // fit: BoxFit.scaleDown,
-      );
-    });
-    return image;
-  }
+  // Future _getDefaultProfile(BuildContext context, String imageName) async {
+  //   Image image;
+  //   await FireStorageService.loadImage(context, imageName).then((value) {
+  //     image = Image.network(
+  //       value.toString(),
+  //       // fit: BoxFit.scaleDown,
+  //     );
+  //   });
+  //   return image;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -120,49 +120,49 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Stack(
-                            children: [
-                              ClipOval(
-                                child: FutureBuilder(
-                                    future: _getDefaultProfile(context, "profile-user.png"),
-                                    builder: (context, snapshot) {
-                                      return Container(
-                                        width: MediaQuery.of(context).size.width / 4,
-                                        height: MediaQuery.of(context).size.width / 4,
-                                        child: snapshot.data,
-                                      );
-                                    }
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                //right : 10,
-                                left: 70,
-                                child: ClipOval(
-                                      child: SizedBox(
-                                        height: 30,
-                                        width: 30,
-                                        child: Container(
-                                          color: Color(0xfffb0d0d),
-                                          child: IconButton(
-                                            iconSize: 16,
-                                              icon: Icon(Icons.edit_rounded,color: Colors.white,),
-                                              onPressed: () async{
-                                               // XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                                               // print(image.path);
-                                               //  await _auth.uploadProfilePicture(File(image.path));
-                                               //  setState(() {
-                                               //
-                                               //  });
-                                              }
-                                          ),
-                                        ),
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          // margin: EdgeInsets.only(top: 10),
+                          // child: Stack(
+                          //   children: [
+                          //     ClipOval(
+                          //       child: FutureBuilder(
+                          //           future: _getDefaultProfile(context, "profile-user.png"),
+                          //           builder: (context, snapshot) {
+                          //             return Container(
+                          //               width: MediaQuery.of(context).size.width / 4,
+                          //               height: MediaQuery.of(context).size.width / 4,
+                          //               child: snapshot.data,
+                          //             );
+                          //           }
+                          //       ),
+                          //     ),
+                          //     Positioned(
+                          //       bottom: 0,
+                          //       //right : 10,
+                          //       left: 70,
+                          //       child: ClipOval(
+                          //             child: SizedBox(
+                          //               height: 30,
+                          //               width: 30,
+                          //               child: Container(
+                          //                 color: Color(0xfffb0d0d),
+                          //                 child: IconButton(
+                          //                   iconSize: 16,
+                          //                     icon: Icon(Icons.edit_rounded,color: Colors.white,),
+                          //                     onPressed: () async{
+                          //                      // XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                          //                      // print(image.path);
+                          //                      //  await _auth.uploadProfilePicture(File(image.path));
+                          //                      //  setState(() {
+                          //                      //
+                          //                      //  });
+                          //                     }
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ),
                         Container(
                           child: TextFormField(
