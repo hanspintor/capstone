@@ -15,9 +15,9 @@ class _CourierListState extends State<CourierList> {
   @override
   Widget build(BuildContext context) {
     final courier = Provider.of<List<Courier>>(context);
-    print(courier.length);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+    print(courier.length);
     return user == null ? LoginScreen() : SingleChildScrollView(
       child: SizedBox(
         height: 600,
