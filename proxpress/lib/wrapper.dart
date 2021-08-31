@@ -7,9 +7,11 @@ import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/authenticate.dart';
+import 'package:proxpress/services/database.dart';
 
 class Wrapper extends StatelessWidget {
   int count = 0;
+  String status = "Active";
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -37,6 +39,7 @@ class Wrapper extends StatelessWidget {
           //count = 0;
           print('no customer document found');
           print("Courier $count");
+          DatabaseService(uid: user.uid).updateStatus(status);
           if(count <= 0)
           {
             Navigator.pushNamed(context, '/courierDashboard');

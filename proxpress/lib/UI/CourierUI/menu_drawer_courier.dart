@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
@@ -42,6 +43,7 @@ void selectedItem(BuildContext context, int index){
 
 class _MainDrawerCourierState extends State<MainDrawerCourier> {
   final AuthService _auth = AuthService();
+  String status = "Active";
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -120,6 +122,12 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
               icon: Icon(Icons.logout_rounded),
               label: Text('Logout'),
               onPressed: () async{
+                setState(() {
+                  status = "Offline";
+                });
+                final FirebaseAuth _auth = FirebaseAuth.instance;
+                User user = _auth.currentUser;
+                await DatabaseService(uid: user.uid).updateStatus(status);
                 await _auth.signOut();
                 //Navigator.pushNamed(context, '/loginScreen');
                 // if(result == null){

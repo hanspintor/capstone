@@ -40,6 +40,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
   String _currentPassword;
   String _newPassword;
   String _confirmPassword;
+  String _status = "Active";
   bool checkCurrentPassword = true;
 
   final AuthService _auth = AuthService();
@@ -389,6 +390,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         _currentContactNo ?? courierData.contactNo,
                                         _confirmPassword ?? courierData.password,
                                         _currentAddress ?? courierData.address,
+                                        _status ?? courierData.status,
                                       );
                                       Navigator.pop(context, false);
                                     }

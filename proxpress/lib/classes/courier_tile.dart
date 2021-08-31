@@ -26,6 +26,7 @@ class CourierTile extends StatelessWidget {
           subtitle: Text(
               "Vehicle Type: "
           ),
+          trailing: Text("${courier.status}"),
         ),
       ),
     );

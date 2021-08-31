@@ -23,7 +23,7 @@ class DatabaseService {
     });
   }
   // Creation of collection reference for courier data
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address) async {
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -31,6 +31,12 @@ class DatabaseService {
       'Contact No' : contactNo,
       'Password' : password,
       'Address' : address,
+      'Active Status' : status,
+    });
+  }
+  Future updateStatus(String status) async {
+    return await courierCollection.doc(uid).update({
+      'Active Status' : status,
     });
   }
   Future<void> AuthupdateCustomerPassword(String password) {
@@ -80,6 +86,7 @@ class DatabaseService {
       password: snapshot['Password'],
       email: snapshot['Email'],
       address: snapshot['Address'],
+
     );
   }
 
@@ -92,6 +99,7 @@ class DatabaseService {
       password: snapshot['Password'],
       email: snapshot['Email'],
       address: snapshot['Address'],
+      status: snapshot['Active Status'],
     );
   }
 

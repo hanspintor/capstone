@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
+import 'package:proxpress/classes/courier_list.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';

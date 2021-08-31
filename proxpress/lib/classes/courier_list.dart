@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/courier_tile.dart';
 import 'package:proxpress/models/couriers.dart';
 
@@ -15,12 +14,9 @@ class _CourierListState extends State<CourierList> {
   @override
   Widget build(BuildContext context) {
     final courier = Provider.of<List<Courier>>(context);
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User user = _auth.currentUser;
-    print(courier.length);
-    return user == null ? LoginScreen() : SingleChildScrollView(
+    return courier == null ? UserLoading() : SingleChildScrollView(
       child: SizedBox(
-        height: 600,
+        height: 650,
         child: ListView.builder(
             itemCount: courier.length,
             itemBuilder: (context, index) {
@@ -29,6 +25,5 @@ class _CourierListState extends State<CourierList> {
         ),
       ),
     );
-    return Container();
   }
 }

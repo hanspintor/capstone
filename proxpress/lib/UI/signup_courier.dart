@@ -51,6 +51,7 @@ class _SignupCourierState extends State<SignupCourier> {
   String address;
   bool loading = false;
   bool agree = false;
+  String status = "Active";
   final AuthService _auth = AuthService();
   final Courier _courier = Courier();
 
@@ -439,7 +440,7 @@ class _SignupCourierState extends State<SignupCourier> {
                               onPressed: () async {
                                 if (regKey.currentState.validate()){
                                   //setState(() => loading = true); // loading = true;
-                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address);
+                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status);
                                   if(result == null){
                                     setState((){
                                       error = 'Email already taken';
