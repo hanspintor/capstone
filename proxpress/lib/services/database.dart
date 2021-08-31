@@ -23,7 +23,7 @@ class DatabaseService {
     });
   }
   // Creation of collection reference for courier data
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved) async {
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved, String vehicleType, String vehicleColor) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -33,6 +33,8 @@ class DatabaseService {
       'Address' : address,
       'Active Status' : status,
       'Admin Approved': approved,
+      'Vehicle Type': vehicleType,
+      'Vehicle Color': vehicleColor,
     });
   }
   Future updateStatus(String status) async {
@@ -101,6 +103,8 @@ class DatabaseService {
       email: snapshot['Email'],
       address: snapshot['Address'],
       status: snapshot['Active Status'],
+      //vehicleType: snapshot['Vehicle Type'],
+      vehicleColor: snapshot['Vehicle Color'],
     );
   }
 

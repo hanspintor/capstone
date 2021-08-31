@@ -41,8 +41,10 @@ class _CourierUpdateState extends State<CourierUpdate> {
   String _newPassword;
   String _confirmPassword;
   String _status = "Active";
-  bool approved = false;
+  bool _approved = false;
   bool checkCurrentPassword = true;
+  String _vehicleType;
+  String _vehicleColor;
 
   final AuthService _auth = AuthService();
 
@@ -269,6 +271,50 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               onChanged: (val) => setState(() => _currentContactNo = val),
                             ),
                           ),
+                          // DropdownButtonFormField<String>(
+                          //   validator: (value) => value == null ? 'Vehicle type is required' : null,
+                          //   decoration: InputDecoration(
+                          //     labelText: 'Vehicle Type:',
+                          //     hintText: "${courierData.vehicleType}",
+                          //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                          //     labelStyle: TextStyle(
+                          //         fontStyle: FontStyle.italic,
+                          //         color: Colors.green
+                          //     ),
+                          //   ),
+                          //   isExpanded: true,
+                          //   icon: const Icon(Icons.arrow_downward),
+                          //   iconSize: 24,
+                          //   elevation: 16,
+                          //   onChanged: (String newValue) {
+                          //     setState(() {
+                          //       _vehicleType = newValue;
+                          //     });
+                          //   },
+                          //   items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'Multi-purpose Vehicle', 'Family-business Van', 'Multi-purpose Van']
+                          //       .map<DropdownMenuItem<String>>((String value) {
+                          //     return DropdownMenuItem<String>(
+                          //       value: value,
+                          //       child: Text(value),
+                          //     );
+                          //   }).toList(),
+                          // ),
+                          Container(
+                            child: TextFormField(
+                              initialValue: "${courierData.vehicleColor}",
+                              decoration: InputDecoration(labelText:
+                              'Vehicle Color:',
+                                hintText: "${courierData.vehicleColor}",
+                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.green
+                                ),
+                              ),
+                              validator: (String val) => val.isEmpty ? 'Enter your vehicle color' : null,
+                              onChanged: (val) => setState(() => _vehicleColor = val),
+                            ),
+                          ),
                           Container(
                             child: Center(
                               child: Text(
@@ -384,8 +430,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                       validCourier.updateCurrentEmail(_currentEmail);
                                       validCourier.updateCurrentPassword(_newPassword);
 
-
-
                                       await DatabaseService(uid: user.uid)
                                           .updateCourierData(
                                         _currentFName ?? courierData.fName,
@@ -395,7 +439,9 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         _confirmPassword ?? courierData.password,
                                         _currentAddress ?? courierData.address,
                                         _status ?? courierData.status,
-                                        _status ?? courierData.approved,
+                                        _approved ?? courierData.approved,
+                                        _vehicleType ?? courierData.vehicleType,
+                                        _vehicleColor ?? courierData.vehicleColor,
                                       );
                                       Navigator.pop(context, false);
                                     }

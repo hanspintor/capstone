@@ -220,31 +220,6 @@ class _SignupCourierState extends State<SignupCourier> {
     );
   }
 
-  Widget _buildVehicleTypeDropdown(String vehicleType){
-    return DropdownButtonFormField<String>(
-      validator: (value) => value == null ? 'Vehicle type is required' : null,
-      decoration: InputDecoration(
-        labelText: 'Select Your Vehicle Type',
-      ),
-      isExpanded: true,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      onChanged: (String newValue) {
-        setState(() {
-          vehicleType = newValue;
-        });
-      },
-      items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'Multi-purpose Vehicle', 'Family-business Van', 'Multi-purpose Van']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-
   Future<bool> _backPressed(){
     return showDialog(context: context, builder: (context)
     =>AlertDialog(
@@ -554,7 +529,28 @@ class _SignupCourierState extends State<SignupCourier> {
                               ],
                             ),
                           ),
-                          _buildVehicleTypeDropdown(vehicleType),
+                          DropdownButtonFormField<String>(
+                            validator: (value) => value == null ? 'Vehicle type is required' : null,
+                            decoration: InputDecoration(
+                              labelText: 'Select Your Vehicle Type',
+                            ),
+                            isExpanded: true,
+                            icon: const Icon(Icons.arrow_downward),
+                            iconSize: 24,
+                            elevation: 16,
+                            onChanged: (String newValue) {
+                              setState(() {
+                                vehicleType = newValue;
+                              });
+                            },
+                            items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'Multi-purpose Vehicle', 'Family-business Van', 'Multi-purpose Van']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
                           _buildColor(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -607,7 +603,7 @@ class _SignupCourierState extends State<SignupCourier> {
                               onPressed: !agree ? null : () async {
                                 if (regKey.currentState.validate()){
                                   //setState(() => loading = true); // loading = true;
-                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, approved);
+                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, approved, vehicleType, vehicleColor);
                                   if(result == null){
                                     setState((){
                                       error = 'Email already taken';
@@ -619,12 +615,12 @@ class _SignupCourierState extends State<SignupCourier> {
                                     final User user = auth.currentUser;
 
                                     if (user != null) {
-                                      final driversLicenseFrontDestination = '${user.uid}/$driversLicenseFrontFileName';
-                                      final driversLicenseBackDestination = '${user.uid}/$driversLicenseBackFileName';
-                                      final nbiClearancePhotoDestination = '${user.uid}/$driversLicenseBackFileName';
-                                      final vehicleRegistrationORDestination = '${user.uid}/$vehicleRegistrationORFileName';
-                                      final vehicleRegistrationCRDestination = '${user.uid}/$vehicleRegistrationCRFileName';
-                                      final vehiclePhotoDestination = '${user.uid}/$vehiclePhotoFileName';
+                                      final driversLicenseFrontDestination = 'Couriers/${user.uid}/$driversLicenseFrontFileName';
+                                      final driversLicenseBackDestination = 'Couriers/${user.uid}/$driversLicenseBackFileName';
+                                      final nbiClearancePhotoDestination = 'Couriers/${user.uid}/$driversLicenseBackFileName';
+                                      final vehicleRegistrationORDestination = 'Couriers/${user.uid}/$vehicleRegistrationORFileName';
+                                      final vehicleRegistrationCRDestination = 'Couriers/${user.uid}/$vehicleRegistrationCRFileName';
+                                      final vehiclePhotoDestination = 'Couriers/${user.uid}/$vehiclePhotoFileName';
 
                                       try {
                                         UploadFile.uploadFile(driversLicenseFrontDestination, driversLicenseFront);
