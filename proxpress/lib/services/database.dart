@@ -23,7 +23,7 @@ class DatabaseService {
     });
   }
   // Creation of collection reference for courier data
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status) async {
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -32,6 +32,7 @@ class DatabaseService {
       'Password' : password,
       'Address' : address,
       'Active Status' : status,
+      'Admin Approved': approved,
     });
   }
   Future updateStatus(String status) async {

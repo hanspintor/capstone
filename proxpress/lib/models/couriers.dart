@@ -9,11 +9,12 @@ class Courier{
   final String password;
   final String address;
   final String status;
+  final bool approved;
   // File file;
 
   final AuthService _auth = AuthService();
 
-  Courier({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.status});
+  Courier({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.status, this.approved});
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCourierPassword(password);

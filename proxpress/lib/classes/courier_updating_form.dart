@@ -41,6 +41,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
   String _newPassword;
   String _confirmPassword;
   String _status = "Active";
+  bool approved = false;
   bool checkCurrentPassword = true;
 
   final AuthService _auth = AuthService();
@@ -382,6 +383,9 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                     if (_updateKey.currentState.validate() && checkCurrentPassword) {
                                       validCourier.updateCurrentEmail(_currentEmail);
                                       validCourier.updateCurrentPassword(_newPassword);
+
+
+
                                       await DatabaseService(uid: user.uid)
                                           .updateCourierData(
                                         _currentFName ?? courierData.fName,
@@ -391,6 +395,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         _confirmPassword ?? courierData.password,
                                         _currentAddress ?? courierData.address,
                                         _status ?? courierData.status,
+                                        _status ?? courierData.approved,
                                       );
                                       Navigator.pop(context, false);
                                     }

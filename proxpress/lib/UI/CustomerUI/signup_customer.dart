@@ -248,7 +248,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                             style: ElevatedButton.styleFrom(
                               primary: Color(0xfffb0d0d),
                             ),
-                            onPressed: () async {
+                            onPressed: !agree ? null : () async {
                               if (regKey.currentState.validate()){
                                 setState(() => loading = true); // loading = true;
                                 dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address);
