@@ -617,7 +617,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                     if (user != null) {
                                       final driversLicenseFrontDestination = 'Couriers/${user.uid}/$driversLicenseFrontFileName';
                                       final driversLicenseBackDestination = 'Couriers/${user.uid}/$driversLicenseBackFileName';
-                                      final nbiClearancePhotoDestination = 'Couriers/${user.uid}/$driversLicenseBackFileName';
+                                      final nbiClearancePhotoDestination = 'Couriers/${user.uid}/$nbiClearancePhotoFileName';
                                       final vehicleRegistrationORDestination = 'Couriers/${user.uid}/$vehicleRegistrationORFileName';
                                       final vehicleRegistrationCRDestination = 'Couriers/${user.uid}/$vehicleRegistrationCRFileName';
                                       final vehiclePhotoDestination = 'Couriers/${user.uid}/$vehiclePhotoFileName';
