@@ -57,7 +57,7 @@ class DatabaseService {
         .catchError((error) => print("Failed to update user: $error"));
   }
 
-  //Customer model
+  //Customer model list builder
   List<Courier> _courierDataListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
      return Courier(
@@ -67,6 +67,10 @@ class DatabaseService {
        password: (doc.data() as dynamic) ['Password'] ?? '',
        email: (doc.data() as dynamic) ['Email'] ?? '',
        address: (doc.data() as dynamic) ['Address']?? '',
+       status: (doc.data() as dynamic) ['Active Status']?? '',
+       vehicleColor: (doc.data() as dynamic) ['Vehicle Color']?? '',
+       vehicleType: (doc.data() as dynamic) ['Vehicle Type']?? '',
+
 
      );
     }).toList();
@@ -92,7 +96,7 @@ class DatabaseService {
 
     );
   }
-
+// specific data
   Courier _courierDataFromSnapshot(DocumentSnapshot snapshot){
     return Courier(
       uid: uid,

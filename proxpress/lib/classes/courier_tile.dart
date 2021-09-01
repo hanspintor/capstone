@@ -13,6 +13,12 @@ class CourierTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+    var color;
+    if(courier.status == "Offline"){
+      color = Colors.redAccent;
+    } else{
+      color = Colors.green;
+    }
     return user == null ? LoginScreen() : Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
@@ -24,9 +30,15 @@ class CourierTile extends StatelessWidget {
                  size: 50,
            ),
           subtitle: Text(
-              "Vehicle Type: "
+              "Vehicle Type: ${courier.vehicleType}"
           ),
-          trailing: Text("${courier.status}"),
+          trailing: Text(
+              "${courier.status}",
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
