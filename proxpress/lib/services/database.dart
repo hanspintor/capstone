@@ -32,8 +32,21 @@ class DatabaseService {
     });
   }
 
+  Future uploadCourierCredentials(String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_) async {
+    await FirebaseFirestore.instance.collection('Courier')
+        .doc(uid)
+        .update({
+      'Driver\'s License Front' : driversLicenseFront_,
+      'Driver\'s License Back' : driversLicenseFront_,
+      'NBI Clearance Photo' : nbiClearancePhoto_,
+      'Vehicle Registration OR' : vehicleRegistrationOR_,
+      'Vehicle Registration CR' : vehicleRegistrationCR_,
+      'Vehicle Photo' : vehiclePhoto_,
+    });
+  }
+
   // Creation of collection reference for courier data
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved, String vehicleType, String vehicleColor) async {
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -47,6 +60,7 @@ class DatabaseService {
       'Vehicle Color': vehicleColor,
     });
   }
+
   Future updateStatus(String status) async {
     return await courierCollection.doc(uid).update({
       'Active Status' : status,

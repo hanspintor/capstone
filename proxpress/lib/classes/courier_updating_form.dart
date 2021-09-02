@@ -442,6 +442,12 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         _approved ?? courierData.approved,
                                         _vehicleType ?? courierData.vehicleType,
                                         _vehicleColor ?? courierData.vehicleColor,
+                                        courierData.driversLicenseFront_,
+                                        courierData.driversLicenseBack_,
+                                        courierData.nbiClearancePhoto_,
+                                        courierData.vehicleRegistrationOR_,
+                                        courierData.vehicleRegistrationCR_,
+                                        courierData.vehiclePhoto_
                                       );
                                       Navigator.pop(context, false);
                                     }

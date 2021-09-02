@@ -11,6 +11,7 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/upload_file.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class SignupCourier extends StatefulWidget{
   //final Function uploadfile;
@@ -53,6 +54,13 @@ class _SignupCourierState extends State<SignupCourier> {
   bool agree = false;
   String status = 'Active';
   bool approved = false;
+  String driversLicenseFront_;
+  String driversLicenseBack_;
+  String nbiClearancePhoto_;
+  String vehicleRegistrationOR_;
+  String vehicleRegistrationCR_;
+  String vehiclePhoto_;
+
   final AuthService _auth = AuthService();
   final Courier _courier = Courier();
 
@@ -605,7 +613,7 @@ class _SignupCourierState extends State<SignupCourier> {
 
                                 if (regKey.currentState.validate()){
                                   //setState(() => loading = true); // loading = true;
-                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, approved, vehicleType, vehicleColor, defaultProfilePic);
+                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, approved, vehicleType, vehicleColor, defaultProfilePic, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
                                   if(result == null){
                                     setState((){
                                       error = 'Email already taken';
@@ -626,11 +634,35 @@ class _SignupCourierState extends State<SignupCourier> {
 
                                       try {
                                         UploadFile.uploadFile(driversLicenseFrontDestination, driversLicenseFront);
+                                        String url1 = await firebase_storage.FirebaseStorage.instance
+                                            .ref(driversLicenseFrontDestination)
+                                            .getDownloadURL();
+
                                         UploadFile.uploadFile(driversLicenseBackDestination, driversLicenseBack);
+                                        String url2 = await firebase_storage.FirebaseStorage.instance
+                                            .ref(driversLicenseBackDestination)
+                                            .getDownloadURL();
+
                                         UploadFile.uploadFile(nbiClearancePhotoDestination, nbiClearancePhoto);
+                                        String url3 = await firebase_storage.FirebaseStorage.instance
+                                            .ref(nbiClearancePhotoDestination)
+                                            .getDownloadURL();
+
                                         UploadFile.uploadFile(vehicleRegistrationORDestination, vehicleRegistrationOR);
+                                        String url4 = await firebase_storage.FirebaseStorage.instance
+                                            .ref(vehicleRegistrationORDestination)
+                                            .getDownloadURL();
+
                                         UploadFile.uploadFile(vehicleRegistrationCRDestination, vehicleRegistrationCR);
+                                        String url5 = await firebase_storage.FirebaseStorage.instance
+                                            .ref(vehicleRegistrationCRDestination)
+                                            .getDownloadURL();
+
                                         UploadFile.uploadFile(vehiclePhotoDestination, vehiclePhoto);
+                                        String url6 = await firebase_storage.FirebaseStorage.instance
+                                            .ref(vehiclePhotoDestination)
+                                            .getDownloadURL();
+
                                       } catch(e) {
                                         print(e.toString());
                                       }
