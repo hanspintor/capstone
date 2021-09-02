@@ -74,6 +74,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
+    Stream<Customer> customerStream = DatabaseService(uid: user.uid).customerData;
+
     if (user != null) {
       return Scaffold(
           drawerEnableOpenDragGesture: false,
@@ -115,10 +117,12 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
           endDrawer: NotifDrawerCustomer(),
           body: SingleChildScrollView(
             child: StreamBuilder<Customer>(
-                stream: DatabaseService(uid: user.uid).customerData,
+                stream: customerStream,
                 builder: (context,snapshot){
                   if(snapshot.hasData){
                     Customer customerData = snapshot.data;
+
+                    fetchedUrl = customerData.avatarUrl;
 
                     return Form(
                       key: _updateKey,
@@ -139,7 +143,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               children: [
                                 Container(
                                   child: ClipOval(
-                                    child: Image.network(customerData.avatarUrl,
+                                    child: Image.network(fetchedUrl,
                                       width:100,
                                       height: 100,
                                     ),
@@ -156,29 +160,41 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                       child: Container(
                                         color: Color(0xfffb0d0d),
                                         child: IconButton(
-                                            iconSize: 16,
-                                            icon: Icon(Icons.edit_rounded,color: Colors.white,),
-                                            onPressed: () async{
+                                          iconSize: 16,
+                                          icon: Icon(Icons.edit_rounded,color: Colors.white,),
+                                          onPressed: () async{
+                                            String datetime = DateTime.now().toString();
 
-                                              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-                                              final path = result.files.single.path;
-                                              setState(() {
-                                                profilePicture = File(path);
-                                              });
+                                            final path = result.files.single.path;
+                                            setState(() {
+                                              profilePicture = File(path);
+                                            });
 
-                                              final profilePictureDestination = 'Customers/${user.uid}/profilepic_${user.uid}';
+                                            final profilePictureDestination = 'Customers/${user.uid}/profilepic_${user.uid}_$datetime';
 
-                                              UploadFile.uploadFile(profilePictureDestination, profilePicture);
+                                            String saveDestination = profilePictureDestination.toString();
 
-                                              String url = await firebase_storage.FirebaseStorage.instance
-                                                  .ref('Customers/${user.uid}/profilepic_${user.uid}')
-                                                  .getDownloadURL();
-                                              print(url);
-                                              if (url != null || url == 'null') {
-                                                await DatabaseService(uid: user.uid).updateCustomerProfilePic(url);
-                                              }
+                                            if (saveDestination != null && saveDestination.length > 0) {
+                                              saveDestination = saveDestination.substring(0, saveDestination.length - 1);
                                             }
+
+                                            await UploadFile.uploadFile(saveDestination, profilePicture);
+
+                                            String url = await firebase_storage.FirebaseStorage.instance
+                                                .ref(saveDestination)
+                                                .getDownloadURL();
+
+                                            if (url != null || url == 'null') {
+                                              await DatabaseService(uid: user.uid).updateCustomerProfilePic(url);
+                                            }
+
+                                            setState(() {
+                                              fetchedUrl = url;
+                                              customerStream = DatabaseService(uid: user.uid).customerData;
+                                            });
+                                          }
                                         ),
                                       ),
                                     ),
