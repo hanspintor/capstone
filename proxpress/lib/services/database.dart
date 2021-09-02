@@ -20,10 +20,9 @@ class DatabaseService {
       'Contact No' : contactNo,
       'Password' : password,
       'Address' : address,
-      'Avatar URL': avatarUrl,
+      'Avatar URL' : avatarUrl,
     });
   }
-
   Future updateCustomerProfilePic(String avatarUrl) async {
     await FirebaseFirestore.instance.collection('Customers')
         .doc(uid)
@@ -99,10 +98,24 @@ class DatabaseService {
      );
     }).toList();
   }
+
+  List<Customer> _customerDataListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return Customer(
+        fName: (doc.data() as dynamic) ['First Name'] ?? '',
+        lName: (doc.data() as dynamic) ['Last Name'] ?? '',
+        contactNo: (doc.data() as dynamic) ['Contact No'] ?? '',
+        password: (doc.data() as dynamic) ['Password'] ?? '',
+        email: (doc.data() as dynamic) ['Email'] ?? '',
+        address: (doc.data() as dynamic) ['Address']?? '',
+        avatarUrl: (doc.data() as dynamic) ['Avatar URL']?? '',
+      );
+    }).toList();
+  }
   // Get data from the database collection customer
-  // Stream<List<Customer>> get customerList {
-  //   return customerCollection.snapshots().map(_customerListFromSnapshot);
-  // }
+  Stream<List<Customer>> get customerList {
+    return customerCollection.snapshots().map(_customerDataListFromSnapshot);
+  }
 
   Stream<List<Courier>> get courierList {
     return courierCollection.snapshots().map(_courierDataListFromSnapshot);
