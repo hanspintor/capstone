@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,8 +16,8 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/UI/CustomerUI/notif_drawer_customer.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
 import 'package:proxpress/services/file_storage.dart';
-
-
+import 'package:proxpress/services/upload_file.dart';
+import 'package:path/path.dart' as Path;
 
 class CustomerUpdate extends StatefulWidget {
 
@@ -41,6 +45,12 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
 
   final AuthService _auth = AuthService();
 
+  File profilePicture;
+
+  //String avatarUrl;
+  String fetchedUrl;
+  String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
+
   String dots(int Dotlength){
     String dot = "•";
     for(var i = 0; i<Dotlength; i++){
@@ -48,6 +58,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     }
     return dot;
   }
+
   // Future _getDefaultProfile(BuildContext context, String imageName) async {
   //   Image image;
   //   await FireStorageService.loadImage(context, imageName).then((value) {
@@ -108,6 +119,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                 builder: (context,snapshot){
                   if(snapshot.hasData){
                     Customer customerData = snapshot.data;
+
                     return Form(
                       key: _updateKey,
                       child: Column(
@@ -127,7 +139,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               children: [
                                 Container(
                                   child: ClipOval(
-                                    child: Image.network('https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e',
+                                    child: Image.network(customerData.avatarUrl,
                                       width:100,
                                       height: 100,
                                     ),
@@ -147,12 +159,25 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                             iconSize: 16,
                                             icon: Icon(Icons.edit_rounded,color: Colors.white,),
                                             onPressed: () async{
-                                              // XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                                              // print(image.path);
-                                              //  await _auth.uploadProfilePicture(File(image.path));
-                                              //  setState(() {
-                                              //
-                                              //  });
+
+                                              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                                              final path = result.files.single.path;
+                                              setState(() {
+                                                profilePicture = File(path);
+                                              });
+
+                                              final profilePictureDestination = 'Customers/${user.uid}/profilepic_${user.uid}';
+
+                                              UploadFile.uploadFile(profilePictureDestination, profilePicture);
+
+                                              String url = await firebase_storage.FirebaseStorage.instance
+                                                  .ref('Customers/${user.uid}/profilepic_${user.uid}')
+                                                  .getDownloadURL();
+
+                                              if (url != null || url == 'null') {
+                                                await DatabaseService(uid: user.uid).updateCustomerProfilePic(url);
+                                              }
                                             }
                                         ),
                                       ),
@@ -385,6 +410,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                         _currentContactNo ?? customerData.contactNo,
                                         _confirmPassword ?? customerData.password,
                                         _currentAddress ?? customerData.address,
+                                        customerData.avatarUrl
                                       );
                                       Navigator.pop(context, false);
                                     }

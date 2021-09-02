@@ -249,9 +249,11 @@ class _SignupCustomerState extends State<SignupCustomer> {
                               primary: Color(0xfffb0d0d),
                             ),
                             onPressed: !agree ? null : () async {
+                              String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
+
                               if (regKey.currentState.validate()){
                                 setState(() => loading = true); // loading = true;
-                                dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address);
+                                dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address, defaultProfilePic);
                                 if(result == null){
                                   setState((){
                                     error = 'Email already taken';

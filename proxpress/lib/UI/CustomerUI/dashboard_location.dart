@@ -85,6 +85,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
       return user == null ? LoginScreen() : StreamBuilder<Customer>(
           stream: DatabaseService(uid: user.uid).customerData,
           builder: (context, snapshot) {
+            print('yoyo ${snapshot.hasData} ${user.uid}');
             if(snapshot.hasData){
               Customer customerData = snapshot.data;
               return WillPopScope(

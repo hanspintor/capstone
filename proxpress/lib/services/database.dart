@@ -12,7 +12,7 @@ class DatabaseService {
   final CollectionReference courierCollection = FirebaseFirestore.instance.collection('Couriers');
 
   // Creation of a collection reference for customer data
-  Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address) async {
+  Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl) async {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -20,8 +20,18 @@ class DatabaseService {
       'Contact No' : contactNo,
       'Password' : password,
       'Address' : address,
+      'Avatar URL': avatarUrl,
     });
   }
+
+  Future updateCustomerProfilePic(String avatarUrl) async {
+    await FirebaseFirestore.instance.collection('Customers')
+        .doc(uid)
+        .update({
+      'Avatar URL': avatarUrl,
+    });
+  }
+
   // Creation of collection reference for courier data
   Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved, String vehicleType, String vehicleColor) async {
     return await courierCollection.doc(uid).set({
@@ -93,7 +103,7 @@ class DatabaseService {
       password: snapshot['Password'],
       email: snapshot['Email'],
       address: snapshot['Address'],
-
+      avatarUrl: snapshot['Avatar URL'],
     );
   }
 // specific data

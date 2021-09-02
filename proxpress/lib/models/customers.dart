@@ -7,8 +7,7 @@ class Customer{
   final String contactNo;
   final String password;
   final String address;
-
-  String avatarUrl;
+  final String avatarUrl;
 
   final AuthService _auth = AuthService();
 

@@ -64,7 +64,7 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                           children: [
                             Container(
                               child: ClipOval(
-                                child: Image.network('https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e',
+                                child: Image.network(customerData.avatarUrl,
                                   width:80,
                                   height: 80,
                                 ),
