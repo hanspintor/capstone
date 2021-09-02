@@ -172,7 +172,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${courierData.fName}",
                               decoration: InputDecoration(labelText:
                               'First Name:',
                                 hintText: "${courierData.fName}",
@@ -183,12 +182,10 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ),
                               ),
                               validator: (String val) => val.isEmpty ? 'Enter your new first name' : null,
-                              onChanged: (val) => setState(() => _currentFName = val),
                             ),
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${courierData.lName}",
                               decoration: InputDecoration(labelText:
                               'Last Name:',
                                 hintText: "${courierData.lName}",
@@ -198,13 +195,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                     color: Colors.green
                                 ),
                               ),
-                              validator: (String val) => val.isEmpty ? 'Enter your new last name' : null,
                               onChanged: (val) => setState(() => _currentLName = val),
                             ),
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${courierData.address}",
                               decoration: InputDecoration(labelText:
                               'Address:',
                                 hintText: "${courierData.address}",
@@ -215,13 +210,12 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ),
                               ),
                               keyboardType: TextInputType.streetAddress,
-                              validator: (String val) => val.isEmpty ? 'Enter your new address' : null,
                               onChanged: (val) => setState(() => _currentAddress = val),
                             ),
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${courierData.email}",
+                              initialValue: _currentEmail,
                               decoration: InputDecoration(labelText:
                               'Email:',
                                 hintText: "${courierData.email}",
@@ -233,7 +227,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               ),
                               validator: (String val){
                                 if(val.isEmpty){
-                                  return 'Email is Required';
+                                  return null;
                                 }
                                 else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
                                   return 'Please Enter a Valid Email Address';
@@ -261,9 +255,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               validator: (String val){
                                 if(val.length < 11 && val.length > 0){
                                   return 'Your contact number should be 11 digits';
-                                }
-                                else if(val.isEmpty){
-                                  return 'Contact Number is Required';
                                 }
                                 else
                                   return null;
@@ -311,7 +302,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                     color: Colors.green
                                 ),
                               ),
-                              validator: (String val) => val.isEmpty ? 'Enter your vehicle color' : null,
                               onChanged: (val) => setState(() => _vehicleColor = val),
                             ),
                           ),
@@ -420,15 +410,16 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   ),
                                   onPressed: () async {
                                     final Courier validCourier = Courier();
-
                                     if(_currentPassword != null)
                                       checkCurrentPassword = await validCourier.validateCurrentPassword(_currentPassword);
                                     setState(() {
 
                                     });
                                     if (_updateKey.currentState.validate() && checkCurrentPassword) {
-                                      validCourier.updateCurrentEmail(_currentEmail);
-                                      validCourier.updateCurrentPassword(_newPassword);
+                                      if(_currentEmail != null)
+                                        validCourier.updateCurrentEmail(_currentEmail);
+                                      if(_newPassword != null)
+                                        validCourier.updateCurrentPassword(_newPassword);
 
                                       await DatabaseService(uid: user.uid)
                                           .updateCourierData(

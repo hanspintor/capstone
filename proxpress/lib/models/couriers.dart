@@ -28,10 +28,4 @@ class Courier{
     _auth.updateCourierEmail(email);
   }
 
-  // Future uploadFile() async {
-  //   final fileName = Path.basename(file.path);
-  //   final destination = 'Courier Credentials/$fileName';
-  //
-  //   UploadFile.uploadFile(destination, file);
-  // }
 }

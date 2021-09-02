@@ -174,7 +174,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                               String url = await firebase_storage.FirebaseStorage.instance
                                                   .ref('Customers/${user.uid}/profilepic_${user.uid}')
                                                   .getDownloadURL();
-
+                                              print(url);
                                               if (url != null || url == 'null') {
                                                 await DatabaseService(uid: user.uid).updateCustomerProfilePic(url);
                                               }
@@ -189,7 +189,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${customerData.fName}",
                               decoration: InputDecoration(labelText:
                               'First Name:',
                                 hintText: "${customerData.fName}",
@@ -199,13 +198,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                     color: Colors.green
                                 ),
                               ),
-                              validator: (String val) => val.isEmpty ? 'Enter your new first name' : null,
                               onChanged: (val) => setState(() => _currentFName = val),
                             ),
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${customerData.lName}",
                               decoration: InputDecoration(labelText:
                               'Last Name:',
                                 hintText: "${customerData.lName}",
@@ -215,13 +212,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                     color: Colors.green
                                 ),
                               ),
-                              validator: (String val) => val.isEmpty ? 'Enter your new last name' : null,
                               onChanged: (val) => setState(() => _currentLName = val),
                             ),
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${customerData.address}",
                               decoration: InputDecoration(labelText:
                               'Address:',
                                 hintText: "${customerData.address}",
@@ -232,13 +227,12 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 ),
                               ),
                               keyboardType: TextInputType.streetAddress,
-                              validator: (String val) => val.isEmpty ? 'Enter your new address' : null,
                               onChanged: (val) => setState(() => _currentAddress = val),
                             ),
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${customerData.email}",
+
                               decoration: InputDecoration(labelText:
                               'Email:',
                                 hintText: "${customerData.email}",
@@ -250,7 +244,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               ),
                               validator: (String val){
                                 if(val.isEmpty){
-                                  return 'Email is Required';
+                                  return null;
                                 }
                                 else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
                                   return 'Please Enter a Valid Email Address';
@@ -263,7 +257,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                           ),
                           Container(
                             child: TextFormField(
-                              initialValue: "${customerData.contactNo}",
                               decoration: InputDecoration(labelText:
                               'Contact No:',
                                 hintText: "${customerData.contactNo}",
@@ -278,9 +271,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               validator: (String val){
                                 if(val.length < 11 && val.length > 0){
                                   return 'Your contact number should be 11 digits';
-                                }
-                                else if(val.isEmpty){
-                                  return 'Contact Number is Required';
                                 }
                                 else
                                   return null;
@@ -400,8 +390,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
 
                                     });
                                     if (_updateKey.currentState.validate() && checkCurrentPassword) {
-                                      validCustomer.updateCurrentEmail(_currentEmail);
-                                      validCustomer.updateCurrentPassword(_newPassword);
+                                      if(_currentEmail != null)
+                                        validCustomer.updateCurrentEmail(_currentEmail);
+                                      if(_newPassword != null)
+                                        validCustomer.updateCurrentPassword(_newPassword);
+
                                       await DatabaseService(uid: user.uid)
                                           .updateCustomerData(
                                         _currentFName ?? customerData.fName,
