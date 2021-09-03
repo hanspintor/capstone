@@ -26,12 +26,5 @@ class PROXpressApp extends StatelessWidget{
         home: Dashboard(),
       ),
     );
-    // return MaterialApp(
-    //     debugShowCheckedModeBanner: false,
-    //     theme: ThemeData(
-    //       primarySwatch: Colors.red,
-    //     ),
-    //     home: LoginScreen(),
-    // );
   }
 }

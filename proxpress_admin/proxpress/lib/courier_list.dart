@@ -15,7 +15,7 @@ class _CourierListState extends State<CourierList> {
     final courier = Provider.of<List<Courier>>(context);
 
     if (courier != null && courier.length > 0) {
-      return SingleChildScrollView(
+      return SizedBox(
         child: ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, index) {
@@ -24,7 +24,6 @@ class _CourierListState extends State<CourierList> {
           itemCount: courier.length,
         ),
       );
-    } else
-      return LoginScreen();
+    } else return Container();
   }
 }

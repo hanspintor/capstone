@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/courier_list.dart';
+import 'package:proxpress/classes/search_bar.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
@@ -28,6 +29,70 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
   void handleTimeOut() async{
     await _auth.signOut();
   }
+  @override
+  void initState(){
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  _onSearchChanged() {
+    print(_searchController.text);
+  }
+
+  // void _openEndDrawer() {
+  //   _scaffoldKey.currentState.openEndDrawer();
+  // }
+
+  Widget _alertmessage(){
+    return Center(
+      child: Column(
+        children: [
+          Container(
+            child: Text("Bitch"),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  // Widget _buildInfo(){
+  //   return Center(
+  //     child: Card(
+  //       margin:EdgeInsets.only(bottom: 30),
+  //       child: InkWell(
+  //         onTap: (){
+  //           showDialog(
+  //               context: context, builder: (BuildContext context) => AlertDialog(
+  //             content: (_alertmessage()),
+  //           )
+  //           );
+  //         },
+  //         child: SizedBox(
+  //           width: 110,
+  //           height: 50,
+  //           child: Container(
+  //             margin:EdgeInsets.only(left: 10),
+  //             child: Text("Name:  \nVehicle:  \nDescription: \nPrice: ",textAlign: TextAlign.justify, style: TextStyle(fontSize: 10)),
+  //           ),
+  //         ),
+  //       ),
+  //       shadowColor: Colors.black,
+  //       color:Colors.white,
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  @override
   Widget build(BuildContext context) {
     return new GestureDetector(
       onTap: (){
@@ -149,7 +214,16 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                       ),
                     shadowColor: Colors.black,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  ),
+                  Card(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        SearchBar(),
+                        CourierList(),
+                      ],
                     ),
+                  ),
                   ],
                 ),
               ),

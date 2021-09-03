@@ -57,6 +57,25 @@ class DatabaseService {
       'Admin Approved': approved,
       'Vehicle Type': vehicleType,
       'Vehicle Color': vehicleColor,
+      'License Front URL': driversLicenseFront_,
+      'License Back URL': driversLicenseBack_,
+      'NBI Clearance URL': nbiClearancePhoto_,
+      'Vehicle OR URL': vehicleRegistrationOR_,
+      'Vehicle CR URL': vehicleRegistrationCR_,
+      'Vehicle Photo URL': vehiclePhoto_,
+    });
+  }
+
+  Future updateCourierCredentials(String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_) async {
+    await FirebaseFirestore.instance.collection('Couriers')
+        .doc(uid)
+        .update({
+      'License Front URL': driversLicenseFront_,
+      'License Back URL': driversLicenseBack_,
+      'NBI Clearance URL': nbiClearancePhoto_,
+      'Vehicle OR URL': vehicleRegistrationOR_,
+      'Vehicle CR URL': vehicleRegistrationCR_,
+      'Vehicle Photo URL': vehiclePhoto_,
     });
   }
 
@@ -93,7 +112,6 @@ class DatabaseService {
        status: (doc.data() as dynamic) ['Active Status']?? '',
        vehicleColor: (doc.data() as dynamic) ['Vehicle Color']?? '',
        vehicleType: (doc.data() as dynamic) ['Vehicle Type']?? '',
-
 
      );
     }).toList();
