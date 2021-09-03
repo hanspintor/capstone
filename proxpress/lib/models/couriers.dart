@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/services/auth.dart';
 
 class Courier{
@@ -34,5 +35,6 @@ class Courier{
   void updateCurrentEmail(String email){
     _auth.updateCourierEmail(email);
   }
+
 
 }

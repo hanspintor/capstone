@@ -12,6 +12,7 @@ class NotifDrawerCustomer extends StatefulWidget {
 }
 
 class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);

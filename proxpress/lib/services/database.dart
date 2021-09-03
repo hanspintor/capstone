@@ -81,7 +81,7 @@ class DatabaseService {
   }
 
   //Customer model list builder
-  List<Courier> _courierDataListFromSnapshot(QuerySnapshot snapshot){
+  List<Courier> courierDataListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
      return Courier(
        fName: (doc.data() as dynamic) ['First Name'] ?? '',
@@ -118,7 +118,7 @@ class DatabaseService {
   }
 
   Stream<List<Courier>> get courierList {
-    return courierCollection.snapshots().map(_courierDataListFromSnapshot);
+    return courierCollection.snapshots().map(courierDataListFromSnapshot);
   }
   // Get data individually using streambuilder
   Customer _customerDataFromSnapshot(DocumentSnapshot snapshot){

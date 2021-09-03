@@ -11,6 +11,9 @@ class CourierList extends StatefulWidget {
 }
 
 class _CourierListState extends State<CourierList> {
+  List <Courier> showResults;
+
+
   @override
   Widget build(BuildContext context) {
     final courier = Provider.of<List<Courier>>(context);
