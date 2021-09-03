@@ -67,7 +67,7 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
-      await FileStorage(uid: user.uid);
+      //await FileStorage(uid: user.uid);
       await DatabaseService(uid: user.uid).updateCourierData(Fname, Lname, email, ContactNo, password, Address, Status, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
       return _userFromFirebaseUser(user);
     }catch(e){

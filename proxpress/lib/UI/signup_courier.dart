@@ -10,6 +10,7 @@ import 'package:proxpress/classes/terms_conditions.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
+import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -54,12 +55,12 @@ class _SignupCourierState extends State<SignupCourier> {
   bool agree = false;
   String status = 'Active';
   bool approved = false;
-  String driversLicenseFront_;
-  String driversLicenseBack_;
-  String nbiClearancePhoto_;
-  String vehicleRegistrationOR_;
-  String vehicleRegistrationCR_;
-  String vehiclePhoto_;
+  String driversLicenseFront_ = '';
+  String driversLicenseBack_ = '';
+  String nbiClearancePhoto_ = '';
+  String vehicleRegistrationOR_ = '';
+  String vehicleRegistrationCR_ = '';
+  String vehiclePhoto_ = '';
 
   final AuthService _auth = AuthService();
   final Courier _courier = Courier();
@@ -611,7 +612,14 @@ class _SignupCourierState extends State<SignupCourier> {
                               onPressed: !agree ? null : () async {
                                 String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
-                                if (regKey.currentState.validate()){
+                                bool picsLoaded = driversLicenseFront != null &&
+                                                  driversLicenseBack != null &&
+                                                  nbiClearancePhoto != null &&
+                                                  vehicleRegistrationOR != null &&
+                                                  vehicleRegistrationCR != null &&
+                                                  vehiclePhoto != null ? true : false;
+
+                                if (regKey.currentState.validate() && picsLoaded){
                                   //setState(() => loading = true); // loading = true;
                                   dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, approved, vehicleType, vehicleColor, defaultProfilePic, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
                                   if(result == null){
@@ -633,44 +641,45 @@ class _SignupCourierState extends State<SignupCourier> {
                                       final vehiclePhotoDestination = 'Couriers/${user.uid}/$vehiclePhotoFileName';
 
                                       try {
-                                        UploadFile.uploadFile(driversLicenseFrontDestination, driversLicenseFront);
-                                        String url1 = await firebase_storage.FirebaseStorage.instance
+                                        await UploadFile.uploadFile(driversLicenseFrontDestination, driversLicenseFront);
+                                        driversLicenseFront_ = await firebase_storage.FirebaseStorage.instance
                                             .ref(driversLicenseFrontDestination)
                                             .getDownloadURL();
 
-                                        UploadFile.uploadFile(driversLicenseBackDestination, driversLicenseBack);
-                                        String url2 = await firebase_storage.FirebaseStorage.instance
+                                        await UploadFile.uploadFile(driversLicenseBackDestination, driversLicenseBack);
+                                        driversLicenseBack_ = await firebase_storage.FirebaseStorage.instance
                                             .ref(driversLicenseBackDestination)
                                             .getDownloadURL();
 
-                                        UploadFile.uploadFile(nbiClearancePhotoDestination, nbiClearancePhoto);
-                                        String url3 = await firebase_storage.FirebaseStorage.instance
+                                        await UploadFile.uploadFile(nbiClearancePhotoDestination, nbiClearancePhoto);
+                                        nbiClearancePhoto_ = await firebase_storage.FirebaseStorage.instance
                                             .ref(nbiClearancePhotoDestination)
                                             .getDownloadURL();
 
-                                        UploadFile.uploadFile(vehicleRegistrationORDestination, vehicleRegistrationOR);
-                                        String url4 = await firebase_storage.FirebaseStorage.instance
+                                        await UploadFile.uploadFile(vehicleRegistrationORDestination, vehicleRegistrationOR);
+                                        vehicleRegistrationOR_ = await firebase_storage.FirebaseStorage.instance
                                             .ref(vehicleRegistrationORDestination)
                                             .getDownloadURL();
 
-                                        UploadFile.uploadFile(vehicleRegistrationCRDestination, vehicleRegistrationCR);
-                                        String url5 = await firebase_storage.FirebaseStorage.instance
+                                        await UploadFile.uploadFile(vehicleRegistrationCRDestination, vehicleRegistrationCR);
+                                        vehicleRegistrationCR_ = await firebase_storage.FirebaseStorage.instance
                                             .ref(vehicleRegistrationCRDestination)
                                             .getDownloadURL();
 
-                                        UploadFile.uploadFile(vehiclePhotoDestination, vehiclePhoto);
-                                        String url6 = await firebase_storage.FirebaseStorage.instance
+                                        await UploadFile.uploadFile(vehiclePhotoDestination, vehiclePhoto);
+                                        vehiclePhoto_ = await firebase_storage.FirebaseStorage.instance
                                             .ref(vehiclePhotoDestination)
                                             .getDownloadURL();
 
+                                        await DatabaseService(uid: user.uid).updateCourierCredentials(driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
                                       } catch(e) {
                                         print(e.toString());
                                       }
                                     }
                                   }
+                                } else {
+                                  print('WTF');
                                 }
-                                // _courier.uploadFile();
-                                // widget.uploadfile();
                               }
                           ),
                         ],
