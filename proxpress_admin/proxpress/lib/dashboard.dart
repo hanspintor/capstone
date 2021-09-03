@@ -21,7 +21,6 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
-
     final User user = auth.currentUser;
 
     return StreamProvider<List<Courier>>.value(

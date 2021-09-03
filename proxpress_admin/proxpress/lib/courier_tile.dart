@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/couriers.dart';
+import 'package:proxpress/database.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CourierTile extends StatelessWidget {
@@ -14,6 +15,8 @@ class CourierTile extends StatelessWidget {
     String vehicleRegistrationOR_ = courier.vehicleRegistrationOR_;
     String vehicleRegistrationCR_ = courier.vehicleRegistrationCR_;
     String vehiclePhoto_ = courier.vehiclePhoto_;
+
+    bool approved = courier.approved;
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
@@ -59,13 +62,14 @@ class CourierTile extends StatelessWidget {
                 ),
               ),
               Align(
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
-                        onPressed: () async {
+                        onPressed: approved ? null : () async {
+                          await DatabaseService(uid: courier.uid).approveCourier();
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,

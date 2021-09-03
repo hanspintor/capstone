@@ -9,6 +9,7 @@ class DatabaseService {
   List<Courier> _courierDataListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
       return Courier(
+        uid: doc.id,
         fName: (doc.data() as dynamic) ['First Name'] ?? '',
         lName: (doc.data() as dynamic) ['Last Name'] ?? '',
         contactNo: (doc.data() as dynamic) ['Contact No'] ?? '',
@@ -17,6 +18,7 @@ class DatabaseService {
         address: (doc.data() as dynamic) ['Address']?? '',
         vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
         vehicleColor: (doc.data() as dynamic) ['Vehicle Color'] ?? '',
+        approved: (doc.data() as dynamic) ['Admin Approved'] ?? '',
         driversLicenseFront_: (doc.data() as dynamic) ['License Front URL'] ?? '',
         driversLicenseBack_: (doc.data() as dynamic) ['License Back URL'] ?? '',
         nbiClearancePhoto_: (doc.data() as dynamic) ['NBI Clearance URL'] ?? '',
@@ -26,7 +28,16 @@ class DatabaseService {
       );
     }).toList();
   }
+
   Stream<List<Courier>> get courierList {
     return courierCollection.snapshots().map(_courierDataListFromSnapshot);
+  }
+
+  Future approveCourier() async {
+    await FirebaseFirestore.instance.collection('Couriers')
+        .doc(uid)
+        .update({
+      'Admin Approved': true,
+    });
   }
 }
