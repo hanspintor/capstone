@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/courier_list.dart';
+import 'package:proxpress/classes/search_bar.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/database.dart';
 
@@ -22,14 +23,28 @@ class Couriers {
 }
 
 class _DashboardCustomerState extends State<DashboardCustomer> {
-  List<Couriers> couriers = [
-    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120,),
-    Couriers(firstName: 'Pedro', lastName: 'Penduko', vehicleType: 'Sedan', vehicleColor: 'Red', price: 120,),
-  ];
+  TextEditingController _searchController = TextEditingController();
 
-  void _openEndDrawer() {
-    _scaffoldKey.currentState.openEndDrawer();
+  @override
+  void initState(){
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
   }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  _onSearchChanged() {
+    print(_searchController.text);
+  }
+
+  // void _openEndDrawer() {
+  //   _scaffoldKey.currentState.openEndDrawer();
+  // }
 
   Widget _alertmessage(){
     return Center(
@@ -44,34 +59,34 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  Widget _buildInfo(){
-    return Center(
-      child: Card(
-        margin:EdgeInsets.only(bottom: 30),
-        child: InkWell(
-          onTap: (){
-            showDialog(
-                context: context, builder: (BuildContext context) => AlertDialog(
-              content: (_alertmessage()),
-            )
-            );
-          },
-          child: SizedBox(
-            width: 110,
-            height: 50,
-            child: Container(
-              margin:EdgeInsets.only(left: 10),
-              child: Text("Name:  \nVehicle:  \nDescription: \nPrice: ",textAlign: TextAlign.justify, style: TextStyle(fontSize: 10)),
-            ),
-          ),
-        ),
-        shadowColor: Colors.black,
-        color:Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
-    );
-  }
+  // Widget _buildInfo(){
+  //   return Center(
+  //     child: Card(
+  //       margin:EdgeInsets.only(bottom: 30),
+  //       child: InkWell(
+  //         onTap: (){
+  //           showDialog(
+  //               context: context, builder: (BuildContext context) => AlertDialog(
+  //             content: (_alertmessage()),
+  //           )
+  //           );
+  //         },
+  //         child: SizedBox(
+  //           width: 110,
+  //           height: 50,
+  //           child: Container(
+  //             margin:EdgeInsets.only(left: 10),
+  //             child: Text("Name:  \nVehicle:  \nDescription: \nPrice: ",textAlign: TextAlign.justify, style: TextStyle(fontSize: 10)),
+  //           ),
+  //         ),
+  //       ),
+  //       shadowColor: Colors.black,
+  //       color:Colors.white,
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -138,40 +153,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                     margin: EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 25),
-                          child: SizedBox(
-                            height: 40,
-                            width: 250,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  hintText: 'Search',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black54,
-                                  ),
-                                  contentPadding: EdgeInsets.all(10.0),
-                                  prefixIcon: Icon(Icons.search_rounded),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 2.0,
-
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  borderSide: BorderSide(
-                                    color: Colors.redAccent,
-                                    width: 2.0,
-
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        SearchBar(),
                         CourierList(),
                       ],
                     ),

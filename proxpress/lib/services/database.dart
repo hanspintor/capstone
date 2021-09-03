@@ -94,7 +94,6 @@ class DatabaseService {
        vehicleColor: (doc.data() as dynamic) ['Vehicle Color']?? '',
        vehicleType: (doc.data() as dynamic) ['Vehicle Type']?? '',
 
-
      );
     }).toList();
   }

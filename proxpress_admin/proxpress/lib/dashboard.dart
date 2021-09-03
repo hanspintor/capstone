@@ -33,7 +33,6 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     TableRow(
                       children: [
-                        //Align(alignment: Alignment.center,child: Text('User ID', style: TextStyle(fontWeight: FontWeight.bold),)),
                         Align(alignment: Alignment.center,child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold),)),
                         Align(alignment: Alignment.center,child: Text('Address', style: TextStyle(fontWeight: FontWeight.bold),)),
                         Align(alignment: Alignment.center,child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold),)),
@@ -46,6 +45,47 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               CourierList(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                      ),
+                      child: Text(
+                        "Update",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                      ),
+                      child: Text(
+                        "Delete",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
