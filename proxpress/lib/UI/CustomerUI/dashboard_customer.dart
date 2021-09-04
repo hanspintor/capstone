@@ -5,9 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/courier_list.dart';
 import 'package:proxpress/classes/search_bar.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 
@@ -94,6 +96,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<TheUser>(context);
     return new GestureDetector(
       onTap: (){
         if(count != 0){
@@ -110,7 +113,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
         });
 
       },
-      child: StreamProvider<List<Courier>>.value(
+      child: user == null ? LoginScreen() : StreamProvider<List<Courier>>.value(
         value: DatabaseService().courierList,
         initialData: [],
         child: Scaffold(
