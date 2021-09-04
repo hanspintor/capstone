@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "744530570009",
+    "project_id": "proxpress-629e3",
+    "storage_bucket": "proxpress-629e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744530570009:android:6cbfb9f1f74ebd93f37388",
+        "android_client_info": {
+          "package_name": "com.capstone.proxpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744530570009-hdv661fikf378vigfbhupm2e0t9t4tvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA14-V5savjS9bnxkesdw2iJcYzi1s3-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744530570009-hdv661fikf378vigfbhupm2e0t9t4tvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
