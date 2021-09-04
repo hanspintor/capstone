@@ -40,4 +40,8 @@ class DatabaseService {
       'Admin Approved': true,
     });
   }
+
+  Future deleteCourierDocument() {
+    return courierCollection.doc(uid).delete();
+  }
 }

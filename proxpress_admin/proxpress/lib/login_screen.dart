@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/auth.dart';
 import 'package:proxpress/dashboard.dart';
@@ -88,8 +90,41 @@ class _LoginScreenState extends State<LoginScreen> {
                                   setState(() {
                                     error = 'Invalid email or password';
                                   });
+                                } else {
+                                  final FirebaseAuth auth = FirebaseAuth.instance;
+
+                                  final User user = auth.currentUser;
+
+                                  FirebaseFirestore.instance
+                                      .collection('Customers')
+                                      .doc(user.uid)
+                                      .get()
+                                      .then((DocumentSnapshot documentSnapshot) {
+                                    if (documentSnapshot.exists) {
+                                      print('customer document found');
+                                      setState((){
+                                        error = 'Account is not an admin';
+                                      });
+                                      _auth.signOut();
+                                    } else {
+                                      FirebaseFirestore.instance
+                                          .collection('Couriers')
+                                          .doc(user.uid)
+                                          .get()
+                                          .then((DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists) {
+                                          print('courier document found');
+                                          setState((){
+                                            error = 'Account is not an admin';
+                                          });
+                                          _auth.signOut();
+                                        } else {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard(savedPassword: password,)));
+                                        }
+                                      });
+                                    }
+                                  });
                                 }
-                                else return Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -115,9 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: InkWell(
                             onTap: () {
                               showDialog(
-                                  context: context, builder: (BuildContext context) => AlertDialog(
-                                content: (Container()),
-                              )
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(content: (Container()))
                               );
                             },
                             child: Text(

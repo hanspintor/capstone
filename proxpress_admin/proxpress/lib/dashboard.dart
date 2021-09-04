@@ -10,12 +10,17 @@ import 'package:proxpress/login_screen.dart';
 import 'auth.dart';
 
 class Dashboard extends StatefulWidget {
+  String savedPassword;
+  Dashboard({this.savedPassword});
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+  String savedPassword;
+  _DashboardState({this.savedPassword});
+
   final AuthService _auth = AuthService();
 
   @override
@@ -38,7 +43,9 @@ class _DashboardState extends State<Dashboard> {
               ),
               onPressed: () async {
                 print(user.uid);
-                await _auth.signOut();
+                if (user != null) {
+                  await _auth.signOut();
+                }
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
               },
               icon: Icon(Icons.logout_rounded),
@@ -68,7 +75,7 @@ class _DashboardState extends State<Dashboard> {
                   ],
                 ),
               ),
-              CourierList(),
+              CourierList(savedPassword: widget.savedPassword,),
             ],
           ),
         ),

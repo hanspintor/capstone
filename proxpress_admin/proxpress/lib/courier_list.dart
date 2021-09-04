@@ -5,6 +5,9 @@ import 'package:proxpress/couriers.dart';
 import 'package:proxpress/login_screen.dart';
 
 class CourierList extends StatefulWidget {
+  String savedPassword;
+  CourierList({this.savedPassword});
+
   @override
   _CourierListState createState() => _CourierListState();
 }
@@ -19,7 +22,7 @@ class _CourierListState extends State<CourierList> {
         child: ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            return CourierTile(courier: courier[index]);
+            return CourierTile(courier: courier[index], savedPassword: widget.savedPassword,);
           },
           itemCount: courier.length,
         ),

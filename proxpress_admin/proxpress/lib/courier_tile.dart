@@ -3,9 +3,12 @@ import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'auth.dart';
+
 class CourierTile extends StatelessWidget {
   final Courier courier;
-  CourierTile({this.courier});
+  String savedPassword;
+  CourierTile({this.courier, this.savedPassword});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,8 @@ class CourierTile extends StatelessWidget {
     String vehiclePhoto_ = courier.vehiclePhoto_;
 
     bool approved = courier.approved;
+
+    final AuthService _auth = AuthService();
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
@@ -88,6 +93,27 @@ class CourierTile extends StatelessWidget {
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
                         onPressed: () async {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                      content: Text(
+                                          "Delete courier?"),
+                                      actions: [
+                                        TextButton(
+                                          child: Text("Yes"),
+                                          onPressed: () async {
+                                            await _auth.deleteUser(courier.email, courier.password, savedPassword);
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text("No"),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ])
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.red,
@@ -112,4 +138,3 @@ class CourierTile extends StatelessWidget {
     );
   }
 }
-// alignment: Alignment.centerLeft,
