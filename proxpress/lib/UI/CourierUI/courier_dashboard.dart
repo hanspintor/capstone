@@ -17,9 +17,28 @@ class CourierDashboard extends StatelessWidget {
     _scaffoldKey.currentState.openEndDrawer();
   }
 
+  Widget _welcomeMessage(){
+    String welcomeMessage = "Thank you for registering in PROXpress. "
+        "Please wait for up to 24 hours for the admin to check and verify your uploaded credentials. "
+        "This is to ensure that you are qualified to be a courier in our app.";
+
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 40, 20, 0),
+      child: Align(
+        child: Text(welcomeMessage,
+          textAlign: TextAlign.justify,
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
+    bool approved = false;
 
     if(user != null) {
       return StreamBuilder<Courier>(
@@ -27,6 +46,9 @@ class CourierDashboard extends StatelessWidget {
           builder: (context,snapshot){
             if(snapshot.hasData){
               Courier courierData = snapshot.data;
+
+              approved = courierData.approved;
+
               return WillPopScope(
                 onWillPop: () async {
                   print("Back Button Pressed");
@@ -67,11 +89,14 @@ class CourierDashboard extends StatelessWidget {
                           SizedBox(height: 10),
                           Align(
                             alignment: Alignment.bottomCenter,
-                            child: Text("Welcome ${courierData.fName}",
+                            child: Text("Welcome, ${courierData.fName}!",
                               style: TextStyle(
                                 fontSize: 25,
                               ),
                             ),
+                          ),
+                          !approved ? _welcomeMessage() : Container(
+                            child: Text('Customer Requests Here'),
                           ),
                         ],
                       ),

@@ -161,8 +161,9 @@ class DatabaseService {
       password: snapshot['Password'],
       email: snapshot['Email'],
       address: snapshot['Address'],
+      approved: snapshot['Admin Approved'],
       status: snapshot['Active Status'],
-      //vehicleType: snapshot['Vehicle Type'],
+      vehicleType: snapshot['Vehicle Type'],
       vehicleColor: snapshot['Vehicle Color'],
     );
   }
