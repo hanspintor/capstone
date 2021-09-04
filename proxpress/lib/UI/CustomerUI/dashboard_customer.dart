@@ -106,7 +106,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
           count=1;
         }
         _sessionTimer?.cancel();
-        _sessionTimer = new Timer(Duration(seconds: duration), handleTimeOut);
+        _sessionTimer = new Timer(Duration(minutes: duration), handleTimeOut);
         _sessionTimerPrint?.cancel();
         _sessionTimerPrint = new Timer(Duration(minutes: duration), () {
           print("Session Expired");
