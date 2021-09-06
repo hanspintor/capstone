@@ -87,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if(value.isEmpty){
                                   return 'Password is Required';
                                 }
+                                else return null;
                               },
                               onSaved: (String value){
                                 password = value;
