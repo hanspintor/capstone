@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:proxpress/classes/firestore_service.dart';
+import 'package:proxpress/services/firestore_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -89,47 +89,45 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: searchField(),
-              ),
-              if (widget.showSearchIcon)
-                IconButton(
-                    icon: const Icon(Icons.search),
-                    padding: const EdgeInsets.all(0),
-                    color: widget?.searchIconColor ??
-                        Theme.of(context).primaryColor,
-                    onPressed: () {
-                      setState(() {
-                        if (!isSearching) {
-                          isSearching = true;
-                          searchFocusNode.requestFocus();
-                        } else {
-                          searchFocusNode.unfocus();
-                        }
-                      });
-                    })
-            ],
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: widget.searchBodyBackgroundColor,
-            child: StreamBuilder<List>(
-                stream: FirestoreServicePackage(
-                    collectionName: widget.firestoreCollectionName,
-                    searchBy: widget.searchBy ?? '',
-                    dataListFromSnapshot: widget.dataListFromSnapshot,
-                    limitOfRetrievedData: widget.limitOfRetrievedData)
-                    .searchData(searchQuery),
-                builder: widget.builder),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: searchField(),
+            ),
+            if (widget.showSearchIcon)
+              IconButton(
+                  icon: const Icon(Icons.search),
+                  padding: const EdgeInsets.all(0),
+                  color: widget?.searchIconColor ??
+                      Theme.of(context).primaryColor,
+                  onPressed: () {
+                    setState(() {
+                      if (!isSearching) {
+                        isSearching = true;
+                        searchFocusNode.requestFocus();
+                      } else {
+                        searchFocusNode.unfocus();
+                      }
+                    });
+                  })
+          ],
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height - 190,
+          color: widget.searchBodyBackgroundColor,
+          child: StreamBuilder<List>(
+              stream: FirestoreServicePackage(
+                  collectionName: widget.firestoreCollectionName,
+                  searchBy: widget.searchBy ?? '',
+                  dataListFromSnapshot: widget.dataListFromSnapshot,
+                  limitOfRetrievedData: widget.limitOfRetrievedData)
+                  .searchData(searchQuery),
+              builder: widget.builder),
+        ),
+      ],
     );
   }
 

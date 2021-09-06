@@ -14,14 +14,11 @@ class FirestoreServicePackage<T> {
   final FirebaseFirestore firebasefirestore = FirebaseFirestore.instance;
 
   Stream<List> searchData(String query) {
-    final collectionReference = firebasefirestore.collection(collectionName).orderBy('First Name');
+    final collectionReference = firebasefirestore.collection(collectionName);
 
-
-    print("niceee $searchBy");
     if(query.length != 0){
       query = query[0].toUpperCase() + query.substring(1);
     }
-    print("niceee $query");
     return collectionReference
         .where(searchBy, isGreaterThanOrEqualTo: query)
         .where(searchBy, isLessThan: query + 'z')

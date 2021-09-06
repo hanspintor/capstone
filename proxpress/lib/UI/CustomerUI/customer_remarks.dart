@@ -138,6 +138,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawerEnableOpenDragGesture: false,
@@ -276,7 +277,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                   ),
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: () {
-                    // _validate();
+                    print("hbiii");
+                     _validate();
                   },
                 ),
                 SizedBox(height: 50),

@@ -9,17 +9,11 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/database.dart';
 
 class CourierList extends StatefulWidget {
-  String searched;
-  CourierList({this.searched});
-
   @override
   _CourierListState createState() => _CourierListState();
 }
 
 class _CourierListState extends State<CourierList> {
-  String searched;
-  _CourierListState({this.searched});
-
   List<Courier> showResults;
 
   @override
@@ -34,14 +28,12 @@ class _CourierListState extends State<CourierList> {
         if (snapshot.hasData) {
           final List<Courier> dataList = snapshot.data;
 
-          return SingleChildScrollView(
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: dataList.length ?? 0,
-                itemBuilder: (context, index) {
-                  return CourierTile(courier: dataList[index]);
-                }),
-          );
+          return ListView.builder(
+
+              itemCount: dataList.length ?? 0,
+              itemBuilder: (context, index) {
+                return CourierTile(courier: dataList[index]);
+              });
         }
         return Center(
           child: CircularProgressIndicator(),
