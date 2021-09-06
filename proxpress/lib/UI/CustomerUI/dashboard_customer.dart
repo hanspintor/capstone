@@ -173,51 +173,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                         ),
                       ),
                     ),
-                    Card(
-                      margin: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 25),
-                            child: SizedBox(
-                              height: 40,
-                              width: 250,
-                              child: TextField(
-                                controller: _searchController,
-                                decoration: InputDecoration(
-                                    hintText: 'Search',
-                                    hintStyle: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.black54,
-                                    ),
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    prefixIcon: Icon(Icons.search_rounded),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    borderSide: BorderSide(
-                                        color: Colors.grey,
-                                        width: 2.0,
-
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.redAccent,
-                                      width: 2.0,
-
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          CourierList(),
-                        ],
-                      ),
-                    shadowColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                  ),
                   Card(
                     margin: EdgeInsets.all(20),
                     child: Column(

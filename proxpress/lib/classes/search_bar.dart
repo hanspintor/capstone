@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
@@ -25,7 +27,12 @@ class _SearchBarState extends State<SearchBar> {
   _onSearchChanged() {
     print(_searchController.text);
   }
-
+  // Stream<QuerySnapshot> getUsersPast(BuildContext context) async*{
+  //     final FirebaseAuth _auth = FirebaseAuth.instance;
+  //     User user = _auth.currentUser;
+  //     var data = await FirebaseFirestore.instance;
+  //     yield* data.collection("Couriers").where(field);
+  // }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,9 +41,19 @@ class _SearchBarState extends State<SearchBar> {
         height: 40,
         width: 250,
         child: TextField(
+          onChanged: (text) {
+            text = text.toLowerCase();
+          },
           controller: _searchController,
           decoration: InputDecoration(
             hintText: 'Search',
+            suffixIcon: IconButton(
+              icon: Icon(
+                Icons.clear, size: 20,
+                color: Colors.black,
+              ),
+              onPressed: () => _searchController.clear(),
+            ),
             hintStyle: TextStyle(
               fontSize: 16.0,
               color: Colors.black54,
