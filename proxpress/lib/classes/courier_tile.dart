@@ -39,6 +39,9 @@ class CourierTile extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          onTap: () {
+            Navigator.pushNamed(context, '/customerRemarks');
+          },
         ),
       ),
     );

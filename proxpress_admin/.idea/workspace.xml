@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,266 +23,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="06a1351b-51e2-4655-9cc6-3613a33e725e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/.metadata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/analysis_options.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/google-services.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/debug/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/kotlin/com/capstone/proxpress/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/kotlin/com/example/test_xpress/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/drawable-v21/launch_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/drawable/launch_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/values-night/styles.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/main/res/values/styles.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/app/src/profile/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/gradle.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/android/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/assets/PROExpress-logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Flutter/Debug.xcconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Flutter/Release.xcconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/AppDelegate.swift" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/1024.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/114.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/120.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/128.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/144.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/152.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/167.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/172.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/180.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/196.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/20.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/216.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/256.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/29.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/32.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/40.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/48.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/50.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/55.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/57.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/58.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/60.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/64.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/72.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/76.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/80.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/87.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/88.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Base.lproj/LaunchScreen.storyboard" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Base.lproj/Main.storyboard" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Info.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/ios/Runner/Runner-Bridging-Header.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/Load/load_screen.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/Load/user_load.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CourierUI/courier_dashboard.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CustomerUI/courier_bookmarks.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CustomerUI/customer_profile.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CustomerUI/customer_remarks.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CustomerUI/dashboard_customer.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CustomerUI/dashboard_location.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CustomerUI/pin_location_map.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/CustomerUI/signup_customer.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/chat_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/forgot_password.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/login_screen.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/menu_drawer.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/notif_drawer.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/reg_landing_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UI/signup_courier.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/UserAuthenticate.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/authenticate.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/classes/courier_upload.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/classes/customer_updating_form.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/classes/terms_conditions.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/classes/user_identifier.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/main.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/models/couriers.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/models/customers.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/models/user.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/services/auth.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/services/database.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/services/default_profile_pic.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/services/file_storage.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/services/upload_file.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/lib/wrapper.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/pubspec.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/pubspec.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/favicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/icons/Icon-192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/icons/Icon-512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/icons/Icon-maskable-192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/icons/Icon-maskable-512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../proxpress null id/web/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/proxpress_admin.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/.metadata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/analysis_options.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/google-services.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/debug/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/kotlin/com/capstone/proxpress/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/kotlin/com/example/test_xpress/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/drawable-v21/launch_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/drawable/launch_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/values-night/styles.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/main/res/values/styles.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/app/src/profile/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/gradle.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/android/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/assets/PROExpress-logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Flutter/Debug.xcconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Flutter/Release.xcconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/AppDelegate.swift" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/1024.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/114.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/120.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/128.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/144.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/152.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/167.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/172.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/180.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/196.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/20.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/216.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/256.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/29.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/32.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/40.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/48.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/50.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/55.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/57.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/58.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/60.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/64.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/72.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/76.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/80.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/87.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/88.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Base.lproj/LaunchScreen.storyboard" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Base.lproj/Main.storyboard" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Info.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/ios/Runner/Runner-Bridging-Header.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/lib/authenticate.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/lib/couriers.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/lib/user.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/lib/user_load.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/pubspec.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/pubspec.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/favicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/icons/Icon-192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/icons/Icon-512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/icons/Icon-maskable-192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/icons/Icon-maskable-512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxpress/web/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/proxpress_admin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/proxpress_admin.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Desktop-Pc\.android\avd\Pixel_2_API_26_2.avd]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -291,9 +44,20 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="06a1351b-51e2-4655-9cc6-3613a33e725e" name="Default Changelist" comment="" />
@@ -314,5 +78,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

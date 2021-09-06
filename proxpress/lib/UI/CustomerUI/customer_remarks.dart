@@ -16,6 +16,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   String _specificInstructions;
   String _paymentOption = 'Choose Payment Option';
   List<String> _onlinePaymentOptions = ['Gcash', 'PayMaya'];
+  int val = -1;
 
   bool buttonState = true;
 
@@ -40,14 +41,6 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     print (_paymentOption);
   }
 
-  void _openEndDrawer() {
-    _scaffoldKey.currentState.openEndDrawer();
-  }
-
-  Widget _alertmessage(){
-    return null;
-  }
-
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -62,11 +55,96 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           if(value.isEmpty){
             return error;
           }
+          else return null;
         },
         onSaved: (String value){
           textFieldInput = value;
         },
       ),
+    );
+  }
+  Widget _buildDropDown(){
+    return SizedBox(
+      width: 270,
+      child: DropdownButton<String>(
+        hint: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Icon(Icons.payment_rounded),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(12, 0, 0, 0),
+              child: Text('Payment Options'),
+            ),
+          ],
+        ),
+        iconSize: 20,
+        elevation: 16,
+        underline: Container(
+          height: 2,
+          color: Colors.black,
+        ),
+        onChanged: (String newValue) {
+          setState(() {
+            _paymentOption = newValue;
+          });
+        },
+        items: <String>['Cash on Delivery', 'Online Payment']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildRadioPayment(){
+    return Column(
+      children: [
+        ListTile(
+          title: Container(
+            child: Row(
+              children: [
+                Image.asset("assets/gcash.png", height: 50, width: 50,),
+                Text("GCash"),
+              ],
+            ),
+          ),
+          leading: Radio(
+            value: 1,
+            groupValue: val,
+            onChanged: (value) {
+              setState(() {
+                val = value;
+              });
+            },
+            activeColor: Color(0xfffb0d0d),
+          ),
+        ),
+        ListTile(
+          title: Container(
+            child: Row(
+              children: [
+                Container(margin: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Image.asset("assets/paymaya.png", height: 25, width: 25,)),
+                Container(margin: EdgeInsets.fromLTRB(15, 0, 0, 0),child: Text("Paymaya")),
+              ],
+            ),
+          ),
+          leading: Radio(
+            value: 2,
+            groupValue: val,
+            onChanged: (value) {
+              setState(() {
+                val = value;
+              });
+            },
+            activeColor: Color(0xfffb0d0d),
+          ),
+        ),
+      ],
     );
   }
 
@@ -192,65 +270,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                               'Item description is required.',
                               _itemDescription
                           ),
-                          // Dapat dropdown ni gcash/paymaya
-                          _buildTextField(
-                              'Payment Option',
-                              Icons.payments_outlined,
-                              TextInputType.text,
-                              'Item description is required.',
-                              _itemDescription
-                          ),
-                          DropdownButton<String>(
-                            value: _paymentOption,
-                            icon: const Icon(Icons.arrow_downward),
-                            iconSize: 24,
-                            elevation: 16,
-                            underline: Container(
-                              height: 2,
-                              color: Colors.black,
-                            ),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                _paymentOption = newValue;
-                              });
-                            },
-                            items: <String>['Choose Payment Option', 'Cash on Delivery', 'Online Payment']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                          Text(
-                            "Online Payment Options",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: buttonState ? _buttonChange : null,
-                                    child: Text(
-                                      "Gcash",
-                                      style: TextStyle(color: Colors.white, fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: buttonState ? null : _buttonChange,
-                                    child: Text(
-                                      "Paymaya",
-                                      style: TextStyle(color: Colors.white, fontSize: 16),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                          _buildDropDown(),
+                          _paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 30),
                         ],
                       ),
                       shadowColor: Colors.black,
