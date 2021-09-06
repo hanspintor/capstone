@@ -25,9 +25,7 @@ class _CourierListState extends State<CourierList> {
   @override
   Widget build(BuildContext context) {
     final courier = Provider.of<List<Courier>>(context);
-
     List<Courier> Function(QuerySnapshot<Object> snapshot) courierList = DatabaseService().courierDataListFromSnapshot;
-
     return courier == null ? UserLoading() : FirestoreSearchScaffold(
       firestoreCollectionName: 'Couriers',
       searchBy: 'First Name',
@@ -41,8 +39,7 @@ class _CourierListState extends State<CourierList> {
                 shrinkWrap: true,
                 itemCount: dataList.length ?? 0,
                 itemBuilder: (context, index) {
-                  courierList = DatabaseService().courierDataListFromSnapshot;
-                  return CourierTile(courier: courier[index]);
+                  return CourierTile(courier: dataList[index]);
                 }),
           );
         }
