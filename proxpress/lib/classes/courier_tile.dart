@@ -4,9 +4,9 @@ import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/courier_list.dart';
 import 'package:proxpress/models/couriers.dart';
 
-
 class CourierTile extends StatelessWidget {
   final Courier courier;
+
   CourierTile({this.courier});
 
   @override
@@ -14,38 +14,58 @@ class CourierTile extends StatelessWidget {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     var color;
-    if(courier.status == "Offline"){
+    if (courier.status == "Offline") {
       color = Colors.redAccent;
-    } else{
+    } else {
       color = Colors.green;
     }
-    return user == null ? LoginScreen() : Padding(
-      padding: EdgeInsets.only(top: 8.0),
-      child: SingleChildScrollView(
-        child: Card(
-          margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-          child: ListTile(
-            title: Text("${courier.fName} ${courier.lName}"),
-            leading: Icon(
-                   Icons.account_circle_rounded,
-                   size: 50,
-             ),
-            subtitle: Text(
-                "Vehicle Type: ${courier.vehicleType}"
-            ),
-            trailing: Text(
-                "${courier.status}",
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.bold,
+    return user == null
+        ? LoginScreen()
+        : Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: SingleChildScrollView(
+              child: Card(
+                margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+                child: ListTile(
+                  title: Text("${courier.fName} ${courier.lName}"),
+                  leading: Icon(
+                    Icons.account_circle_rounded,
+                    size: 50,
+                  ),
+                  subtitle: Text("Vehicle Type: ${courier.vehicleType}"),
+                  trailing: Column(
+                    children: [
+                      Text(
+                        "${courier.status}",
+                        style: TextStyle(
+                          color: color,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 5),
+                          height: 25,
+                          child: ElevatedButton(
+                              child: Text(
+                                'Request',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 10),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.black),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/customerRemarks');
+                              }
+                          )
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+
+                  },
+                ),
               ),
             ),
-            onTap: () {
-              Navigator.pushNamed(context, '/customerRemarks');
-            },
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

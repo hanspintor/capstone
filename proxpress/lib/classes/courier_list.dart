@@ -24,6 +24,7 @@ class _CourierListState extends State<CourierList> {
       firestoreCollectionName: 'Couriers',
       searchBy: 'First Name',
       dataListFromSnapshot: courierList,
+      limitOfRetrievedData: courier.length,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final List<Courier> dataList = snapshot.data;

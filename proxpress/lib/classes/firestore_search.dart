@@ -80,6 +80,7 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
   bool isSearching = false;
   String searchQuery = "";
   FocusNode searchFocusNode = FocusNode();
+  double x;
 
   @override
   void initState() {
@@ -89,6 +90,7 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.limitOfRetrievedData);
     return Column(
       children: [
         Row(
@@ -115,8 +117,9 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
           ],
         ),
         Container(
+
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 190,
+          height: MediaQuery.of(context).size.height,
           color: widget.searchBodyBackgroundColor,
           child: StreamBuilder<List>(
               stream: FirestoreServicePackage(
