@@ -14,9 +14,9 @@ class CourierTile extends StatelessWidget {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     var color;
-    if(courier.status == "Offline"){
+    if(courier.status == "Offline") {
       color = Colors.redAccent;
-    } else{
+    } else {
       color = Colors.green;
     }
     return user == null ? LoginScreen() : Padding(

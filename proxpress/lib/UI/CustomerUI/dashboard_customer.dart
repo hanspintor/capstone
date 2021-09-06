@@ -23,11 +23,13 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _searchController = TextEditingController();
+  String searched = '';
   final AuthService _auth = AuthService();
   static Timer _sessionTimer;
   static Timer _sessionTimerPrint;
   int count = 0;
-  int duration = 1;
+  int duration = 60;
+
   void handleTimeOut() async{
     await _auth.signOut();
   }
@@ -46,6 +48,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
   _onSearchChanged() {
     print(_searchController.text);
+    searched = _searchController.text;
   }
 
   // void _openEndDrawer() {
@@ -63,7 +66,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
       ),
     );
   }
-
 
   // Widget _buildInfo(){
   //   return Center(
@@ -111,7 +113,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
         _sessionTimerPrint = new Timer(Duration(minutes: duration), () {
           print("Session Expired");
         });
-
       },
       child: user == null ? LoginScreen() : StreamProvider<List<Courier>>.value(
         value: DatabaseService().courierList,
@@ -160,7 +161,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
               //title: Text("PROExpress"),
             ),
             body: SingleChildScrollView(
-              child: Center(
+              child: Container(
                 child: Column(
                   children: [
                     SizedBox(height: 10),
@@ -177,56 +178,12 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                       margin: EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 25),
-                            child: SizedBox(
-                              height: 40,
-                              width: 250,
-                              child: TextField(
-                                controller: _searchController,
-                                decoration: InputDecoration(
-                                    hintText: 'Search',
-                                    hintStyle: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.black54,
-                                    ),
-                                    contentPadding: EdgeInsets.all(10.0),
-                                    prefixIcon: Icon(Icons.search_rounded),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    borderSide: BorderSide(
-                                        color: Colors.grey,
-                                        width: 2.0,
-
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.redAccent,
-                                      width: 2.0,
-
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          CourierList(),
+                          CourierList(searched: searched,),
                         ],
                       ),
-                    shadowColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                  ),
-                  Card(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        SearchBar(),
-                        CourierList(),
-                      ],
+                      shadowColor: Colors.black,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
-                  ),
                   ],
                 ),
               ),

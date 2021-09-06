@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
 
+
   @override
   _SearchBarState createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<SearchBar> {
   TextEditingController _searchController = TextEditingController();
+  String searched = '';
 
   @override
   void initState() {
@@ -24,6 +26,7 @@ class _SearchBarState extends State<SearchBar> {
 
   _onSearchChanged() {
     print(_searchController.text);
+    searched = _searchController.text;
   }
 
   @override
@@ -48,7 +51,6 @@ class _SearchBarState extends State<SearchBar> {
               borderSide: BorderSide(
                 color: Colors.grey,
                 width: 2.0,
-
               ),
             ),
             focusedBorder: OutlineInputBorder(
