@@ -169,17 +169,17 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
           ? const EdgeInsets.only(bottom: 3.5, top: 3.5, right: 2.0, left: 2.0)
           : isSearching
           ? const EdgeInsets.only(bottom: 3.5, top: 3.5, right: 10.0)
-          : const EdgeInsets.only(
-          bottom: 3.5, top: 3.5, right: 10.0, left: 10.0),
+          : const EdgeInsets.only(bottom: 3.5, top: 3.5, right: 10.0, left: 10.0),
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4.0),
+        borderRadius: BorderRadius.circular(20.0),
         color: widget?.searchBackgroundColor ?? Colors.blueGrey.withOpacity(.2),
       ),
       child: TextField(
         controller: searchQueryController,
         focusNode: searchFocusNode,
         decoration: InputDecoration(
+          prefixIcon: Icon(Icons.search_rounded),
           hintText: "Search...",
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
