@@ -64,27 +64,15 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     );
   }
   Widget _buildDropDown(){
-    return SizedBox(
-      width: 270,
-      child: DropdownButton<String>(
-        hint: Row(
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Icon(Icons.payment_rounded),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(12, 0, 0, 0),
-              child: Text('Payment Options'),
-            ),
-          ],
+    return Container(
+      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: 'Payment Method',
+          prefixIcon: Icon(Icons.payment_rounded),
         ),
         iconSize: 20,
         elevation: 16,
-        underline: Container(
-          height: 2,
-          color: Colors.black,
-        ),
         onChanged: (String newValue) {
           setState(() {
             _paymentOption = newValue;
