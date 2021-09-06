@@ -23,11 +23,13 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _searchController = TextEditingController();
+  String searched = '';
   final AuthService _auth = AuthService();
   static Timer _sessionTimer;
   static Timer _sessionTimerPrint;
   int count = 0;
-  int duration = 1;
+  int duration = 60;
+
   void handleTimeOut() async{
     await _auth.signOut();
   }
@@ -46,6 +48,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
   _onSearchChanged() {
     print(_searchController.text);
+    searched = _searchController.text;
   }
 
   // void _openEndDrawer() {
@@ -63,7 +66,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
       ),
     );
   }
-
 
   // Widget _buildInfo(){
   //   return Center(
@@ -111,7 +113,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
         _sessionTimerPrint = new Timer(Duration(minutes: duration), () {
           print("Session Expired");
         });
-
       },
       child: user == null ? LoginScreen() : StreamProvider<List<Courier>>.value(
         value: DatabaseService().courierList,
@@ -129,21 +130,21 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                 ),
                   onPressed: (){
                     showDialog(
-                      context: context,
-                      builder: (BuildContext context){
-                        return AlertDialog(
-                          title: Text("Help"),
-                          content: Text('nice'),
-                          actions: [
-                            TextButton(
-                              child: Text("OK"),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      }
+                        context: context,
+                        builder: (BuildContext context){
+                          return AlertDialog(
+                            title: Text("Help"),
+                            content: Text('nice'),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        }
                     );
                   },
                   iconSize: 25,
@@ -160,7 +161,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
               //title: Text("PROExpress"),
             ),
             body: SingleChildScrollView(
-              child: Center(
+              child: Container(
                 child: Column(
                   children: [
                     SizedBox(height: 10),
@@ -173,15 +174,16 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                         ),
                       ),
                     ),
-                  Card(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        SearchBar(),
-                        CourierList(),
-                      ],
+                    Card(
+                      margin: EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          CourierList(searched: searched,),
+                        ],
+                      ),
+                      shadowColor: Colors.black,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
-                  ),
                   ],
                 ),
               ),

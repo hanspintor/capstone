@@ -112,7 +112,6 @@ class DatabaseService {
        status: (doc.data() as dynamic) ['Active Status']?? '',
        vehicleColor: (doc.data() as dynamic) ['Vehicle Color']?? '',
        vehicleType: (doc.data() as dynamic) ['Vehicle Type']?? '',
-
      );
     }).toList();
   }
