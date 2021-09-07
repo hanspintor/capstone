@@ -26,10 +26,17 @@ class _PinLocationMapState extends State<PinLocationMap> {
       region: 'ph',
       onPlacePicked: (result) {
         selectedPlace = result;
-        Navigator.pop(context, selectedPlace.formattedAddress);
-        print(selectedPlace.formattedAddress);
+        LatLng selectedPlaceCoordinates = LatLng(selectedPlace.geometry.location.lat, selectedPlace.geometry.location.lng);
+        Navigator.pop(context, LocationDetails(address: selectedPlace.formattedAddress, coordinates: selectedPlaceCoordinates));
         setState(() {});
       },
     );
   }
+}
+
+class LocationDetails {
+  String address;
+  LatLng coordinates;
+
+  LocationDetails({ this.address, this.coordinates });
 }
