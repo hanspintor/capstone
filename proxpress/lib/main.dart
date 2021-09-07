@@ -5,6 +5,7 @@ import 'package:proxpress/UI/CourierUI/pending_deliveries.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
+import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:proxpress/UI/signup_courier.dart';
@@ -100,6 +101,9 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/courierUpdate':
               return PageTransition(child: CourierUpdate(), type: PageTransitionType.bottomToTop);
+              break;
+            case '/deliveryStatus':
+              return PageTransition(child: DeliveryStatus(), type: PageTransitionType.rightToLeftWithFade);
               break;
             default:
               return null;
