@@ -116,19 +116,21 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
                   })
           ],
         ),
-        Container(
+        SingleChildScrollView(
+          child: Container(
 
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: widget.searchBodyBackgroundColor,
-          child: StreamBuilder<List>(
-              stream: FirestoreServicePackage(
-                  collectionName: widget.firestoreCollectionName,
-                  searchBy: widget.searchBy ?? '',
-                  dataListFromSnapshot: widget.dataListFromSnapshot,
-                  limitOfRetrievedData: widget.limitOfRetrievedData)
-                  .searchData(searchQuery),
-              builder: widget.builder),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 200,
+            color: widget.searchBodyBackgroundColor,
+            child: StreamBuilder<List>(
+                stream: FirestoreServicePackage(
+                    collectionName: widget.firestoreCollectionName,
+                    searchBy: widget.searchBy ?? '',
+                    dataListFromSnapshot: widget.dataListFromSnapshot,
+                    limitOfRetrievedData: widget.limitOfRetrievedData)
+                    .searchData(searchQuery),
+                builder: widget.builder),
+          ),
         ),
       ],
     );
