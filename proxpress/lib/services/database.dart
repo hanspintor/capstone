@@ -84,6 +84,22 @@ class DatabaseService {
       'Active Status' : status,
     });
   }
+
+  Future updateDelivery(String itemDescription, String senderName, String senderContactNum, String receiverName, String receiverContactNum, String whoWillPay, String specificInstructions, String paymentOption) async {
+    await FirebaseFirestore.instance.collection('Delivery')
+        .doc(uid)
+        .set({
+      'Item Description' : itemDescription,
+      'Sender Name': senderName,
+      'Sender Contact Number' : senderContactNum,
+      'Receiver Name' : receiverName,
+      'Receiver Contact Number' : receiverContactNum,
+      'Who Will Pay' : whoWillPay,
+      'Specific Description' : specificInstructions,
+      'Payment Option' : paymentOption,
+    });
+  }
+
   Future<void> AuthupdateCustomerPassword(String password) {
     return customerCollection
         .doc(uid)

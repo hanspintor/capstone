@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:proxpress/services/database.dart';
 
 class CustomerRemarks extends StatefulWidget {
   @override
@@ -7,37 +8,29 @@ class CustomerRemarks extends StatefulWidget {
 }
 
 class _CustomerRemarksState extends State<CustomerRemarks> {
-  String _itemDescription;
-  String _senderName;
-  String _senderContactNum;
-  String _receiverName;
-  String _receiverContactNum;
-  String _whoWillPay;
-  String _specificInstructions;
-  String _paymentOption = 'Choose Payment Option';
-  int val = -1;
-
-  bool buttonState = true;
-
-  void _buttonChange() {
-    setState(() {
-      buttonState = !buttonState;
-    });
-  }
+  String itemDescription;
+  String senderName;
+  String senderContactNum;
+  String receiverName;
+  String receiverContactNum;
+  String whoWillPay;
+  String specificInstructions;
+  String paymentOption = 'Choose Payment Option';
+  String onlinePayment = '';
   
   void _validate(){
     if(!locKey.currentState.validate()){
       return;
     }
     locKey.currentState.save();
-    print (_itemDescription);
-    print (_senderName);
-    print (_senderContactNum);
-    print (_receiverName);
-    print (_receiverContactNum);
-    print (_whoWillPay);
-    print (_specificInstructions);
-    print (_paymentOption);
+    print (itemDescription);
+    print (senderName);
+    print (senderContactNum);
+    print (receiverName);
+    print (receiverContactNum);
+    print (whoWillPay);
+    print (specificInstructions);
+    print (paymentOption);
   }
 
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
@@ -76,10 +69,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           else return null;
         },
         onSaved: (String value){
-          _itemDescription = value;
+          itemDescription = value;
         },
         onChanged: (String value){
-          setState(() => _itemDescription = value);
+          setState(() => itemDescription = value);
         },
       ),
     );
@@ -97,10 +90,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           else return null;
         },
         onSaved: (String value){
-          _senderName = value;
+          senderName = value;
         },
         onChanged: (String value){
-          setState(() => _senderName = value);
+          setState(() => senderName = value);
         },
       ),
     );
@@ -122,10 +115,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           else return null;
         },
         onSaved: (String value){
-          _senderContactNum = value;
+          senderContactNum = value;
         },
         onChanged: (String value){
-          setState(() => _senderContactNum = value);
+          setState(() => senderContactNum = value);
         },
       ),
     );
@@ -143,10 +136,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           else return null;
         },
         onSaved: (String value){
-          _receiverName = value;
+          receiverName = value;
         },
         onChanged: (String value){
-          setState(() => _receiverName = value);
+          setState(() => receiverName = value);
         },
       ),
     );
@@ -168,10 +161,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           else return null;
         },
         onSaved: (String value){
-          _receiverContactNum = value;
+          receiverContactNum = value;
         },
         onChanged: (String value){
-          setState(() => _receiverContactNum = value);
+          setState(() => receiverContactNum = value);
         },
       ),
     );
@@ -189,10 +182,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           else return null;
         },
         onSaved: (String value){
-          _whoWillPay = value;
+          whoWillPay = value;
         },
         onChanged: (String value){
-          setState(() => _whoWillPay = value);
+          setState(() => whoWillPay = value);
         },
       ),
     );
@@ -212,10 +205,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           else return null;
         },
         onSaved: (String value){
-          _specificInstructions = value;
+          specificInstructions = value;
         },
         onChanged: (String value){
-          setState(() => _specificInstructions = value);
+          setState(() => specificInstructions = value);
         },
       ),
     );
@@ -232,7 +225,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         elevation: 16,
         onChanged: (String newValue) {
           setState(() {
-            _paymentOption = newValue;
+            paymentOption = newValue;
           });
         },
         items: <String>['Cash on Delivery', 'Online Payment']
@@ -259,11 +252,11 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
             ),
           ),
           leading: Radio(
-            value: 1,
-            groupValue: val,
+            value: 'Gcash',
+            groupValue: onlinePayment,
             onChanged: (value) {
               setState(() {
-                val = value;
+                onlinePayment = value;
               });
             },
             activeColor: Color(0xfffb0d0d),
@@ -273,17 +266,23 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           title: Container(
             child: Row(
               children: [
-                Container(margin: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Image.asset("assets/paymaya.png", height: 25, width: 25,)),
-                Container(margin: EdgeInsets.fromLTRB(15, 0, 0, 0),child: Text("Paymaya")),
+                Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Image.asset("assets/paymaya.png", height: 25, width: 25,)
+                ),
+                Container(
+                    margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    child: Text("Paymaya")
+                ),
               ],
             ),
           ),
           leading: Radio(
-            value: 2,
-            groupValue: val,
+            value: 'Paymaya',
+            groupValue: onlinePayment,
             onChanged: (value) {
               setState(() {
-                val = value;
+                onlinePayment = value;
               });
             },
             activeColor: Color(0xfffb0d0d),
@@ -374,7 +373,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                           _buildWhoWillPay(),
                           _buildSpecificInstructions(),
                           _buildDropDown(),
-                          _paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 30),
+                          paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 30),
                         ],
                       ),
                       shadowColor: Colors.black,
@@ -390,8 +389,9 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                  onPressed: () {
+                  onPressed: () async {
                     _validate();
+                    await DatabaseService().updateDelivery(itemDescription, senderName, senderContactNum, receiverName, receiverContactNum, whoWillPay, specificInstructions, paymentOption);
                   }
                 ),
                 SizedBox(height: 50),

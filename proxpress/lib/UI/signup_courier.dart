@@ -23,27 +23,6 @@ class SignupCourier extends StatefulWidget{
 }
 
 class _SignupCourierState extends State<SignupCourier> {
-  // Future selectFile() async {
-  //   final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-  //
-  //   if (result != null){
-  //   }
-  //   final path = result.files.single.path;
-  //   setState(() {
-  //     file = File(path);
-  //   });
-  //
-  //   return file;
-  //   //SignupCourier(uploadfile: uploadFile);
-  // }
-
-  // Future getFileName() async {
-  //   final fileName = Path.basename(file.path);
-  //   //final destination = 'Courier Credentials/$fileName';
-  //
-  //   //UploadFile.uploadFile(destination, file);
-  //   return fileName;
-  // }
 
   String fName;
   String lName;
