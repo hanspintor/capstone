@@ -1,8 +1,26 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomerRemarks extends StatefulWidget {
+  final String courierUID;
+  final String pickupAddress;
+  final LatLng pickupCoordinates;
+  final String dropOffAddress;
+  final LatLng dropOffCoordinates;
+
+  CustomerRemarks({
+    Key key,
+    @required this.courierUID,
+    @required this.pickupAddress,
+    @required this.pickupCoordinates,
+    @required this.dropOffAddress,
+    @required this.dropOffCoordinates,
+  }) : super(key: key);
+
   @override
   _CustomerRemarksState createState() => _CustomerRemarksState();
 }
@@ -295,6 +313,26 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   @override
   Widget build(BuildContext context) {
 
+
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
+
+    print(user.uid);
+    print(widget.courierUID);
+    print(widget.pickupAddress);
+    print(widget.pickupCoordinates.toString());
+    print(widget.dropOffAddress);
+    print(widget.dropOffCoordinates.toString());
+
+    DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
+    DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.courierUID);
+
+    GeoPoint pickupGeoPoint = GeoPoint(widget.pickupCoordinates.latitude, widget.pickupCoordinates.longitude);
+    GeoPoint dropOffGeoPoint = GeoPoint(widget.dropOffCoordinates.latitude, widget.dropOffCoordinates.longitude);
+
+    print(pickupGeoPoint.toString());
+    print(dropOffGeoPoint.toString());
+
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawerEnableOpenDragGesture: false,
@@ -391,7 +429,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: () async {
                     _validate();
-                    await DatabaseService().updateDelivery(itemDescription, senderName, senderContactNum, receiverName, receiverContactNum, whoWillPay, specificInstructions, paymentOption);
+                    await DatabaseService().updateDelivery(customer, courier, widget.pickupAddress, pickupGeoPoint, widget.dropOffAddress, dropOffGeoPoint, itemDescription, senderName, senderContactNum, receiverName, receiverContactNum, whoWillPay, specificInstructions, paymentOption, 20, 'Pending', 'Pending');
                   }
                 ),
                 SizedBox(height: 50),

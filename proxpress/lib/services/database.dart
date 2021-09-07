@@ -85,10 +85,22 @@ class DatabaseService {
     });
   }
 
-  Future updateDelivery(String itemDescription, String senderName, String senderContactNum, String receiverName, String receiverContactNum, String whoWillPay, String specificInstructions, String paymentOption) async {
+  Future updateDelivery(DocumentReference customer, DocumentReference courier,
+      String pickupAddress, GeoPoint pickupCoordinates, String dropOffAddress,
+      GeoPoint dropOffCoordinates, String itemDescription, String senderName,
+      String senderContactNum, String receiverName, String receiverContactNum,
+      String whoWillPay, String specificInstructions, String paymentOption,
+      double deliveryFee, String courierApproval, String deliveryStatus) async {
     await FirebaseFirestore.instance.collection('Delivery')
         .doc(uid)
         .set({
+      'Customer Reference' : customer,
+      'Courier Reference' : courier,
+      'Pickup Address' : pickupAddress,
+      'Pickup Coordinates' : pickupCoordinates,
+      'DropOff Address' : dropOffAddress,
+      'DropOff Coordinates' : dropOffCoordinates,
+
       'Item Description' : itemDescription,
       'Sender Name': senderName,
       'Sender Contact Number' : senderContactNum,
@@ -97,6 +109,10 @@ class DatabaseService {
       'Who Will Pay' : whoWillPay,
       'Specific Description' : specificInstructions,
       'Payment Option' : paymentOption,
+
+      'Delivery Fee' : deliveryFee,
+      'Courier Approval' : courierApproval,
+      'Delivery Status' : deliveryStatus,
     });
   }
 
@@ -119,6 +135,7 @@ class DatabaseService {
   List<Courier> courierDataListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
      return Courier(
+       uid: doc.id,
        fName: (doc.data() as dynamic) ['First Name'] ?? '',
        lName: (doc.data() as dynamic) ['Last Name'] ?? '',
        contactNo: (doc.data() as dynamic) ['Contact No'] ?? '',

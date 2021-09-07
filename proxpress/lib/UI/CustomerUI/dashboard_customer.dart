@@ -1,7 +1,5 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,10 +11,22 @@ import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 
 class DashboardCustomer extends StatefulWidget{
+  final String pickupAddress;
+  final LatLng pickupCoordinates;
+  final String dropOffAddress;
+  final LatLng dropOffCoordinates;
+
+  DashboardCustomer({
+    Key key,
+    @required this.pickupAddress,
+    @required this.pickupCoordinates,
+    @required this.dropOffAddress,
+    @required this.dropOffCoordinates,
+  }) : super(key: key);
+
   @override
   _DashboardCustomerState createState() => _DashboardCustomerState();
 }
-
 
 class _DashboardCustomerState extends State<DashboardCustomer> {
 
@@ -97,6 +107,12 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.pickupAddress);
+    print(widget.pickupCoordinates.toString());
+
+    print(widget.dropOffAddress);
+    print(widget.dropOffCoordinates.toString());
+
     final user = Provider.of<TheUser>(context);
     return new GestureDetector(
       onTap: (){
@@ -163,7 +179,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
               child: Container(
                 child: Column(
                   children: [
-
+                    SizedBox(height: 10),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Text(
@@ -175,7 +191,11 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                     ),
                     Card(
                       margin: EdgeInsets.all(20),
-                      child: CourierList(),
+                      child: CourierList(
+                                pickupAddress: widget.pickupAddress,
+                                pickupCoordinates: widget.pickupCoordinates,
+                                dropOffAddress: widget.dropOffAddress,
+                                dropOffCoordinates: widget.dropOffCoordinates),
                       shadowColor: Colors.black,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),

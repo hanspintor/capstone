@@ -1,13 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/courier_list.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CourierTile extends StatelessWidget {
   final Courier courier;
+  final String pickupAddress;
+  final LatLng pickupCoordinates;
+  final String dropOffAddress;
+  final LatLng dropOffCoordinates;
 
-  CourierTile({this.courier});
+  CourierTile({
+    Key key,
+    @required this.courier,
+    @required this.pickupAddress,
+    @required this.pickupCoordinates,
+    @required this.dropOffAddress,
+    @required this.dropOffCoordinates,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +66,17 @@ class CourierTile extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.black),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/customerRemarks');
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CustomerRemarks(
+                                          courierUID: courier.uid,
+                                          pickupAddress: pickupAddress,
+                                          pickupCoordinates: pickupCoordinates,
+                                          dropOffAddress: dropOffAddress,
+                                          dropOffCoordinates: dropOffCoordinates),
+                                    ));
                               }
                           )
                       ),
