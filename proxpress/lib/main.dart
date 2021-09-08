@@ -9,7 +9,7 @@ import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:proxpress/UI/signup_courier.dart';
-import 'package:proxpress/UI/CustomerUI/signup_customer.dart';
+import 'package:proxpress/UI/signup_customer.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';

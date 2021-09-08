@@ -76,35 +76,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
     );
   }
 
-  // Widget _buildInfo(){
-  //   return Center(
-  //     child: Card(
-  //       margin:EdgeInsets.only(bottom: 30),
-  //       child: InkWell(
-  //         onTap: (){
-  //           showDialog(
-  //               context: context, builder: (BuildContext context) => AlertDialog(
-  //             content: (_alertmessage()),
-  //           )
-  //           );
-  //         },
-  //         child: SizedBox(
-  //           width: 110,
-  //           height: 50,
-  //           child: Container(
-  //             margin:EdgeInsets.only(left: 10),
-  //             child: Text("Name:  \nVehicle:  \nDescription: \nPrice: ",textAlign: TextAlign.justify, style: TextStyle(fontSize: 10)),
-  //           ),
-  //         ),
-  //       ),
-  //       shadowColor: Colors.black,
-  //       color:Colors.white,
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     print(widget.pickupAddress);

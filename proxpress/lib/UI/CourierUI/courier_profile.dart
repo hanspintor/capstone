@@ -6,7 +6,6 @@ import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/services/default_profile_pic.dart';
 
 
 class CourierProfile extends StatelessWidget {

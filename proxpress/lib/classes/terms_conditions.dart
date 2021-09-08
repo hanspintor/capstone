@@ -80,11 +80,10 @@ class _AlertTermsConditionsState extends State<AlertTermsConditions> {
           Container(
             margin: EdgeInsets.only(left: 200, top: 30),
             width: MediaQuery.of(context).size.width / 7,
-            child:ElevatedButton(
+            child:TextButton(
                 child: Text(
-                  'OK', style: TextStyle(color: Colors.white, fontSize:15),
+                  'OK', style: TextStyle(fontSize:15),
                 ),
-                style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
                 onPressed: (){
                   Navigator.of(context, rootNavigator: true).pop();
                 }
