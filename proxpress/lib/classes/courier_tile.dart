@@ -5,6 +5,7 @@ import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:favorite_button/favorite_button.dart';
 
 class CourierTile extends StatefulWidget {
   final Courier courier;
@@ -73,19 +74,28 @@ class _CourierTileState extends State<CourierTile> {
     return user == null
         ? LoginScreen()
         : Padding(
-            padding: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.only(top: 0.0),
             child: SingleChildScrollView(
               child: Card(
                 margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
                 child: ListTile(
+                  isThreeLine: true,
                   title: Text("${widget.courier.fName} ${widget.courier.lName}"),
-                  leading: Icon(
-                    Icons.account_circle_rounded,
-                    size: 50,
+                  leading: Container(
+                    width: 48,
+                    height: 48,
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    alignment: Alignment.center,
+                    child:Icon(
+                          Icons.account_circle_rounded,
+                          size: 55,
+                        ),
+
                   ),
                   subtitle: Text("Vehicle Type: ${widget.courier.vehicleType}\nDelivery Fee: $deliveryFee"),
                   trailing: Column(
                     children: [
+
                       Text(
                         "${widget.courier.status}",
                         style: TextStyle(
@@ -94,7 +104,7 @@ class _CourierTileState extends State<CourierTile> {
                         ),
                       ),
                       Container(
-                          margin: EdgeInsets.only(top: 5),
+                        margin: EdgeInsets.only(top: 5),
                           height: 25,
                           child: ElevatedButton(
                               child: Text(
@@ -119,11 +129,9 @@ class _CourierTileState extends State<CourierTile> {
                               }
                           )
                       ),
+
                     ],
                   ),
-                  onTap: () {
-
-                  },
                 ),
               ),
             ),
