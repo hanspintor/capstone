@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 
 class SignupCustomer extends StatefulWidget{
@@ -17,6 +18,8 @@ class _SignupCustomerState extends State<SignupCustomer> {
   String password;
   String address;
   bool agree = false;
+  bool slide = false;
+
   bool loading = false;
   final AuthService _auth = AuthService();
   String error = '';
@@ -161,7 +164,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
 
   void confirm(value) {
     setState(() {
-      agree = value;
+      slide = value;
     });
   }
 
@@ -211,6 +214,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                           _buildAddress(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Container (
                                 child: Checkbox(
@@ -251,20 +255,38 @@ class _SignupCustomerState extends State<SignupCustomer> {
                             ],
                           ),
                         Container(
-                          margin: EdgeInsets.only(top: 50, bottom: 100),
-                          child: ConfirmationSlider(
-                            height: 50,
-                            width: 250,
-                            foregroundColor: Color(0xfffb0d0d),
-                            text: 'SLIDE IF NOT A BOT',
-                            onConfirmation: (){
-
-                            },
-                            onTapUp: () {
-
+                          margin: EdgeInsets.symmetric(horizontal: 30),
+                          child: SlideAction(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 40),
+                              child: Text('SLIDE IF YOU ARE NOT A BOT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),),
+                            ),
+                            elevation: 4,
+                            height:60,
+                            sliderRotate: false,
+                            sliderButtonIconPadding: 13,
+                            //sliderButtonYOffset: -5,
+                            onSubmit: (){
+                              confirm(true);
                             },
                           ),
                         ),
+
+                        // Container(
+                        //   margin: EdgeInsets.only(top: 50, bottom: 100),
+                        //   child: ConfirmationSlider(
+                        //     height: 50,
+                        //     width: 250,
+                        //     foregroundColor: Color(0xfffb0d0d),
+                        //     text: 'SLIDE IF NOT A BOT',
+                        //     onConfirmation: (){
+                        //
+                        //     },
+                        //     onTapUp: () {
+                        //
+                        //     },
+                        //   ),
+                        // ),
 
                           ElevatedButton(
                             child: Text(
@@ -273,7 +295,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                             style: ElevatedButton.styleFrom(
                               primary: Color(0xfffb0d0d),
                             ),
-                            onPressed: !agree ? null : () async {
+                            onPressed: !agree || !slide ? null : () async {
                               String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
                               if (regKey.currentState.validate()){
