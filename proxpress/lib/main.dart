@@ -28,7 +28,8 @@ import 'package:proxpress/classes/customer_updating_form.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(DevicePreview(builder: (context) => PROXpressApp()));
+  //runApp(DevicePreview(builder: (context) => PROXpressApp()));
+  runApp(PROXpressApp());
 }
 
 class PROXpressApp extends StatelessWidget{
