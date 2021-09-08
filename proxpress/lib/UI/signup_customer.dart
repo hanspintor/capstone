@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
+import 'package:slide_to_confirm/slide_to_confirm.dart';
 
 class SignupCustomer extends StatefulWidget{
   @override
@@ -19,6 +20,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
   bool loading = false;
   final AuthService _auth = AuthService();
   String error = '';
+  int _counter = 0;
 
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
 
@@ -157,6 +159,13 @@ class _SignupCustomerState extends State<SignupCustomer> {
     ));
   }
 
+  void confirm(value) {
+    setState(() {
+      agree = value;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return loading ? UserLoading() : WillPopScope(
@@ -241,6 +250,22 @@ class _SignupCustomerState extends State<SignupCustomer> {
                               ),
                             ],
                           ),
+                        Container(
+                          margin: EdgeInsets.only(top: 50, bottom: 100),
+                          child: ConfirmationSlider(
+                            height: 50,
+                            width: 250,
+                            foregroundColor: Color(0xfffb0d0d),
+                            text: 'SLIDE IF NOT A BOT',
+                            onConfirmation: (){
+
+                            },
+                            onTapUp: () {
+
+                            },
+                          ),
+                        ),
+
                           ElevatedButton(
                             child: Text(
                               'Signup', style: TextStyle(color: Colors.white, fontSize:18),

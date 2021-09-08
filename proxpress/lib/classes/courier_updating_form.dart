@@ -459,7 +459,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                           courierData.nbiClearancePhoto_,
                                           courierData.vehicleRegistrationOR_,
                                           courierData.vehicleRegistrationCR_,
-                                          courierData.vehiclePhoto_
+                                          courierData.vehiclePhoto_,
+                                          courierData.deliveryPriceRef,
                                         );
                                         Navigator.pop(context, false);
                                       }

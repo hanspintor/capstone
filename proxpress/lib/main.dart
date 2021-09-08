@@ -10,7 +10,7 @@ import 'package:proxpress/UI/chat_page.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:proxpress/UI/signup_courier.dart';
-import 'package:proxpress/UI/CustomerUI/signup_customer.dart';
+import 'package:proxpress/UI/signup_customer.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
@@ -29,7 +29,8 @@ import 'package:proxpress/classes/customer_updating_form.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(DevicePreview(builder: (context) => PROXpressApp()));
+  //runApp(DevicePreview(builder: (context) => PROXpressApp()));
+  runApp(PROXpressApp());
 }
 
 class PROXpressApp extends StatelessWidget{

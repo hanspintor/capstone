@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
+import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/auth.dart';
 import 'menu_drawer_customer.dart';
@@ -18,13 +18,16 @@ class DashboardLocation extends StatefulWidget{
 }
 
 class _DashboardLocationState extends State<DashboardLocation>{
-  String _pickupAddress;
+  String pickupAddress;
   LatLng pickupCoordinates;
 
-  String _dropOffAddress;
+  String dropOffAddress;
   LatLng dropOffCoordinates;
 
-  int duration = 1;
+  dynamic pickupDetails;
+  dynamic dropOffDetails;
+
+  int duration = 60;
   int count = 0;
   final AuthService _auth = AuthService();
   final textFieldPickup = TextEditingController();
@@ -35,8 +38,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
       return;
     }
     locKey.currentState.save();
-    print (_pickupAddress);
-    print (_dropOffAddress);
+    print (pickupAddress);
+    print (dropOffAddress);
   }
 
   void _openEndDrawer() {
@@ -151,7 +154,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                         child: TextFormField(
                                           controller: textFieldPickup,
                                           onTap: () async {
-                                            dynamic pickupDetails = await Navigator.pushNamed(context, '/pinLocationMap');
+                                            pickupDetails = await Navigator.pushNamed(context, '/pinLocationMap');
 
                                             print("niceee ${pickupDetails.address}");
                                             textFieldPickup.text = pickupDetails.address;
@@ -159,6 +162,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
                                             print("niceee2 ${pickupDetails.coordinates.toString()}");
                                             pickupCoordinates = pickupDetails.coordinates;
+
+                                            setState(() => pickupAddress = textFieldPickup.text);
                                           },
                                           decoration: InputDecoration(labelText: 'Pick up location', prefixIcon: Icon(Icons.location_searching_rounded)),
                                           keyboardType: TextInputType.streetAddress,
@@ -170,7 +175,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                             }
                                           },
                                           onSaved: (String value){
-                                            _pickupAddress = value;
+                                            pickupAddress = value;
                                           },
                                         ),
                                       ),
@@ -179,7 +184,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                         child: TextFormField(
                                           controller: textFieldDropOff,
                                           onTap: () async {
-                                            dynamic dropOffDetails = await Navigator.pushNamed(context, '/pinLocationMap');
+                                            dropOffDetails = await Navigator.pushNamed(context, '/pinLocationMap');
 
                                             print("niceee ${dropOffDetails.address}");
                                             textFieldDropOff.text = dropOffDetails.address;
@@ -187,6 +192,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
                                             print("niceee2 ${dropOffDetails.coordinates.toString()}");
                                             dropOffCoordinates = dropOffDetails.coordinates;
+
+                                            setState(() => dropOffAddress = textFieldDropOff.text);
                                           },
                                           decoration: InputDecoration(labelText: 'Pick up location', prefixIcon: Icon(Icons.location_searching_rounded)),
                                           keyboardType: TextInputType.streetAddress,
@@ -198,7 +205,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                             }
                                           },
                                           onSaved: (String value){
-                                            _dropOffAddress = value;
+                                            dropOffAddress = value;
                                           },
                                         ),
                                       ),
@@ -221,7 +228,20 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                   primary: Color(0xfffb0d0d)),
                               onPressed: () {
                                 if (locKey.currentState.validate()) {
-                                  Navigator.pushNamed(context, '/dashboardCustomer');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            DashboardCustomer(
+                                                      pickupAddress:
+                                                          pickupAddress,
+                                                      pickupCoordinates:
+                                                          pickupCoordinates,
+                                                      dropOffAddress:
+                                                          dropOffAddress,
+                                                      dropOffCoordinates:
+                                                          dropOffCoordinates),
+                                      ));
                                 }
                               },
                             ),
@@ -230,7 +250,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                       ),
                     ))
                 );
-              } else{
+              } else {
                 return UserLoading();
               }
             }
