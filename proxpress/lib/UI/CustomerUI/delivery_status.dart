@@ -53,7 +53,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 40, 10),
+              margin: EdgeInsets.only(right: 40),
                 child: Lottie.asset('assets/delivery.json')
             ),
             Row(
@@ -73,6 +73,17 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                   ),
                 ),
               ],
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              child: ElevatedButton.icon(
+                label: Text('Message Courier'),
+                icon: Icon(Icons.message_outlined),
+                style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                onPressed: (){
+                  Navigator.pushNamed(context, '/chatPage');
+                },
+              ),
             ),
           ],
         ),
