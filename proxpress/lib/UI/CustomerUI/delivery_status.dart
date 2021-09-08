@@ -83,9 +83,11 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              child: Text('Delivered',
-                style: TextStyle(fontSize: 50),
-              ),
+              margin: EdgeInsets.only(right: 40),
+                child: Lottie.asset('assets/delivery.json'),
+              // child: Text('Delivered',
+              //   style: TextStyle(fontSize: 50),
+              // ),
             ),
             ElevatedButton(
               child: Text(
@@ -97,7 +99,17 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                   primary: Color(0xfffb0d0d)),
               onPressed: () => showFeedback(),
             ),
-            //SizedBox(height: 10),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+              child: ElevatedButton.icon(
+                label: Text('Message Courier'),
+                icon: Icon(Icons.message_outlined),
+                style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                onPressed: (){
+                  Navigator.pushNamed(context, '/chatPage');
+                },
+              ),
+            ),
           ],
         ),
       ),

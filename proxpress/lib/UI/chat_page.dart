@@ -21,7 +21,7 @@ class _ChatPageState extends State<ChatPage> {
                 enableSuggestions: true,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.grey,
+
                   labelText: 'Type your message',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 0),
@@ -40,6 +40,52 @@ class _ChatPageState extends State<ChatPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return _buildMessage();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
+        actions: [
+          IconButton(icon: Icon(
+            Icons.help_outline,
+          ),
+            onPressed: (){
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return AlertDialog(
+                      title: Text("Help"),
+                      content: Text('nice'),
+                      actions: [
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  }
+              );
+            },
+            iconSize: 25,
+          ),
+        ],
+        flexibleSpace: Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Image.asset(
+            "assets/PROExpress-logo.png",
+            height: 120,
+            width: 120,
+          ),
+        ),
+        //title: Text("PROExpress"),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(top: 475),
+          child: _buildMessage(),
+        ),
+      )
+    );
   }
 }
