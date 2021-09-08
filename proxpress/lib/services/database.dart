@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/couriers.dart';
-import 'package:proxpress/models/delivery.dart';
+import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/delivery_prices.dart';
 
 class DatabaseService {
   final String uid;
@@ -48,7 +49,7 @@ class DatabaseService {
   }
 
   // Create/Update a Courier Document
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_) async {
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_, DocumentReference deliveryPriceRef) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -66,6 +67,7 @@ class DatabaseService {
       'Vehicle OR URL': vehicleRegistrationOR_,
       'Vehicle CR URL': vehicleRegistrationCR_,
       'Vehicle Photo URL': vehiclePhoto_,
+      'Delivery Price Reference': deliveryPriceRef,
     });
   }
 
@@ -158,6 +160,7 @@ class DatabaseService {
         status: (doc.data() as dynamic) ['Active Status'] ?? '',
         vehicleColor: (doc.data() as dynamic) ['Vehicle Color'] ?? '',
         vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
+        deliveryPriceRef: (doc.data() as dynamic) ['Delivery Price Reference'] ?? '',
       );
     }).toList();
   }
@@ -167,8 +170,8 @@ class DatabaseService {
     return snapshot.docs.map((doc){
       return Delivery(
         uid: doc.id,
-        customer: (doc.data() as dynamic) ['Customer Reference'] ?? '',
-        courier: (doc.data() as dynamic) ['Courier Reference'] ?? '',
+        customerRef: (doc.data() as dynamic) ['Customer Reference'] ?? '',
+        courierRef: (doc.data() as dynamic) ['Courier Reference'] ?? '',
         pickupAddress: (doc.data() as dynamic) ['Pickup Address'] ?? '',
         pickupCoordinates: (doc.data() as dynamic) ['Pickup Coordinates'] ?? '',
         dropOffAddress: (doc.data() as dynamic) ['DropOff Address'] ?? '',
@@ -188,6 +191,18 @@ class DatabaseService {
     }).toList();
   }
 
+  // Delivery Model List Builder
+  List<DeliveryPrice> deliveryPriceDataListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return DeliveryPrice(
+        uid: doc.id,
+        vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
+        baseFare: (doc.data() as dynamic) ['Base Fare'] ?? '',
+        farePerKM: (doc.data() as dynamic) ['Fare Per KM'] ?? '',
+      );
+    }).toList();
+  }
+
   // Get list of data from Customers Collection
   Stream<List<Customer>> get customerList {
     return customerCollection.snapshots().map(_customerDataListFromSnapshot);
@@ -201,6 +216,11 @@ class DatabaseService {
   // Get list of data from Deliveries Collection
   Stream<List<Delivery>> get deliveryList {
     return courierCollection.snapshots().map(deliveryDataListFromSnapshot);
+  }
+
+  // Get list of data from Customers Collection
+  Stream<List<DeliveryPrice>> get deliveryPriceList {
+    return customerCollection.snapshots().map(deliveryPriceDataListFromSnapshot);
   }
 
   // Get Customer Document Data using StreamBuilder
@@ -231,6 +251,7 @@ class DatabaseService {
       status: snapshot['Active Status'],
       vehicleType: snapshot['Vehicle Type'],
       vehicleColor: snapshot['Vehicle Color'],
+      deliveryPriceRef: snapshot['Delivery Price Reference'],
     );
   }
 
@@ -238,8 +259,8 @@ class DatabaseService {
   Delivery _deliveryDataFromSnapshot(DocumentSnapshot snapshot){
     return Delivery(
       uid: uid,
-      customer: snapshot['Customer Reference'],
-      courier: snapshot['Courier Reference'],
+      customerRef: snapshot['Customer Reference'],
+      courierRef: snapshot['Courier Reference'],
       pickupAddress: snapshot['Pickup Address'],
       pickupCoordinates: snapshot['Pickup Coordinates'],
       dropOffAddress: snapshot['DropOff Address'],

@@ -19,12 +19,11 @@ class Courier{
   final String vehicleRegistrationOR_;
   final String vehicleRegistrationCR_;
   final String vehiclePhoto_;
-
-  // File file;
+  final DocumentReference deliveryPriceRef;
 
   final AuthService _auth = AuthService();
 
-  Courier({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.status, this.approved, this.vehicleType, this.vehicleColor, this.driversLicenseFront_, this.driversLicenseBack_, this.nbiClearancePhoto_, this.vehicleRegistrationOR_, this.vehicleRegistrationCR_, this.vehiclePhoto_});
+  Courier({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.status, this.approved, this.vehicleType, this.vehicleColor, this.driversLicenseFront_, this.driversLicenseBack_, this.nbiClearancePhoto_, this.vehicleRegistrationOR_, this.vehicleRegistrationCR_, this.vehiclePhoto_, this.deliveryPriceRef});
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCourierPassword(password);
@@ -35,6 +34,4 @@ class Courier{
   void updateCurrentEmail(String email){
     _auth.updateCourierEmail(email);
   }
-
-
 }

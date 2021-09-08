@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -37,6 +38,8 @@ class _SignupCourierState extends State<SignupCourier> {
   String vehicleRegistrationOR_ = '';
   String vehicleRegistrationCR_ = '';
   String vehiclePhoto_ = '';
+  DocumentReference deliveryPriceRef;
+  String deliveryPriceUid;
 
   final AuthService _auth = AuthService();
   final Courier _courier = Courier();
@@ -528,7 +531,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                 vehicleType = newValue;
                               });
                             },
-                            items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'Multi-purpose Vehicle', 'Family-business Van', 'Multi-purpose Van']
+                            items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'Multi-purpose Vehicle', 'FB-Type Van', 'Van']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -596,8 +599,20 @@ class _SignupCourierState extends State<SignupCourier> {
                                                   vehiclePhoto != null ? true : false;
 
                                 if (regKey.currentState.validate() && picsLoaded){
+
+
+                                  FirebaseFirestore.instance
+                                      .collection('Delivery Prices')
+                                      .where('Vehicle Type', isEqualTo: vehicleType)
+                                      .get()
+                                      .then((event) {
+                                        deliveryPriceUid = event.docs.first.id.toString(); //if it is a single document
+                                      });
+
+                                  deliveryPriceRef = FirebaseFirestore.instance.collection('Delivery Prices').doc(deliveryPriceUid);
+
                                   //setState(() => loading = true); // loading = true;
-                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, approved, vehicleType, vehicleColor, defaultProfilePic, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
+                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, approved, vehicleType, vehicleColor, defaultProfilePic, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef);
                                   if(result == null){
                                     setState((){
                                       error = 'Email already taken';
