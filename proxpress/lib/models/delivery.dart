@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Delivery{
-  // final String Pickup_Address;
-  // final String Pickup_Coordinates;
-  // final String DropOff_Address;
-  // final String DropOff_Coordinates;
-  // final String Chosen_Courier;
+  final String uid;
+  final DocumentReference customer;
+  final DocumentReference courier;
+  final String pickupAddress;
+  final GeoPoint pickupCoordinates;
+  final String dropOffAddress;
+  final GeoPoint dropOffCoordinates;
   final String itemDescription;
   final String senderName;
   final String senderContactNum;
@@ -12,17 +16,18 @@ class Delivery{
   final String whoWillPay;
   final String specificInstructions;
   final String paymentOption;
-  // final String Delivery_Fee;
-  // final String Courier_Approval;
-  // final String Delivery_Status;
-
+  final double deliveryFee;
+  final String courierApproval;
+  final String deliveryStatus;
 
   Delivery({
-    // this.Pickup_Address,
-    // this.Pickup_Coordinates,
-    // this.DropOff_Address,
-    // this.DropOff_Coordinates,
-    // this.Chosen_Courier,
+    this.uid,
+    this.customer,
+    this.courier,
+    this.pickupAddress,
+    this.pickupCoordinates,
+    this.dropOffAddress,
+    this.dropOffCoordinates,
     this.itemDescription,
     this.senderName,
     this.senderContactNum,
@@ -31,9 +36,8 @@ class Delivery{
     this.whoWillPay,
     this.specificInstructions,
     this.paymentOption,
-    // this.Delivery_Fee,
-    // this.Courier_Approval,
-    // this.Delivery_Status,
+    this.deliveryFee,
+    this.courierApproval,
+    this.deliveryStatus,
   });
-
 }
