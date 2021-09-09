@@ -161,6 +161,7 @@ class DatabaseService {
         vehicleColor: (doc.data() as dynamic) ['Vehicle Color'] ?? '',
         vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
         deliveryPriceRef: (doc.data() as dynamic) ['Delivery Price Reference'] ?? '',
+        vehiclePhoto_: (doc.data() as dynamic) ['Vehicle Photo URL'] ?? '',
       );
     }).toList();
   }
@@ -252,6 +253,7 @@ class DatabaseService {
       vehicleType: snapshot['Vehicle Type'],
       vehicleColor: snapshot['Vehicle Color'],
       deliveryPriceRef: snapshot['Delivery Price Reference'],
+      vehiclePhoto_: snapshot['Vehicle Photo URL']
     );
   }
 
