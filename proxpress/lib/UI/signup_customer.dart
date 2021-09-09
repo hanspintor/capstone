@@ -263,30 +263,13 @@ class _SignupCustomerState extends State<SignupCustomer> {
                             ),
                             elevation: 4,
                             height:60,
-                            sliderRotate: false,
+                            sliderRotate: true,
                             sliderButtonIconPadding: 13,
-                            //sliderButtonYOffset: -5,
                             onSubmit: (){
                               confirm(true);
                             },
                           ),
                         ),
-
-                        // Container(
-                        //   margin: EdgeInsets.only(top: 50, bottom: 100),
-                        //   child: ConfirmationSlider(
-                        //     height: 50,
-                        //     width: 250,
-                        //     foregroundColor: Color(0xfffb0d0d),
-                        //     text: 'SLIDE IF NOT A BOT',
-                        //     onConfirmation: (){
-                        //
-                        //     },
-                        //     onTapUp: () {
-                        //
-                        //     },
-                        //   ),
-                        // ),
 
                           ElevatedButton(
                             child: Text(

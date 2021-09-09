@@ -11,6 +11,7 @@ import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:slide_to_act/slide_to_act.dart';
 
 class SignupCourier extends StatefulWidget{
   //final Function uploadfile;
@@ -30,6 +31,7 @@ class _SignupCourierState extends State<SignupCourier> {
   String address;
   bool loading = false;
   bool agree = false;
+  bool slide = false;
   String status = 'Active';
   bool approved = false;
   String driversLicenseFront_ = '';
@@ -223,6 +225,11 @@ class _SignupCourierState extends State<SignupCourier> {
         )
       ],
     ));
+  }
+  void confirm(value) {
+    setState(() {
+      slide = value;
+    });
   }
 
   @override
@@ -581,6 +588,23 @@ class _SignupCourierState extends State<SignupCourier> {
                               ),
                             ],
                           ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            child: SlideAction(
+                              child: Container(
+                                margin: EdgeInsets.only(left: 40),
+                                child: Text('SLIDE IF YOU ARE NOT A BOT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),),
+                              ),
+                              elevation: 4,
+                              height:60,
+                              sliderRotate: true,
+                              sliderButtonIconPadding: 13,
+                              onSubmit: (){
+                                confirm(true);
+                              },
+                            ),
+                          ),
+
                           ElevatedButton(
                               child: Text(
                                 'Signup', style: TextStyle(color: Colors.white, fontSize:18),
@@ -588,7 +612,7 @@ class _SignupCourierState extends State<SignupCourier> {
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xfffb0d0d),
                               ),
-                              onPressed: !agree ? null : () async {
+                              onPressed: !agree || !slide ? null : () async {
                                 String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
                                 bool picsLoaded = driversLicenseFront != null &&
