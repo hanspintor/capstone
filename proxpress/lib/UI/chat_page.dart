@@ -22,7 +22,7 @@ class _ChatPageState extends State<ChatPage> {
                 decoration: InputDecoration(
                   filled: true,
 
-                  labelText: 'Type your message',
+                  hintText: 'Type your message',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 0),
                     gapPadding: 10,
@@ -80,10 +80,15 @@ class _ChatPageState extends State<ChatPage> {
         ),
         //title: Text("PROExpress"),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.only(top: 475),
-          child: _buildMessage(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: _buildMessage(),
+            ),
+          ],
         ),
       )
     );
