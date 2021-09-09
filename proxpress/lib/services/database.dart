@@ -107,7 +107,7 @@ class DatabaseService {
       GeoPoint dropOffCoordinates, String itemDescription, String senderName,
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
-      double deliveryFee, String courierApproval, String deliveryStatus) async {
+      int deliveryFee, String courierApproval, String deliveryStatus) async {
     await FirebaseFirestore.instance.collection('Deliveries')
         .doc(uid)
         .set({

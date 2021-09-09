@@ -14,6 +14,7 @@ class CourierTile extends StatefulWidget {
   final LatLng pickupCoordinates;
   final String dropOffAddress;
   final LatLng dropOffCoordinates;
+  final double distance;
 
   CourierTile({
     Key key,
@@ -22,6 +23,7 @@ class CourierTile extends StatefulWidget {
     @required this.pickupCoordinates,
     @required this.dropOffAddress,
     @required this.dropOffCoordinates,
+    @required this.distance,
   }) : super(key: key);
 
   @override
@@ -35,33 +37,29 @@ class _CourierTileState extends State<CourierTile> {
     setState((){});
   }
 
-  int baseFare;
-  int farePerKM;
+  int baseFare = 0;
+  int farePerKM = 0;
 
   // need to get this from distance of 2 geopoints
-  int distance = 4;
-  int deliveryFee;
+  var deliveryFee = 0.0;
 
   @override
   Widget build(BuildContext context) {
-    baseFare ??= 0;
-    farePerKM ??= 0;
-    deliveryFee ??= 0;
-
-    print(widget.courier.deliveryPriceRef.toString());
-
     widget.courier.deliveryPriceRef.get().then((DocumentSnapshot doc) {
       baseFare = doc['Base Fare'];
       farePerKM = doc['Fare Per KM'];
     });
 
-    deliveryFee = baseFare + (farePerKM * distance);
+    print('Base Fare: $baseFare');
+    print('Fare Per KM: $farePerKM');
 
-    print('${widget.courier.fName} - $baseFare');
-    print('${widget.courier.fName} - $farePerKM');
+    var baseFareDouble = baseFare;
+    var farePerKMDouble = farePerKM;
 
-    // Ini dapat mag luwas na delivery fee
-    print('${widget.courier.fName} - $deliveryFee');
+    // deliveryFeeInt = (baseFare + (farePerKM * widget.distance)) as int;
+    // print('Int: $deliveryFeeInt');
+    deliveryFee = (baseFareDouble + (farePerKMDouble * widget.distance));
+    print('Double: ${deliveryFee.toInt()}');
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
@@ -91,7 +89,7 @@ class _CourierTileState extends State<CourierTile> {
                   TextSpan(text: "Vehicle Type: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                   TextSpan(text: "${widget.courier.vehicleType}\n",style: Theme.of(context).textTheme.bodyText2),
                   TextSpan(text: "Delivery Fee: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                  TextSpan(text: "₱${deliveryFee}\n",style: Theme.of(context).textTheme.bodyText2),
+                  TextSpan(text: "₱${deliveryFee.toInt()}\n",style: Theme.of(context).textTheme.bodyText2),
                   TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                   TextSpan(text: "${widget.courier.status}", style: TextStyle(color: color, fontWeight: FontWeight.bold,)),
                 ],
@@ -135,7 +133,8 @@ class _CourierTileState extends State<CourierTile> {
                                           pickupAddress: widget.pickupAddress,
                                           pickupCoordinates: widget.pickupCoordinates,
                                           dropOffAddress: widget.dropOffAddress,
-                                          dropOffCoordinates: widget.dropOffCoordinates),
+                                          dropOffCoordinates: widget.dropOffCoordinates,
+                                          deliveryFee: deliveryFee.toInt(),),
                                   ));
                                 }
                             )

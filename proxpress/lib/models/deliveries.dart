@@ -16,7 +16,7 @@ class Delivery{
   final String whoWillPay;
   final String specificInstructions;
   final String paymentOption;
-  final double deliveryFee;
+  final int deliveryFee;
   final String courierApproval;
   final String deliveryStatus;
 

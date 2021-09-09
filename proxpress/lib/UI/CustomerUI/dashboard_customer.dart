@@ -15,6 +15,7 @@ class DashboardCustomer extends StatefulWidget{
   final LatLng pickupCoordinates;
   final String dropOffAddress;
   final LatLng dropOffCoordinates;
+  final double distance;
 
   DashboardCustomer({
     Key key,
@@ -22,6 +23,7 @@ class DashboardCustomer extends StatefulWidget{
     @required this.pickupCoordinates,
     @required this.dropOffAddress,
     @required this.dropOffCoordinates,
+    @required this.distance,
   }) : super(key: key);
 
   @override
@@ -166,7 +168,8 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                                 pickupAddress: widget.pickupAddress,
                                 pickupCoordinates: widget.pickupCoordinates,
                                 dropOffAddress: widget.dropOffAddress,
-                                dropOffCoordinates: widget.dropOffCoordinates),
+                                dropOffCoordinates: widget.dropOffCoordinates,
+                                distance: widget.distance,),
                       shadowColor: Colors.black,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),

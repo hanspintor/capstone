@@ -47,6 +47,7 @@ dependencies:
   slide_to_act: ^2.0.1
   favorite_button: ^0.0.4
   expansion_tile_card: ^2.0.0
+  flutter_polyline_points: ^1.0.0
 
 dev_dependencies:
   flutter_test:
