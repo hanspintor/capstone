@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/services/database.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -40,6 +43,11 @@ class _ChatPageState extends State<ChatPage> {
   }
   @override
   Widget build(BuildContext context) {
+
+    // final FirebaseAuth _auth = FirebaseAuth.instance;
+    // User user = _auth.currentUser;
+    Delivery delivery = Delivery();
+    // print("Delivery Id: ${delivery.uid}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -80,16 +88,18 @@ class _ChatPageState extends State<ChatPage> {
         ),
         //title: Text("PROExpress"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: _buildMessage(),
-            ),
-          ],
-        ),
+      body: StreamBuilder<Delivery>(
+
+        stream: DatabaseService(uid: delivery.uid).deliveryData,
+          builder: (context,snapshot){
+            if(snapshot.hasData){
+              Delivery deliveryData = snapshot.data;
+              return Text(deliveryData.courierRef.toString());
+            }
+            else{
+              return Text("data");
+            }
+          }
       )
     );
   }

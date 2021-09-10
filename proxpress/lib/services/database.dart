@@ -291,6 +291,6 @@ class DatabaseService {
 
   // Get Delivery Document Data
   Stream<Delivery> get deliveryData{
-    return customerCollection.doc(uid).snapshots().map(_deliveryDataFromSnapshot);
+    return deliveryCollection.doc(uid).snapshots().map(_deliveryDataFromSnapshot);
   }
 }
