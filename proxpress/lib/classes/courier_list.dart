@@ -13,6 +13,7 @@ class CourierList extends StatefulWidget {
   final LatLng pickupCoordinates;
   final String dropOffAddress;
   final LatLng dropOffCoordinates;
+  final double distance;
 
   CourierList({
     Key key,
@@ -20,6 +21,7 @@ class CourierList extends StatefulWidget {
     @required this.pickupCoordinates,
     @required this.dropOffAddress,
     @required this.dropOffCoordinates,
+    @required this.distance,
   }) : super(key: key);
 
   @override
@@ -49,7 +51,8 @@ class _CourierListState extends State<CourierList> {
                           pickupAddress: widget.pickupAddress,
                           pickupCoordinates: widget.pickupCoordinates,
                           dropOffAddress: widget.dropOffAddress,
-                          dropOffCoordinates: widget.dropOffCoordinates);
+                          dropOffCoordinates: widget.dropOffCoordinates,
+                          distance: widget.distance,);
                     });
         }
         return Center(

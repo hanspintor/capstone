@@ -10,6 +10,7 @@ class CustomerRemarks extends StatefulWidget {
   final LatLng pickupCoordinates;
   final String dropOffAddress;
   final LatLng dropOffCoordinates;
+  final int deliveryFee;
 
   CustomerRemarks({
     Key key,
@@ -18,6 +19,7 @@ class CustomerRemarks extends StatefulWidget {
     @required this.pickupCoordinates,
     @required this.dropOffAddress,
     @required this.dropOffCoordinates,
+    @required this.deliveryFee,
   }) : super(key: key);
 
   @override
@@ -428,7 +430,9 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: () async {
                     _validate();
-                    await DatabaseService().updateDelivery(customer, courier, widget.pickupAddress, pickupGeoPoint, widget.dropOffAddress, dropOffGeoPoint, itemDescription, senderName, senderContactNum, receiverName, receiverContactNum, whoWillPay, specificInstructions, paymentOption, 20, 'Pending', 'Pending');
+                    if (locKey.currentState.validate()){
+                      await DatabaseService().updateDelivery(customer, courier, widget.pickupAddress, pickupGeoPoint, widget.dropOffAddress, dropOffGeoPoint, itemDescription, senderName, senderContactNum, receiverName, receiverContactNum, whoWillPay, specificInstructions, paymentOption, widget.deliveryFee, 'Pending', 'Pending');
+                    }
                   }
                 ),
                 SizedBox(height: 50),

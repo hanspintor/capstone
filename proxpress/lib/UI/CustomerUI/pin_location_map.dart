@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:proxpress/services/secrets.dart';
 
 class PinLocationMap extends StatefulWidget {
   const PinLocationMap({Key key}) : super(key: key);
@@ -17,7 +18,7 @@ class _PinLocationMapState extends State<PinLocationMap> {
   @override
   Widget build(BuildContext context) {
     return PlacePicker(
-      apiKey: 'AIzaSyD5uXWSGt2uIXHixz51hP2URf3D59ieTyw',
+      apiKey: Secrets.API_KEY,
       initialPosition: PinLocationMap.kInitialPosition,
       useCurrentLocation: true,
       selectInitialPosition: true,
