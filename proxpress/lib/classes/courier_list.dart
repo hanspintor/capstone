@@ -29,8 +29,6 @@ class CourierList extends StatefulWidget {
 }
 
 class _CourierListState extends State<CourierList> {
-  List<Courier> showResults;
-
   @override
   Widget build(BuildContext context) {
     final courier = Provider.of<List<Courier>>(context);
@@ -60,17 +58,5 @@ class _CourierListState extends State<CourierList> {
         );
       },
     );
-
-    // SingleChildScrollView(
-    //   child: SizedBox(
-    //     height: 650,
-    //     child: ListView.builder(
-    //         itemCount: courier.length,
-    //         itemBuilder: (context, index) {
-    //           return CourierTile(courier: courier[index]);
-    //         },
-    //     ),
-    //   ),
-    // );
   }
 }
