@@ -91,14 +91,13 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                       SizedBox(height: 10),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: Text(
-                          "Bookmarked Couriers",
-                          style: TextStyle(
-                            fontSize: 25,
+                        child:  Text(
+                            "Bookmarked Couriers",
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
                           ),
                         ),
-                      ),
-
                       Container(
                         margin: EdgeInsets.only(
                             top: 10, bottom: 10, left: 100, right: 100),
