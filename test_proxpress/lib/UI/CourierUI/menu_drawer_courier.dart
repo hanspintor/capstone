@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
@@ -40,7 +41,7 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
 
-    return Drawer(
+    return user == null ? LoginScreen() :Drawer(
       child: StreamBuilder<Courier>(
         stream: DatabaseService(uid: user.uid).courierData,
         builder: (context, snapshot) {
