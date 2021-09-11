@@ -16,6 +16,7 @@ class DatabaseService {
 
   // Deliveries Collection Reference
   final CollectionReference deliveryCollection = FirebaseFirestore.instance.collection('Deliveries');
+  final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
 
   // Create/Update a Customer Document
   Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl) async {
@@ -216,12 +217,12 @@ class DatabaseService {
 
   // Get list of data from Deliveries Collection
   Stream<List<Delivery>> get deliveryList {
-    return courierCollection.snapshots().map(deliveryDataListFromSnapshot);
+    return deliveryCollection.snapshots().map(deliveryDataListFromSnapshot);
   }
 
   // Get list of data from Customers Collection
   Stream<List<DeliveryPrice>> get deliveryPriceList {
-    return customerCollection.snapshots().map(deliveryPriceDataListFromSnapshot);
+    return deliveryPriceCollection.snapshots().map(deliveryPriceDataListFromSnapshot);
   }
 
   // Get Customer Document Data using StreamBuilder
@@ -293,6 +294,6 @@ class DatabaseService {
 
   // Get Delivery Document Data
   Stream<Delivery> get deliveryData{
-    return customerCollection.doc(uid).snapshots().map(_deliveryDataFromSnapshot);
+    return deliveryCollection.doc(uid).snapshots().map(_deliveryDataFromSnapshot);
   }
 }

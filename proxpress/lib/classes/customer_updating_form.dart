@@ -85,7 +85,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
+    Stream<Customer> customerStream;
+    if(user != null)
+      customerStream = DatabaseService(uid: user.uid).customerData;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3f1e5435010e5601c6c97ae4504f7ac7e608414b
       return GestureDetector(
         onTap: (){
           if(count != 0){
@@ -188,6 +195,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                             iconSize: 16,
                                             icon: Icon(Icons.edit_rounded,color: Colors.white,),
                                             onPressed: () async{
+
                                               String datetime = DateTime.now().toString();
 
                                               final result = await FilePicker.platform.pickFiles(allowMultiple: false);
