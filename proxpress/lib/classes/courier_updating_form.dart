@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/UI/CustomerUI/notif_drawer_customer.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
 import 'package:proxpress/services/file_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:proxpress/services/upload_file.dart';
 
 
 
@@ -52,6 +55,12 @@ class _CourierUpdateState extends State<CourierUpdate> {
   int duration = 1;
   final AuthService _auth = AuthService();
 
+  File profilePicture;
+
+  //String avatarUrl;
+  String fetchedUrl;
+  String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
+
   String dots(int Dotlength){
     String dot = "•";
     for(var i = 0; i<Dotlength; i++){
@@ -76,6 +85,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+
+    Stream<Courier> courierStream = DatabaseService(uid: user.uid).courierData;
 
       return new GestureDetector(
         onTap: (){
@@ -133,10 +144,14 @@ class _CourierUpdateState extends State<CourierUpdate> {
             endDrawer: NotifDrawerCourier(),
             body: SingleChildScrollView(
               child: StreamBuilder<Courier>(
-                  stream: DatabaseService(uid: user.uid).courierData,
+                  stream: courierStream,
                   builder: (context,snapshot){
                     if(snapshot.hasData){
                       Courier courierData = snapshot.data;
+
+                      fetchedUrl = courierData.avatarUrl;
+                      print(fetchedUrl);
+
                       return Form(
                         key: _updateKey,
                         child: Column(
@@ -156,7 +171,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 children: [
                                   Container(
                                     child: ClipOval(
-                                      child: Image.network('https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e',
+                                      child: Image.network(fetchedUrl ?? 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.rollingstone.com%2Fwp-content%2Fuploads%2F2018%2F06%2Frs-18737-zimmer-1800-1397663777.jpg%3Fcrop%3D900%3A600%26width%3D440&f=1&nofb=1',
                                         width:100,
                                         height: 100,
                                       ),
@@ -176,12 +191,37 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                               iconSize: 16,
                                               icon: Icon(Icons.edit_rounded,color: Colors.white,),
                                               onPressed: () async{
-                                                // XFile image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                                                // print(image.path);
-                                                //  await _auth.uploadProfilePicture(File(image.path));
-                                                //  setState(() {
-                                                //
-                                                //  });
+                                                String datetime = DateTime.now().toString();
+
+                                                final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                                                final path = result.files.single.path;
+                                                setState(() {
+                                                  profilePicture = File(path);
+                                                });
+
+                                                final profilePictureDestination = 'Couriers/${user.uid}/profilepic_${user.uid}_$datetime';
+
+                                                String saveDestination = profilePictureDestination.toString();
+
+                                                if (saveDestination != null && saveDestination.length > 0) {
+                                                  saveDestination = saveDestination.substring(0, saveDestination.length - 1);
+                                                }
+
+                                                await UploadFile.uploadFile(saveDestination, profilePicture);
+
+                                                String url = await firebase_storage.FirebaseStorage.instance
+                                                    .ref(saveDestination)
+                                                    .getDownloadURL();
+
+                                                if (url != null || url == 'null') {
+                                                  await DatabaseService(uid: user.uid).updateCourierProfilePic(url);
+                                                }
+
+                                                setState(() {
+                                                  fetchedUrl = url;
+                                                  courierStream = DatabaseService(uid: user.uid).courierData;
+                                                });
                                               }
                                           ),
                                         ),
@@ -283,34 +323,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 onChanged: (val) => setState(() => _currentContactNo = val),
                               ),
                             ),
-                            // DropdownButtonFormField<String>(
-                            //   validator: (value) => value == null ? 'Vehicle type is required' : null,
-                            //   decoration: InputDecoration(
-                            //     labelText: 'Vehicle Type:',
-                            //     hintText: "${courierData.vehicleType}",
-                            //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                            //     labelStyle: TextStyle(
-                            //         fontStyle: FontStyle.italic,
-                            //         color: Colors.green
-                            //     ),
-                            //   ),
-                            //   isExpanded: true,
-                            //   icon: const Icon(Icons.arrow_downward),
-                            //   iconSize: 24,
-                            //   elevation: 16,
-                            //   onChanged: (String newValue) {
-                            //     setState(() {
-                            //       _vehicleType = newValue;
-                            //     });
-                            //   },
-                            //   items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'Multi-purpose Vehicle', 'Family-business Van', 'Multi-purpose Van']
-                            //       .map<DropdownMenuItem<String>>((String value) {
-                            //     return DropdownMenuItem<String>(
-                            //       value: value,
-                            //       child: Text(value),
-                            //     );
-                            //   }).toList(),
-                            // ),
+
                             Container(
                               child: TextFormField(
                                 initialValue: "${courierData.vehicleColor}",
@@ -451,6 +464,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                           _confirmPassword ?? courierData.password,
                                           _currentAddress ?? courierData.address,
                                           _status ?? courierData.status,
+                                          courierData.avatarUrl,
                                           _approved ?? courierData.approved,
                                           _vehicleType ?? courierData.vehicleType,
                                           _vehicleColor ?? courierData.vehicleColor,

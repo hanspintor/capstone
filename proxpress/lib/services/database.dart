@@ -51,8 +51,16 @@ class DatabaseService {
     });
   }
 
+  Future updateCourierProfilePic(String avatarUrl) async {
+    await FirebaseFirestore.instance.collection('Couriers')
+        .doc(uid)
+        .update({
+      'Avatar URL' : avatarUrl,
+    });
+  }
+
   // Create/Update a Courier Document
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_, DocumentReference deliveryPriceRef) async {
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, String avatarUrl, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_, DocumentReference deliveryPriceRef) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -61,6 +69,7 @@ class DatabaseService {
       'Password' : password,
       'Address' : address,
       'Active Status' : status,
+      'Avatar URL' : avatarUrl,
       'Admin Approved': approved,
       'Vehicle Type': vehicleType,
       'Vehicle Color': vehicleColor,
@@ -161,6 +170,7 @@ class DatabaseService {
         email: (doc.data() as dynamic) ['Email'] ?? '',
         address: (doc.data() as dynamic) ['Address'] ?? '',
         status: (doc.data() as dynamic) ['Active Status'] ?? '',
+        avatarUrl: (doc.data() as dynamic) ['Avatar URL']?? '',
         vehicleColor: (doc.data() as dynamic) ['Vehicle Color'] ?? '',
         vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
         deliveryPriceRef: (doc.data() as dynamic) ['Delivery Price Reference'] ?? '',
@@ -252,6 +262,7 @@ class DatabaseService {
       email: snapshot['Email'],
       address: snapshot['Address'],
       approved: snapshot['Admin Approved'],
+      avatarUrl: snapshot['Avatar URL'],
       status: snapshot['Active Status'],
       vehicleType: snapshot['Vehicle Type'],
       vehicleColor: snapshot['Vehicle Color'],
