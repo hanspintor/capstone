@@ -1,16 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/classes/courier_list.dart';
+import 'package:proxpress/classes/delivery_list.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
 
 
-class CourierDashboard extends StatelessWidget {
+class CourierDashboard extends StatefulWidget {
+  @override
+  State<CourierDashboard> createState() => _CourierDashboardState();
+}
+
+class _CourierDashboardState extends State<CourierDashboard> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openEndDrawer() {
@@ -48,6 +57,12 @@ class CourierDashboard extends StatelessWidget {
               Courier courierData = snapshot.data;
 
               approved = courierData.approved;
+
+              Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+                  .collection('Deliveries')
+                  .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+                  .snapshots()
+                  .map(DatabaseService().deliveryDataListFromSnapshot);
 
               return WillPopScope(
                 onWillPop: () async {
@@ -96,7 +111,11 @@ class CourierDashboard extends StatelessWidget {
                             ),
                           ),
                           !approved ? _welcomeMessage() : Container(
-                            child: Text('Customer Requests Here'),
+                            child: StreamProvider<List<Delivery>>.value(
+                              initialData: [],
+                              value: deliveryList,
+                              child: DeliveryList(),
+                            ),
                           ),
                         ],
                       ),
