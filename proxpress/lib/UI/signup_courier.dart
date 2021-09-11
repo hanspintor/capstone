@@ -538,7 +538,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                 vehicleType = newValue;
                               });
                             },
-                            items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'Multi-purpose Vehicle', 'FB-Type Van', 'Van']
+                            items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'MPV', 'FB-Type Van', 'Van']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
