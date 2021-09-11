@@ -79,8 +79,10 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
+    Stream<Customer> customerStream;
+    if(user != null)
+      customerStream = DatabaseService(uid: user.uid).customerData;
 
-    Stream<Customer> customerStream = DatabaseService(uid: user.uid).customerData;
 
       return GestureDetector(
         onTap: (){
@@ -91,7 +93,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
             count=1;
           }
           _sessionTimer?.cancel();
-          _sessionTimer = new Timer(Duration(minutes: duration), handleTimeOut);
+          _sessionTimer = new Timer(Duration(seconds: duration), handleTimeOut);
           _sessionTimerPrint?.cancel();
           _sessionTimerPrint = new Timer(Duration(minutes: duration), () {
             print("Session Expired");
@@ -184,6 +186,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                             iconSize: 16,
                                             icon: Icon(Icons.edit_rounded,color: Colors.white,),
                                             onPressed: () async{
+
                                               String datetime = DateTime.now().toString();
 
                                               final result = await FilePicker.platform.pickFiles(allowMultiple: false);
