@@ -1,14 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/classes/delivery_tile.dart';
-import 'package:proxpress/classes/firestore_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/classes/courier_tile.dart';
-import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
-import 'package:proxpress/services/database.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DeliveryList extends StatefulWidget {
   @override

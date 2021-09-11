@@ -78,12 +78,17 @@ class _CourierDashboardState extends State<CourierDashboard> {
                     iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                     ),
                     actions:[
-                      IconButton(
-                        icon: Icon(Icons.notifications_none_rounded),
-                        onPressed: (){
-                          _openEndDrawer();
-                        },
-                        iconSize: 25,
+                      Stack(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.notifications_none_rounded),
+                            onPressed: (){
+                              _openEndDrawer();
+                            },
+                            iconSize: 25,
+                          ),
+                          Text("10")
+                        ],
                       ),
                     ],
                     flexibleSpace: Container(
