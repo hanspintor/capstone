@@ -41,39 +41,16 @@ class _DeliveryListState extends State<DeliveryList> {
     final delivery = Provider.of<List<Delivery>>(context);
     return delivery == null
         ? UserLoading()
-        : SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 200,
-              //color: widget.searchBodyBackgroundColor,
-              child: StreamBuilder<List>(
-                stream: FirestoreServicePackage(
-                        collectionName: 'Couriers',
-                        searchBy: 'Courier Reference' ?? '',
-                        dataListFromSnapshot:
-                            DatabaseService().deliveryDataListFromSnapshot,
-                        limitOfRetrievedData: 10)
-                    .searchData(FirebaseFirestore.instance
-                        .collection('Couriers')
-                        .doc(user.uid)),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final List<Delivery> dataList = snapshot.data;
-                    return ListView.builder(
-                        itemCount: dataList.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return DeliveryTile(
-                            delivery: dataList[index],
-                          );
-                        });
-                  }
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
+        : SizedBox(
+          height: 500,
+          width: 500,
+          child: ListView.builder(
+              itemCount: delivery.length,
+              itemBuilder: (context, index) {
+                return DeliveryTile(delivery: delivery[index]);
+              },
             ),
-          );
+        );
 
     // FirestoreSearchScaffold(
     //   firestoreCollectionName: 'Delivery',

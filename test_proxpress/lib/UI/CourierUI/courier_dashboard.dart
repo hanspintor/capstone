@@ -66,6 +66,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
     User user = _auth.currentUser;
     bool approved = false;
 
+
     if(user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
@@ -133,10 +134,11 @@ class _CourierDashboardState extends State<CourierDashboard> {
                             ),
                             Card(
                               margin: EdgeInsets.all(20),
-                              // child: DeliveryList(),
-                              // shadowColor: Colors.black,
-                              // shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                              child: DeliveryList(),
+                              shadowColor: Colors.black,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                             ),
+                            //CourierDeliveryData(),
                           ],
                         ),
                       ),
