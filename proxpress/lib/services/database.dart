@@ -262,12 +262,17 @@ class DatabaseService {
       email: snapshot['Email'],
       address: snapshot['Address'],
       approved: snapshot['Admin Approved'],
-      avatarUrl: snapshot['Avatar URL'],
       status: snapshot['Active Status'],
+      avatarUrl: snapshot['Avatar URL'],
       vehicleType: snapshot['Vehicle Type'],
       vehicleColor: snapshot['Vehicle Color'],
+      driversLicenseFront_: snapshot['License Front URL'],
+      driversLicenseBack_: snapshot['License Back URL'],
+      nbiClearancePhoto_: snapshot['NBI Clearance URL'],
+      vehicleRegistrationOR_: snapshot['Vehicle OR URL'],
+      vehicleRegistrationCR_: snapshot['Vehicle CR URL'],
+      vehiclePhoto_: snapshot['Vehicle Photo URL'],
       deliveryPriceRef: snapshot['Delivery Price Reference'],
-      vehiclePhoto_: snapshot['Vehicle Photo URL']
     );
   }
 

@@ -45,7 +45,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
   String _newPassword;
   String _confirmPassword;
   String _status = "Active";
-  bool _approved = false;
   bool checkCurrentPassword = true;
   String _vehicleType;
   String _vehicleColor;
@@ -56,6 +55,9 @@ class _CourierUpdateState extends State<CourierUpdate> {
   final AuthService _auth = AuthService();
 
   File profilePicture;
+  bool uploadedNewPic = false;
+  String savedUrl = '';
+  String saveDestination = '';
 
   //String avatarUrl;
   String fetchedUrl;
@@ -85,8 +87,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-
-    Stream<Courier> courierStream = DatabaseService(uid: user.uid).courierData;
 
       return new GestureDetector(
         onTap: (){
@@ -144,7 +144,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
             endDrawer: NotifDrawerCourier(),
             body: SingleChildScrollView(
               child: StreamBuilder<Courier>(
-                  stream: courierStream,
+                  stream: DatabaseService(uid: user.uid).courierData,
                   builder: (context,snapshot){
                     if(snapshot.hasData){
                       Courier courierData = snapshot.data;
@@ -170,11 +170,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               child: Stack(
                                 children: [
                                   Container(
-                                    child: ClipOval(
-                                      child: Image.network(fetchedUrl ?? 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.rollingstone.com%2Fwp-content%2Fuploads%2F2018%2F06%2Frs-18737-zimmer-1800-1397663777.jpg%3Fcrop%3D900%3A600%26width%3D440&f=1&nofb=1',
-                                        width:100,
-                                        height: 100,
-                                      ),
+                                    child: CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: uploadedNewPic
+                                          ? FileImage(File(profilePicture.path))
+                                          : NetworkImage(fetchedUrl),
                                     ),
                                   ),
                                   Positioned(
@@ -195,32 +195,19 @@ class _CourierUpdateState extends State<CourierUpdate> {
 
                                                 final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-                                                final path = result.files.single.path;
+                                                final pathProfiePicUploaded = result.files.single.path;
                                                 setState(() {
-                                                  profilePicture = File(path);
+                                                  uploadedNewPic = true;
+                                                  profilePicture = File(pathProfiePicUploaded);
                                                 });
 
                                                 final profilePictureDestination = 'Couriers/${user.uid}/profilepic_${user.uid}_$datetime';
 
-                                                String saveDestination = profilePictureDestination.toString();
-
-                                                if (saveDestination != null && saveDestination.length > 0) {
-                                                  saveDestination = saveDestination.substring(0, saveDestination.length - 1);
-                                                }
-
-                                                await UploadFile.uploadFile(saveDestination, profilePicture);
-
-                                                String url = await firebase_storage.FirebaseStorage.instance
-                                                    .ref(saveDestination)
-                                                    .getDownloadURL();
-
-                                                if (url != null || url == 'null') {
-                                                  await DatabaseService(uid: user.uid).updateCourierProfilePic(url);
-                                                }
-
-                                                setState(() {
-                                                  fetchedUrl = url;
-                                                  courierStream = DatabaseService(uid: user.uid).courierData;
+                                                setState((){
+                                                  saveDestination = profilePictureDestination.toString();
+                                                  if (saveDestination != null && saveDestination.length > 0) {
+                                                    saveDestination = saveDestination.substring(0, saveDestination.length - 1);
+                                                  }
                                                 });
                                               }
                                           ),
@@ -465,7 +452,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                           _currentAddress ?? courierData.address,
                                           _status ?? courierData.status,
                                           courierData.avatarUrl,
-                                          _approved ?? courierData.approved,
+                                          courierData.approved,
                                           _vehicleType ?? courierData.vehicleType,
                                           _vehicleColor ?? courierData.vehicleColor,
                                           courierData.driversLicenseFront_,
@@ -476,6 +463,21 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                           courierData.vehiclePhoto_,
                                           courierData.deliveryPriceRef,
                                         );
+
+                                        await UploadFile.uploadFile(saveDestination, profilePicture);
+
+                                        savedUrl = await firebase_storage.FirebaseStorage.instance
+                                            .ref(saveDestination)
+                                            .getDownloadURL();
+
+                                        if (savedUrl != null || savedUrl == 'null') {
+                                          await DatabaseService(uid: user.uid).updateCourierProfilePic(savedUrl);
+                                        }
+
+                                        setState(() {
+                                          fetchedUrl = savedUrl;
+                                        });
+
                                         Navigator.pop(context, false);
                                       }
                                     }

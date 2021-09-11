@@ -123,8 +123,11 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   ),
                 ),
               );
+            } else {
+              print('nice');
+
+              return UserLoading();
             }
-            else return UserLoading();
           }
       );
     }

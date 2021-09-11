@@ -19,6 +19,9 @@ import 'package:proxpress/services/default_profile_pic.dart';
 import 'package:proxpress/services/file_storage.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:path/path.dart' as Path;
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CustomerUpdate extends StatefulWidget {
 
@@ -50,6 +53,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   final AuthService _auth = AuthService();
 
   File profilePicture;
+  bool uploadedNewPic = false;
+  String savedUrl = '';
+  String saveDestination = '';
 
   //String avatarUrl;
   String fetchedUrl;
@@ -79,8 +85,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-
-    Stream<Customer> customerStream = DatabaseService(uid: user.uid).customerData;
 
       return GestureDetector(
         onTap: (){
@@ -138,7 +142,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
             endDrawer: NotifDrawerCustomer(),
             body: SingleChildScrollView(
               child: StreamBuilder<Customer>(
-                  stream: customerStream,
+                  stream: DatabaseService(uid: user.uid).customerData,
                   builder: (context,snapshot){
                     if(snapshot.hasData){
                       Customer customerData = snapshot.data;
@@ -163,11 +167,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               child: Stack(
                                 children: [
                                   Container(
-                                    child: ClipOval(
-                                      child: Image.network(fetchedUrl,
-                                        width:100,
-                                        height: 100,
-                                      ),
+                                    child: CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: uploadedNewPic
+                                        ? FileImage(File(profilePicture.path))
+                                        : NetworkImage(fetchedUrl),
                                     ),
                                   ),
                                   Positioned(
@@ -188,32 +192,19 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
 
                                               final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-                                              final path = result.files.single.path;
+                                              final pathProfiePicUploaded = result.files.single.path;
                                               setState(() {
-                                                profilePicture = File(path);
+                                                uploadedNewPic = true;
+                                                profilePicture = File(pathProfiePicUploaded);
                                               });
 
                                               final profilePictureDestination = 'Customers/${user.uid}/profilepic_${user.uid}_$datetime';
 
-                                              String saveDestination = profilePictureDestination.toString();
-
-                                              if (saveDestination != null && saveDestination.length > 0) {
-                                                saveDestination = saveDestination.substring(0, saveDestination.length - 1);
-                                              }
-
-                                              await UploadFile.uploadFile(saveDestination, profilePicture);
-
-                                              String url = await firebase_storage.FirebaseStorage.instance
-                                                  .ref(saveDestination)
-                                                  .getDownloadURL();
-
-                                              if (url != null || url == 'null') {
-                                                await DatabaseService(uid: user.uid).updateCustomerProfilePic(url);
-                                              }
-
-                                              setState(() {
-                                                fetchedUrl = url;
-                                                customerStream = DatabaseService(uid: user.uid).customerData;
+                                              setState((){
+                                                saveDestination = profilePictureDestination.toString();
+                                                if (saveDestination != null && saveDestination.length > 0) {
+                                                  saveDestination = saveDestination.substring(0, saveDestination.length - 1);
+                                                }
                                               });
                                             }
                                           ),
@@ -442,6 +433,21 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                           _currentAddress ?? customerData.address,
                                           customerData.avatarUrl
                                         );
+
+                                        await UploadFile.uploadFile(saveDestination, profilePicture);
+
+                                        savedUrl = await firebase_storage.FirebaseStorage.instance
+                                            .ref(saveDestination)
+                                            .getDownloadURL();
+
+                                        if (savedUrl != null || savedUrl == 'null') {
+                                          await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
+                                        }
+
+                                        setState(() {
+                                          fetchedUrl = savedUrl;
+                                        });
+
                                         Navigator.pop(context, false);
                                       }
                                     }
