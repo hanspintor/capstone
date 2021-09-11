@@ -89,10 +89,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     if(user != null)
       customerStream = DatabaseService(uid: user.uid).customerData;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 3f1e5435010e5601c6c97ae4504f7ac7e608414b
       return GestureDetector(
         onTap: (){
           if(count != 0){
