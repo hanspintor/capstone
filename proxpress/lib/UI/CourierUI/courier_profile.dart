@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 
 class CourierProfile extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -51,7 +50,7 @@ class CourierProfile extends StatelessWidget {
                       iconSize: 25,
                     ),
                     actions: [
-                      NotifCounter(scaffoldKey: _scaffoldKey,)
+                      NotifCounter(scaffoldKey: _scaffoldKey)
                     ],
                     flexibleSpace: Container(
                       margin: EdgeInsets.only(top: 10),

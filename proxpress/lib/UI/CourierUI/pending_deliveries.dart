@@ -15,12 +15,11 @@ class PendingDeliveries extends StatefulWidget {
   @override
   _PendingDeliveriesState createState() => _PendingDeliveriesState();
 }
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-void _openEndDrawer() {
-  _scaffoldKey.currentState.openEndDrawer();
-}
+
+
 
 class _PendingDeliveriesState extends State<PendingDeliveries> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -54,7 +53,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                       ),
                       actions:[
-                        NotifCounter(scaffoldKey: _scaffoldKey),
+                        NotifCounter(scaffoldKey: _scaffoldKey)
                       ],
                       flexibleSpace: Container(
                         margin: EdgeInsets.only(top: 10),

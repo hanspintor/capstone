@@ -83,9 +83,7 @@ class _NotifTileState extends State<NotifTile> {
 
         } else {
           return Center(
-            child: CircularProgressIndicator(
 
-            ),
           );
         }
       },

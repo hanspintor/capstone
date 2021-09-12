@@ -47,7 +47,6 @@ class _CourierDashboardState extends State<CourierDashboard> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
-
     if(user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,

@@ -17,12 +17,19 @@ class NotifDrawerCourier extends StatefulWidget {
 }
 
 class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
-  @override
   bool isClear = false;
   String caption = "";
+  int flag = 1;
+  @override
   Widget build(BuildContext context) {
     bool approved = false;
     final user = Provider.of<TheUser>(context);
+    if(flag <= 0){
+      isClear = true;
+      caption = "No data found";
+      flag++;
+    }
+    print("flag out: $flag");
     return user == null ? LoginScreen() : StreamBuilder<Courier>(
       stream: DatabaseService(uid: user.uid).courierData,
        builder: (context, snapshot){
@@ -64,9 +71,9 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
                         label: Text('Clear'),
                         onPressed: (){
                           setState(() {
-                            isClear = true;
-                            caption = "No data found";
+                            flag = 0;
                           });
+
                         },
                         style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
                       ),
