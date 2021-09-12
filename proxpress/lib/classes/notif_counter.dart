@@ -32,7 +32,7 @@ class _NotifCounterState extends State<NotifCounter> {
           },
           iconSize: 25,
         ),
-        Container(
+        delivery.length == 0 ? Container() : Container(
           margin: EdgeInsets.only(left: 25, top: 5),
           height: 20,
           width: 30,
@@ -42,7 +42,7 @@ class _NotifCounterState extends State<NotifCounter> {
           ),
           child: Center(
             child: Text(
-              delivery.length.toString(),
+               delivery.length.toString(),
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold
