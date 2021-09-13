@@ -69,7 +69,7 @@ class _CourierTileState extends State<CourierTile> {
       color = Colors.green;
     }
     return user == null ? LoginScreen() : Padding(
-      padding: EdgeInsets.only(top: 0.0),
+      padding: EdgeInsets.all(8),
       child: ExpansionTileCard(
         //expandedColor: Colors.grey,
         title: Text("${widget.courier.fName} ${widget.courier.lName}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
@@ -81,20 +81,24 @@ class _CourierTileState extends State<CourierTile> {
               child: CircleAvatar(
                 radius: 20,
                 backgroundImage: NetworkImage(widget.courier.avatarUrl),
+                backgroundColor: Colors.white,
               ),
             ),
           ),
         ),
-        subtitle: Text.rich(
-          TextSpan(children: [
-            TextSpan(text: "Vehicle Type: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-            TextSpan(text: "${widget.courier.vehicleType}\n",style: Theme.of(context).textTheme.bodyText2),
-            TextSpan(text: "Delivery Fee: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-            TextSpan(text: "₱${deliveryFee.toInt()}\n",style: Theme.of(context).textTheme.bodyText2),
-            TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-            TextSpan(text: "${widget.courier.status}", style: TextStyle(color: color, fontWeight: FontWeight.bold,)),
-          ],
-        ),
+        subtitle: Container(
+          padding: EdgeInsets.only(top: 5),
+          child: Text.rich(
+            TextSpan(children: [
+              TextSpan(text: "Vehicle Type: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+              TextSpan(text: "${widget.courier.vehicleType}\n",style: Theme.of(context).textTheme.bodyText2),
+              TextSpan(text: "Delivery Fee: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+              TextSpan(text: "₱${deliveryFee.toInt()}\n",style: Theme.of(context).textTheme.bodyText2),
+              TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+              TextSpan(text: "${widget.courier.status}", style: TextStyle(color: color, fontWeight: FontWeight.bold,)),
+            ],
+          ),
+          ),
         ),
         children: <Widget>[
           Padding(
@@ -103,17 +107,27 @@ class _CourierTileState extends State<CourierTile> {
               vertical: 8.0,
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text.rich(
-                  TextSpan(children: [
-                    TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                    TextSpan(text: "${widget.courier.contactNo}\n",style: Theme.of(context).textTheme.bodyText2),
-                    TextSpan(text: "Vehicle Color: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                    TextSpan(text: "${widget.courier.vehicleColor}\n",style: Theme.of(context).textTheme.bodyText2),
-                  ],
+                ListTile(
+                  leading: Icon(Icons.info_rounded, color: Colors.red),
+                  title: Text('Additional Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  subtitle: Container(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                        TextSpan(text: "${widget.courier.contactNo}\n",style: Theme.of(context).textTheme.bodyText2),
+                        TextSpan(text: "Vehicle Color: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                        TextSpan(text: "${widget.courier.vehicleColor}\n",style: Theme.of(context).textTheme.bodyText2),
+                      ],
+                      ),
+                    ),
                   ),
                 ),
-                Image.network(widget.courier.vehiclePhoto_, height: 140, width: 326,
+                Container(
+                  padding: EdgeInsets.only(right: 40),
+                    child: Image.network(widget.courier.vehiclePhoto_, height: 140, width: 326,)
                 ),
                 SizedBox(height: 20,),
                 Align(

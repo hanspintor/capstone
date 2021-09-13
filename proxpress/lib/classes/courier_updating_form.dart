@@ -175,6 +175,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                       backgroundImage: uploadedNewPic
                                           ? FileImage(File(profilePicture.path))
                                           : NetworkImage(fetchedUrl),
+                                      backgroundColor: Colors.white,
                                     ),
                                   ),
                                   Positioned(
