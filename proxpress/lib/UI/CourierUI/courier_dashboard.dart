@@ -105,7 +105,8 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                 ),
                               ),
                             ),
-                             Container(
+                             Card(
+                               margin: EdgeInsets.all(20),
                               child: DeliveryList(),
                             ),
                           ],

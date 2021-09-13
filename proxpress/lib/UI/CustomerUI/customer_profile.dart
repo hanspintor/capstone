@@ -108,6 +108,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   child: CircleAvatar(
                                     radius: 80,
                                     backgroundImage: NetworkImage(customerData.avatarUrl),
+                                    backgroundColor: Colors.white,
                                   ),
                                 ),
                                 Container(

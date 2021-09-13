@@ -77,6 +77,7 @@ class CourierProfile extends StatelessWidget {
                                 child: CircleAvatar(
                                   radius: 80,
                                   backgroundImage: NetworkImage(courierData.avatarUrl),
+                                  backgroundColor: Colors.white,
                                 ),
                               ),
                               Container(

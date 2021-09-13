@@ -62,6 +62,7 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                               child: CircleAvatar(
                                 radius: 40,
                                 backgroundImage: NetworkImage(courierData.avatarUrl),
+                                backgroundColor: Colors.white,
                               ),
                             ),
                             SizedBox(height: 20,),

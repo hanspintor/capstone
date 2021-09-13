@@ -165,6 +165,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                         backgroundImage: uploadedNewPic
                                           ? FileImage(File(profilePicture.path))
                                           : NetworkImage(fetchedUrl),
+                                        backgroundColor: Colors.white,
                                       ),
                                     ),
                                     Positioned(
