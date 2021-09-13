@@ -625,7 +625,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                 if (regKey.currentState.validate() && picsLoaded){
 
 
-                                  FirebaseFirestore.instance
+                                  await FirebaseFirestore.instance
                                       .collection('Delivery Prices')
                                       .where('Vehicle Type', isEqualTo: vehicleType)
                                       .get()

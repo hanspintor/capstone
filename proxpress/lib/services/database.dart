@@ -17,7 +17,7 @@ class DatabaseService {
   // Deliveries Collection Reference
   final CollectionReference deliveryCollection = FirebaseFirestore.instance.collection('Deliveries');
 
-// Deliveries Collection Reference
+  // Deliveries Collection Reference
   final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
 
   // Create/Update a Customer Document
@@ -300,6 +300,16 @@ class DatabaseService {
     );
   }
 
+  // Get Delivery Document Data using StreamBuilder
+  DeliveryPrice _deliveryPriceDataFromSnapshot(DocumentSnapshot snapshot){
+    return DeliveryPrice(
+      uid: uid,
+      vehicleType: snapshot['Vehicle Type'],
+      baseFare: snapshot['Base Fare'],
+      farePerKM: snapshot['Fare Per KM']
+    );
+  }
+
   // Get Customer Document Data
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
@@ -313,5 +323,10 @@ class DatabaseService {
   // Get Delivery Document Data
   Stream<Delivery> get deliveryData{
     return deliveryCollection.doc(uid).snapshots().map(_deliveryDataFromSnapshot);
+  }
+
+  // Get Delivery Price Document Data
+  Stream<DeliveryPrice> get deliveryPriceData{
+    return deliveryPriceCollection.doc(uid).snapshots().map(_deliveryPriceDataFromSnapshot);
   }
 }
