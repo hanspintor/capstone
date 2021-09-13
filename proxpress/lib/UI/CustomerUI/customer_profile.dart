@@ -21,16 +21,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
   void _openEndDrawer() {
     _scaffoldKey.currentState.openEndDrawer();
   }
-  // Future _getDefaultProfile(BuildContext context, String imageName) async {
-  //   Image image;
-  //   await FireStorageService.loadImage(context, imageName).then((value) {
-  //     image = Image.network(
-  //       value.toString(),
-  //       // fit: BoxFit.scaleDown,
-  //     );
-  //   });
-  //   return image;
-  // }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final AuthService _auth = AuthService();
@@ -115,11 +105,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  child: ClipOval(
-                                    child: Image.network(customerData.avatarUrl,
-                                      width:100,
-                                      height: 100,
-                                    ),
+                                  child: CircleAvatar(
+                                    radius: 80,
+                                    backgroundImage: NetworkImage(customerData.avatarUrl),
                                   ),
                                 ),
                                 Container(

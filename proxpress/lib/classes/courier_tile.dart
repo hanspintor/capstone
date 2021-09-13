@@ -77,7 +77,12 @@ class _CourierTileState extends State<CourierTile> {
           child: SizedBox(
             width: 48,
             height: 48,
-            child:Image.network('https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e'),
+            child: Container(
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(widget.courier.avatarUrl),
+              ),
+            ),
           ),
         ),
         subtitle: Text.rich(

@@ -171,7 +171,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 children: [
                                   Container(
                                     child: CircleAvatar(
-                                      radius: 80,
+                                      radius: 55,
                                       backgroundImage: uploadedNewPic
                                           ? FileImage(File(profilePicture.path))
                                           : NetworkImage(fetchedUrl),

@@ -29,16 +29,6 @@ void selectedItem(BuildContext context, int index){
       break;
   }
 }
-// Future _getDefaultProfile(BuildContext context, String imageName) async {
-//   Image image;
-//   await FireStorageService.loadImage(context, imageName).then((value) {
-//     image = Image.network(
-//       value.toString(),
-//       // fit: BoxFit.scaleDown,
-//     );
-//   });
-//   return image;
-// }
 
 class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
 
@@ -62,11 +52,9 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                         return Column(
                           children: [
                             Container(
-                              child: ClipOval(
-                                child: Image.network(customerData.avatarUrl,
-                                  width:80,
-                                  height: 80,
-                                ),
+                              child: CircleAvatar(
+                                radius: 40,
+                                backgroundImage: NetworkImage(customerData.avatarUrl),
                               ),
                             ),
                             SizedBox(height: 20,),

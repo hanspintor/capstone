@@ -59,11 +59,9 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                         child: Column(
                           children: [
                             Container(
-                              child: ClipOval(
-                                child: Image.network(courierData.avatarUrl,
-                                  width:80,
-                                  height: 80,
-                                ),
+                              child: CircleAvatar(
+                                radius: 40,
+                                backgroundImage: NetworkImage(courierData.avatarUrl),
                               ),
                             ),
                             SizedBox(height: 20,),

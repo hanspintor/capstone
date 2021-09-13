@@ -74,11 +74,9 @@ class CourierProfile extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                child: ClipOval(
-                                  child: Image.network(courierData.avatarUrl,
-                                    width:100,
-                                    height: 100,
-                                  ),
+                                child: CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage: NetworkImage(courierData.avatarUrl),
                                 ),
                               ),
                               Container(
