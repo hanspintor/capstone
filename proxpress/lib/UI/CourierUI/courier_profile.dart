@@ -16,7 +16,7 @@ class CourierProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-
+    bool approved = false;
     if (user != null) {
       return StreamBuilder<Courier>(
         stream: DatabaseService(uid: user.uid).courierData,
@@ -24,6 +24,7 @@ class CourierProfile extends StatelessWidget {
           if(snapshot.hasData)
           {
             Courier courierData = snapshot.data;
+            approved = courierData.approved;
             Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                 .collection('Deliveries')
                 .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
@@ -50,7 +51,7 @@ class CourierProfile extends StatelessWidget {
                       iconSize: 25,
                     ),
                     actions: [
-                      NotifCounter(scaffoldKey: _scaffoldKey)
+                      NotifCounter(scaffoldKey: _scaffoldKey, approved: approved,)
                     ],
                     flexibleSpace: Container(
                       margin: EdgeInsets.only(top: 10),

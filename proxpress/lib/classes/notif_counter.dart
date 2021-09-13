@@ -5,9 +5,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotifCounter extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
+  final approved;
   NotifCounter({
     Key key,
     @required this.scaffoldKey,
+    @required this.approved,
   }) : super(key: key);
 
   @override
@@ -15,11 +17,10 @@ class NotifCounter extends StatefulWidget {
 }
 
 class _NotifCounterState extends State<NotifCounter> {
-  bool viewable = true;
+  bool viewable;
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
-
   FlutterLocalNotificationsPlugin localNotication;
   @override
   void initState(){
@@ -41,13 +42,13 @@ class _NotifCounterState extends State<NotifCounter> {
         "Channel ID",
         "Local Notifcation",
         "This is description",
-      importance: Importance.high
+        importance: Importance.high
     );
     var IOSDetails = new IOSNotificationDetails();
     var generalNotif = new NotificationDetails(android: androidDetails, iOS: IOSDetails);
     var schedNotif = DateTime.now().add(Duration(seconds: 5));
 
-     localNotication.schedule(
+    localNotication.schedule(
         0,
         "TRIAL",
         "NOTIF",
@@ -69,8 +70,12 @@ class _NotifCounterState extends State<NotifCounter> {
     final delivery = Provider.of<List<Delivery>>(context);
 
     // flag = 0;
-    print("Notifs ${notifs}");
+    //print("Notifs ${notifs}");
     print("flag ${flag}");
+    if(flag <= 0){
+      viewable = true;
+      flag++;
+    }
     // if(flag <= 0){
     //   viewable  = true;
     //
@@ -79,16 +84,17 @@ class _NotifCounterState extends State<NotifCounter> {
     notifs = delivery.length;
     // if(notifs == 0)
     //   viewable = false;
-
-    // print("flag ${flag}");
-
+    if(!widget.approved || notifs == 0){
+      viewable = false;
+    }
     return Stack(
       children: [
         IconButton(
           icon: Icon(Icons.notifications_none_rounded),
-          onPressed: (){
-            showNotifcation();
-              //setFalse();
+          onPressed: !widget.approved ? null : (){
+            if(notifs != 0)
+              showNotifcation();
+             // setFalse();
             _openEndDrawer();
             //print("flag inC: $flag");
             print("V:  ${viewable}");

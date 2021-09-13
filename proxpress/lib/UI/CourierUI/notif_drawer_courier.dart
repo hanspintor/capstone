@@ -29,7 +29,7 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
       caption = "No data found";
       flag++;
     }
-    print("flag out: $flag");
+    //print("flag out: $flag");
     return user == null ? LoginScreen() : StreamBuilder<Courier>(
       stream: DatabaseService(uid: user.uid).courierData,
        builder: (context, snapshot){

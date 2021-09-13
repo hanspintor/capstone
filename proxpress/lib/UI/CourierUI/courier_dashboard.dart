@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
-import 'package:proxpress/classes/courier_list.dart';
 import 'package:proxpress/classes/delivery_list.dart';
 import 'package:proxpress/classes/notif_counter.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -53,9 +51,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
           builder: (context,snapshot){
             if(snapshot.hasData){
               Courier courierData = snapshot.data;
-
               approved = courierData.approved;
-
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
@@ -67,7 +63,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   print("Back Button Pressed");
                   return false;
                 },
-                child: !approved ? _welcomeMessage() : StreamProvider<List<Delivery>>.value(
+                child: StreamProvider<List<Delivery>>.value(
                   initialData: [],
                   value: deliveryList,
                   child: Scaffold(
@@ -79,7 +75,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                       ),
                       actions: <Widget>[
-                        NotifCounter(scaffoldKey: _scaffoldKey)
+                        NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
                       ],
                       flexibleSpace: Container(
                         margin: EdgeInsets.only(top: 10),
@@ -106,14 +102,14 @@ class _CourierDashboardState extends State<CourierDashboard> {
                               ),
                             ),
                              Container(
-                              child: DeliveryList(),
+                              child: !approved ? _welcomeMessage() : DeliveryList(),
                             ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                ),
+                )
               );
             } else {
               print('nice');

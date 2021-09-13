@@ -20,17 +20,11 @@ class NotifTile extends StatefulWidget {
 class _NotifTileState extends State<NotifTile> {
   int flag = 0;
   String uid;
-  bool isViewed = false;
+  bool view = true;
   @override
   Widget build(BuildContext context) {
-    widget.delivery.customerRef.get().then((DocumentSnapshot doc) {
-      if(flag <= 0){
-        setState(() {
-          uid = doc.id;
-        });
-        flag++;
-      }
-    });
+    uid = widget.delivery.customerRef.id;
+
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     return user == null ? LoginScreen() : StreamBuilder<Customer>(
@@ -41,43 +35,24 @@ class _NotifTileState extends State<NotifTile> {
 
           return  Card(
               child: ListTile(
-                selected: isViewed,
+                selected: view,
+                leading: Icon(
+                  Icons.fiber_manual_record,
+                  size: 15,
+                ),
                 title: Text(
                     "${customerData.fName} ${customerData.lName} "
                         "requested a delivery",
                   style: TextStyle(
-                    color: !isViewed ? Colors.black87 : Colors.black54,
+                    color: view ? Colors.black87 : Colors.black54,
                   ),
                 ),
                 onTap: (){
                     setState(() {
-                      isViewed = true;
+                      view = false;
                     });
                 },
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 35,
-                      width: 78,
-                      child: ElevatedButton(
-                          child: Text(
-                            'Accept Request',
-                            style:
-                            TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                          onPressed: () {
 
-                          }
-                      ),
-                    ),
-
-
-                  ],
-                ),
               ),
             );
 

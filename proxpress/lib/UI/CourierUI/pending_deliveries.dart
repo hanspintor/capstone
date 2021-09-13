@@ -23,14 +23,14 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-
+    bool approved = false;
     if(user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
           builder: (context,snapshot){
             if(snapshot.hasData){
               Courier courierData = snapshot.data;
-
+              approved = courierData.approved;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
@@ -53,7 +53,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                       ),
                       actions:[
-                        NotifCounter(scaffoldKey: _scaffoldKey)
+                        NotifCounter(scaffoldKey: _scaffoldKey, approved: approved,)
                       ],
                       flexibleSpace: Container(
                         margin: EdgeInsets.only(top: 10),
