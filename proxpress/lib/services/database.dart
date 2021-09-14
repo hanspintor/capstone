@@ -3,6 +3,7 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
+import 'package:proxpress/models/notification.dart';
 
 class DatabaseService {
   final String uid;
@@ -17,8 +18,10 @@ class DatabaseService {
   // Deliveries Collection Reference
   final CollectionReference deliveryCollection = FirebaseFirestore.instance.collection('Deliveries');
 
-  // Deliveries Collection Reference
+  // Delivery Price Collection Reference
   final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
+  // Notification Collection Reference
+  final CollectionReference notificationCollection = FirebaseFirestore.instance.collection('Notification');
 
   // Create/Update a Customer Document
   Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl) async {
@@ -44,7 +47,7 @@ class DatabaseService {
 
   // Update Customer Profile Picture
   Future updateCustomerProfilePic(String avatarUrl) async {
-    await FirebaseFirestore.instance.collection('Customers')
+    await customerCollection
         .doc(uid)
         .update({
       'Avatar URL': avatarUrl,
@@ -52,7 +55,7 @@ class DatabaseService {
   }
 
   Future updateCourierProfilePic(String avatarUrl) async {
-    await FirebaseFirestore.instance.collection('Couriers')
+    await courierCollection
         .doc(uid)
         .update({
       'Avatar URL' : avatarUrl,
@@ -85,7 +88,7 @@ class DatabaseService {
 
   // Together with Courier Creation, Update Credentials URL
   Future updateCourierCredentials(String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_) async {
-    await FirebaseFirestore.instance.collection('Couriers')
+    await courierCollection
         .doc(uid)
         .update({
       'License Front URL': driversLicenseFront_,
@@ -96,7 +99,13 @@ class DatabaseService {
       'Vehicle Photo URL': vehiclePhoto_,
     });
   }
+  Future updateNotification(bool viewable, int notifC) async {
+    return await notificationCollection.doc(uid).set({
+      'Notification Status': viewable,
+      'Current Notification': notifC,
 
+    });
+  }
   // Update Courier Password in Auth
   Future<void> AuthupdateCourierPassword(String password) {
     return courierCollection
@@ -112,12 +121,22 @@ class DatabaseService {
       'Active Status' : status,
     });
   }
+  // Update delivery approval
   Future updateApproval(String courierApproval) async {
     return await deliveryCollection.doc(uid).update({
       'Courier Approval' : courierApproval,
     });
   }
-
+  Future updateNotifCounter(int notifC) async {
+    return await notificationCollection.doc(uid).update({
+      'Current Notification': notifC,
+    });
+  }
+  Future updateNotifStatus(bool viewable) async {
+    return await notificationCollection.doc(uid).update({
+      'Notification Status': viewable,
+    });
+  }
   // Create Delivery Document
   Future updateDelivery(DocumentReference customer, DocumentReference courier,
       String pickupAddress, GeoPoint pickupCoordinates, String dropOffAddress,
@@ -125,7 +144,7 @@ class DatabaseService {
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
       int deliveryFee, String courierApproval, String deliveryStatus) async {
-    await FirebaseFirestore.instance.collection('Deliveries')
+    await deliveryCollection
         .doc(uid)
         .set({
       'Customer Reference' : customer,
@@ -314,7 +333,14 @@ class DatabaseService {
       farePerKM: snapshot['Fare Per KM']
     );
   }
-
+  // Get Notification Document Data using StreamBuilder
+  Notifications _notificationDataFromSnapshot(DocumentSnapshot snapshot){
+    return Notifications(
+        uid: uid,
+        viewable: snapshot['Notification Status'],
+        notifC: snapshot['Current Notification']
+    );
+  }
   // Get Customer Document Data
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
@@ -333,5 +359,8 @@ class DatabaseService {
   // Get Delivery Price Document Data
   Stream<DeliveryPrice> get deliveryPriceData{
     return deliveryPriceCollection.doc(uid).snapshots().map(_deliveryPriceDataFromSnapshot);
+  }
+  Stream<Notifications> get notifData{
+    return notificationCollection.doc(uid).snapshots().map(_notificationDataFromSnapshot);
   }
 }

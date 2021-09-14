@@ -27,12 +27,15 @@ class _NotifTileState extends State<NotifTile> {
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+
+    if(widget.delivery.courierApproval == "Approved")
+      view = false;
+    else view = true;
     return user == null ? LoginScreen() : StreamBuilder<Customer>(
       stream: DatabaseService(uid: uid).customerData,
       builder: (context, snapshot){
         if(snapshot.hasData){
           Customer customerData = snapshot.data;
-
           return  Card(
               child: ListTile(
                 selected: view,

@@ -33,6 +33,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
               approved = courierData.approved;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
+                  .where('Courier Approval', isEqualTo: 'Pending')
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);

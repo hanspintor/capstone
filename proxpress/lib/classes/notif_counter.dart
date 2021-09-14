@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:proxpress/models/notification.dart';
+import 'package:proxpress/services/database.dart';
 
 class NotifCounter extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -62,71 +64,68 @@ class _NotifCounterState extends State<NotifCounter> {
     });
   }
   int notifs;
-  int del = 0;
-  int flag = 0;
+
 
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
 
-    // flag = 0;
-    //print("Notifs ${notifs}");
-    print("flag ${flag}");
-    if(flag <= 0){
-      viewable = true;
-      flag++;
-    }
-    // if(flag <= 0){
-    //   viewable  = true;
-    //
-    //   flag++;
-    // }
-    notifs = delivery.length;
-    // if(notifs == 0)
-    //   viewable = false;
-    if(!widget.approved || notifs == 0){
-      viewable = false;
-    }
-    return Stack(
-      children: [
-        IconButton(
-          icon: Icon(Icons.notifications_none_rounded),
-          onPressed: !widget.approved ? null : (){
-            if(notifs != 0)
-              showNotifcation();
-             // setFalse();
-            _openEndDrawer();
-            //print("flag inC: $flag");
-            print("V:  ${viewable}");
-          },
-          iconSize: 25,
-        ),
-        Visibility(
-          maintainSize: true,
-          maintainAnimation: true,
-          maintainState: true,
-          visible: viewable,
-          child: Container(
-            margin: EdgeInsets.only(left: 25, top: 5),
-            height: 20,
-            width: 30,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red
-            ),
-            child: Center(
-              child: Text(
-                 notifs.toString(),
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold
-                ),
+
+
+    return StreamBuilder <Notifications>(
+      stream: DatabaseService(uid: "1").notifData,
+      builder: (context, snapshot){
+        if(snapshot.hasData){
+          Notifications notifData = snapshot.data;
+          return Stack(
+            children: [
+              IconButton(
+                icon: Icon(Icons.notifications_none_rounded),
+                onPressed: !widget.approved ? null : () async{
+                  if(notifs != 0)
+                    //showNotifcation();
+                    setFalse();
+                  await DatabaseService(uid: "1").updateNotifCounter(delivery.length);
+                  await DatabaseService(uid: "1").updateNotifStatus(viewable);
+                  _openEndDrawer();
+                  //print("flag inC: $flag");
+                },
+                iconSize: 25,
               ),
-            ),
-          ),
-        )
-      ],
+              Visibility(
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                visible: notifData.viewable,
+                child: Container(
+                  margin: EdgeInsets.only(left: 25, top: 5),
+                  height: 20,
+                  width: 30,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red
+                  ),
+                  child: Center(
+                    child: Text(
+                      notifs.toString(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        } else return Container();
+      },
+
     );
+
+
+
+
 
   }
 }
