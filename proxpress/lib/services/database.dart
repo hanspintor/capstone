@@ -112,6 +112,11 @@ class DatabaseService {
       'Active Status' : status,
     });
   }
+  Future updateApproval(String courierApproval) async {
+    return await deliveryCollection.doc(uid).update({
+      'Courier Approval' : courierApproval,
+    });
+  }
 
   // Create Delivery Document
   Future updateDelivery(DocumentReference customer, DocumentReference courier,
