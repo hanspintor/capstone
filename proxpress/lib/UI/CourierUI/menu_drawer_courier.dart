@@ -78,8 +78,8 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.home_rounded, color: approved ? Color(0xfffb0d0d) : Colors.grey,),
-                        title: Text('Home', style: TextStyle(color: approved ? Color(0xfffb0d0d) : Colors.grey)),
+                        leading: Icon(Icons.pending_actions_rounded, color: approved ? Color(0xfffb0d0d) : Colors.grey,),
+                        title: Text('Pending Requests', style: TextStyle(color: approved ? Color(0xfffb0d0d) : Colors.grey)),
                         onTap: !approved ? null : () {
                           selectedItem(context, 1);
                         },

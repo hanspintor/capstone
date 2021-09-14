@@ -49,6 +49,7 @@ dependencies:
   expansion_tile_card: ^2.0.0
   flutter_polyline_points: ^1.0.0
   flutter_local_notifications: ^8.2.0
+  google_maps_flutter: ^2.0.8
 
 
 
