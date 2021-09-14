@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart';
 
 class DeliveryStatus extends StatefulWidget {
@@ -9,6 +10,10 @@ class DeliveryStatus extends StatefulWidget {
 
 class _DeliveryStatusState extends State<DeliveryStatus> {
   double rating = 0;
+  static final _initialCameraPosition = CameraPosition(
+      target: LatLng(13.621980880497976, 123.19477396693487),
+      zoom: 15
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -79,38 +84,53 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         //     ),
         //   ],
         // ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.only(right: 40),
-                child: Lottie.asset('assets/delivery.json'),
-              // child: Text('Delivered',
-              //   style: TextStyle(fontSize: 50),
-              // ),
-            ),
-            ElevatedButton(
-              child: Text(
-                'Send Feedback',
-                style:
-                TextStyle(color: Colors.white, fontSize: 18),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Text("Ongoing Delivery",
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
               ),
-              style: ElevatedButton.styleFrom(
-                  primary: Color(0xfffb0d0d)),
-              onPressed: () => showFeedback(),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: ElevatedButton.icon(
-                label: Text('Message Courier'),
-                icon: Icon(Icons.message_outlined),
-                style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                onPressed: (){
-                  Navigator.pushNamed(context, '/chatPage');
-                },
+              SizedBox(height: 10),
+                Container(
+                  height: 400,
+                  width: 400,
+                  child: GoogleMap(
+                    myLocationButtonEnabled: false,
+                    zoomControlsEnabled: false,
+                    initialCameraPosition: _initialCameraPosition,
+                  ),
+                ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                child: Text(
+                  'Send Feedback',
+                  style:
+                  TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xfffb0d0d)),
+                onPressed: () => showFeedback(),
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                child: ElevatedButton.icon(
+                  label: Text('Message Courier'),
+                  icon: Icon(Icons.message_outlined),
+                  style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/chatPage');
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -145,7 +165,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
             ),
             keyboardType: TextInputType.multiline,
           ),
-          //SizedBox(height: 10),
         ],
       ),
       actions: [
