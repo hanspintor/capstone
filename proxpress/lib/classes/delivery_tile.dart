@@ -9,35 +9,10 @@ import 'package:proxpress/services/database.dart';
 
 class DeliveryTile extends StatefulWidget {
   final Delivery delivery;
-  final String pickupAddress;
-  final GeoPoint pickupCoordinates;
-  final String dropOffAddress;
-  final GeoPoint dropOffCoordinates;
-  final String itemDescription;
-  final String senderName;
-  final String senderContactNum;
-  final String receiverName;
-  final String receiverContactNum;
-  final String whoWillPay;
-  final String specificInstructions;
-  final String paymentOption;
 
   DeliveryTile({
     Key key,
     @required this.delivery,
-    @required this.pickupAddress,
-    @required this.pickupCoordinates,
-    @required this.dropOffAddress,
-    @required this.dropOffCoordinates,
-    @required this.itemDescription,
-    @required this.senderName,
-    @required this.senderContactNum,
-    @required this.receiverName,
-    @required this.receiverContactNum,
-    @required this.whoWillPay,
-    @required this.specificInstructions,
-    @required this.paymentOption,
-
   }) : super(key: key);
 
   @override
