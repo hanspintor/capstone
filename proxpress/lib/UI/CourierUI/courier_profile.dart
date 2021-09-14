@@ -66,13 +66,12 @@ class CourierProfile extends StatelessWidget {
                   endDrawer: NotifDrawerCourier(),
                   body: SingleChildScrollView(
                     child:  Center(
-                      child: SizedBox(
-                        width: 300,
-                        height: 500,
+                      child: Container(
+                        width: 350,
                         child: Card(
                           margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
                                 child: CircleAvatar(
@@ -81,45 +80,110 @@ class CourierProfile extends StatelessWidget {
                                   backgroundColor: Colors.white,
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text(
+                              ListTile(
+                                title: Text(
                                   '${courierData.fName} ${courierData.lName}',
                                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                 ),
+                                subtitle: Container(
+                                  padding: EdgeInsets.only(top: 5, left: 2),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.home_rounded, size: 20,)),
+                                          Text(courierData.address, style: TextStyle(fontSize: 15)),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.alternate_email_rounded, size: 20,)),
+                                          Text(courierData.email, style: TextStyle(fontSize: 15)),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.phone_rounded, size: 20,)),
+                                          Text(courierData.contactNo, style: TextStyle(fontSize: 15)),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.local_shipping_rounded, size: 20,)),
+                                          Text(courierData.vehicleType, style: TextStyle(fontSize: 15)),
+                                        ],
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                                        width: 125,
+                                        child: ElevatedButton.icon(
+                                          icon: Icon(Icons.edit_rounded, size: 15),
+                                          label: Text('Edit Profile', style: TextStyle(fontSize: 15),),
+                                          style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                                          onPressed: (){
+                                            Navigator.pushNamed(context, '/courierUpdate');
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text(
-                                    courierData.address,
-                                    style: TextStyle(fontSize: 15)
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text(
-                                    courierData.email,
-                                    style: TextStyle(fontSize: 15)
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text(
-                                    courierData.contactNo,
-                                    style: TextStyle(fontSize: 15)
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                                child: ElevatedButton.icon(
-                                  icon: Icon(Icons.edit_rounded),
-                                  label: Text('Edit Profile'),
-                                  style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                                  onPressed: (){
-                                    Navigator.pushNamed(context, '/courierUpdate');
-                                  },
-                                ),
-                              ),
+                              )
+
+                              // Container(
+                              //   child: CircleAvatar(
+                              //     radius: 80,
+                              //     backgroundImage: NetworkImage(courierData.avatarUrl),
+                              //     backgroundColor: Colors.white,
+                              //   ),
+                              // ),
+                              // Container(
+                              //   margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              //   child: Text(
+                              //     '${courierData.fName} ${courierData.lName}',
+                              //     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              //   child: Text(
+                              //       courierData.address,
+                              //       style: TextStyle(fontSize: 15)
+                              //   ),
+                              // ),
+                              // Container(
+                              //   margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              //   child: Text(
+                              //       courierData.email,
+                              //       style: TextStyle(fontSize: 15)
+                              //   ),
+                              // ),
+                              // Container(
+                              //   margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              //   child: Text(
+                              //       courierData.contactNo,
+                              //       style: TextStyle(fontSize: 15)
+                              //   ),
+                              // ),
+                              // Container(
+                              //   margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                              //   child: Text(
+                              //       courierData.vehicleType,
+                              //       style: TextStyle(fontSize: 15)
+                              //   ),
+                              // ),
+                              // Container(
+                              //   margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                              //   child: ElevatedButton.icon(
+                              //     icon: Icon(Icons.edit_rounded),
+                              //     label: Text('Edit Profile'),
+                              //     style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                              //     onPressed: (){
+                              //       Navigator.pushNamed(context, '/courierUpdate');
+                              //     },
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

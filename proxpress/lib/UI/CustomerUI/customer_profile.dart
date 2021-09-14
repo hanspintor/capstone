@@ -96,13 +96,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
                     if(snapshot.hasData){
                       Customer customerData = snapshot.data;
                       return Center(
-                        child: SizedBox(
-                          width: 300,
-                          height: 500,
+                        child: Container(
+                          width: 350,
                           child: Card(
                             margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
                                   child: CircleAvatar(
@@ -111,45 +110,50 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                     backgroundColor: Colors.white,
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Text(
+                                ListTile(
+                                  title: Text(
                                     '${customerData.fName} ${customerData.lName}',
                                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Text(
-                                      customerData.address,
-                                      style: TextStyle(fontSize: 15)
+                                  subtitle: Container(
+                                    padding: EdgeInsets.only(top: 5, left: 2),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.home_rounded, size: 20,)),
+                                            Text(customerData.address, style: TextStyle(fontSize: 15)),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.alternate_email_rounded, size: 20,)),
+                                            Text(customerData.email, style: TextStyle(fontSize: 15)),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.phone_rounded, size: 20,)),
+                                            Text(customerData.contactNo, style: TextStyle(fontSize: 15)),
+                                          ],
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                                          width: 125,
+                                          child: ElevatedButton.icon(
+                                            icon: Icon(Icons.edit_rounded, size: 15),
+                                            label: Text('Edit Profile', style: TextStyle(fontSize: 15),),
+                                            style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                                            onPressed: (){
+                                              Navigator.pushNamed(context, '/courierUpdate');
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Text(
-                                      customerData.email,
-                                      style: TextStyle(fontSize: 15)
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: Text(
-                                      customerData.contactNo,
-                                      style: TextStyle(fontSize: 15)
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                                  child: ElevatedButton.icon(
-                                    icon: Icon(Icons.edit_rounded),
-                                    label: Text('Edit Profile'),
-                                    style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                                    onPressed: (){
-                                      Navigator.pushNamed(context, '/customerUpdate');
-                                    },
-                                  ),
-                                ),
+                                )
                               ],
                             ),
                           ),

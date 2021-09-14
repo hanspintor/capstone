@@ -28,10 +28,10 @@ class CustomerRemarks extends StatefulWidget {
 
 class _CustomerRemarksState extends State<CustomerRemarks> {
   String itemDescription;
-  String senderName;
-  String senderContactNum;
-  String receiverName;
-  String receiverContactNum;
+  String pickupPointPerson;
+  String pickupContactNum;
+  String dropoffPointPerson;
+  String dropoffContactNum;
   String whoWillPay;
   String specificInstructions;
   String paymentOption = 'Choose Payment Option';
@@ -43,10 +43,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     }
     locKey.currentState.save();
     print (itemDescription);
-    print (senderName);
-    print (senderContactNum);
-    print (receiverName);
-    print (receiverContactNum);
+    print (pickupPointPerson);
+    print (pickupContactNum);
+    print (dropoffPointPerson);
+    print (dropoffContactNum);
     print (whoWillPay);
     print (specificInstructions);
     print (paymentOption);
@@ -100,19 +100,19 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     return Container(
       padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Sender Name', prefixIcon: Icon(Icons.person_rounded,)),
+        decoration: InputDecoration(labelText: 'Pick Up Point Person', prefixIcon: Icon(Icons.person_rounded,)),
         keyboardType: TextInputType.name,
         validator: (String value){
           if(value.isEmpty){
-            return 'Sender name is required.';
+            return 'Pick up point person is required.';
           }
           else return null;
         },
         onSaved: (String value){
-          senderName = value;
+          pickupPointPerson = value;
         },
         onChanged: (String value){
-          setState(() => senderName = value);
+          setState(() => pickupPointPerson = value);
         },
       ),
     );
@@ -122,22 +122,22 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
       child: TextFormField(
         maxLength: 11,
-        decoration: InputDecoration(labelText: 'Sender Contact Number', prefixIcon: Icon(Icons.phone_rounded,)),
+        decoration: InputDecoration(labelText: 'Pick Up Contact Number', prefixIcon: Icon(Icons.phone_rounded,)),
         keyboardType: TextInputType.number,
         validator: (String value){
           if(value.length < 11 && value.length > 0){
-            return 'Your sender contact number should be 11 digits.';
+            return 'Pick up contact number should be 11 digits.';
           }
           else if(value.isEmpty){
-            return 'Sender contact number is required.';
+            return 'Pick up contact number is required.';
           }
           else return null;
         },
         onSaved: (String value){
-          senderContactNum = value;
+          pickupContactNum = value;
         },
         onChanged: (String value){
-          setState(() => senderContactNum = value);
+          setState(() => pickupContactNum = value);
         },
       ),
     );
@@ -146,19 +146,19 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     return Container(
       padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Receiver Name', prefixIcon: Icon(Icons.person_rounded,)),
+        decoration: InputDecoration(labelText: 'Drop Off Point Person', prefixIcon: Icon(Icons.person_rounded,)),
         keyboardType: TextInputType.name,
         validator: (String value){
           if(value.isEmpty){
-            return 'Receiver name is required.';
+            return 'Drop off point person is required.';
           }
           else return null;
         },
         onSaved: (String value){
-          receiverName = value;
+          dropoffPointPerson = value;
         },
         onChanged: (String value){
-          setState(() => receiverName = value);
+          setState(() => dropoffPointPerson = value);
         },
       ),
     );
@@ -168,22 +168,22 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
       child: TextFormField(
         maxLength: 11,
-        decoration: InputDecoration(labelText: 'Receiver Contact Number', prefixIcon: Icon(Icons.phone_rounded,)),
+        decoration: InputDecoration(labelText: 'Drop Off Contact Number', prefixIcon: Icon(Icons.phone_rounded,)),
         keyboardType: TextInputType.number,
         validator: (String value){
           if(value.length < 11 && value.length > 0){
-            return 'Your receiver contact number should be 11 digits.';
+            return 'Drop off contact number should be 11 digits.';
           }
           else if(value.isEmpty){
-            return 'Receiver contact number is required.';
+            return 'Drop off contact number is required.';
           }
           else return null;
         },
         onSaved: (String value){
-          receiverContactNum = value;
+          dropoffContactNum = value;
         },
         onChanged: (String value){
-          setState(() => receiverContactNum = value);
+          setState(() => dropoffContactNum = value);
         },
       ),
     );
@@ -431,7 +431,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                   onPressed: () async {
                     _validate();
                     if (locKey.currentState.validate()){
-                      await DatabaseService().updateDelivery(customer, courier, widget.pickupAddress, pickupGeoPoint, widget.dropOffAddress, dropOffGeoPoint, itemDescription, senderName, senderContactNum, receiverName, receiverContactNum, whoWillPay, specificInstructions, paymentOption, widget.deliveryFee, 'Pending', 'Pending');
+                      await DatabaseService().updateDelivery(customer, courier, widget.pickupAddress, pickupGeoPoint, widget.dropOffAddress, dropOffGeoPoint, itemDescription, pickupPointPerson, pickupContactNum, dropoffPointPerson, dropoffContactNum, whoWillPay, specificInstructions, paymentOption, widget.deliveryFee, 'Pending', 'Pending');
                     }
                   }
                 ),

@@ -9,10 +9,10 @@ class Delivery{
   final String dropOffAddress;
   final GeoPoint dropOffCoordinates;
   final String itemDescription;
-  final String senderName;
-  final String senderContactNum;
-  final String receiverName;
-  final String receiverContactNum;
+  final String pickupPointPerson;
+  final String pickupContactNum;
+  final String dropoffPointPerson;
+  final String dropoffContactNum;
   final String whoWillPay;
   final String specificInstructions;
   final String paymentOption;
@@ -29,10 +29,10 @@ class Delivery{
     this.dropOffAddress,
     this.dropOffCoordinates,
     this.itemDescription,
-    this.senderName,
-    this.senderContactNum,
-    this.receiverName,
-    this.receiverContactNum,
+    this.pickupPointPerson,
+    this.pickupContactNum,
+    this.dropoffPointPerson,
+    this.dropoffContactNum,
     this.whoWillPay,
     this.specificInstructions,
     this.paymentOption,
