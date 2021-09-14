@@ -84,51 +84,53 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         //     ),
         //   ],
         // ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 10),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Text("Ongoing Delivery",
-                style: TextStyle(
-                  fontSize: 25,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Text("Ongoing Delivery",
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10),
+              SizedBox(height: 10),
+                Container(
+                  height: 400,
+                  width: 400,
+                  child: GoogleMap(
+                    myLocationButtonEnabled: false,
+                    zoomControlsEnabled: false,
+                    initialCameraPosition: _initialCameraPosition,
+                  ),
+                ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                child: Text(
+                  'Send Feedback',
+                  style:
+                  TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xfffb0d0d)),
+                onPressed: () => showFeedback(),
+              ),
               Container(
-                height: 400,
-                width: 400,
-                child: GoogleMap(
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: _initialCameraPosition,
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                child: ElevatedButton.icon(
+                  label: Text('Message Courier'),
+                  icon: Icon(Icons.message_outlined),
+                  style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/chatPage');
+                  },
                 ),
               ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              child: Text(
-                'Send Feedback',
-                style:
-                TextStyle(color: Colors.white, fontSize: 18),
-              ),
-              style: ElevatedButton.styleFrom(
-                  primary: Color(0xfffb0d0d)),
-              onPressed: () => showFeedback(),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-              child: ElevatedButton.icon(
-                label: Text('Message Courier'),
-                icon: Icon(Icons.message_outlined),
-                style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                onPressed: (){
-                  Navigator.pushNamed(context, '/chatPage');
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -163,7 +165,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
             ),
             keyboardType: TextInputType.multiline,
           ),
-          //SizedBox(height: 10),
         ],
       ),
       actions: [
