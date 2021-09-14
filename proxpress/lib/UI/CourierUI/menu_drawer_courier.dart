@@ -23,10 +23,10 @@ void selectedItem(BuildContext context, int index){
       Navigator.pushNamed(context, '/courierDashboard');
       break;
     case 2:
-      Navigator.pushNamed(context, '/pendingDeliveries');
+      Navigator.pushNamed(context, '/ongoingDelivery');
       break;
     case 3:
-      Navigator.pop(context);
+      Navigator.pushNamed(context, '/transactionHistory');
       break;
   }
 }
@@ -85,8 +85,8 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.pending_actions_rounded, color: approved ? Color(0xfffb0d0d) : Colors.grey,),
-                        title: Text('Pending Deliveries', style: TextStyle(color: approved ? Color(0xfffb0d0d) : Colors.grey)),
+                        leading: Icon(Icons.published_with_changes_rounded, color: approved ? Color(0xfffb0d0d) : Colors.grey,),
+                        title: Text('Ongoing Delivery', style: TextStyle(color: approved ? Color(0xfffb0d0d) : Colors.grey)),
                         onTap: !approved ? null : () {
                           selectedItem(context, 2);
                         },

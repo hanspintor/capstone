@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:proxpress/UI/CourierUI/courier_profile.dart';
 import 'package:proxpress/UI/CourierUI/pending_deliveries.dart';
+import 'package:proxpress/UI/CourierUI/transaction_history.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
@@ -17,6 +18,7 @@ import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/authenticate.dart';
 import 'package:proxpress/classes/courier_updating_form.dart';
 import 'package:proxpress/services/auth.dart';
+import 'UI/CourierUI/ongoing_delivery.dart';
 import 'UI/CustomerUI/courier_bookmarks.dart';
 import 'UI/CustomerUI/customer_profile.dart';
 import 'UI/CustomerUI/customer_remarks.dart';
@@ -109,6 +111,12 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/chatPage':
               return PageTransition(child: ChatPage(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/ongoingDelivery':
+              return PageTransition(child: OngoingDelivery(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/transactionHistory':
+              return PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade);
               break;
             default:
               return null;
