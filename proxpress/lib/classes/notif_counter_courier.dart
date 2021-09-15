@@ -40,7 +40,7 @@ class _NotifCounterState extends State<NotifCounter> {
 
   }
 
-  Future showNotifcation() async{
+  void showNotifcation() {
     var androidDetails = new AndroidNotificationDetails(
         "Channel ID",
         "Local Notifcation",
@@ -79,6 +79,7 @@ class _NotifCounterState extends State<NotifCounter> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           Courier notifData = snapshot.data;
+          showNotifcation();
           if(notifData.currentNotif != delivery.length){
             if(notifData.currentNotif < delivery.length){
               notifs = delivery.length - notifData.currentNotif;
