@@ -146,7 +146,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                             label: Text('Edit Profile', style: TextStyle(fontSize: 15),),
                                             style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                                             onPressed: (){
-                                              Navigator.pushNamed(context, '/courierUpdate');
+                                              Navigator.pushNamed(context, '/customerUpdate');
                                             },
                                           ),
                                         ),

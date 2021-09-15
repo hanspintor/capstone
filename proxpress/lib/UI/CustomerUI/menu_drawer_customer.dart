@@ -25,7 +25,7 @@ void selectedItem(BuildContext context, int index){
       Navigator.pushNamed(context, '/courierBookmarks');
       break;
     case 3:
-      Navigator.pushNamed(context, '/deliveryStatus');
+      Navigator.pushNamed(context, '/myRequests');
       break;
   }
 }
