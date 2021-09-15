@@ -130,6 +130,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                         child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
                                         onPressed: () async{
                                           await DatabaseService(uid: widget.delivery.uid).updateApproval('Approved');
+                                          await DatabaseService(uid: widget.delivery.uid).updateDeliveryStatus('Ongoing');
                                         }
                                     )
                                 ),

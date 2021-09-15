@@ -120,6 +120,12 @@ class DatabaseService {
       'Courier Approval' : courierApproval,
     });
   }
+  // Update Delivery Status
+  Future updateDeliveryStatus(String status) async {
+    return await courierCollection.doc(uid).update({
+      'Delivery Status' : status,
+    });
+  }
   Future updateNotifCounter(int notifC) async {
     return await courierCollection.doc(uid).update({
       'Current Notification': notifC,

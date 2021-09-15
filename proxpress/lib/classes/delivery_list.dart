@@ -28,28 +28,3 @@ class _DeliveryListState extends State<DeliveryList> {
     );
   }
 }
-// FirestoreSearchScaffold(
-//   firestoreCollectionName: 'Couriers',
-//   searchBy: 'First Name',
-//   dataListFromSnapshot: DatabaseService().courierDataListFromSnapshot,
-//   builder: (context, snapshot) {
-//     if (snapshot.hasData) {
-//       final List<Courier> dataList = snapshot.data;
-//
-//       return ListView.builder(
-//           itemCount: dataList.length ?? 0,
-//           itemBuilder: (context, index) {
-//             return CourierTile(
-//               courier: dataList[index],
-//               pickupAddress: widget.pickupAddress,
-//               pickupCoordinates: widget.pickupCoordinates,
-//               dropOffAddress: widget.dropOffAddress,
-//               dropOffCoordinates: widget.dropOffCoordinates,
-//               distance: widget.distance,);
-//           });
-//     }
-//     return Center(
-//       child: CircularProgressIndicator(),
-//     );
-//   },
-// ),
