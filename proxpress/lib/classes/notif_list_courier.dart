@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/deliveries.dart';
 
-import 'notif_tile.dart';
+import 'notif_tile_courier.dart';
 
 class NotifList extends StatefulWidget {
 
