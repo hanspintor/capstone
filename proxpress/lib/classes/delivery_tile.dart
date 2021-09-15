@@ -139,7 +139,8 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                     height: 25,
                                     child: ElevatedButton(
                                         child: Text('Decline', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                        onPressed: () {
+                                        onPressed: () async{
+                                          await DatabaseService(uid: widget.delivery.uid).updateApproval('Rejected');
                                         }
                                     )
                                 ),

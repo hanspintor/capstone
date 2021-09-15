@@ -244,7 +244,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
                                             setState(() => pickupAddress = textFieldPickup.text);
                                           },
-                                          decoration: InputDecoration(labelText: 'Pick up location', prefixIcon: Icon(Icons.location_searching_rounded)),
+                                          decoration: InputDecoration(labelText: 'Pick up location', prefixIcon: Icon(Icons.place_rounded)),
                                           keyboardType: TextInputType.streetAddress,
                                           validator: (String value){
                                             if(value.isEmpty){
