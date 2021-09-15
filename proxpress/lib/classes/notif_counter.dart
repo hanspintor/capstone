@@ -79,7 +79,15 @@ class _NotifCounterState extends State<NotifCounter> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           Courier notifData = snapshot.data;
-          notifs = delivery.length;
+          if(notifData.currentNotif != delivery.length){
+            if(notifData.currentNotif < delivery.length){
+              notifs = delivery.length - notifData.currentNotif;
+            } else{
+              notifs = notifData.currentNotif - delivery.length;
+            }
+          } else{
+            notifs = delivery.length;
+          }
           return Stack(
             children: [
               IconButton(
