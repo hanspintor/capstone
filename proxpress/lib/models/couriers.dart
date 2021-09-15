@@ -20,11 +20,19 @@ class Courier{
   final String vehicleRegistrationOR_;
   final String vehicleRegistrationCR_;
   final String vehiclePhoto_;
+  final bool notifStatus;
+  final int currentNotif;
   final DocumentReference deliveryPriceRef;
 
   final AuthService _auth = AuthService();
 
-  Courier({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.status, this.avatarUrl, this.approved, this.vehicleType, this.vehicleColor, this.driversLicenseFront_, this.driversLicenseBack_, this.nbiClearancePhoto_, this.vehicleRegistrationOR_, this.vehicleRegistrationCR_, this.vehiclePhoto_, this.deliveryPriceRef});
+  Courier({
+    this.uid, this.fName, this.lName, this.email, this.contactNo,
+    this.password, this.address, this.status, this.avatarUrl,
+    this.approved, this.vehicleType, this.vehicleColor,
+    this.driversLicenseFront_, this.driversLicenseBack_, this.nbiClearancePhoto_,
+    this.vehicleRegistrationOR_, this.vehicleRegistrationCR_, this.vehiclePhoto_,
+    this.deliveryPriceRef, this.notifStatus, this.currentNotif});
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCourierPassword(password);

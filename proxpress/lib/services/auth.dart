@@ -61,14 +61,14 @@ class AuthService {
   }
 
   // Sign Up email and password for Courier
-  Future SignUpCourier(String email, String password, String Fname, String Lname, String ContactNo, String Address, String Status, String avatarUrl, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef) async {
+  Future SignUpCourier(String email, String password, String Fname, String Lname, String ContactNo, String Address, String Status, String avatarUrl, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, notifStatus,currentNotif) async {
     try{
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
       //await FileStorage(uid: user.uid);
-      await DatabaseService(uid: user.uid).updateCourierData(Fname, Lname, email, ContactNo, password, Address, Status, avatarUrl, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef);
+      await DatabaseService(uid: user.uid).updateCourierData(Fname, Lname, email, ContactNo, password, Address, Status, avatarUrl, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, notifStatus, currentNotif);
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());

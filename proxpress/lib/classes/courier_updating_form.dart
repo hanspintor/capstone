@@ -463,6 +463,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                           courierData.vehicleRegistrationCR_,
                                           courierData.vehiclePhoto_,
                                           courierData.deliveryPriceRef,
+                                          courierData.notifStatus,
+                                          courierData.currentNotif
                                         );
 
                                         await UploadFile.uploadFile(saveDestination, profilePicture);

@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:proxpress/models/notification.dart';
 import 'package:proxpress/services/database.dart';
 
 class NotifCounter extends StatefulWidget {
@@ -69,24 +70,26 @@ class _NotifCounterState extends State<NotifCounter> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
 
 
-
-    return StreamBuilder <Notifications>(
-      stream: DatabaseService(uid: "1").notifData,
+    return StreamBuilder <Courier>(
+      stream: DatabaseService(uid: user.uid).courierData,
       builder: (context, snapshot){
         if(snapshot.hasData){
-          Notifications notifData = snapshot.data;
+          Courier notifData = snapshot.data;
+          notifs = delivery.length;
           return Stack(
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !widget.approved ? null : () async{
-                  if(notifs != 0)
+
                     //showNotifcation();
-                    setFalse();
-                  await DatabaseService(uid: "1").updateNotifCounter(delivery.length);
-                  await DatabaseService(uid: "1").updateNotifStatus(viewable);
+                  setFalse();
+                  await DatabaseService(uid: user.uid).updateNotifCounter(delivery.length);
+                   await DatabaseService(uid: user.uid).updateNotifStatus(viewable);
                   _openEndDrawer();
                   //print("flag inC: $flag");
                 },
@@ -96,7 +99,7 @@ class _NotifCounterState extends State<NotifCounter> {
                 maintainSize: true,
                 maintainAnimation: true,
                 maintainState: true,
-                visible: notifData.viewable,
+                visible: notifData.notifStatus,
                 child: Container(
                   margin: EdgeInsets.only(left: 25, top: 5),
                   height: 20,

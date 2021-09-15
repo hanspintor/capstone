@@ -3,7 +3,6 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
-import 'package:proxpress/models/notification.dart';
 
 class DatabaseService {
   final String uid;
@@ -20,8 +19,7 @@ class DatabaseService {
 
   // Delivery Price Collection Reference
   final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
-  // Notification Collection Reference
-  final CollectionReference notificationCollection = FirebaseFirestore.instance.collection('Notification');
+
 
   // Create/Update a Customer Document
   Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl) async {
@@ -63,7 +61,7 @@ class DatabaseService {
   }
 
   // Create/Update a Courier Document
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, String avatarUrl, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_, DocumentReference deliveryPriceRef) async {
+  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, String avatarUrl, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_, DocumentReference deliveryPriceRef, bool notifStatus, int currentNotif) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -83,6 +81,8 @@ class DatabaseService {
       'Vehicle CR URL': vehicleRegistrationCR_,
       'Vehicle Photo URL': vehiclePhoto_,
       'Delivery Price Reference': deliveryPriceRef,
+      'Notification Status' : notifStatus,
+      'Current Notification' : currentNotif,
     });
   }
 
@@ -97,13 +97,6 @@ class DatabaseService {
       'Vehicle OR URL': vehicleRegistrationOR_,
       'Vehicle CR URL': vehicleRegistrationCR_,
       'Vehicle Photo URL': vehiclePhoto_,
-    });
-  }
-  Future updateNotification(bool viewable, int notifC) async {
-    return await notificationCollection.doc(uid).set({
-      'Notification Status': viewable,
-      'Current Notification': notifC,
-
     });
   }
   // Update Courier Password in Auth
@@ -128,12 +121,12 @@ class DatabaseService {
     });
   }
   Future updateNotifCounter(int notifC) async {
-    return await notificationCollection.doc(uid).update({
+    return await courierCollection.doc(uid).update({
       'Current Notification': notifC,
     });
   }
   Future updateNotifStatus(bool viewable) async {
-    return await notificationCollection.doc(uid).update({
+    return await courierCollection.doc(uid).update({
       'Notification Status': viewable,
     });
   }
@@ -199,6 +192,8 @@ class DatabaseService {
         vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
         deliveryPriceRef: (doc.data() as dynamic) ['Delivery Price Reference'] ?? '',
         vehiclePhoto_: (doc.data() as dynamic) ['Vehicle Photo URL'] ?? '',
+        notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
+        currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
       );
     }).toList();
   }
@@ -297,6 +292,8 @@ class DatabaseService {
       vehicleRegistrationCR_: snapshot['Vehicle CR URL'],
       vehiclePhoto_: snapshot['Vehicle Photo URL'],
       deliveryPriceRef: snapshot['Delivery Price Reference'],
+      notifStatus: snapshot['Notification Status'],
+      currentNotif: snapshot['Current Notification']
     );
   }
 
@@ -333,14 +330,6 @@ class DatabaseService {
       farePerKM: snapshot['Fare Per KM']
     );
   }
-  // Get Notification Document Data using StreamBuilder
-  Notifications _notificationDataFromSnapshot(DocumentSnapshot snapshot){
-    return Notifications(
-        uid: uid,
-        viewable: snapshot['Notification Status'],
-        notifC: snapshot['Current Notification']
-    );
-  }
   // Get Customer Document Data
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
@@ -359,8 +348,5 @@ class DatabaseService {
   // Get Delivery Price Document Data
   Stream<DeliveryPrice> get deliveryPriceData{
     return deliveryPriceCollection.doc(uid).snapshots().map(_deliveryPriceDataFromSnapshot);
-  }
-  Stream<Notifications> get notifData{
-    return notificationCollection.doc(uid).snapshots().map(_notificationDataFromSnapshot);
   }
 }
