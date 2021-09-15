@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:proxpress/services/database.dart';
 
 class NotifCounter extends StatefulWidget {
@@ -24,41 +24,7 @@ class _NotifCounterState extends State<NotifCounter> {
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
-  FlutterLocalNotificationsPlugin localNotication;
-  @override
-  void initState(){
-    super.initState();
-    var androidInitialize = new AndroidInitializationSettings('mipmap/ic_launcher');
-    var iOSInitialize = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-    localNotication = new FlutterLocalNotificationsPlugin();
-    localNotication.initialize(
-        initializationSettings, onSelectNotification: notifSelected
-    );
-  }
-  Future notifSelected(String payload) async{
 
-  }
-
-  void showNotifcation() {
-    var androidDetails = new AndroidNotificationDetails(
-        "Channel ID",
-        "Local Notifcation",
-        "This is description",
-        importance: Importance.high
-    );
-    var IOSDetails = new IOSNotificationDetails();
-    var generalNotif = new NotificationDetails(android: androidDetails, iOS: IOSDetails);
-    var schedNotif = DateTime.now().add(Duration(seconds: 5));
-
-    localNotication.schedule(
-        0,
-        "TRIAL",
-        "NOTIF",
-        schedNotif,
-        generalNotif
-    );
-  }
   void setFalse(){
     setState(() {
       viewable = false;
@@ -79,7 +45,7 @@ class _NotifCounterState extends State<NotifCounter> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           Courier notifData = snapshot.data;
-          showNotifcation();
+          //showNotifcation();
           if(notifData.currentNotif != delivery.length){
             if(notifData.currentNotif < delivery.length){
               notifs = delivery.length - notifData.currentNotif;
@@ -94,8 +60,6 @@ class _NotifCounterState extends State<NotifCounter> {
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !widget.approved ? null : () async{
-
-                    //showNotifcation();
                   setFalse();
                   await DatabaseService(uid: user.uid).updateNotifCounter(delivery.length);
                    await DatabaseService(uid: user.uid).updateNotifStatus(viewable);
