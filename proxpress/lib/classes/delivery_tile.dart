@@ -5,6 +5,7 @@ import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class DeliveryTile extends StatefulWidget {
   final Delivery delivery;
@@ -21,9 +22,38 @@ class DeliveryTile extends StatefulWidget {
 class _DeliveryTileState extends State<DeliveryTile> {
   int flag = 0;
   String uid;
+  FlutterLocalNotificationsPlugin localNotication;
+  @override
+  void initState(){
+    super.initState();
+    var androidInitialize = new AndroidInitializationSettings('mipmap/ic_launcher');
+    var iOSInitialize = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+    localNotication = new FlutterLocalNotificationsPlugin();
+    localNotication.initialize(
+        initializationSettings
+    );
+  }
+  void showNotifcation(String name,) {
+    var androidDetails = new AndroidNotificationDetails(
+        "Channel ID",
+        "Local Notifcation",
+        "This is description",
+        importance: Importance.high
+    );
+    var IOSDetails = new IOSNotificationDetails();
+    var generalNotif = new NotificationDetails(android: androidDetails, iOS: IOSDetails);
+    var schedNotif = DateTime.now().add(Duration(seconds: 1));
+    localNotication.schedule(
+        0,
+        name,
+        "requested a delivery",
+        schedNotif,
+        generalNotif
+    );
+  }
 
   @override
-
   Widget build(BuildContext context) {
     uid = widget.delivery.customerRef.id;
 
@@ -42,6 +72,8 @@ class _DeliveryTileState extends State<DeliveryTile> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 Customer customerData = snapshot.data;
+                String name = "${customerData.fName} ${customerData.lName}";
+                showNotifcation(name);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ExpansionTileCard(
