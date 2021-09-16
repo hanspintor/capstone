@@ -35,17 +35,7 @@ class _RequestTileState extends State<RequestTile> {
       stream: DatabaseService(uid: widget.delivery.uid).deliveryData,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          //Delivery deliveryData = snapshot.data;
-          // var color1;
-          // if(widget.delivery.courierApproval == 'Pending'){
-          //   color1 = Colors.orange;
-          // }
-          // else if(widget.delivery.courierApproval == 'Approved'){
-          //   color1 = Colors.green;
-          // }
-          // else{
-          //   color1 = Colors.red;
-          // }
+          Delivery deliveryData = snapshot.data;
 
           var color;
           if(widget.delivery.deliveryStatus == 'Ongoing'){
@@ -89,7 +79,7 @@ class _RequestTileState extends State<RequestTile> {
                                     child: Text.rich(
                                       TextSpan(children: [
                                         TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                        TextSpan(text: "${widget.delivery.deliveryStatus} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
+                                        TextSpan(text: "${deliveryData.deliveryStatus} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
                                         TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                         TextSpan(text: courierData.contactNo),
                                       ],
@@ -156,12 +146,17 @@ class _RequestTileState extends State<RequestTile> {
                                                 ),
                                               ),
                                               Container(
-                                                  height: 25,
-                                                  child: ElevatedButton(
-                                                      child: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                      onPressed: () {
-                                                      }
-                                                  )
+                                                height: 25,
+                                                child: (() {
+                                                  if (widget.delivery.deliveryStatus == "Ongoing") {
+                                                    return ElevatedButton(
+                                                        child: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                        onPressed: () {
+
+                                                        }
+                                                    );
+                                                  }
+                                                }())
                                               ),
                                             ],
                                           ),

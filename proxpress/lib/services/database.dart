@@ -122,8 +122,14 @@ class DatabaseService {
   }
   // Update Delivery Status
   Future updateDeliveryStatus(String status) async {
-    return await courierCollection.doc(uid).update({
+    return await deliveryCollection.doc(uid).update({
       'Delivery Status' : status,
+    });
+  }
+  Future customerCancelRequest() async {
+    return await deliveryCollection.doc(uid).update({
+      'Delivery Status' : 'Cancelled',
+      'Courier Approval' : 'Cancelled',
     });
   }
   Future updateNotifCounter(int notifC) async {

@@ -15,17 +15,13 @@ class _RequestListState extends State<RequestList> {
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
     print(delivery.length.toString());
-    return delivery == null ? UserLoading() : SingleChildScrollView(
-      child: SizedBox(
-        height: 500,
-        width: 500,
-        child: ListView.builder(
-          itemCount: delivery.length,
-          itemBuilder: (context, index) {
-            return RequestTile(delivery: delivery[index]);
-          },
-        ),
-      ),
+
+    return delivery == null ? UserLoading() : ListView.builder(
+      shrinkWrap: true,
+      itemCount: delivery.length,
+      itemBuilder: (context, index) {
+        return RequestTile(delivery: delivery[index]);
+      },
     );
   }
 }

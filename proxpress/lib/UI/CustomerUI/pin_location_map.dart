@@ -20,7 +20,7 @@ class _PinLocationMapState extends State<PinLocationMap> {
     return PlacePicker(
       apiKey: Secrets.API_KEY,
       initialPosition: PinLocationMap.kInitialPosition,
-      useCurrentLocation: true,
+      useCurrentLocation: false, // switch to true if user activated GPS to track his current location
       selectInitialPosition: true,
       searchForInitialValue: true,
       usePlaceDetailSearch: true,
