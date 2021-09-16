@@ -52,7 +52,7 @@ class CourierProfile extends StatelessWidget {
                       iconSize: 25,
                     ),
                     actions: [
-                      NotifCounter(scaffoldKey: _scaffoldKey, approved: approved,)
+                      NotifCounterCourier(scaffoldKey: _scaffoldKey, approved: approved,)
                     ],
                     flexibleSpace: Container(
                       margin: EdgeInsets.only(top: 10),

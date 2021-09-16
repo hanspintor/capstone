@@ -6,20 +6,20 @@ import 'package:proxpress/models/deliveries.dart';
 
 import 'package:proxpress/services/database.dart';
 
-class NotifCounter extends StatefulWidget {
+class NotifCounterCourier extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final approved;
-  NotifCounter({
+  NotifCounterCourier({
     Key key,
     @required this.scaffoldKey,
     @required this.approved,
   }) : super(key: key);
 
   @override
-  _NotifCounterState createState() => _NotifCounterState();
+  _NotifCounterCourierState createState() => _NotifCounterCourierState();
 }
 
-class _NotifCounterState extends State<NotifCounter> {
+class _NotifCounterCourierState extends State<NotifCounterCourier> {
   bool viewable;
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();

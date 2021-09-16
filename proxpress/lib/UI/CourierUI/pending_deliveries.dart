@@ -54,7 +54,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                       ),
                       actions:[
-                        NotifCounter(scaffoldKey: _scaffoldKey, approved: approved,)
+                        NotifCounterCourier(scaffoldKey: _scaffoldKey, approved: approved,)
                       ],
                       flexibleSpace: Container(
                         margin: EdgeInsets.only(top: 10),

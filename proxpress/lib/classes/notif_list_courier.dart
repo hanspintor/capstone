@@ -5,13 +5,13 @@ import 'package:proxpress/models/deliveries.dart';
 
 import 'notif_tile_courier.dart';
 
-class NotifList extends StatefulWidget {
+class NotifListCourier extends StatefulWidget {
 
   @override
-  _NotifListState createState() => _NotifListState();
+  _NotifListCourierState createState() => _NotifListCourierState();
 }
 
-class _NotifListState extends State<NotifList> {
+class _NotifListCourierState extends State<NotifListCourier> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
@@ -22,7 +22,7 @@ class _NotifListState extends State<NotifList> {
         child: ListView.builder(
           itemCount: delivery.length,
           itemBuilder: (context, index){
-            return NotifTile(delivery: delivery[index]);
+            return NotifTileCourier(delivery: delivery[index]);
           },
         ),
       ),

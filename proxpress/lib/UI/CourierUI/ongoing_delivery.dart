@@ -61,7 +61,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                         iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                         ),
                         actions: <Widget>[
-                          NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
+                          NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,)
                         ],
                         flexibleSpace: Container(
                           margin: EdgeInsets.only(top: 10),
