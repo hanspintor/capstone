@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/classes/notif_tile_customer.dart';
 import 'package:proxpress/models/deliveries.dart';
 
 import 'notif_tile_courier.dart';
@@ -22,7 +23,7 @@ class _NotifListCustomerState extends State<NotifListCustomer> {
         child: ListView.builder(
           itemCount: delivery.length,
           itemBuilder: (context, index){
-            return NotifTileCourier(delivery: delivery[index]);
+            return NotifTileCustomer(delivery: delivery[index]);
           },
         ),
       ),

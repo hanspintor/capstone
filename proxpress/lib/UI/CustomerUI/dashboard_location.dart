@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/notif_counter_customer.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/secrets.dart';
 import 'menu_drawer_customer.dart';
@@ -134,7 +136,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-
+    bool approved = false;
       return new GestureDetector(
         onTap: (){
           if(count != 0){
@@ -172,15 +174,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         color: Color(0xfffb0d0d),
                       ),
                       actions: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.notifications_none_rounded,
-                          ),
-                          onPressed: () {
-                            _openEndDrawer();
-                          },
-                          iconSize: 25,
-                        ),
+                        //NotifCounterCustomer(scaffoldKey: _scaffoldKey,approved: approved,)
                       ],
                       flexibleSpace: Container(
                         margin: EdgeInsets.only(top: 10),
