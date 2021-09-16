@@ -36,7 +36,6 @@ class _RequestTileState extends State<RequestTile> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           //Delivery deliveryData = snapshot.data;
-
           // var color1;
           // if(widget.delivery.courierApproval == 'Pending'){
           //   color1 = Colors.orange;

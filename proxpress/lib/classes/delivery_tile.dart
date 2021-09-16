@@ -83,6 +83,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                       child: CircleAvatar(
                         radius: 20,
                         backgroundImage: NetworkImage(customerData.avatarUrl),
+                        backgroundColor: Colors.white,
                       ),
                     ),
                     subtitle: Container(
