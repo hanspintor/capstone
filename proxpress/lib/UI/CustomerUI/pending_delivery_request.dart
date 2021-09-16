@@ -20,7 +20,6 @@ class _PendingDeliveryRequestState extends State<PendingDeliveryRequest> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
-    print(delivery.length.toString());
 
     if (delivery.length != 0) {
       return delivery == null ? UserLoading() : ListView.builder(
