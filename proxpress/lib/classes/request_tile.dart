@@ -37,26 +37,26 @@ class _RequestTileState extends State<RequestTile> {
         if (snapshot.hasData) {
           //Delivery deliveryData = snapshot.data;
 
-          var color1;
-          if(widget.delivery.courierApproval == 'Pending'){
-            color1 = Colors.orange;
-          }
-          else if(widget.delivery.courierApproval == 'Approved'){
-            color1 = Colors.green;
-          }
-          else{
-            color1 = Colors.red;
-          }
+          // var color1;
+          // if(widget.delivery.courierApproval == 'Pending'){
+          //   color1 = Colors.orange;
+          // }
+          // else if(widget.delivery.courierApproval == 'Approved'){
+          //   color1 = Colors.green;
+          // }
+          // else{
+          //   color1 = Colors.red;
+          // }
 
-          var color2;
+          var color;
           if(widget.delivery.deliveryStatus == 'Ongoing'){
-            color2 = Colors.orange;
+            color = Colors.orange;
           }
           else if(widget.delivery.deliveryStatus == 'Pending'){
-            color2 = Colors.black;
+            color = Colors.blue;
           }
           else if (widget.delivery.deliveryStatus == 'Delivered'){
-            color2 = Colors.green;
+            color = Colors.green;
           }
           else return null;
 
@@ -90,7 +90,9 @@ class _RequestTileState extends State<RequestTile> {
                                     child: Text.rich(
                                       TextSpan(children: [
                                         TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                        TextSpan(text: widget.delivery.deliveryStatus, style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color2)),
+                                        TextSpan(text: "${widget.delivery.deliveryStatus} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
+                                        TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                        TextSpan(text: courierData.contactNo),
                                       ],
                                       ),
                                     ),
@@ -154,6 +156,14 @@ class _RequestTileState extends State<RequestTile> {
                                                   ),
                                                 ),
                                               ),
+                                              Container(
+                                                  height: 25,
+                                                  child: ElevatedButton(
+                                                      child: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                      onPressed: () {
+                                                      }
+                                                  )
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -202,7 +212,9 @@ class _RequestTileState extends State<RequestTile> {
                                       child: Text.rich(
                                         TextSpan(children: [
                                           TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                          TextSpan(text: widget.delivery.courierApproval, style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color1)),
+                                          TextSpan(text: "${widget.delivery.deliveryStatus} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
+                                          TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                          TextSpan(text: courierData.contactNo),
                                         ],
                                         ),
                                       ),
@@ -268,14 +280,6 @@ class _RequestTileState extends State<RequestTile> {
                                                 ),
                                               ],
                                             ),
-                                            Container(
-                                                height: 25,
-                                                child: ElevatedButton(
-                                                    child: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                    onPressed: () {
-                                                    }
-                                                )
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -322,7 +326,9 @@ class _RequestTileState extends State<RequestTile> {
                                       child: Text.rich(
                                         TextSpan(children: [
                                           TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                          TextSpan(text: widget.delivery.courierApproval, style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color1)),
+                                          TextSpan(text: "${widget.delivery.courierApproval} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
+                                          TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                          TextSpan(text: courierData.contactNo),
                                         ],
                                         ),
                                       ),
