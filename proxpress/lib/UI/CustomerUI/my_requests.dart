@@ -25,7 +25,12 @@ class MyRequests extends StatefulWidget {
 }
 
 class _MyRequestsState extends State<MyRequests> {
+  void _openEndDrawer() {
+    _scaffoldKey.currentState.openEndDrawer();
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -73,6 +78,15 @@ class _MyRequestsState extends State<MyRequests> {
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                       ),
                       actions: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.notifications_none_rounded,
+                          ),
+                          onPressed: () {
+                            _openEndDrawer();
+                          },
+                          iconSize: 25,
+                        ),
                         //NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
                       ],
                       flexibleSpace: Container(

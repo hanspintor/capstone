@@ -57,9 +57,10 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String savedUrl = '';
   String saveDestination = '';
 
-  //String avatarUrl;
   String fetchedUrl;
   String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
+
+  bool _isLoading = false;
 
   String dots(int Dotlength){
     String dot = "•";
@@ -75,9 +76,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     Stream<Customer> customerStream;
+
     if(user != null)
       customerStream = DatabaseService(uid: user.uid).customerData;
-
 
       return GestureDetector(
         onTap: (){
@@ -397,61 +398,64 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 margin: EdgeInsets.only(right: 20),
                                 child: Align(
                                   alignment: Alignment.topRight,
-                                  child: ElevatedButton(
-                                      child: Text(
-                                        'Save Changes', style: TextStyle(color: Colors.white, fontSize:15),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Color(0xfffb0d0d),
-                                      ),
-                                      onPressed: () async {
-                                        final Customer validCustomer = Customer();
+                                  child: ElevatedButton.icon(
+                                    icon: _isLoading ? CircularProgressIndicator() : Icon(Icons.save),
+                                    label: Text(
+                                      _isLoading ? 'Loading...' : 'Save Changes',
+                                      style: TextStyle(color: Colors.white, fontSize:15),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Color(0xfffb0d0d),
+                                    ),
+                                    onPressed: _isLoading ? null : () async {
+                                      setState((){
+                                        _isLoading = true;
+                                      });
+                                      final Customer validCustomer = Customer();
 
-                                        if(_currentPassword != null)
-                                          checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
-                                        setState(() {
+                                      if(_currentPassword != null)
+                                        checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
+                                      setState(() {
 
-                                        });
-                                        if (_updateKey.currentState.validate() && checkCurrentPassword) {
-                                          if(_currentEmail != null)
-                                            validCustomer.updateCurrentEmail(_currentEmail);
-                                          if(_newPassword != null)
-                                            validCustomer.updateCurrentPassword(_newPassword);
+                                      });
+                                      if (_updateKey.currentState.validate() && checkCurrentPassword) {
+                                        if(_currentEmail != null)
+                                          validCustomer.updateCurrentEmail(_currentEmail);
+                                        if(_newPassword != null)
+                                          validCustomer.updateCurrentPassword(_newPassword);
 
-                                          await DatabaseService(uid: user.uid)
-                                              .updateCustomerData(
-                                            _currentFName ?? customerData.fName,
-                                            _currentLName ?? customerData.lName,
-                                            _currentEmail ?? customerData.email,
-                                            _currentContactNo ?? customerData.contactNo,
-                                            _confirmPassword ?? customerData.password,
-                                            _currentAddress ?? customerData.address,
-                                            customerData.avatarUrl,
-                                            customerData.notifStatus,
-                                            customerData.currentNotif,
-                                          );
+                                        await DatabaseService(uid: user.uid)
+                                            .updateCustomerData(
+                                          _currentFName ?? customerData.fName,
+                                          _currentLName ?? customerData.lName,
+                                          _currentEmail ?? customerData.email,
+                                          _currentContactNo ?? customerData.contactNo,
+                                          _confirmPassword ?? customerData.password,
+                                          _currentAddress ?? customerData.address,
+                                          customerData.avatarUrl,
+                                          customerData.notifStatus,
+                                          customerData.currentNotif,
+                                        );
 
-                                          if (profilePicture != null) {
-                                            await UploadFile.uploadFile(saveDestination, profilePicture);
+                                        if (profilePicture != null) {
+                                          await UploadFile.uploadFile(saveDestination, profilePicture);
 
-                                            savedUrl = await firebase_storage.FirebaseStorage.instance
-                                                .ref(saveDestination)
-                                                .getDownloadURL();
+                                          savedUrl = await firebase_storage.FirebaseStorage.instance
+                                              .ref(saveDestination)
+                                              .getDownloadURL();
 
-                                            if (savedUrl != null || savedUrl == 'null') {
-                                              await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
-                                            }
-
-                                            setState(() {
-                                              fetchedUrl = savedUrl;
-                                            });
+                                          if (savedUrl != null || savedUrl == 'null') {
+                                            await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
                                           }
 
-                                          CircularProgressIndicator();
-
-                                          Navigator.pop(context, false);
+                                          setState(() {
+                                            fetchedUrl = savedUrl;
+                                          });
                                         }
+
+                                        Navigator.pop(context, false);
                                       }
+                                    },
                                   ),
                                 ),
                               ),

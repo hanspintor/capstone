@@ -81,6 +81,9 @@ class _CourierUpdateState extends State<CourierUpdate> {
   void handleTimeOut() async{
     await _auth.signOut();
   }
+
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -148,7 +151,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                       Courier courierData = snapshot.data;
 
                       fetchedUrl = courierData.avatarUrl;
-                      print(fetchedUrl);
 
                       return Form(
                         key: _updateKey,
@@ -228,7 +230,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                       color: Colors.green
                                   ),
                                 ),
-                                validator: (String val) => val.isEmpty ? 'Enter your new first name' : null,
+                                onChanged: (val) => setState(() => _currentFName = val),
                               ),
                             ),
                             Container(
@@ -421,50 +423,56 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               margin: EdgeInsets.only(right: 20),
                               child: Align(
                                 alignment: Alignment.topRight,
-                                child: ElevatedButton(
-                                    child: Text(
-                                      'Save Changes', style: TextStyle(color: Colors.white, fontSize:15),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xfffb0d0d),
-                                    ),
-                                    onPressed: () async {
-                                      final Courier validCourier = Courier();
-                                      if(_currentPassword != null)
-                                        checkCurrentPassword = await validCourier.validateCurrentPassword(_currentPassword);
-                                      setState(() {
+                                child: ElevatedButton.icon(
+                                  icon: _isLoading ? CircularProgressIndicator() : Icon(Icons.save),
+                                  label: Text(
+                                    'Save Changes', style: TextStyle(color: Colors.white, fontSize:15),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xfffb0d0d),
+                                  ),
+                                  onPressed: _isLoading ? null : () async {
+                                    setState((){
+                                      _isLoading = true;
+                                    });
+                                    final Courier validCourier = Courier();
 
-                                      });
-                                      if (_updateKey.currentState.validate() && checkCurrentPassword) {
-                                        if(_currentEmail != null)
-                                          validCourier.updateCurrentEmail(_currentEmail);
-                                        if(_newPassword != null)
-                                          validCourier.updateCurrentPassword(_newPassword);
+                                    if(_currentPassword != null)
+                                      checkCurrentPassword = await validCourier.validateCurrentPassword(_currentPassword);
+                                    setState(() {
 
-                                        await DatabaseService(uid: user.uid)
-                                            .updateCourierData(
-                                          _currentFName ?? courierData.fName,
-                                          _currentLName ?? courierData.lName,
-                                          _currentEmail ?? courierData.email,
-                                          _currentContactNo ?? courierData.contactNo,
-                                          _confirmPassword ?? courierData.password,
-                                          _currentAddress ?? courierData.address,
-                                          _status ?? courierData.status,
-                                          courierData.avatarUrl,
-                                          courierData.approved,
-                                          _vehicleType ?? courierData.vehicleType,
-                                          _vehicleColor ?? courierData.vehicleColor,
-                                          courierData.driversLicenseFront_,
-                                          courierData.driversLicenseBack_,
-                                          courierData.nbiClearancePhoto_,
-                                          courierData.vehicleRegistrationOR_,
-                                          courierData.vehicleRegistrationCR_,
-                                          courierData.vehiclePhoto_,
-                                          courierData.deliveryPriceRef,
-                                          courierData.notifStatus,
-                                          courierData.currentNotif
-                                        );
+                                    });
+                                    if (_updateKey.currentState.validate() && checkCurrentPassword) {
+                                      if(_currentEmail != null)
+                                        validCourier.updateCurrentEmail(_currentEmail);
+                                      if(_newPassword != null)
+                                        validCourier.updateCurrentPassword(_newPassword);
 
+                                      await DatabaseService(uid: user.uid)
+                                          .updateCourierData(
+                                        _currentFName ?? courierData.fName,
+                                        _currentLName ?? courierData.lName,
+                                        _currentEmail ?? courierData.email,
+                                        _currentContactNo ?? courierData.contactNo,
+                                        _confirmPassword ?? courierData.password,
+                                        _currentAddress ?? courierData.address,
+                                        _status ?? courierData.status,
+                                        courierData.avatarUrl,
+                                        courierData.approved,
+                                        _vehicleType ?? courierData.vehicleType,
+                                        _vehicleColor ?? courierData.vehicleColor,
+                                        courierData.driversLicenseFront_,
+                                        courierData.driversLicenseBack_,
+                                        courierData.nbiClearancePhoto_,
+                                        courierData.vehicleRegistrationOR_,
+                                        courierData.vehicleRegistrationCR_,
+                                        courierData.vehiclePhoto_,
+                                        courierData.deliveryPriceRef,
+                                        courierData.notifStatus,
+                                        courierData.currentNotif
+                                      );
+
+                                      if (profilePicture != null) {
                                         await UploadFile.uploadFile(saveDestination, profilePicture);
 
                                         savedUrl = await firebase_storage.FirebaseStorage.instance
@@ -478,10 +486,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         setState(() {
                                           fetchedUrl = savedUrl;
                                         });
-
-                                        Navigator.pop(context, false);
                                       }
+
+                                      Navigator.pop(context, false);
                                     }
+                                  }
                                 ),
                               ),
                             ),

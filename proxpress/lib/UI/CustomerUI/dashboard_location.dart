@@ -6,6 +6,8 @@ import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
+import 'package:proxpress/classes/directions_model.dart';
+import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/secrets.dart';
@@ -26,79 +28,6 @@ class DashboardLocation extends StatefulWidget{
 }
 
 class _DashboardLocationState extends State<DashboardLocation>{
-  // Object for PolylinePoints
-  PolylinePoints polylinePoints;
-
-  // List of coordinates to join
-  List<LatLng> polylineCoordinates = [];
-
-  // Map storing polylines created by connecting two points
-  Map<PolylineId, Polyline> polylines = {};
-
-  // Create the polylines for showing the route between two places
-  Future<double> _createPolylines(
-      double startLatitude,
-      double startLongitude,
-      double destinationLatitude,
-      double destinationLongitude,
-      ) async {
-    // Initializing PolylinePoints
-    polylinePoints = PolylinePoints();
-
-    // Generating the list of coordinates to be used for
-    // drawing the polylines
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      Secrets.API_KEY, // Google Maps API Key
-      PointLatLng(startLatitude, startLongitude),
-      PointLatLng(destinationLatitude, destinationLongitude),
-      travelMode: TravelMode.transit,
-    );
-
-    // Adding the coordinates to the list
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    }
-
-    // Defining an ID
-    PolylineId id = PolylineId('poly');
-
-    // Initializing Polyline
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.red,
-      points: polylineCoordinates,
-      width: 3,
-    );
-
-    // Adding the polyline to the map
-    polylines[id] = polyline;
-
-    // Calculating the total distance by adding the distance between small segments
-    for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += _coordinateDistance(
-        polylineCoordinates[i].latitude,
-        polylineCoordinates[i].longitude,
-        polylineCoordinates[i + 1].latitude,
-        polylineCoordinates[i + 1].longitude,
-      );
-    }
-
-    return totalDistance;
-  }
-
-  double _coordinateDistance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((lat2 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
-  }
-
-  double totalDistance = 0.0;
-
   String pickupAddress;
   LatLng pickupCoordinates;
 
@@ -136,13 +65,32 @@ class _DashboardLocationState extends State<DashboardLocation>{
     await _auth.signOut();
   }
 
+  Future<bool> checkIfHasPendingRequest(String uid) async {
+    bool hasPendingRequest = false;
+
+    await FirebaseFirestore.instance
+        .collection('Deliveries')
+        .where('Courier Approval', isEqualTo: 'Pending')
+        .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(uid))
+        .limit(1)
+        .get()
+        .then((event) {
+      if (event.docs.isNotEmpty) {
+        hasPendingRequest = true;
+      } else {
+        hasPendingRequest = false;
+      }
+    });
+
+    return hasPendingRequest;
+  }
+
   String error = '';
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    bool hasPendingRequest = false;
     bool approved = true;
 
     return new GestureDetector(
@@ -321,30 +269,25 @@ class _DashboardLocationState extends State<DashboardLocation>{
                           style: ElevatedButton.styleFrom(
                               primary: Color(0xfffb0d0d)),
                           onPressed: () async {
-                            await FirebaseFirestore.instance
-                                .collection('Deliveries')
-                                .where('Courier Approval', isEqualTo: 'Pending')
-                                .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-                                .limit(1)
-                                .get()
-                                .then((event) {
-                              if (event.docs.isNotEmpty) {
-                                hasPendingRequest = true;
-                              } else {
-                                hasPendingRequest = false;
-                              }
-                            });
-
                             if (locKey.currentState.validate()) {
                               print("${pickupCoordinates.latitude}, ${pickupCoordinates.longitude}, ${dropOffCoordinates.latitude}, ${dropOffCoordinates.longitude}");
 
-                              double distance = await _createPolylines(pickupCoordinates.latitude, pickupCoordinates.longitude, dropOffCoordinates.latitude, dropOffCoordinates.longitude);
-                              totalDistance = 0.0;
-                              polylinePoints = PolylinePoints();
-                              polylineCoordinates = [];
-                              polylines = {};
+                              Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates, destination: dropOffCoordinates);
 
-                              print("${distance} KM");
+                              print("??? ${_infoFetch.totalDistance}");
+                              String distanceRemoveKM = '';
+                              bool isKM = false;
+
+                              if (_infoFetch.totalDistance.contains('km')) {
+                                isKM = true;
+                                distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 3);
+                              } else {
+                                distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 2);
+                              }
+
+                              print("WTF $distanceRemoveKM");
+
+                              bool hasPendingRequest = await checkIfHasPendingRequest(user.uid);
 
                               if (!hasPendingRequest){
                                 Navigator.push(
@@ -356,7 +299,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                         pickupCoordinates: pickupCoordinates,
                                         dropOffAddress: dropOffAddress,
                                         dropOffCoordinates: dropOffCoordinates,
-                                        distance: distance,
+                                        distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
                                       ),
                                   )
                                 );

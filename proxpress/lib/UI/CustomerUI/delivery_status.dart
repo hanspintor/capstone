@@ -113,64 +113,96 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-                FutureBuilder<Directions>(
-                  future: _infoFetch,
-                  builder: (context, AsyncSnapshot<Directions> snapshot) {
-                    if (snapshot.hasData) {
-                      Directions _info = snapshot.data;
+              FutureBuilder<Directions>(
+                future: _infoFetch,
+                builder: (context, AsyncSnapshot<Directions> snapshot) {
+                  if (snapshot.hasData) {
+                    Directions _info = snapshot.data;
 
+                    CameraPosition _initialCameraPosition = CameraPosition(
+                      target: LatLng(13.621980880497976, 123.19477396693487),
+                      zoom: 15,
+                    );
 
-                      CameraPosition _initialCameraPosition = CameraPosition(
-                        target: LatLng(13.621980880497976, 123.19477396693487),
-                        zoom: 15,
-                      );
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
+                          width: MediaQuery.of(context).size.width,
+                          child: GoogleMap(
+                            onMapCreated: (controller) {
+                              _googleMapController = controller;
 
-                      return Container(
-                        height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
-                        width: MediaQuery.of(context).size.width,
-                        child: GoogleMap(
-                          onMapCreated: (controller) {
-                            _googleMapController = controller;
+                              _googleMapController.animateCamera(
+                                CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                              );
 
-                            _googleMapController.animateCamera(
-                              CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-                            );
-
-                            _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
-                            //_googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
-                          },
-                          myLocationButtonEnabled: false,
-                          zoomControlsEnabled: false,
-                          initialCameraPosition: _initialCameraPosition,
-                          markers: {
-                            if (_pickup != null) _pickup,
-                            if (_dropOff != null) _dropOff
-                          },
-                          polylines: {
-                            if (_info != null)
-                              Polyline(
-                                polylineId: const PolylineId('overview_polyline'),
-                                color: Colors.red,
-                                width: 5,
-                                points: _info.polylinePoints
-                                    .map((e) => LatLng(e.latitude, e.longitude))
-                                    .toList(),
+                              _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
+                              //_googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                            },
+                            myLocationButtonEnabled: false,
+                            zoomControlsEnabled: false,
+                            initialCameraPosition: _initialCameraPosition,
+                            markers: {
+                              if (_pickup != null) _pickup,
+                              if (_dropOff != null) _dropOff
+                            },
+                            polylines: {
+                              if (_info != null)
+                                Polyline(
+                                  polylineId: const PolylineId('overview_polyline'),
+                                  color: Colors.red,
+                                  width: 5,
+                                  points: _info.polylinePoints
+                                      .map((e) => LatLng(e.latitude, e.longitude))
+                                      .toList(),
+                                ),
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          top: 20.0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 6.0,
+                              horizontal: 12.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.yellowAccent,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 6.0,
+                                )
+                              ],
+                            ),
+                            child: Text(
+                              '${_info.totalDistance}, ${_info.totalDuration}',
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w600,
                               ),
-                          },
+                            ),
+                          ),
                         ),
-                      );
-                    } else {
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [CircularProgressIndicator()]
-                        ),
-                      );
-                    }
+                      ],
+                    );
+                  } else {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [CircularProgressIndicator()]
+                      ),
+                    );
                   }
-                ),
+                }
+              ),
+
               SizedBox(height: 10),
               ElevatedButton(
                 child: Text(

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/CustomerUI/review_request.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -192,7 +193,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     return Container(
       padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Who Will Pay', prefixIcon: Icon(Icons.person_pin_circle_rounded,)),
+        decoration: InputDecoration(labelText: 'Who Will Pay?', prefixIcon: Icon(Icons.person_pin_circle_rounded,)),
         keyboardType: TextInputType.name,
         validator: (String value){
           if(value.isEmpty){
@@ -318,7 +319,6 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    print(user.uid);
     print(widget.courierUID);
     print(widget.pickupAddress);
     print(widget.pickupCoordinates.toString());
@@ -404,6 +404,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          SizedBox(height: 10),
                           _buildItemDescription(),
                           _buildSenderName(),
                           _buildSenderContactNum(),
@@ -412,7 +413,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                           _buildWhoWillPay(),
                           _buildSpecificInstructions(),
                           _buildDropDown(),
-                          paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 30),
+                          paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 5),
                         ],
                       ),
                       shadowColor: Colors.black,
@@ -424,16 +425,33 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                 ),
                 ElevatedButton(
                   child: Text(
-                    'Send Remarks',
+                    'Proceed',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: () async {
-                    _validate();
                     if (locKey.currentState.validate()){
-                      await DatabaseService().updateDelivery(customer, courier, widget.pickupAddress, pickupGeoPoint, widget.dropOffAddress, dropOffGeoPoint, itemDescription, pickupPointPerson, pickupContactNum, dropoffPointPerson, dropoffContactNum, whoWillPay, specificInstructions, paymentOption, widget.deliveryFee, 'Pending', 'Pending');
-                      await DatabaseService(uid: widget.courierUID).updateNotifStatusCourier(true);
-                      await DatabaseService(uid: user.uid).updateNotifStatusCustomer(true);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ReviewRequest(
+                                customer: customer,
+                                courier: courier,
+                                pickupAddress: widget.pickupAddress,
+                                pickupGeoPoint: pickupGeoPoint,
+                                dropOffAddress: widget.dropOffAddress,
+                                dropOffGeoPoint: dropOffGeoPoint,
+                                itemDescription: itemDescription,
+                                pickupPointPerson: pickupPointPerson,
+                                pickupContactNum: pickupContactNum,
+                                dropOffPointPerson: dropoffPointPerson,
+                                dropOffContactNum: dropoffContactNum,
+                                whoWillPay: whoWillPay,
+                                specificInstructions: specificInstructions,
+                                paymentOption: paymentOption,
+                                deliveryFee: widget.deliveryFee)
+                        )
+                      );
                     }
                   }
                 ),
