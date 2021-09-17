@@ -85,7 +85,7 @@ class _MyRequestsState extends State<MyRequests> {
                       ),
                     ),
                     drawer: MainDrawerCustomer(),
-                    //endDrawer: NotifDrawerCustomer(),
+                    endDrawer: NotifDrawerCustomer(),
                     body: SingleChildScrollView(
                       child: Center(
                         child: Column(

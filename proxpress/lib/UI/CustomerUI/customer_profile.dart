@@ -63,20 +63,18 @@ class _CustomerProfileState extends State<CustomerProfile> {
               ),
                 onPressed: (){
                   Navigator.pop(context, false);
-
-
                 },
                 iconSize: 25,
               ),
               actions: [
-                IconButton(icon: Icon(
-                  Icons.notifications_none_rounded,
-                ),
-                  onPressed: (){
-                    _openEndDrawer();
-                  },
-                  iconSize: 25,
-                ),
+                // IconButton(icon: Icon(
+                //   Icons.notifications_none_rounded,
+                // ),
+                //   onPressed: (){
+                //     _openEndDrawer();
+                //   },
+                //   iconSize: 25,
+                // ),
               ],
               flexibleSpace: Container(
                 margin: EdgeInsets.only(top: 10),

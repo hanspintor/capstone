@@ -45,7 +45,7 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
               ),
               title: Text(
                 "${courierData.fName} ${courierData.lName} "
-                    "received your request",
+                    "received your request.",
                 style: TextStyle(
                   color: view ? Colors.black87 : Colors.black54,
                 ),

@@ -143,6 +143,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
     final user = Provider.of<TheUser>(context);
 
     bool hasPendingRequest = false;
+    bool approved = true;
 
     return new GestureDetector(
       onTap: (){
@@ -165,6 +166,13 @@ class _DashboardLocationState extends State<DashboardLocation>{
           //print('yoyo ${snapshot.hasData} ${user.uid}');
           if(snapshot.hasData){
             Customer customerData = snapshot.data;
+
+            Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+                .collection('Deliveries')
+                .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+                .snapshots()
+                .map(DatabaseService().deliveryDataListFromSnapshot);
+
             return WillPopScope(
               onWillPop: () async {
                 print("Back Button pressed");
@@ -180,7 +188,11 @@ class _DashboardLocationState extends State<DashboardLocation>{
                     color: Color(0xfffb0d0d),
                   ),
                   actions: [
-                    //NotifCounterCustomer(scaffoldKey: _scaffoldKey,approved: approved,)
+                    StreamProvider<List<Delivery>>.value(
+                        value: deliveryList,
+                        initialData: [],
+                        child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+                    )
                   ],
                   flexibleSpace: Container(
                     margin: EdgeInsets.only(top: 10),
@@ -364,7 +376,8 @@ class _DashboardLocationState extends State<DashboardLocation>{
                       ],
                     ),
                   ),
-                ))
+                ),
+              ),
             );
           } else {
             return UserLoading();
