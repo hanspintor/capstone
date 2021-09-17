@@ -17,7 +17,7 @@ import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/authenticate.dart';
-import 'package:proxpress/classes/courier_updating_form.dart';
+import 'package:proxpress/classes/courier_classes/courier_updating_form.dart';
 import 'package:proxpress/services/auth.dart';
 import 'UI/CourierUI/ongoing_delivery.dart';
 import 'UI/CustomerUI/courier_bookmarks.dart';
@@ -27,7 +27,7 @@ import 'UI/CustomerUI/pin_location_map.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/wrapper.dart';
-import 'package:proxpress/classes/customer_updating_form.dart';
+import 'package:proxpress/classes/customer_classes/customer_updating_form.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

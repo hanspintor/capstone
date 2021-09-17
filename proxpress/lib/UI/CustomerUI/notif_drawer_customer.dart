@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
-import 'package:proxpress/classes/notif_list_customer.dart';
+import 'package:proxpress/classes/customer_classes/notif_list_customer.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/user.dart';
