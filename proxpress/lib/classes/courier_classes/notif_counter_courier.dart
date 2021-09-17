@@ -61,8 +61,8 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !widget.approved ? null : () async{
                   setFalse();
-                  await DatabaseService(uid: user.uid).updateNotifCounter(delivery.length);
-                   await DatabaseService(uid: user.uid).updateNotifStatus(viewable);
+                  await DatabaseService(uid: user.uid).updateNotifCounterCourier(delivery.length);
+                  await DatabaseService(uid: user.uid).updateNotifStatusCourier(viewable);
                   _openEndDrawer();
                   //print("flag inC: $flag");
                 },
@@ -96,12 +96,6 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
           );
         } else return Container();
       },
-
     );
-
-
-
-
-
   }
 }

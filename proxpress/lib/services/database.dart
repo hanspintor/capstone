@@ -22,7 +22,7 @@ class DatabaseService {
 
 
   // Create/Update a Customer Document
-  Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl) async {
+  Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl, bool notifStatus, int currentNotif) async {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -31,6 +31,8 @@ class DatabaseService {
       'Password' : password,
       'Address' : address,
       'Avatar URL' : avatarUrl,
+      'Notification Status' : notifStatus,
+      'Current Notification' : currentNotif,
     });
   }
 
@@ -132,13 +134,24 @@ class DatabaseService {
       'Courier Approval' : 'Cancelled',
     });
   }
-  Future updateNotifCounter(int notifC) async {
+  Future updateNotifCounterCourier(int notifC) async {
     return await courierCollection.doc(uid).update({
       'Current Notification': notifC,
     });
   }
-  Future updateNotifStatus(bool viewable) async {
+  Future updateNotifStatusCourier(bool viewable) async {
     return await courierCollection.doc(uid).update({
+      'Notification Status': viewable,
+    });
+  }
+
+  Future updateNotifCounterCustomer(int notifC) async {
+    return await customerCollection.doc(uid).update({
+      'Current Notification': notifC,
+    });
+  }
+  Future updateNotifStatusCustomer(bool viewable) async {
+    return await customerCollection.doc(uid).update({
       'Notification Status': viewable,
     });
   }
@@ -183,6 +196,8 @@ class DatabaseService {
         email: (doc.data() as dynamic) ['Email'] ?? '',
         address: (doc.data() as dynamic) ['Address']?? '',
         avatarUrl: (doc.data() as dynamic) ['Avatar URL']?? '',
+        notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
+        currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
       );
     }).toList();
   }
@@ -279,6 +294,8 @@ class DatabaseService {
       email: snapshot['Email'],
       address: snapshot['Address'],
       avatarUrl: snapshot['Avatar URL'],
+      notifStatus: snapshot['Notification Status'],
+      currentNotif: snapshot['Current Notification'],
     );
   }
 

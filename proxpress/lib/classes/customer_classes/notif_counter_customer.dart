@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 
 import 'package:proxpress/services/database.dart';
@@ -39,11 +40,11 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
     User user = _auth.currentUser;
 
 
-    return StreamBuilder <Courier>(
-      stream: DatabaseService(uid: user.uid).courierData,
+    return StreamBuilder <Customer>(
+      stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot){
         if(snapshot.hasData){
-          Courier notifData = snapshot.data;
+          Customer notifData = snapshot.data;
           //showNotifcation();
           if(notifData.currentNotif != delivery.length){
             if(notifData.currentNotif < delivery.length){
@@ -60,8 +61,8 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !widget.approved ? null : () async{
                   setFalse();
-                  await DatabaseService(uid: user.uid).updateNotifCounter(delivery.length);
-                  await DatabaseService(uid: user.uid).updateNotifStatus(viewable);
+                  await DatabaseService(uid: user.uid).updateNotifCounterCustomer(delivery.length);
+                  await DatabaseService(uid: user.uid).updateNotifStatusCustomer(viewable);
                   _openEndDrawer();
                   //print("flag inC: $flag");
                 },
@@ -96,6 +97,5 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
         } else return Container();
       },
     );
-
   }
 }

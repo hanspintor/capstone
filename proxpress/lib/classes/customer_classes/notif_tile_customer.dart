@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
-import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 
@@ -24,7 +23,7 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
   bool view = true;
   @override
   Widget build(BuildContext context) {
-    uid = widget.delivery.customerRef.id;
+    uid = widget.delivery.courierRef.id;
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
@@ -46,7 +45,7 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
               ),
               title: Text(
                 "${courierData.fName} ${courierData.lName} "
-                    "requested a delivery",
+                    "received your request",
                 style: TextStyle(
                   color: view ? Colors.black87 : Colors.black54,
                 ),

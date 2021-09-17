@@ -20,8 +20,6 @@ import 'package:proxpress/services/file_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:proxpress/services/upload_file.dart';
 
-
-
 class CourierUpdate extends StatefulWidget {
 
   @override

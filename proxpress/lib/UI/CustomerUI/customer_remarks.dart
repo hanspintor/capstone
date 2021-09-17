@@ -432,7 +432,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                     _validate();
                     if (locKey.currentState.validate()){
                       await DatabaseService().updateDelivery(customer, courier, widget.pickupAddress, pickupGeoPoint, widget.dropOffAddress, dropOffGeoPoint, itemDescription, pickupPointPerson, pickupContactNum, dropoffPointPerson, dropoffContactNum, whoWillPay, specificInstructions, paymentOption, widget.deliveryFee, 'Pending', 'Pending');
-                      await DatabaseService(uid: widget.courierUID).updateNotifStatus(true);
+                      await DatabaseService(uid: widget.courierUID).updateNotifStatusCourier(true);
+                      await DatabaseService(uid: user.uid).updateNotifStatusCustomer(true);
                     }
                   }
                 ),

@@ -426,22 +426,28 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                             _currentContactNo ?? customerData.contactNo,
                                             _confirmPassword ?? customerData.password,
                                             _currentAddress ?? customerData.address,
-                                            customerData.avatarUrl
+                                            customerData.avatarUrl,
+                                            customerData.notifStatus,
+                                            customerData.currentNotif,
                                           );
 
-                                          await UploadFile.uploadFile(saveDestination, profilePicture);
+                                          if (profilePicture != null) {
+                                            await UploadFile.uploadFile(saveDestination, profilePicture);
 
-                                          savedUrl = await firebase_storage.FirebaseStorage.instance
-                                              .ref(saveDestination)
-                                              .getDownloadURL();
+                                            savedUrl = await firebase_storage.FirebaseStorage.instance
+                                                .ref(saveDestination)
+                                                .getDownloadURL();
 
-                                          if (savedUrl != null || savedUrl == 'null') {
-                                            await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
+                                            if (savedUrl != null || savedUrl == 'null') {
+                                              await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
+                                            }
+
+                                            setState(() {
+                                              fetchedUrl = savedUrl;
+                                            });
                                           }
 
-                                          setState(() {
-                                            fetchedUrl = savedUrl;
-                                          });
+                                          CircularProgressIndicator();
 
                                           Navigator.pop(context, false);
                                         }
