@@ -1,22 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:lottie/lottie.dart';
+import 'package:proxpress/classes/directions_model.dart';
+import 'package:proxpress/classes/directions_repository.dart';
+//import 'package:lottie/lottie.dart';
+import 'package:proxpress/models/deliveries.dart';
 
 class DeliveryStatus extends StatefulWidget {
+  final Delivery delivery;
+
+  DeliveryStatus({
+    Key key,
+    @required this.delivery,
+  }) : super(key: key);
+
   @override
   _DeliveryStatusState createState() => _DeliveryStatusState();
 }
 
 class _DeliveryStatusState extends State<DeliveryStatus> {
   double rating = 0;
-  static final _initialCameraPosition = CameraPosition(
-      target: LatLng(13.621980880497976, 123.19477396693487),
-      zoom: 15
-  );
 
   @override
   Widget build(BuildContext context) {
+    GoogleMapController _googleMapController;
+
+    LatLng pickup_pos = LatLng(widget.delivery.pickupCoordinates.latitude, widget.delivery.pickupCoordinates.longitude,);
+    Marker _pickup = Marker(
+      markerId: const MarkerId('pickup'),
+      infoWindow: const InfoWindow(title: 'Pickup Location'),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      position: pickup_pos,
+    );
+
+    LatLng dropOff_pos = LatLng(widget.delivery.dropOffCoordinates.latitude, widget.delivery.dropOffCoordinates.longitude,);
+    Marker _dropOff = Marker(
+      markerId: const MarkerId('dropOff'),
+      infoWindow: const InfoWindow(title: 'Drop Off Location'),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      position: dropOff_pos,
+    );
+
+    Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: _pickup.position, destination: _dropOff.position);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -86,26 +112,64 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         // ),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 10),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Text("Ongoing Delivery",
-                  style: TextStyle(
-                    fontSize: 25,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-                Container(
-                  height: 400,
-                  width: 400,
-                  child: GoogleMap(
-                    myLocationButtonEnabled: false,
-                    zoomControlsEnabled: false,
-                    initialCameraPosition: _initialCameraPosition,
-                  ),
+                FutureBuilder<Directions>(
+                  future: _infoFetch,
+                  builder: (context, AsyncSnapshot<Directions> snapshot) {
+                    if (snapshot.hasData) {
+                      Directions _info = snapshot.data;
+
+
+                      CameraPosition _initialCameraPosition = CameraPosition(
+                        target: LatLng(13.621980880497976, 123.19477396693487),
+                        zoom: 15,
+                      );
+
+                      return Container(
+                        height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.width,
+                        child: GoogleMap(
+                          onMapCreated: (controller) {
+                            _googleMapController = controller;
+
+                            _googleMapController.animateCamera(
+                              CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                            );
+
+                            _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
+                            //_googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                          },
+                          myLocationButtonEnabled: false,
+                          zoomControlsEnabled: false,
+                          initialCameraPosition: _initialCameraPosition,
+                          markers: {
+                            if (_pickup != null) _pickup,
+                            if (_dropOff != null) _dropOff
+                          },
+                          polylines: {
+                            if (_info != null)
+                              Polyline(
+                                polylineId: const PolylineId('overview_polyline'),
+                                color: Colors.red,
+                                width: 5,
+                                points: _info.polylinePoints
+                                    .map((e) => LatLng(e.latitude, e.longitude))
+                                    .toList(),
+                              ),
+                          },
+                        ),
+                      );
+                    } else {
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [CircularProgressIndicator()]
+                        ),
+                      );
+                    }
+                  }
                 ),
               SizedBox(height: 10),
               ElevatedButton(

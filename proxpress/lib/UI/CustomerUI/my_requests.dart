@@ -52,6 +52,13 @@ class _MyRequestsState extends State<MyRequests> {
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
+              Stream<List<Delivery>> deliveryListDelivered = FirebaseFirestore.instance
+                  .collection('Deliveries')
+                  .where('Delivery Status', isEqualTo: 'Delivered')
+                  .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+                  .snapshots()
+                  .map(DatabaseService().deliveryDataListFromSnapshot);
+
               return WillPopScope(
                   onWillPop: () async {
                     print("Back Button Pressed");

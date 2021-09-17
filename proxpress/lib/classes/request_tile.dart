@@ -1,6 +1,7 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
@@ -152,7 +153,7 @@ class _RequestTileState extends State<RequestTile> {
                                                     return ElevatedButton(
                                                         child: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
                                                         onPressed: () {
-
+                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryStatus(delivery: widget.delivery)));
                                                         }
                                                     );
                                                   }
