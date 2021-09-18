@@ -68,7 +68,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                   await DatabaseService(uid: user.uid).updateNotifCounterCustomer(delivery.length);
                   await DatabaseService(uid: user.uid).updateNotifStatusCustomer(viewable);
                   _openEndDrawer();
-                  //print("flag inC: $flag");
                 },
                 iconSize: 25,
               ),

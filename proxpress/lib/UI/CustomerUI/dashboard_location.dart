@@ -111,7 +111,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
       child: user == null ? LoginScreen() : StreamBuilder<Customer>(
         stream: DatabaseService(uid: user.uid).customerData,
         builder: (context, snapshot) {
-          //print('yoyo ${snapshot.hasData} ${user.uid}');
           if(snapshot.hasData){
             Customer customerData = snapshot.data;
 
@@ -285,8 +284,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                 distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 2);
                               }
 
-                              print("WTF $distanceRemoveKM");
-
                               bool hasPendingRequest = await checkIfHasPendingRequest(user.uid);
 
                               if (!hasPendingRequest){
@@ -304,7 +301,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                   )
                                 );
                               } else {
-                                print('wtf');
                                 setState((){
                                   error = 'You still have one pending request.';
                                 });

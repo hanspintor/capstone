@@ -108,8 +108,6 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                   )
               );
             } else {
-              print('nice');
-
               return UserLoading();
             }
           }

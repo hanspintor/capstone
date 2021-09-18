@@ -30,7 +30,6 @@ class Wrapper extends StatelessWidget {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          //print('Document data: ${documentSnapshot.data()}');
           print('customer document found');
 
           print("Customer $count");

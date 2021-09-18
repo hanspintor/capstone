@@ -47,7 +47,7 @@ class _ChatPageState extends State<ChatPage> {
     // final FirebaseAuth _auth = FirebaseAuth.instance;
     // User user = _auth.currentUser;
     Delivery delivery = Delivery();
-    // print("Delivery Id: ${delivery.uid}");
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

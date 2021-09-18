@@ -31,7 +31,7 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
       caption = "No data found";
       flag++;
     }
-    //print("flag out: $flag");
+
     return user == null ? LoginScreen() : StreamBuilder<Customer>(
       stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot){

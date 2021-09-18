@@ -56,7 +56,6 @@ class _CourierTileState extends State<CourierTile> {
           DeliveryPrice deliveryPriceData = snapshot.data;
 
           deliveryFee = (deliveryPriceData.baseFare.toDouble() + (deliveryPriceData.farePerKM.toDouble() * widget.distance));
-          print('(${deliveryPriceData.baseFare} + (${deliveryPriceData.farePerKM} * ${widget.distance})) = $deliveryFee');
 
           return Padding(
             padding: EdgeInsets.all(8),

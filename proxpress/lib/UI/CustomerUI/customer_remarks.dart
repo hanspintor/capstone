@@ -314,25 +314,17 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    print(widget.courierUID);
-    print(widget.pickupAddress);
-    print(widget.pickupCoordinates.toString());
-    print(widget.dropOffAddress);
-    print(widget.dropOffCoordinates.toString());
-
-    DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
+    DocumentReference customer;
+    if (user != null) {
+      customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
+    }
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.courierUID);
 
     GeoPoint pickupGeoPoint = GeoPoint(widget.pickupCoordinates.latitude, widget.pickupCoordinates.longitude);
     GeoPoint dropOffGeoPoint = GeoPoint(widget.dropOffCoordinates.latitude, widget.dropOffCoordinates.longitude);
-
-    print(pickupGeoPoint.toString());
-    print(dropOffGeoPoint.toString());
 
     return Scaffold(
         drawerEnableOpenDragGesture: false,

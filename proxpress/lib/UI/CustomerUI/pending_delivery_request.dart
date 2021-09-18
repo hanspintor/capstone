@@ -8,7 +8,6 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
-
 import '../login_screen.dart';
 
 class PendingDeliveryRequest extends StatefulWidget {
@@ -23,6 +22,7 @@ class _PendingDeliveryRequestState extends State<PendingDeliveryRequest> {
 
     if (delivery.length != 0) {
       return delivery == null ? UserLoading() : ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: delivery.length,
         itemBuilder: (context, index) {

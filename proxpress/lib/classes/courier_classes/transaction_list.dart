@@ -14,7 +14,7 @@ class _TransactionListState extends State<TransactionList> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
-    //print(delivery.length.toString());
+
     return delivery == null ? UserLoading() : SingleChildScrollView(
       child: SizedBox(
         height: 500,

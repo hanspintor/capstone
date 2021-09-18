@@ -693,7 +693,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                     }
                                   }
                                 } else {
-                                  print('WTF');
+                                  print('Photos not yet uploaded');
                                 }
                               }
                           ),

@@ -92,8 +92,6 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                   )
               );
             } else {
-              print('nice');
-
               return UserLoading();
             }
           }

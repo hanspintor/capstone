@@ -14,9 +14,10 @@ class _RequestListState extends State<RequestList> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
-    //print(delivery.length.toString());
+
     if(delivery.length != 0){
       return delivery == null ? UserLoading() : ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: delivery.length,
         itemBuilder: (context, index) {
