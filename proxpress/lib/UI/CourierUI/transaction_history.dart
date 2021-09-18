@@ -4,6 +4,7 @@ import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/classes/courier_classes/delivery_list.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/courier_classes/transaction_list.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -34,6 +35,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
               approved = courierData.approved;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
+                  .where('Delivery Status', isEqualTo: 'Delivered')
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
@@ -81,6 +83,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                                   ),
                                 ),
                               ),
+                              TransactionList(),
                             ],
                           ),
                         ),
