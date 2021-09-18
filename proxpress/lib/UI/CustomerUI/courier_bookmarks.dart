@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 import 'menu_drawer_customer.dart';
@@ -34,6 +37,13 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+    bool approved = true;
+    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+        .collection('Deliveries')
+        .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+        .snapshots()
+        .map(DatabaseService().deliveryDataListFromSnapshot);
+
       return new GestureDetector(
         onTap: (){
           if(count != 0){
@@ -62,14 +72,10 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                   color: Color(0xfffb0d0d),
                 ),
                 actions: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications_none_rounded,
-                    ),
-                    onPressed: () {
-                      _openEndDrawer();
-                    },
-                    iconSize: 25,
+                  StreamProvider<List<Delivery>>.value(
+                      value: deliveryList,
+                      initialData: [],
+                      child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
                   ),
                 ],
                 flexibleSpace: Container(

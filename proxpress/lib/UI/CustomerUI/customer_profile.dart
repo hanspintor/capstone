@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CustomerUI/menu_drawer_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
+import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
 import 'notif_drawer_customer.dart';
@@ -19,9 +22,6 @@ class CustomerProfile extends StatefulWidget {
 }
 class _CustomerProfileState extends State<CustomerProfile> {
 
-  void _openEndDrawer() {
-    _scaffoldKey.currentState.openEndDrawer();
-  }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final AuthService _auth = AuthService();
@@ -35,7 +35,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
+    bool approved = true;
 
+    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+        .collection('Deliveries')
+        .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+        .snapshots()
+        .map(DatabaseService().deliveryDataListFromSnapshot);
       return new GestureDetector(
         onTap: (){
           if(count != 0){
@@ -60,14 +66,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
               actions: [
-                IconButton(icon: Icon(
-                  Icons.notifications_none_rounded,
-                ),
-                  onPressed: (){
-                    _openEndDrawer();
-                  },
-                  iconSize: 25,
-                ),
+                StreamProvider<List<Delivery>>.value(
+                    value: deliveryList,
+                    initialData: [],
+                    child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+                )
               ],
               flexibleSpace: Container(
                 margin: EdgeInsets.only(top: 10),

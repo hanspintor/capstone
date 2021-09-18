@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
 //import 'package:lottie/lottie.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/user.dart';
+import 'package:proxpress/services/database.dart';
 
 class DeliveryStatus extends StatefulWidget {
   final Delivery delivery;
@@ -24,7 +28,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
   @override
   Widget build(BuildContext context) {
     GoogleMapController _googleMapController;
-
+    final user = Provider.of<TheUser>(context);
     LatLng pickup_pos = LatLng(widget.delivery.pickupCoordinates.latitude, widget.delivery.pickupCoordinates.longitude,);
     Marker _pickup = Marker(
       markerId: const MarkerId('pickup'),
@@ -42,7 +46,11 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
     );
 
     Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: _pickup.position, destination: _dropOff.position);
-
+    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+        .collection('Deliveries')
+        .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+        .snapshots()
+        .map(DatabaseService().deliveryDataListFromSnapshot);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

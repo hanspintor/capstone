@@ -10,6 +10,7 @@ import 'package:proxpress/UI/CustomerUI/pending_delivery_request.dart';
 import 'package:proxpress/classes/courier_classes/delivery_list.dart';
 import 'package:proxpress/classes/courier_classes/delivery_tile.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
 import 'package:proxpress/classes/customer_classes/request_list.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
@@ -25,22 +26,25 @@ class MyRequests extends StatefulWidget {
 }
 
 class _MyRequestsState extends State<MyRequests> {
-  void _openEndDrawer() {
-    _scaffoldKey.currentState.openEndDrawer();
-  }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-    bool approved = false;
+    bool approved = true;
     if(user != null) {
       return StreamBuilder<Customer>(
           stream: DatabaseService(uid: user.uid).customerData,
           builder: (context,snapshot){
             if(snapshot.hasData){
               Customer customerData = snapshot.data;
+
+              Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+                  .collection('Deliveries')
+                  .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+                  .snapshots()
+                  .map(DatabaseService().deliveryDataListFromSnapshot);
 
               Stream<List<Delivery>> deliveryRequestPending = FirebaseFirestore.instance
                   .collection('Deliveries')
@@ -86,15 +90,11 @@ class _MyRequestsState extends State<MyRequests> {
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                       ),
                       actions: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.notifications_none_rounded,
-                          ),
-                          onPressed: () {
-                            _openEndDrawer();
-                          },
-                          iconSize: 25,
-                        ),
+                        StreamProvider<List<Delivery>>.value(
+                            value: deliveryList,
+                            initialData: [],
+                            child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+                        )
                         //NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
                       ],
                       flexibleSpace: Container(
