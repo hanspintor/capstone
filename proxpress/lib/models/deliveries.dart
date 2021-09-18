@@ -19,6 +19,7 @@ class Delivery{
   final int deliveryFee;
   final String courierApproval;
   final String deliveryStatus;
+  final int rating;
 
   Delivery({
     this.uid,
@@ -39,5 +40,6 @@ class Delivery{
     this.deliveryFee,
     this.courierApproval,
     this.deliveryStatus,
+    this.rating,
   });
 }

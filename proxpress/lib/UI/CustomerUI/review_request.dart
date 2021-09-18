@@ -22,6 +22,7 @@ class ReviewRequest extends StatefulWidget {
   final String specificInstructions;
   final String paymentOption;
   final int deliveryFee;
+  final int rating;
 
   ReviewRequest({
     Key key,
@@ -39,7 +40,8 @@ class ReviewRequest extends StatefulWidget {
     @required this.whoWillPay,
     @required this.specificInstructions,
     @required this.paymentOption,
-    @required this.deliveryFee
+    @required this.deliveryFee,
+    this.rating
   }) : super(key: key);
 
   @override
@@ -230,7 +232,8 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         widget.paymentOption,
                         widget.deliveryFee,
                         'Pending',
-                        'Pending');
+                        'Pending',
+                        widget.rating);
                     await DatabaseService(uid: widget.courier.id).updateNotifStatusCourier(true);
                     await DatabaseService(uid: user.uid).updateNotifStatusCustomer(true);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardLocation()));

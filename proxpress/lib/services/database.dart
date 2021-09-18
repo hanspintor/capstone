@@ -161,7 +161,7 @@ class DatabaseService {
       GeoPoint dropOffCoordinates, String itemDescription, String senderName,
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
-      int deliveryFee, String courierApproval, String deliveryStatus) async {
+      int deliveryFee, String courierApproval, String deliveryStatus, int rating) async {
     await deliveryCollection
         .doc(uid)
         .set({
@@ -182,6 +182,7 @@ class DatabaseService {
       'Delivery Fee' : deliveryFee,
       'Courier Approval' : courierApproval,
       'Delivery Status' : deliveryStatus,
+      'Rating' : rating,
     });
   }
 
@@ -247,6 +248,7 @@ class DatabaseService {
         deliveryFee: (doc.data() as dynamic) ['Delivery Fee'] ?? '',
         courierApproval: (doc.data() as dynamic) ['Courier Approval'] ?? '',
         deliveryStatus: (doc.data() as dynamic) ['Delivery Status'] ?? '',
+        rating: (doc.data() as dynamic) ['Rating'] ?? '',
       );
     }).toList();
   }
@@ -347,6 +349,7 @@ class DatabaseService {
       deliveryFee: snapshot['Delivery Fee'],
       courierApproval: snapshot['Courier Approval'],
       deliveryStatus: snapshot['Delivery Status'],
+      rating: snapshot['Rating'],
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -41,6 +42,7 @@ class _TransactionTileState extends State<TransactionTile> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     Customer customerData = snapshot.data;
+                    int rating = widget.delivery.rating;
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ExpansionTileCard(
@@ -111,6 +113,14 @@ class _TransactionTileState extends State<TransactionTile> {
                                       title: Text("Rating", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                       subtitle: Container(
                                         padding: EdgeInsets.only(top: 5),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: List.generate(5, (index) {
+                                            return Icon(
+                                              index < rating ? Icons.star : Icons.star_border, color: Colors.amber,
+                                            );
+                                          }),
+                                        )
                                       ),
                                     ),
                                   ],
