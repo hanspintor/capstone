@@ -28,7 +28,7 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    if(widget.delivery.courierApproval == "Approved")
+    if(widget.delivery.courierApproval == "Approved" || widget.delivery.courierApproval == "Cancelled")
       view = false;
     else view = true;
     return user == null ? LoginScreen() : StreamBuilder<Courier>(

@@ -73,7 +73,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
               if (snapshot.hasData) {
                 Customer customerData = snapshot.data;
                 String name = "${customerData.fName} ${customerData.lName}";
-                showNotifcation(name);
+                //showNotifcation(name);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ExpansionTileCard(
