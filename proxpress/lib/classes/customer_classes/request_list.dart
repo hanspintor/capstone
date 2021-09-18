@@ -15,13 +15,30 @@ class _RequestListState extends State<RequestList> {
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
     //print(delivery.length.toString());
-
-    return delivery == null ? UserLoading() : ListView.builder(
-      shrinkWrap: true,
-      itemCount: delivery.length,
-      itemBuilder: (context, index) {
-        return RequestTile(delivery: delivery[index]);
-      },
+    if(delivery.length != 0){
+      return delivery == null ? UserLoading() : ListView.builder(
+        shrinkWrap: true,
+        itemCount: delivery.length,
+        itemBuilder: (context, index) {
+          return RequestTile(delivery: delivery[index]);
+        },
+      );
+    }
+    else return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              'You currently have no request.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

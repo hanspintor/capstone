@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -274,6 +276,19 @@ class _RequestTileState extends State<RequestTile> {
                                                 ),
                                               ],
                                             ),
+                                            Container(
+                                                height: 25,
+                                                child: (() {
+                                                  if (widget.delivery.deliveryStatus == "Delivered") {
+                                                    return ElevatedButton(
+                                                        child: Text('Send Feedback', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                        onPressed: () {
+                                                          showFeedback();
+                                                        }
+                                                    );
+                                                  }
+                                                }())
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -532,6 +547,56 @@ class _RequestTileState extends State<RequestTile> {
           return Container();
         }
       },
+    );
+  }
+
+  double rating = 0;
+  String feedback  = '';
+  void showFeedback(){
+    DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
+    DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id);
+    showDialog(
+      context : context,
+      builder: (context) => AlertDialog(
+        title: Text('How\'s My Service?'),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RatingBar.builder(
+              minRating: 1,
+              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+              updateOnDrag: true,
+              onRatingUpdate: (rating) => setState((){
+                this.rating = rating;
+              }),
+            ),
+            Text('Rate Me',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              maxLines: 2,
+              maxLength: 200,
+              decoration: InputDecoration(
+                hintText: 'Leave a Feedback',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.multiline,
+              onChanged: (val) => setState(() => feedback = val),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+              child: Text('OK'),
+              onPressed: () async{
+                  await DatabaseService().updateFeedback(rating, feedback, courier, customer);
+                  Navigator.pop(context);
+              }
+          ),
+        ],
+      ),
     );
   }
 }

@@ -20,6 +20,8 @@ class DatabaseService {
   // Delivery Price Collection Reference
   final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
 
+  final CollectionReference feedbackCollection = FirebaseFirestore.instance.collection('Feedback');
+
 
   // Create/Update a Customer Document
   Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl, bool notifStatus, int currentNotif) async {
@@ -182,6 +184,16 @@ class DatabaseService {
       'Delivery Fee' : deliveryFee,
       'Courier Approval' : courierApproval,
       'Delivery Status' : deliveryStatus,
+    });
+  }
+
+  //Create Feedback Document
+  Future updateFeedback(double rating, String feedback, DocumentReference courierRef,DocumentReference customerRef) async {
+    await feedbackCollection.doc(uid).set({
+      'Rating' : rating,
+      'Feedback' : feedback,
+      'Courier Reference' : courierRef,
+      'Customer Reference' : customerRef,
     });
   }
 
