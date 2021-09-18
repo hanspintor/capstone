@@ -64,6 +64,14 @@ class _MyRequestsState extends State<MyRequests> {
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
+              Stream<List<Delivery>> deliveryListCancelled = FirebaseFirestore.instance
+                  .collection('Deliveries')
+                  .where('Delivery Status', isEqualTo: 'Cancelled')
+                  .where('Courier Approval', isEqualTo: 'Cancelled')
+                  .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+                  .snapshots()
+                  .map(DatabaseService().deliveryDataListFromSnapshot);
+
               return WillPopScope(
                   onWillPop: () async {
                     print("Back Button Pressed");
@@ -132,6 +140,38 @@ class _MyRequestsState extends State<MyRequests> {
                             StreamProvider<List<Delivery>>.value(
                               initialData: [],
                               value: deliveryListOngoing,
+                              child: Card(
+                                child: RequestList(),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text("Finished Transactions",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                ),
+                              ),
+                            ),
+                            StreamProvider<List<Delivery>>.value(
+                              initialData: [],
+                              value: deliveryListDelivered,
+                              child: Card(
+                                child: RequestList(),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text("Cancelled Requests",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                ),
+                              ),
+                            ),
+                            StreamProvider<List<Delivery>>.value(
+                              initialData: [],
+                              value: deliveryListCancelled,
                               child: Card(
                                 child: RequestList(),
                               ),

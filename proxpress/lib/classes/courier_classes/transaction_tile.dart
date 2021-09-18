@@ -42,7 +42,6 @@ class _TransactionTileState extends State<TransactionTile> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     Customer customerData = snapshot.data;
-                    int rating = widget.delivery.rating;
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ExpansionTileCard(
@@ -113,14 +112,6 @@ class _TransactionTileState extends State<TransactionTile> {
                                       title: Text("Rating", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                       subtitle: Container(
                                         padding: EdgeInsets.only(top: 5),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: List.generate(5, (index) {
-                                            return Icon(
-                                              index < rating ? Icons.star : Icons.star_border, color: Colors.amber,
-                                            );
-                                          }),
-                                        )
                                       ),
                                     ),
                                   ],
