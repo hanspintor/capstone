@@ -60,58 +60,58 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
               return WillPopScope(
-                onWillPop: () async {
-                  print("Back Button Pressed");
-                  return false;
-                },
-                child: StreamProvider<List<Delivery>>.value(
-                  initialData: [],
-                  value: deliveryList,
-                  child: Scaffold(
-                    drawerEnableOpenDragGesture: false,
-                    endDrawerEnableOpenDragGesture: false,
-                    key: _scaffoldKey,
-                    appBar: AppBar(
-                      backgroundColor: Colors.white,
-                      iconTheme: IconThemeData(color: Color(0xfffb0d0d)
-                      ),
-                      actions: <Widget>[
-                        NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,)
-                      ],
-                      flexibleSpace: Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Image.asset(
-                          "assets/PROExpress-logo.png",
-                          height: 120,
-                          width: 120,
+                  onWillPop: () async {
+                    print("Back Button Pressed");
+                    return false;
+                  },
+                  child: StreamProvider<List<Delivery>>.value(
+                    initialData: [],
+                    value: deliveryList,
+                    child: Scaffold(
+                      drawerEnableOpenDragGesture: false,
+                      endDrawerEnableOpenDragGesture: false,
+                      key: _scaffoldKey,
+                      appBar: AppBar(
+                        backgroundColor: Colors.white,
+                        iconTheme: IconThemeData(color: Color(0xfffb0d0d)
+                        ),
+                        actions: <Widget>[
+                          NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,)
+                        ],
+                        flexibleSpace: Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Image.asset(
+                            "assets/PROExpress-logo.png",
+                            height: 120,
+                            width: 120,
+                          ),
                         ),
                       ),
-                    ),
-                    drawer: MainDrawerCourier(),
-                    endDrawer: NotifDrawerCourier(),
-                    body: SingleChildScrollView(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text("Welcome, ${courierData.fName}!",
-                                style: TextStyle(
-                                  fontSize: 25,
+                      drawer: MainDrawerCourier(),
+                      endDrawer: NotifDrawerCourier(),
+                      body: SingleChildScrollView(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text("Welcome, ${courierData.fName}!",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
                                 ),
                               ),
-                            ),
-                             !approved ? Container(child: _welcomeMessage(),) : Card(
-                               margin: EdgeInsets.all(20),
-                              child:  DeliveryList(),
-                             ),
-                          ],
+                              !approved ? Container(child: _welcomeMessage(),) : Card(
+                                margin: EdgeInsets.all(20),
+                                child:  DeliveryList(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
+                  )
               );
             } else {
               print('nice');

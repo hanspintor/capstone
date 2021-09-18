@@ -55,6 +55,10 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           } else{
             notifs = delivery.length;
           }
+
+          if(notifs == 0){
+            viewable = false;
+          }
           return Stack(
             children: [
               IconButton(
