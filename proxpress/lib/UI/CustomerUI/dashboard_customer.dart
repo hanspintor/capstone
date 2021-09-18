@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/courier_list.dart';
+import 'package:proxpress/classes/customer_classes/courier_list.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';

@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
-import 'package:proxpress/classes/delivery_list.dart';
-import 'package:proxpress/classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/courier_classes/delivery_list.dart';
+import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/courier_classes/transaction_list.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -34,6 +35,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
               approved = courierData.approved;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
+                  .where('Delivery Status', isEqualTo: 'Delivered')
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
@@ -55,7 +57,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                         iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                         ),
                         actions: <Widget>[
-                          NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
+                          NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,)
                         ],
                         flexibleSpace: Container(
                           margin: EdgeInsets.only(top: 10),
@@ -81,6 +83,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                                   ),
                                 ),
                               ),
+                              TransactionList(),
                             ],
                           ),
                         ),

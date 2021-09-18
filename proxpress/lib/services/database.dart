@@ -22,7 +22,7 @@ class DatabaseService {
 
 
   // Create/Update a Customer Document
-  Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl) async {
+  Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl, bool notifStatus, int currentNotif) async {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -31,6 +31,8 @@ class DatabaseService {
       'Password' : password,
       'Address' : address,
       'Avatar URL' : avatarUrl,
+      'Notification Status' : notifStatus,
+      'Current Notification' : currentNotif,
     });
   }
 
@@ -122,17 +124,34 @@ class DatabaseService {
   }
   // Update Delivery Status
   Future updateDeliveryStatus(String status) async {
-    return await courierCollection.doc(uid).update({
+    return await deliveryCollection.doc(uid).update({
       'Delivery Status' : status,
     });
   }
-  Future updateNotifCounter(int notifC) async {
+  Future customerCancelRequest() async {
+    return await deliveryCollection.doc(uid).update({
+      'Delivery Status' : 'Cancelled',
+      'Courier Approval' : 'Cancelled',
+    });
+  }
+  Future updateNotifCounterCourier(int notifC) async {
     return await courierCollection.doc(uid).update({
       'Current Notification': notifC,
     });
   }
-  Future updateNotifStatus(bool viewable) async {
+  Future updateNotifStatusCourier(bool viewable) async {
     return await courierCollection.doc(uid).update({
+      'Notification Status': viewable,
+    });
+  }
+
+  Future updateNotifCounterCustomer(int notifC) async {
+    return await customerCollection.doc(uid).update({
+      'Current Notification': notifC,
+    });
+  }
+  Future updateNotifStatusCustomer(bool viewable) async {
+    return await customerCollection.doc(uid).update({
       'Notification Status': viewable,
     });
   }
@@ -142,7 +161,7 @@ class DatabaseService {
       GeoPoint dropOffCoordinates, String itemDescription, String senderName,
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
-      int deliveryFee, String courierApproval, String deliveryStatus) async {
+      int deliveryFee, String courierApproval, String deliveryStatus, int rating) async {
     await deliveryCollection
         .doc(uid)
         .set({
@@ -163,6 +182,7 @@ class DatabaseService {
       'Delivery Fee' : deliveryFee,
       'Courier Approval' : courierApproval,
       'Delivery Status' : deliveryStatus,
+      'Rating' : rating,
     });
   }
 
@@ -177,6 +197,8 @@ class DatabaseService {
         email: (doc.data() as dynamic) ['Email'] ?? '',
         address: (doc.data() as dynamic) ['Address']?? '',
         avatarUrl: (doc.data() as dynamic) ['Avatar URL']?? '',
+        notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
+        currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
       );
     }).toList();
   }
@@ -226,6 +248,7 @@ class DatabaseService {
         deliveryFee: (doc.data() as dynamic) ['Delivery Fee'] ?? '',
         courierApproval: (doc.data() as dynamic) ['Courier Approval'] ?? '',
         deliveryStatus: (doc.data() as dynamic) ['Delivery Status'] ?? '',
+        rating: (doc.data() as dynamic) ['Rating'] ?? '',
       );
     }).toList();
   }
@@ -273,6 +296,8 @@ class DatabaseService {
       email: snapshot['Email'],
       address: snapshot['Address'],
       avatarUrl: snapshot['Avatar URL'],
+      notifStatus: snapshot['Notification Status'],
+      currentNotif: snapshot['Current Notification'],
     );
   }
 
@@ -324,6 +349,7 @@ class DatabaseService {
       deliveryFee: snapshot['Delivery Fee'],
       courierApproval: snapshot['Courier Approval'],
       deliveryStatus: snapshot['Delivery Status'],
+      rating: snapshot['Rating'],
     );
   }
 

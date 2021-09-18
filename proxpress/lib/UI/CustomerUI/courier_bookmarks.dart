@@ -9,7 +9,7 @@ import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 import 'menu_drawer_customer.dart';
 import 'notif_drawer_customer.dart';
-import 'package:proxpress/classes/courier_list.dart';
+import 'package:proxpress/classes/customer_classes/courier_list.dart';
 class CourierBookmarks extends StatefulWidget {
   @override
   _CourierBookmarksState createState() => _CourierBookmarksState();

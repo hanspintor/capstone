@@ -8,10 +8,12 @@ class Customer{
   final String password;
   final String address;
   final String avatarUrl;
+  final bool notifStatus;
+  final int currentNotif;
 
   final AuthService _auth = AuthService();
 
-  Customer({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.avatarUrl});
+  Customer({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.avatarUrl, this.notifStatus, this.currentNotif});
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCustomerPassword(password);

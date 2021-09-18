@@ -6,20 +6,20 @@ import 'package:proxpress/models/deliveries.dart';
 
 import 'package:proxpress/services/database.dart';
 
-class NotifCounter extends StatefulWidget {
+class NotifCounterCourier extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final approved;
-  NotifCounter({
+  NotifCounterCourier({
     Key key,
     @required this.scaffoldKey,
     @required this.approved,
   }) : super(key: key);
 
   @override
-  _NotifCounterState createState() => _NotifCounterState();
+  _NotifCounterCourierState createState() => _NotifCounterCourierState();
 }
 
-class _NotifCounterState extends State<NotifCounter> {
+class _NotifCounterCourierState extends State<NotifCounterCourier> {
   bool viewable;
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
@@ -61,8 +61,8 @@ class _NotifCounterState extends State<NotifCounter> {
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !widget.approved ? null : () async{
                   setFalse();
-                  await DatabaseService(uid: user.uid).updateNotifCounter(delivery.length);
-                   await DatabaseService(uid: user.uid).updateNotifStatus(viewable);
+                  await DatabaseService(uid: user.uid).updateNotifCounterCourier(delivery.length);
+                  await DatabaseService(uid: user.uid).updateNotifStatusCourier(viewable);
                   _openEndDrawer();
                   //print("flag inC: $flag");
                 },
@@ -96,12 +96,6 @@ class _NotifCounterState extends State<NotifCounter> {
           );
         } else return Container();
       },
-
     );
-
-
-
-
-
   }
 }

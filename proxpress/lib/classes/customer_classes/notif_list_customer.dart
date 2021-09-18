@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/classes/customer_classes/notif_tile_customer.dart';
 import 'package:proxpress/models/deliveries.dart';
 
-import 'notif_tile_courier.dart';
-
-class NotifList extends StatefulWidget {
+class NotifListCustomer extends StatefulWidget {
 
   @override
-  _NotifListState createState() => _NotifListState();
+  _NotifListCustomerState createState() => _NotifListCustomerState();
 }
 
-class _NotifListState extends State<NotifList> {
+class _NotifListCustomerState extends State<NotifListCustomer> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
@@ -22,7 +21,7 @@ class _NotifListState extends State<NotifList> {
         child: ListView.builder(
           itemCount: delivery.length,
           itemBuilder: (context, index){
-            return NotifTile(delivery: delivery[index]);
+            return NotifTileCustomer(delivery: delivery[index]);
           },
         ),
       ),

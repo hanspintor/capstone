@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/notif_list_courier.dart';
+import 'package:proxpress/classes/courier_classes/notif_list_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/user.dart';
@@ -51,7 +51,7 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
                   children: [
 
                     Expanded(
-                        child: !isClear ? NotifList() : Container(),
+                        child: !isClear ? NotifListCourier() : Container(),
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height / 2,

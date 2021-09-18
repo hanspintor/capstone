@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/CustomerUI/menu_drawer_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/default_profile_pic.dart';
@@ -58,16 +59,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
-              leading: IconButton(icon: Icon(
-                Icons.arrow_back,
-              ),
-                onPressed: (){
-                  Navigator.pop(context, false);
-
-
-                },
-                iconSize: 25,
-              ),
               actions: [
                 IconButton(icon: Icon(
                   Icons.notifications_none_rounded,
@@ -88,6 +79,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
               ),
               //title: Text("PROExpress"),
             ),
+            drawer: MainDrawerCustomer(),
             endDrawer: NotifDrawerCustomer(),
             body: SingleChildScrollView(
               child: StreamBuilder<Customer>(

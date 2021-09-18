@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -42,17 +43,8 @@ class CourierProfile extends StatelessWidget {
                   appBar: AppBar(
                     backgroundColor: Colors.white,
                     iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
-                    leading: IconButton(icon: Icon(
-                      Icons.arrow_back,
-                    ),
-                      onPressed: (){
-                        Navigator.pop(context, false);
-
-                      },
-                      iconSize: 25,
-                    ),
                     actions: [
-                      NotifCounter(scaffoldKey: _scaffoldKey, approved: approved,)
+                      NotifCounterCourier(scaffoldKey: _scaffoldKey, approved: approved,)
                     ],
                     flexibleSpace: Container(
                       margin: EdgeInsets.only(top: 10),
@@ -64,6 +56,7 @@ class CourierProfile extends StatelessWidget {
                     ),
                     //title: Text("PROExpress"),
                   ),
+                  drawer: MainDrawerCourier(),
                   endDrawer: NotifDrawerCourier(),
                   body: SingleChildScrollView(
                     child:  Center(

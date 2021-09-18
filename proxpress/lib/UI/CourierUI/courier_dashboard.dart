@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
-import 'package:proxpress/classes/delivery_list.dart';
-import 'package:proxpress/classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/courier_classes/delivery_list.dart';
+import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -60,58 +60,58 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
               return WillPopScope(
-                onWillPop: () async {
-                  print("Back Button Pressed");
-                  return false;
-                },
-                child: StreamProvider<List<Delivery>>.value(
-                  initialData: [],
-                  value: deliveryList,
-                  child: Scaffold(
-                    drawerEnableOpenDragGesture: false,
-                    endDrawerEnableOpenDragGesture: false,
-                    key: _scaffoldKey,
-                    appBar: AppBar(
-                      backgroundColor: Colors.white,
-                      iconTheme: IconThemeData(color: Color(0xfffb0d0d)
-                      ),
-                      actions: <Widget>[
-                        NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
-                      ],
-                      flexibleSpace: Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Image.asset(
-                          "assets/PROExpress-logo.png",
-                          height: 120,
-                          width: 120,
+                  onWillPop: () async {
+                    print("Back Button Pressed");
+                    return false;
+                  },
+                  child: StreamProvider<List<Delivery>>.value(
+                    initialData: [],
+                    value: deliveryList,
+                    child: Scaffold(
+                      drawerEnableOpenDragGesture: false,
+                      endDrawerEnableOpenDragGesture: false,
+                      key: _scaffoldKey,
+                      appBar: AppBar(
+                        backgroundColor: Colors.white,
+                        iconTheme: IconThemeData(color: Color(0xfffb0d0d)
+                        ),
+                        actions: <Widget>[
+                          NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,)
+                        ],
+                        flexibleSpace: Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Image.asset(
+                            "assets/PROExpress-logo.png",
+                            height: 120,
+                            width: 120,
+                          ),
                         ),
                       ),
-                    ),
-                    drawer: MainDrawerCourier(),
-                    endDrawer: NotifDrawerCourier(),
-                    body: SingleChildScrollView(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text("Welcome, ${courierData.fName}!",
-                                style: TextStyle(
-                                  fontSize: 25,
+                      drawer: MainDrawerCourier(),
+                      endDrawer: NotifDrawerCourier(),
+                      body: SingleChildScrollView(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text("Welcome, ${courierData.fName}!",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
                                 ),
                               ),
-                            ),
-                             !approved ? Container(child: _welcomeMessage(),) : Card(
-                               margin: EdgeInsets.all(20),
-                              child:  DeliveryList(),
-                             ),
-                          ],
+                              !approved ? Container(child: _welcomeMessage(),) : Card(
+                                margin: EdgeInsets.all(20),
+                                child:  DeliveryList(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
+                  )
               );
             } else {
               print('nice');

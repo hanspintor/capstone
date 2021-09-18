@@ -8,16 +8,16 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 
-class NotifTile extends StatefulWidget {
+class NotifTileCourier extends StatefulWidget {
   final Delivery delivery;
 
-  NotifTile({ Key key, this.delivery}) : super(key: key);
+  NotifTileCourier({ Key key, this.delivery}) : super(key: key);
 
   @override
-  State<NotifTile> createState() => _NotifTileState();
+  State<NotifTileCourier> createState() => _NotifTileCourierState();
 }
 
-class _NotifTileState extends State<NotifTile> {
+class _NotifTileCourierState extends State<NotifTileCourier> {
   int flag = 0;
   String uid;
   bool view = true;
