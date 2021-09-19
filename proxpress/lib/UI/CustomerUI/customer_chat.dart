@@ -65,6 +65,7 @@ class _CustomerChatState extends State<CustomerChat> {
     Stream<List<Message>> messageList = FirebaseFirestore.instance
         .collection('Messages')
         .where('Sent By', whereIn: [FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id), FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id)])
+       // .orderBy('Time Sent', descending: false)
         //.where('Sent To', isEqualTo: [FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id), FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id)])
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot);
@@ -125,7 +126,6 @@ class _CustomerChatState extends State<CustomerChat> {
               }
             ),
             Expanded(
-              child: SingleChildScrollView(
                 child: StreamProvider<List<Message>>.value(
                   value: messageList,
                   initialData: [],
@@ -133,7 +133,7 @@ class _CustomerChatState extends State<CustomerChat> {
                     child: MessageList(),
                   ),
                 ),
-              )
+
             ),
             _buildMessageTextField(),
           ]

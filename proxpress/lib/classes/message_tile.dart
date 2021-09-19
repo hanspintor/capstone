@@ -31,9 +31,8 @@ class _MessageTileState extends State<MessageTile> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     print(widget.message.uid);
-    return user == null ? LoginScreen() :  SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+    return user == null ? LoginScreen() :  Padding(
+        padding: const EdgeInsets.all(10.0),
         child: StreamBuilder<Message>(
           stream: DatabaseService(uid: widget.message.uid).messageData,
           builder: (context, snapshot) {
@@ -55,7 +54,6 @@ class _MessageTileState extends State<MessageTile> {
             }
           }
         ),
-      ),
-    );
+      );
   }
 }

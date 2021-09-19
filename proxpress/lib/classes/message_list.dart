@@ -19,7 +19,7 @@ class _MessageListState extends State<MessageList> {
   @override
   Widget build(BuildContext context) {
     final message = Provider.of<List<Message>>(context);
-
+    print(message.length);
     if(message.length != 0){
       return message == null ? UserLoading() : ListView.builder(
         shrinkWrap: true,
