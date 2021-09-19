@@ -3,6 +3,7 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
+import 'package:proxpress/models/messages.dart';
 
 class DatabaseService {
   final String uid;
@@ -17,10 +18,14 @@ class DatabaseService {
   // Deliveries Collection Reference
   final CollectionReference deliveryCollection = FirebaseFirestore.instance.collection('Deliveries');
 
-  // Delivery Price Collection Reference
+  // Delivery Prices Collection Reference
   final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
 
-  final CollectionReference feedbackCollection = FirebaseFirestore.instance.collection('Feedback');
+  // Feedbacks Collection Reference
+  final CollectionReference feedbackCollection = FirebaseFirestore.instance.collection('Feedbacks');
+
+  // Messages Collection Reference
+  final CollectionReference messageCollection = FirebaseFirestore.instance.collection('Messages');
 
 
   // Create/Update a Customer Document
@@ -217,6 +222,16 @@ class DatabaseService {
     });
   }
 
+  // Create a Message Document
+  Future createMessageData(String messageContent, Timestamp timeSent, DocumentReference sentBy, DocumentReference sentTo) async {
+    return await messageCollection.doc(uid).set({
+      'Message Content' : messageContent,
+      'Time Sent' : timeSent,
+      'Sent By' : sentBy,
+      'Sent To' : sentTo,
+    });
+  }
+
   // Customer Model List Builder
   List<Customer> _customerDataListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
@@ -293,6 +308,19 @@ class DatabaseService {
         vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
         baseFare: (doc.data() as dynamic) ['Base Fare'] ?? '',
         farePerKM: (doc.data() as dynamic) ['Fare Per KM'] ?? '',
+      );
+    }).toList();
+  }
+
+  // Delivery Model List Builder
+  List<Message> messageDataListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return Message(
+        uid: doc.id,
+        messageContent: (doc.data() as dynamic) ['Message Content'] ?? '',
+        timeSent: (doc.data() as dynamic) ['Time Sent'] ?? '',
+        sentBy: (doc.data() as dynamic) ['Sent By'] ?? '',
+        sentTo: (doc.data() as dynamic) ['Sent To'] ?? '',
       );
     }).toList();
   }
@@ -395,6 +423,18 @@ class DatabaseService {
       farePerKM: snapshot['Fare Per KM']
     );
   }
+
+  // Get Message Data using StreamBuilder
+  Message _messageDataFromSnapshot(DocumentSnapshot snapshot){
+    return Message(
+      uid: uid,
+      messageContent: snapshot['Message Content'],
+      timeSent: snapshot['Time Sent'],
+      sentBy: snapshot['Sent By'],
+      sentTo: snapshot['Sent To']
+    );
+  }
+
   // Get Customer Document Data
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
@@ -413,5 +453,10 @@ class DatabaseService {
   // Get Delivery Price Document Data
   Stream<DeliveryPrice> get deliveryPriceData{
     return deliveryPriceCollection.doc(uid).snapshots().map(_deliveryPriceDataFromSnapshot);
+  }
+
+  // Get Message Document Data
+  Stream<Message> get messageData{
+    return messageCollection.doc(uid).snapshots().map(_messageDataFromSnapshot);
   }
 }
