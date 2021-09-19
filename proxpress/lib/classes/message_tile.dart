@@ -11,6 +11,7 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/messages.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:intl/intl.dart';
 
 class MessageTile extends StatefulWidget {
   final Message message;
@@ -39,12 +40,12 @@ class _MessageTileState extends State<MessageTile> {
           print(snapshot.hasData);
           if(snapshot.hasData){
             Message message = snapshot.data;
-
+            String time = DateFormat.Hms().format(message.timeSent.toDate());
             print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
             if (message.sentBy.toString().contains('Customers')) {
-              return Text('Message: ${message.messageContent} \nTime Sent: ${message.timeSent.toString()}', textAlign: TextAlign.right,);
+              return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.right,);
             } else if (message.sentBy.toString().contains('Couriers')) {
-              return Text('Message: ${message.messageContent} \nTime Sent: ${message.timeSent.toString()}', textAlign: TextAlign.left,);
+              return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.left,);
             } else {
               return Container();
             }

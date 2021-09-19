@@ -62,11 +62,10 @@ class _DeliveryTileState extends State<DeliveryTile> {
                 // print("flag ${flag}");
                 // NotificationService().showNotification(1, name, notifDescrip, 1);
                 // NotificationService().showNotification(2, name, notifDescrip, 1);
-                print(name);
-
+                //print(name);
                  if(widget.delivery.courierApproval == "Pending" ){
-                   NotificationService().showNotification(1, name, notifDescrip, 1);
-                   NotificationService().showNotification(2, name, notifDescrip, 2);
+                    NotificationService().showNotification(1, name, notifDescrip, 1);
+                   // NotificationService().showNotification(2, name, notifDescrip, 2);
                    // if(flag<widget.lengthDelivery){
                    //
                    //   flag++;
