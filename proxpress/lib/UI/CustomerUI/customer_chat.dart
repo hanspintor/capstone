@@ -65,7 +65,7 @@ class _CustomerChatState extends State<CustomerChat> {
     Stream<List<Message>> messageList = FirebaseFirestore.instance
         .collection('Messages')
         .where('Sent By', whereIn: [FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id), FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id)])
-       // .orderBy('Time Sent', descending: false)
+        .orderBy('Time Sent', descending: false)
         //.where('Sent To', isEqualTo: [FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id), FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id)])
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot);
@@ -110,31 +110,35 @@ class _CustomerChatState extends State<CustomerChat> {
         ),
         //title: Text("PROExpress"),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            StreamBuilder<Courier>(
-              stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  Courier courier = snapshot.data;
+          Container(
+            decoration: BoxDecoration(border: Border.all(), color: Colors.red),
+            child: StreamBuilder<Courier>(
+                stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    Courier courier = snapshot.data;
 
-                  return Text("${courier.fName} ${courier.lName}");
-                } else {
-                  return Text('Loading');
+                    return Text("${courier.fName} ${courier.lName}");
+                  } else {
+                    return Text('Loading');
+                  }
                 }
-              }
             ),
-            Expanded(
-                child: StreamProvider<List<Message>>.value(
-                  value: messageList,
-                  initialData: [],
-                  child: Container(
+          ),
+                 Container(
+                   height: 500,
+                   decoration: BoxDecoration(border: Border.all()),
+                   child: StreamProvider<List<Message>>.value(
+                    value: messageList,
+                    initialData: [],
                     child: MessageList(),
-                  ),
                 ),
+                 ),
 
-            ),
+
             _buildMessageTextField(),
           ]
         ),
