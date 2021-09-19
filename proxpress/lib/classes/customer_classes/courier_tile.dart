@@ -114,9 +114,18 @@ class _CourierTileState extends State<CourierTile> {
                           ),
                         ),
                       ),
-                      Container(
-                          padding: EdgeInsets.only(right: 40),
-                          child: Image.network(widget.courier.vehiclePhoto_, height: 140, width: 326,)
+                      Stack(
+                        children: [
+                          Container(
+                            child: const Center(child: CircularProgressIndicator(),),
+                            height: 150,
+                            width: 326,
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(right: 40),
+                            child: Image.network(widget.courier.vehiclePhoto_, height: 140, width: 326,)
+                          ),
+                        ],
                       ),
                       SizedBox(height: 20,),
                       Align(

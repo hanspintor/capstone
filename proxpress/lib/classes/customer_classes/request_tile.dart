@@ -3,6 +3,7 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:proxpress/UI/CustomerUI/customer_chat.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -24,16 +25,12 @@ class RequestTile extends StatefulWidget {
 
 class _RequestTileState extends State<RequestTile> {
   int flag = 0;
-  String uid;
 
   @override
-
   Widget build(BuildContext context) {
-
-    uid = widget.delivery.customerRef.id;
-
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+
     return user == null ? LoginScreen() : StreamBuilder<Delivery>(
       stream: DatabaseService(uid: widget.delivery.uid).deliveryData,
       builder: (context, snapshot) {
@@ -55,7 +52,7 @@ class _RequestTileState extends State<RequestTile> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<Customer>(
-                  stream: DatabaseService(uid: uid).customerData,
+                  stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       Customer customerData = snapshot.data;
@@ -147,18 +144,33 @@ class _RequestTileState extends State<RequestTile> {
                                                   ),
                                                 ),
                                               ),
-                                              Container(
-                                                height: 25,
-                                                child: (() {
-                                                  if (widget.delivery.deliveryStatus == "Ongoing") {
-                                                    return ElevatedButton(
-                                                        child: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                        onPressed: () {
-                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryStatus(delivery: widget.delivery)));
-                                                        }
-                                                    );
-                                                  }
-                                                }())
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 25,
+                                                    child: (() {
+                                                      return ElevatedButton(
+                                                          child: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                          onPressed: () {
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryStatus(delivery: widget.delivery)));
+                                                          }
+                                                      );
+                                                    }())
+                                                  ),
+                                                  SizedBox(width: 20,),
+                                                  Container(
+                                                    height: 25,
+                                                    child: (() {
+                                                      return ElevatedButton(
+                                                          child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                          onPressed: () {
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerChat(delivery: widget.delivery)));
+                                                          }
+                                                      );
+                                                    }())
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
@@ -182,7 +194,7 @@ class _RequestTileState extends State<RequestTile> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<Customer>(
-                  stream: DatabaseService(uid: uid).customerData,
+                  stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       Customer customerData = snapshot.data;
@@ -309,7 +321,7 @@ class _RequestTileState extends State<RequestTile> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<Customer>(
-                  stream: DatabaseService(uid: uid).customerData,
+                  stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       Customer customerData = snapshot.data;
@@ -431,7 +443,7 @@ class _RequestTileState extends State<RequestTile> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<Customer>(
-                  stream: DatabaseService(uid: uid).customerData,
+                  stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       Customer customerData = snapshot.data;
@@ -555,6 +567,7 @@ class _RequestTileState extends State<RequestTile> {
   void showFeedback(){
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
     DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id);
+
     showDialog(
       context : context,
       builder: (context) => AlertDialog(

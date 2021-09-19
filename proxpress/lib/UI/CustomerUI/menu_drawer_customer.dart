@@ -51,12 +51,21 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                         Customer customerData = snapshot.data;
                         return Column(
                           children: [
-                            Container(
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(customerData.avatarUrl),
-                                backgroundColor: Colors.white,
-                              ),
+                            Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                  child: Center(child: CircularProgressIndicator(),),
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: NetworkImage(customerData.avatarUrl),
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 20,),
                             Text('${customerData.fName} ${customerData.lName}', style: TextStyle(fontSize: 20)),
