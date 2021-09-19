@@ -5,6 +5,13 @@ import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/deliveries.dart';
 
 class DeliveryList extends StatefulWidget {
+  final bool notifPopUpStatus;
+  final int notifPopUpCounter;
+  DeliveryList({
+    Key key,
+    @required this.notifPopUpStatus,
+    @required this.notifPopUpCounter,
+  }) : super(key: key);
   @override
   _DeliveryListState createState() => _DeliveryListState();
 }
@@ -21,7 +28,11 @@ class _DeliveryListState extends State<DeliveryList> {
         child: ListView.builder(
           itemCount: delivery.length,
           itemBuilder: (context, index) {
-            return DeliveryTile(delivery: delivery[index]);
+            return DeliveryTile(delivery: delivery[index],
+              lengthDelivery: delivery.length,
+              notifPopUpStatus: widget.notifPopUpStatus,
+              notifPopUpCounter: widget.notifPopUpCounter,
+            );
           },
         ),
       ),

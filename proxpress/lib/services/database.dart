@@ -65,7 +65,15 @@ class DatabaseService {
   }
 
   // Create/Update a Courier Document
-  Future updateCourierData(String fname, String lname, String email, String contactNo, String password, String address, String status, String avatarUrl, bool approved, String vehicleType, String vehicleColor, String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_, DocumentReference deliveryPriceRef, bool notifStatus, int currentNotif) async {
+  Future updateCourierData(String fname, String lname, String email,
+      String contactNo, String password, String address, String status,
+      String avatarUrl, bool approved, String vehicleType,
+      String vehicleColor, String driversLicenseFront_,
+      String driversLicenseBack_, String nbiClearancePhoto_,
+      String vehicleRegistrationOR_, String vehicleRegistrationCR_,
+      String vehiclePhoto_, DocumentReference deliveryPriceRef,
+      bool notifStatus, int currentNotif, bool notifPopStatus,
+      int notifPopCounter) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -87,6 +95,8 @@ class DatabaseService {
       'Delivery Price Reference': deliveryPriceRef,
       'Notification Status' : notifStatus,
       'Current Notification' : currentNotif,
+      'Notification Pop Up Status' : notifPopStatus,
+      'Current Notification Pop Up' : notifPopCounter
     });
   }
 
@@ -144,6 +154,16 @@ class DatabaseService {
   Future updateNotifStatusCourier(bool viewable) async {
     return await courierCollection.doc(uid).update({
       'Notification Status': viewable,
+    });
+  }
+  Future updateNotifPopUpStatusCourier(bool popUpStatus) async {
+    return await courierCollection.doc(uid).update({
+      'Notification Pop Up Status': popUpStatus,
+    });
+  }
+  Future updateNotifPopUpCounterCourier(int counter) async {
+    return await courierCollection.doc(uid).update({
+      'Current Notification Pop Up': counter,
     });
   }
 
@@ -233,6 +253,8 @@ class DatabaseService {
         vehiclePhoto_: (doc.data() as dynamic) ['Vehicle Photo URL'] ?? '',
         notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
         currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
+        NotifPopStatus: (doc.data() as dynamic) ['Notification Pop Up Status'] ?? '',
+        NotifPopCounter: (doc.data() as dynamic) ['Current Notification Pop Up'] ?? '',
       );
     }).toList();
   }
@@ -334,7 +356,9 @@ class DatabaseService {
       vehiclePhoto_: snapshot['Vehicle Photo URL'],
       deliveryPriceRef: snapshot['Delivery Price Reference'],
       notifStatus: snapshot['Notification Status'],
-      currentNotif: snapshot['Current Notification']
+      currentNotif: snapshot['Current Notification'],
+      NotifPopStatus: snapshot['Notification Pop Up Status'],
+      NotifPopCounter: snapshot['Current Notification Pop Up']
     );
   }
 

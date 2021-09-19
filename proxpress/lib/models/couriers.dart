@@ -22,6 +22,8 @@ class Courier{
   final String vehiclePhoto_;
   final bool notifStatus;
   final int currentNotif;
+  final bool NotifPopStatus;
+  final int NotifPopCounter;
   final DocumentReference deliveryPriceRef;
 
   final AuthService _auth = AuthService();
@@ -32,7 +34,9 @@ class Courier{
     this.approved, this.vehicleType, this.vehicleColor,
     this.driversLicenseFront_, this.driversLicenseBack_, this.nbiClearancePhoto_,
     this.vehicleRegistrationOR_, this.vehicleRegistrationCR_, this.vehiclePhoto_,
-    this.deliveryPriceRef, this.notifStatus, this.currentNotif});
+    this.deliveryPriceRef, this.notifStatus, this.currentNotif, this.NotifPopStatus,
+    this.NotifPopCounter
+  });
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCourierPassword(password);

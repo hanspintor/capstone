@@ -6,13 +6,24 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:proxpress/services/notification.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
+import 'dart:math';
 
 class DeliveryTile extends StatefulWidget {
   final Delivery delivery;
+  final int lengthDelivery;
+  final bool notifPopUpStatus;
+  final int notifPopUpCounter;
+
 
   DeliveryTile({
     Key key,
     @required this.delivery,
+    @required this.lengthDelivery,
+    @required this.notifPopUpStatus,
+    @required this.notifPopUpCounter,
   }) : super(key: key);
 
   @override
@@ -20,64 +31,61 @@ class DeliveryTile extends StatefulWidget {
 }
 
 class _DeliveryTileState extends State<DeliveryTile> {
-  int flag = 0;
   String uid;
-  FlutterLocalNotificationsPlugin localNotication;
+
   @override
   void initState(){
     super.initState();
-    var androidInitialize = new AndroidInitializationSettings('mipmap/ic_launcher');
-    var iOSInitialize = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-    localNotication = new FlutterLocalNotificationsPlugin();
-    localNotication.initialize(
-        initializationSettings
-    );
-  }
-  void showNotifcation(String name,) {
-    var androidDetails = new AndroidNotificationDetails(
-        "Channel ID",
-        "Local Notifcation",
-        "This is description",
-        importance: Importance.high
-    );
-    var IOSDetails = new IOSNotificationDetails();
-    var generalNotif = new NotificationDetails(android: androidDetails, iOS: IOSDetails);
-    var schedNotif = DateTime.now().add(Duration(seconds: 1));
-    localNotication.schedule(
-        0,
-        name,
-        "requested a delivery",
-        schedNotif,
-        generalNotif
-    );
+
+    tz.initializeTimeZones();
   }
 
   @override
   Widget build(BuildContext context) {
+
     uid = widget.delivery.customerRef.id;
+    int flag = 0;
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    return user == null ? LoginScreen() : StreamBuilder<Delivery>(
-      stream: DatabaseService(uid: widget.delivery.uid).deliveryData,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        //Delivery deliveryData = snapshot.data;
-
-        return Padding(
+    return user == null ? LoginScreen() : Padding(
           padding: const EdgeInsets.all(8.0),
           child: StreamBuilder<Customer>(
             stream: DatabaseService(uid: uid).customerData,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+
                 Customer customerData = snapshot.data;
                 String name = "${customerData.fName} ${customerData.lName}";
-                //showNotifcation(name);
+                String notifDescrip = "have requested a delivery";
+                // print("length ${widget.lengthDelivery}");
+                // print("flag ${flag}");
+                // NotificationService().showNotification(1, name, notifDescrip, 1);
+                // NotificationService().showNotification(2, name, notifDescrip, 1);
+                print(name);
+
+                 if(widget.delivery.courierApproval == "Pending" ){
+                   NotificationService().showNotification(1, name, notifDescrip, 1);
+                   NotificationService().showNotification(2, name, notifDescrip, 2);
+                   // if(flag<widget.lengthDelivery){
+                   //
+                   //   flag++;
+                   //   print("flag1 ${flag}");
+                   //   print("length ${widget.lengthDelivery}");
+                   //
+                   //
+                   // }
+                   // else if(flag == widget.lengthDelivery){
+                   //   print("hu ${widget.notifPopUpStatus}");
+                   //   DatabaseService(uid: user.uid).updateNotifPopUpCounterCourier(flag);
+                   //   DatabaseService(uid: user.uid).updateNotifPopUpStatusCourier(false);
+                   // }
+
+                 }
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ExpansionTileCard(
-                    title: Text("${customerData.fName} ${customerData.lName}",
+                    title: Text("${name}",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                     leading: Container(
                       child: CircleAvatar(
@@ -190,11 +198,6 @@ class _DeliveryTileState extends State<DeliveryTile> {
             }
           ),
         );
-      }
-      else {
-        return Container();
-      }
-    },
-    );
-  }
+
+    }
 }

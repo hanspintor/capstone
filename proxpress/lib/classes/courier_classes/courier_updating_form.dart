@@ -469,7 +469,9 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         courierData.vehiclePhoto_,
                                         courierData.deliveryPriceRef,
                                         courierData.notifStatus,
-                                        courierData.currentNotif
+                                        courierData.currentNotif,
+                                        courierData.NotifPopStatus,
+                                        courierData.NotifPopCounter,
                                       );
 
                                       if (profilePicture != null) {

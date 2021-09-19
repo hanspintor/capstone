@@ -53,7 +53,7 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
                     Expanded(
                         child: !isClear ? NotifListCourier() : Container(),
                     ),
-                    Container(
+                    isClear ? Container(
                       height: MediaQuery.of(context).size.height / 2,
                       child: Text(
                         caption,
@@ -61,7 +61,7 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
 
                         ),
                       ),
-                    ),
+                    ) : Container(),
                     Container(
                       height: MediaQuery.of(context).size.height / 20,
                       width: MediaQuery.of(context).size.width / 1,

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
-
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:proxpress/services/database.dart';
+import 'package:proxpress/services/notification.dart';
 
 class NotifCounterCourier extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -32,6 +34,12 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
   }
   int notifs;
 
+  @override
+  void initState(){
+    super.initState();
+
+    tz.initializeTimeZones();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           Courier notifData = snapshot.data;
-          //showNotifcation();
+
           if(notifData.currentNotif != delivery.length){
             if(notifData.currentNotif < delivery.length){
               notifs = delivery.length - notifData.currentNotif;
@@ -65,6 +73,8 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !widget.approved ? null : () async{
                   setFalse();
+
+
                   await DatabaseService(uid: user.uid).updateNotifCounterCourier(delivery.length);
                   await DatabaseService(uid: user.uid).updateNotifStatusCourier(viewable);
                   _openEndDrawer();

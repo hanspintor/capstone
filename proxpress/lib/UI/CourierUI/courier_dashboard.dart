@@ -45,6 +45,8 @@ class _CourierDashboardState extends State<CourierDashboard> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
+    bool notifPopUpStatus = false;
+    int notifCounter = 0;
     if(user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
@@ -52,6 +54,8 @@ class _CourierDashboardState extends State<CourierDashboard> {
             if(snapshot.hasData){
               Courier courierData = snapshot.data;
               approved = courierData.approved;
+              notifPopUpStatus = courierData.NotifPopStatus;
+              notifCounter = courierData.NotifPopCounter;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
                   .where('Courier Approval', isEqualTo: 'Pending')
@@ -104,7 +108,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                               ),
                               !approved ? Container(child: _welcomeMessage(),) : Card(
                                 margin: EdgeInsets.all(20),
-                                child:  DeliveryList(),
+                                child:  DeliveryList(notifPopUpStatus: notifPopUpStatus,notifPopUpCounter: notifCounter,),
                               ),
                             ],
                           ),
