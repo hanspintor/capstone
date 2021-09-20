@@ -33,7 +33,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
   double rating = 0;
   StreamSubscription _locationSubscription;
   Marker marker;
-  Circle circle;
 
   void updateMarkerAndCircle(GeoPoint courierLocation){
     LatLng latlng = LatLng(courierLocation.latitude, courierLocation.longitude);
@@ -216,8 +215,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                           myLocationButtonEnabled: false,
                           zoomControlsEnabled: false,
                           initialCameraPosition: _initialCameraPosition,
-                          //markers: Set.of((marker != null) ? [marker] : []),
-                          //circles: Set.of((circle != null) ? [circle] : []),
                           markers: {
                             if (_pickup != null) _pickup,
                             if (_dropOff != null) _dropOff,
@@ -285,8 +282,13 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Delivery deliveryData = snapshot.data;
-              return FloatingActionButton(
-                  child: ClipOval(child: Image.asset('assets/courier.png')),
+              return FloatingActionButton.extended(
+                label: Text('Courier Location'),
+                  icon: Container(
+                    height: 20,
+                      width: 20,
+                      child: Image.asset('assets/courier.png')
+                  ),
                   onPressed: () {
                     getCurrentLocation(deliveryData.courierLocation);
                     print(deliveryData.courierLocation.latitude);
