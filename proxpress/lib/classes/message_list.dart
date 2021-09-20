@@ -12,14 +12,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MessageList extends StatefulWidget {
   final List<Message> messageList;
+  final ScrollController scrollController;
 
-  const MessageList({Key key, this.messageList}) : super(key: key);
+  const MessageList({Key key, this.messageList, this.scrollController}) : super(key: key);
 
   @override
   _MessageListState createState() => _MessageListState();
 }
 
 class _MessageListState extends State<MessageList> {
+
+
+
   @override
   Widget build(BuildContext context) {
     print(widget.messageList.length);
@@ -27,9 +31,16 @@ class _MessageListState extends State<MessageList> {
     if(widget.messageList.length != 0){
       return widget.messageList == null ? UserLoading() : ListView.builder(
         shrinkWrap: true,
-        itemCount: widget.messageList.length,
+        controller: widget.scrollController,
+        itemCount: widget.messageList.length + 1,
         itemBuilder: (context, index) {
-          return MessageTile(message: widget.messageList[index]);
+          if(index == widget.messageList.length){
+            return Container(
+              height: 50,
+            );
+          } else{
+            return MessageTile(message: widget.messageList[index]);
+          }
         },
       );
     } else {
