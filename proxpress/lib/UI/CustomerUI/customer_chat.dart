@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,7 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/messages.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CustomerChat extends StatefulWidget {
   final Delivery delivery;
@@ -62,11 +65,22 @@ class _CustomerChatState extends State<CustomerChat> {
 
   @override
   Widget build(BuildContext context) {
-    Stream<List<Message>> messageList = FirebaseFirestore.instance
+    DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id);
+    DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
+
+    Stream<List<Message>> messageListCustomerToCour = FirebaseFirestore.instance
         .collection('Messages')
-        .where('Sent By', whereIn: [FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id), FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id)])
-        .orderBy('Time Sent', descending: false)
-        //.where('Sent To', isEqualTo: [FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id), FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id)])
+        .where('Sent By', isEqualTo: customer)
+        .where('Sent To', isEqualTo: courier)
+        //.orderBy('Time Sent', descending: false)
+        .snapshots()
+        .map(DatabaseService().messageDataListFromSnapshot);
+
+    Stream<List<Message>> messageListCourToCustomer = FirebaseFirestore.instance
+        .collection('Messages')
+        .where('Sent By', isEqualTo: courier)
+        .where('Sent To', isEqualTo: customer)
+        //.orderBy('Time Sent', descending: false)
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot);
 
@@ -113,32 +127,50 @@ class _CustomerChatState extends State<CustomerChat> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-          Container(
-            decoration: BoxDecoration(border: Border.all(), color: Colors.red),
-            child: StreamBuilder<Courier>(
-                stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
+            Container(
+              decoration: BoxDecoration(border: Border.all(), color: Colors.red),
+              child: StreamBuilder<Courier>(
+                  stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Courier courier = snapshot.data;
+
+                      return Text("${courier.fName} ${courier.lName}");
+                    } else {
+                      return Text('Loading');
+                    }
+                  }
+              ),
+            ),
+            Container(
+              height: 500,
+              decoration: BoxDecoration(border: Border.all()),
+              child:
+              // StreamProvider<List<Message>>.value(
+              //   value: messageListCustomerToCour,
+              //   initialData: [],
+              //   child: MessageList(),
+              // ),
+              StreamBuilder(
+                stream: CombineLatestStream.list([
+                  messageListCustomerToCour,
+                  messageListCourToCustomer,
+                ]),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    Courier courier = snapshot.data;
+                    List<List<Message>> twoMessageLists = snapshot.data;
 
-                    return Text("${courier.fName} ${courier.lName}");
+                    List<Message> mergedMessageList = twoMessageLists[0] + twoMessageLists[1];
+
+                    mergedMessageList.sort((a, b) => a.timeSent.compareTo(b.timeSent));
+
+                    return MessageList(messageList: mergedMessageList);
                   } else {
-                    return Text('Loading');
+                    return Text('');
                   }
                 }
+              ),
             ),
-          ),
-                 Container(
-                   height: 500,
-                   decoration: BoxDecoration(border: Border.all()),
-                   child: StreamProvider<List<Message>>.value(
-                    value: messageList,
-                    initialData: [],
-                    child: MessageList(),
-                ),
-                 ),
-
-
             _buildMessageTextField(),
           ]
         ),

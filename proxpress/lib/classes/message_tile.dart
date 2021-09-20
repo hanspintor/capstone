@@ -30,17 +30,16 @@ class _MessageTileState extends State<MessageTile> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    print(widget.message.uid);
+    //print(widget.message.uid);
     return user == null ? LoginScreen() :  Container(
         margin: EdgeInsets.symmetric(vertical: 8),
         child: StreamBuilder<Message>(
           stream: DatabaseService(uid: widget.message.uid).messageData,
           builder: (context, snapshot) {
-            print(snapshot.hasData);
             if(snapshot.hasData){
               Message message = snapshot.data;
               String time = DateFormat.jm().format(message.timeSent.toDate());
-              print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
+              //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
               if (message.sentBy.toString().contains('Customers')) {
                 return Text('${message.messageContent} :You \nTime Sent: ${time}', textAlign: TextAlign.right,);
               } else if (message.sentBy.toString().contains('Couriers')) {
@@ -48,7 +47,6 @@ class _MessageTileState extends State<MessageTile> {
               } else {
                 return Container();
               }
-
             } else {
               return Container();
             }

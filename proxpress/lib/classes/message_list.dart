@@ -11,6 +11,10 @@ import 'package:proxpress/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MessageList extends StatefulWidget {
+  final List<Message> messageList;
+
+  const MessageList({Key key, this.messageList}) : super(key: key);
+
   @override
   _MessageListState createState() => _MessageListState();
 }
@@ -18,14 +22,14 @@ class MessageList extends StatefulWidget {
 class _MessageListState extends State<MessageList> {
   @override
   Widget build(BuildContext context) {
-    final message = Provider.of<List<Message>>(context);
-    print(message.length);
-    if(message.length != 0){
-      return message == null ? UserLoading() : ListView.builder(
+    print(widget.messageList.length);
+
+    if(widget.messageList.length != 0){
+      return widget.messageList == null ? UserLoading() : ListView.builder(
         shrinkWrap: true,
-        itemCount: message.length,
+        itemCount: widget.messageList.length,
         itemBuilder: (context, index) {
-          return MessageTile(message: message[index]);
+          return MessageTile(message: widget.messageList[index]);
         },
       );
     } else {
