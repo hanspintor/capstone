@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,61 +32,52 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
   GoogleMapController _googleMapController;
   double rating = 0;
   StreamSubscription _locationSubscription;
-  Location _locationTracker = Location();
   Marker marker;
   Circle circle;
 
-  void updateMarkerAndCircle(LocationData newLocalData){
-    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
+  void updateMarkerAndCircle(GeoPoint courierLocation){
+    LatLng latlng = LatLng(courierLocation.latitude, courierLocation.longitude);
 
     this.setState(() {
       marker = Marker(
         markerId: MarkerId("home"),
         position: latlng,
-        rotation: newLocalData.heading,
+        rotation: courierLocation.latitude,
         draggable: false,
         zIndex: 2,
         flat: true,
-        anchor: Offset(.5,.5),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      );
-      circle = Circle(
-        circleId: CircleId("courier"),
-        radius: newLocalData.accuracy,
-        zIndex: 1,
-        strokeColor: Colors.blue,
-        center: latlng,
-        fillColor: Colors.redAccent.withAlpha(70),
+        //anchor: Offset(.5,.5),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+        infoWindow: const InfoWindow(title: 'Courier Location'),
       );
     });
   }
+
 
   Future<Uint8List> getMarker() async{
     ByteData byteData = await DefaultAssetBundle.of(context).load("assets/courier.png");
     return byteData.buffer.asUint8List();
   }
 
-  void getCurrentLocation() async {
-    try{
-      var location = await _locationTracker.getLocation();
 
-      updateMarkerAndCircle(location);
+  void getCurrentLocation(GeoPoint courierLocation) async {
+    try{
+      updateMarkerAndCircle(courierLocation);
 
       if(_locationSubscription != null){
         _locationSubscription.cancel();
       }
 
-      _locationSubscription = _locationTracker.onLocationChanged.listen((newLocalData) {
+
         if(_googleMapController != null) {
           _googleMapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
             bearing: 192.8334901295799,
-            target: LatLng(widget.delivery.courierLocation.latitude, widget.delivery.courierLocation.longitude),
+            target: LatLng(courierLocation.latitude, courierLocation.longitude), //widget.delivery.courierLocation.latitude, widget.delivery.courierLocation.longitude
             tilt: 0,
             zoom: 15,
           )));
-          updateMarkerAndCircle(newLocalData);
+          updateMarkerAndCircle(courierLocation);
         }
-      });
     } on PlatformException catch (e){
       if (e.code == 'PERMISSION_DENIED'){
         debugPrint("Permission Denied");
@@ -227,7 +217,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                           zoomControlsEnabled: false,
                           initialCameraPosition: _initialCameraPosition,
                           //markers: Set.of((marker != null) ? [marker] : []),
-                          circles: Set.of((circle != null) ? [circle] : []),
+                          //circles: Set.of((circle != null) ? [circle] : []),
                           markers: {
                             if (_pickup != null) _pickup,
                             if (_dropOff != null) _dropOff,
@@ -290,13 +280,21 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
           ],
         ),
       ),
-        floatingActionButton: FloatingActionButton(
-            child: ClipOval(
-                child: Image.asset('assets/courier.png')
-            ),
-          onPressed: (){
-              getCurrentLocation();
-            }),
+      floatingActionButton: StreamBuilder<Delivery>(
+          stream: DatabaseService(uid: widget.delivery.uid).deliveryData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              Delivery deliveryData = snapshot.data;
+              return FloatingActionButton(
+                  child: ClipOval(child: Image.asset('assets/courier.png')),
+                  onPressed: () {
+                    getCurrentLocation(deliveryData.courierLocation);
+                    print(deliveryData.courierLocation.latitude);
+                    print(deliveryData.courierLocation.longitude);
+                  });
+            } else
+              return Container();
+          }),
     );
   }
 }
