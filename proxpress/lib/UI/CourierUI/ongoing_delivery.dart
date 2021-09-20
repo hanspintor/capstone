@@ -124,44 +124,58 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                       String deliveryOngoingUID = snapshot.data;
 
                                       return StreamBuilder<Delivery>(
-                                        stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            Delivery delivery = snapshot.data;
+                                          stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              Delivery delivery = snapshot.data;
 
-                                            return Container(
-                                                height: 25,
-                                                child: (() {
-                                                  return ElevatedButton(
-                                                      child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                      onPressed: () {
-                                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: delivery)));
-                                                      }
-                                                  );
-                                                }())
-                                            );
-                                          } else {
-                                            return Container(
-                                              height: 25,
-                                              child: (() {
-                                                return ElevatedButton(
-                                                  child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                  onPressed: null,
+                                              if(delivery.deliveryStatus == "Ongoing"){
+                                                return Container(
+                                                    height: 25,
+                                                    child: (() {
+                                                      return ElevatedButton(
+                                                          child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                          onPressed: () {
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: delivery)));
+                                                          }
+                                                      );
+                                                    }())
                                                 );
-                                              }())
-                                            );
+                                              } else{
+                                                return Container(
+                                                    height: 25,
+                                                    child: (() {
+                                                      return ElevatedButton(
+                                                        child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                        onPressed: null,
+                                                      );
+                                                    }())
+                                                );
+                                              }
+                                            }
+
+                                            else {
+                                              return Container(
+                                                  height: 25,
+                                                  child: (() {
+                                                    return ElevatedButton(
+                                                      child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                      onPressed: null,
+                                                    );
+                                                  }())
+                                              );
+                                            }
                                           }
-                                        }
                                       );
                                     } else {
                                       return Container(
-                                        height: 25,
-                                        child: (() {
-                                          return ElevatedButton(
-                                            child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                            onPressed: null,
-                                          );
-                                        }())
+                                          height: 25,
+                                          child: (() {
+                                            return ElevatedButton(
+                                              child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                              onPressed: null,
+                                            );
+                                          }())
                                       );
                                     }
                                   },
