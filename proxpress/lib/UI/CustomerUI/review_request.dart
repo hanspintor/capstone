@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -212,7 +213,6 @@ class _ReviewRequestState extends State<ReviewRequest> {
                     setState(() {
                       _isLoading = true;
                     });
-
                     await DatabaseService().updateDelivery(
                         widget.customer,
                         widget.courier,
@@ -230,7 +230,9 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         widget.paymentOption,
                         widget.deliveryFee,
                         'Pending',
-                        'Pending');
+                        'Pending',
+                      GeoPoint(13.621980880497976, 123.19477396693487),
+                    );
                     await DatabaseService(uid: widget.courier.id).updateNotifStatusCourier(true);
                     await DatabaseService(uid: user.uid).updateNotifStatusCustomer(true);
                     await DatabaseService(uid: widget.courier.id).updateNotifPopUpStatusCourier(true);

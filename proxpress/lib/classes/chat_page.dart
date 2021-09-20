@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/message_list.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -29,6 +30,7 @@ class _ChatPageState extends State<ChatPage> {
   final _controller = TextEditingController();
   String message = '';
   bool isCustomer = false;
+  ScrollController _scrollController = new ScrollController();
 
   Widget _buildMessageTextField() {
     return Align(
@@ -51,6 +53,7 @@ class _ChatPageState extends State<ChatPage> {
                 } else {
                   await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
                 }
+                _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
                 setState((){
                   _controller.text = '';
                 });
@@ -86,6 +89,8 @@ class _ChatPageState extends State<ChatPage> {
     DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id);
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
 
+
+    //ScrollDown();
     Stream<List<Message>> messageListCustomerToCour = FirebaseFirestore.instance
         .collection('Messages')
         .where('Sent By', isEqualTo: customer)
@@ -102,6 +107,7 @@ class _ChatPageState extends State<ChatPage> {
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot);
 
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -111,6 +117,7 @@ class _ChatPageState extends State<ChatPage> {
             Icons.help_outline,
           ),
             onPressed: (){
+
               showDialog(
                   context: context,
                   builder: (BuildContext context){
@@ -143,6 +150,7 @@ class _ChatPageState extends State<ChatPage> {
         //title: Text("PROExpress"),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -193,7 +201,7 @@ class _ChatPageState extends State<ChatPage> {
 
                     mergedMessageList.sort((a, b) => a.timeSent.compareTo(b.timeSent));
 
-                    return MessageList(messageList: mergedMessageList, isCustomer: isCustomer);
+                    return MessageList(messageList: mergedMessageList, isCustomer: isCustomer, scrollController: _scrollController);
                   } else {
                     return Text('');
                   }
