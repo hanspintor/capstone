@@ -1,7 +1,13 @@
+import 'dart:async';
+import 'dart:ffi';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
@@ -23,11 +29,82 @@ class DeliveryStatus extends StatefulWidget {
 }
 
 class _DeliveryStatusState extends State<DeliveryStatus> {
+  GoogleMapController _googleMapController;
   double rating = 0;
+  StreamSubscription _locationSubscription;
+  Location _locationTracker = Location();
+  Marker marker;
+  Circle circle;
+
+  void updateMarkerAndCircle(LocationData newLocalData, Uint8List imageData){
+    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
+
+    this.setState(() {
+      marker = Marker(
+        markerId: MarkerId("home"),
+        position: latlng,
+        rotation: newLocalData.heading,
+        draggable: false,
+        zIndex: 2,
+        flat: true,
+        //anchor: Offset()
+        icon: BitmapDescriptor.fromBytes(imageData),
+      );
+      circle = Circle(
+        circleId: CircleId("courier"),
+        radius: newLocalData.accuracy,
+        zIndex: 1,
+        strokeColor: Colors.red,
+        center: latlng,
+        fillColor: Colors.redAccent.withAlpha(70),
+      );
+    });
+  }
+
+  Future<Uint8List> getMarker() async{
+    ByteData byteData = await DefaultAssetBundle.of(context).load("assets/courier.png");
+    return byteData.buffer.asUint8List();
+  }
+
+  void getCurrentLocation() async {
+    try{
+      Uint8List imageData = await getMarker();
+      var location = await _locationTracker.getLocation();
+
+      updateMarkerAndCircle(location, imageData);
+
+      if(_locationSubscription != null){
+        _locationSubscription.cancel();
+      }
+
+      _locationSubscription = _locationTracker.onLocationChanged.listen((newLocalData) {
+        if(_googleMapController != null) {
+          _googleMapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+            bearing: 192.8334901295799,
+            target: LatLng(newLocalData.latitude, newLocalData.longitude),
+            tilt: 0,
+            zoom: 15,
+          )));
+          updateMarkerAndCircle(newLocalData, imageData);
+        }
+      });
+    } on PlatformException catch (e){
+      if (e.code == 'PERMISSION_DENIED'){
+        debugPrint("Permission Denied");
+      }
+    }
+  }
+
+  @override
+  void dispose(){
+    if(_locationSubscription != null){
+      _locationSubscription.cancel();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    GoogleMapController _googleMapController;
     final user = Provider.of<TheUser>(context);
     LatLng pickup_pos = LatLng(widget.delivery.pickupCoordinates.latitude, widget.delivery.pickupCoordinates.longitude,);
     Marker _pickup = Marker(
@@ -51,6 +128,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
         .snapshots()
         .map(DatabaseService().deliveryDataListFromSnapshot);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -118,56 +196,54 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         //     ),
         //   ],
         // ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              FutureBuilder<Directions>(
-                future: _infoFetch,
-                builder: (context, AsyncSnapshot<Directions> snapshot) {
-                  if (snapshot.hasData) {
-                    Directions _info = snapshot.data;
+        child: Column(
+          children: [
+            FutureBuilder<Directions>(
+              future: _infoFetch,
+              builder: (context, AsyncSnapshot<Directions> snapshot) {
+                if (snapshot.hasData) {
+                  Directions _info = snapshot.data;
 
-                    CameraPosition _initialCameraPosition = CameraPosition(
-                      target: LatLng(13.621980880497976, 123.19477396693487),
-                      zoom: 15,
-                    );
+                  CameraPosition _initialCameraPosition = CameraPosition(
+                    target: LatLng(13.621980880497976, 123.19477396693487),
+                    zoom: 15,
+                  );
 
-                    return Stack(
+                  return Expanded(
+                    child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
-                          width: MediaQuery.of(context).size.width,
-                          child: GoogleMap(
-                            onMapCreated: (controller) {
-                              _googleMapController = controller;
+                        GoogleMap(
+                          onMapCreated: (controller) {
+                            _googleMapController = controller;
+                            // _googleMapController.animateCamera(
+                            //   CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                            // );
 
-                              _googleMapController.animateCamera(
-                                CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-                              );
-
-                              _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
-                              //_googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
-                            },
-                            myLocationButtonEnabled: false,
-                            zoomControlsEnabled: false,
-                            initialCameraPosition: _initialCameraPosition,
-                            markers: {
-                              if (_pickup != null) _pickup,
-                              if (_dropOff != null) _dropOff
-                            },
-                            polylines: {
-                              if (_info != null)
-                                Polyline(
-                                  polylineId: const PolylineId('overview_polyline'),
-                                  color: Colors.red,
-                                  width: 5,
-                                  points: _info.polylinePoints
-                                      .map((e) => LatLng(e.latitude, e.longitude))
-                                      .toList(),
-                                ),
-                            },
-                          ),
+                            _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
+                            //_googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                          },
+                          myLocationButtonEnabled: false,
+                          zoomControlsEnabled: false,
+                          initialCameraPosition: _initialCameraPosition,
+                          //markers: Set.of((marker != null) ? [marker] : []),
+                          circles: Set.of((circle != null) ? [circle] : []),
+                          markers: {
+                            if (_pickup != null) _pickup,
+                            if (_dropOff != null) _dropOff,
+                            if(marker != null) marker,
+                          },
+                          polylines: {
+                            if (_info != null)
+                              Polyline(
+                                polylineId: const PolylineId('overview_polyline'),
+                                color: Colors.red,
+                                width: 5,
+                                points: _info.polylinePoints
+                                    .map((e) => LatLng(e.latitude, e.longitude))
+                                    .toList(),
+                              ),
+                          },
                         ),
                         Positioned(
                           top: 20.0,
@@ -177,7 +253,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                               horizontal: 12.0,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.yellowAccent,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(20.0),
                               boxShadow: const [
                                 BoxShadow(
@@ -197,88 +273,28 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                           ),
                         ),
                       ],
-                    );
-                  } else {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [CircularProgressIndicator()]
-                      ),
-                    );
-                  }
+                    ),
+                  );
+                } else {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [CircularProgressIndicator()]
+                    ),
+                  );
                 }
-              ),
-
-              SizedBox(height: 10),
-              ElevatedButton(
-                child: Text(
-                  'Send Feedback',
-                  style:
-                  TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                style: ElevatedButton.styleFrom(
-                    primary: Color(0xfffb0d0d)),
-                onPressed: () => showFeedback(),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                child: ElevatedButton.icon(
-                  label: Text('Message Courier'),
-                  icon: Icon(Icons.message_outlined),
-                  style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/chatPage');
-                  },
-                ),
-              ),
-            ],
-          ),
+              }
+            ),
+          ],
         ),
       ),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.local_shipping_rounded),
+          onPressed: (){
+              getCurrentLocation();
+            }),
     );
   }
-  //shows the alert dialog for sending a feedback to the courier's service
-  void showFeedback() => showDialog(
-    context : context,
-    builder: (context) => AlertDialog(
-      title: Text('How\'s My Service?'),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RatingBar.builder(
-            minRating: 1,
-            itemBuilder: (context, _) => Icon(Icons.star, color: Color(0xfffb0d0d)),
-            updateOnDrag: true,
-            onRatingUpdate: (rating) => setState((){
-              this.rating = rating;
-            }),
-          ),
-          Text('Rate Me',
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            maxLines: 2,
-            maxLength: 200,
-            decoration: InputDecoration(
-              hintText: 'Leave a Feedback',
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.multiline,
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          child: Text('OK'),
-          onPressed: () {
-            Navigator.pop(context);
-          }
-        ),
-      ],
-    ),
-  );
 }
