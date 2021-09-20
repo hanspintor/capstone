@@ -1,32 +1,35 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/message_list.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/messages.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:rxdart/rxdart.dart';
 
-class CustomerChat extends StatefulWidget {
+class ChatPage extends StatefulWidget {
   final Delivery delivery;
 
-  CustomerChat({
+  ChatPage({
     Key key,
     @required this.delivery,
   }) : super(key: key);
 
   @override
-  _CustomerChatState createState() => _CustomerChatState();
+  _ChatPageState createState() => _ChatPageState();
 }
 
-class _CustomerChatState extends State<CustomerChat> {
+class _ChatPageState extends State<ChatPage> {
   final _controller = TextEditingController();
   String message = '';
+  bool isCustomer = false;
   ScrollController _scrollController = new ScrollController();
 
   Widget _buildMessageTextField() {
@@ -45,8 +48,12 @@ class _CustomerChatState extends State<CustomerChat> {
             suffixIcon: IconButton(
               icon: Icon(Icons.send),
               onPressed: () async {
+                if (isCustomer) {
+                  await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
+                } else {
+                  await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
+                }
                 _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-                await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
                 setState((){
                   _controller.text = '';
                 });
@@ -68,6 +75,17 @@ class _CustomerChatState extends State<CustomerChat> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
+
+    if (widget.delivery.customerRef.id == user.uid) {
+      setState((){
+        isCustomer = true;
+      });
+    }
+
+    print("isCustomer?? $isCustomer");
+
     DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id);
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
 
@@ -137,7 +155,7 @@ class _CustomerChatState extends State<CustomerChat> {
           children: [
             Container(
               decoration: BoxDecoration(border: Border.all(), color: Colors.red),
-              child: StreamBuilder<Courier>(
+              child: isCustomer ? StreamBuilder<Courier>(
                   stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
@@ -148,10 +166,21 @@ class _CustomerChatState extends State<CustomerChat> {
                       return Text('Loading');
                     }
                   }
+              ) : StreamBuilder<Customer>(
+                  stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Customer customer = snapshot.data;
+
+                      return Text("${customer.fName} ${customer.lName}");
+                    } else {
+                      return Text('Loading');
+                    }
+                  }
               ),
             ),
             Container(
-              height: 500,
+              height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * .28,
               decoration: BoxDecoration(border: Border.all()),
               child:
               // StreamProvider<List<Message>>.value(
@@ -172,7 +201,7 @@ class _CustomerChatState extends State<CustomerChat> {
 
                     mergedMessageList.sort((a, b) => a.timeSent.compareTo(b.timeSent));
 
-                    return MessageList(messageList: mergedMessageList, scrollController: _scrollController,);
+                    return MessageList(messageList: mergedMessageList, isCustomer: isCustomer, scrollController: _scrollController);
                   } else {
                     return Text('');
                   }

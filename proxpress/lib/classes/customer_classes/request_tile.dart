@@ -3,7 +3,7 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:proxpress/UI/CustomerUI/customer_chat.dart';
+import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -164,7 +164,7 @@ class _RequestTileState extends State<RequestTile> {
                                                       return ElevatedButton(
                                                           child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
                                                           onPressed: () {
-                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerChat(delivery: widget.delivery)));
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: widget.delivery)));
                                                           }
                                                       );
                                                     }())
