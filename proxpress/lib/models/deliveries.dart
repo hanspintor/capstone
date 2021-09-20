@@ -19,7 +19,7 @@ class Delivery{
   final int deliveryFee;
   final String courierApproval;
   final String deliveryStatus;
-  final int rating;
+  final GeoPoint courierLocation;
 
   Delivery({
     this.uid,
@@ -40,6 +40,6 @@ class Delivery{
     this.deliveryFee,
     this.courierApproval,
     this.deliveryStatus,
-    this.rating,
+    this.courierLocation
   });
 }

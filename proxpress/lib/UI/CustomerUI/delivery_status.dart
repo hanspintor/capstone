@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animarker/flutter_map_marker_animation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -36,7 +37,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
   Marker marker;
   Circle circle;
 
-  void updateMarkerAndCircle(LocationData newLocalData, Uint8List imageData){
+  void updateMarkerAndCircle(LocationData newLocalData){
     LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
 
     this.setState(() {
@@ -47,14 +48,14 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         draggable: false,
         zIndex: 2,
         flat: true,
-        //anchor: Offset()
-        icon: BitmapDescriptor.fromBytes(imageData),
+        anchor: Offset(.5,.5),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       );
       circle = Circle(
         circleId: CircleId("courier"),
         radius: newLocalData.accuracy,
         zIndex: 1,
-        strokeColor: Colors.red,
+        strokeColor: Colors.blue,
         center: latlng,
         fillColor: Colors.redAccent.withAlpha(70),
       );
@@ -68,10 +69,9 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
 
   void getCurrentLocation() async {
     try{
-      Uint8List imageData = await getMarker();
       var location = await _locationTracker.getLocation();
 
-      updateMarkerAndCircle(location, imageData);
+      updateMarkerAndCircle(location);
 
       if(_locationSubscription != null){
         _locationSubscription.cancel();
@@ -81,11 +81,11 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         if(_googleMapController != null) {
           _googleMapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
             bearing: 192.8334901295799,
-            target: LatLng(newLocalData.latitude, newLocalData.longitude),
+            target: LatLng(widget.delivery.courierLocation.latitude, widget.delivery.courierLocation.longitude),
             tilt: 0,
             zoom: 15,
           )));
-          updateMarkerAndCircle(newLocalData, imageData);
+          updateMarkerAndCircle(newLocalData);
         }
       });
     } on PlatformException catch (e){
@@ -216,12 +216,12 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                         GoogleMap(
                           onMapCreated: (controller) {
                             _googleMapController = controller;
-                            // _googleMapController.animateCamera(
-                            //   CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-                            // );
+                            _googleMapController.animateCamera(
+                              CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                            );
 
                             _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
-                            //_googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                            _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
                           },
                           myLocationButtonEnabled: false,
                           zoomControlsEnabled: false,
@@ -291,7 +291,9 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         ),
       ),
         floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.local_shipping_rounded),
+            child: ClipOval(
+                child: Image.asset('assets/courier.png')
+            ),
           onPressed: (){
               getCurrentLocation();
             }),
