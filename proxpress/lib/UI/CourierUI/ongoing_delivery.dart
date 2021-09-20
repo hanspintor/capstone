@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
+import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/classes/courier_classes/delivery_list.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -43,6 +44,18 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
+
+              Future<String> deliveryOngoing = FirebaseFirestore.instance.collection('Deliveries')
+                  .where('Courier Approval', isEqualTo: 'Approved')
+                  .where('Delivery Status', isEqualTo: 'Ongoing')
+                  .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+                  .get().then((event) async {
+                if (event.docs.isNotEmpty) {
+                  return event.docs.first.id.toString(); //if it is a single document
+                } else {
+                  return '';
+                }
+              });
 
               return WillPopScope(
                   onWillPop: () async {
@@ -100,6 +113,61 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                 zoomControlsEnabled: false,
                                 initialCameraPosition: _initialCameraPosition,
                               ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FutureBuilder<String>(
+                                  future: deliveryOngoing,
+                                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                                    if (snapshot.hasData) {
+                                      String deliveryOngoingUID = snapshot.data;
+
+                                      return StreamBuilder<Delivery>(
+                                        stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            Delivery delivery = snapshot.data;
+
+                                            return Container(
+                                                height: 25,
+                                                child: (() {
+                                                  return ElevatedButton(
+                                                      child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                      onPressed: () {
+                                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: delivery)));
+                                                      }
+                                                  );
+                                                }())
+                                            );
+                                          } else {
+                                            return Container(
+                                              height: 25,
+                                              child: (() {
+                                                return ElevatedButton(
+                                                  child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                  onPressed: null,
+                                                );
+                                              }())
+                                            );
+                                          }
+                                        }
+                                      );
+                                    } else {
+                                      return Container(
+                                        height: 25,
+                                        child: (() {
+                                          return ElevatedButton(
+                                            child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                            onPressed: null,
+                                          );
+                                        }())
+                                      );
+                                    }
+                                  },
+
+                                ),
+                              ],
                             ),
                           ],
                         ),

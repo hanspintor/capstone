@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/CustomerUI/my_requests.dart';
-import 'package:proxpress/UI/chat_page.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:proxpress/UI/signup_courier.dart';
@@ -111,9 +110,6 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/deliveryStatus':
               return PageTransition(child: DeliveryStatus(), type: PageTransitionType.rightToLeftWithFade);
-              break;
-            case '/chatPage':
-              return PageTransition(child: ChatPage(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/ongoingDelivery':
               return PageTransition(child: OngoingDelivery(), type: PageTransitionType.rightToLeftWithFade);

@@ -12,8 +12,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MessageList extends StatefulWidget {
   final List<Message> messageList;
+  final bool isCustomer;
 
-  const MessageList({Key key, this.messageList}) : super(key: key);
+  const MessageList({
+    Key key,
+    @required this.messageList,
+    @required this.isCustomer
+  }) : super(key: key);
 
   @override
   _MessageListState createState() => _MessageListState();
@@ -29,7 +34,7 @@ class _MessageListState extends State<MessageList> {
         shrinkWrap: true,
         itemCount: widget.messageList.length,
         itemBuilder: (context, index) {
-          return MessageTile(message: widget.messageList[index]);
+          return MessageTile(message: widget.messageList[index], isCustomer: widget.isCustomer);
         },
       );
     } else {
