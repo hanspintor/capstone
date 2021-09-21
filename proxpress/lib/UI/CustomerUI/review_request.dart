@@ -232,6 +232,8 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         'Pending',
                         'Pending',
                       GeoPoint(13.621980880497976, 123.19477396693487),
+                      0,
+                      ''
                     );
                     await DatabaseService(uid: widget.courier.id).updateNotifStatusCourier(true);
                     await DatabaseService(uid: user.uid).updateNotifStatusCustomer(true);

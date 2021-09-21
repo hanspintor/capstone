@@ -561,7 +561,7 @@ class _RequestTileState extends State<RequestTile> {
     );
   }
 
-  double rating = 0;
+  double rating = 0.0;
   String feedback  = '';
   void showFeedback(){
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
@@ -603,7 +603,7 @@ class _RequestTileState extends State<RequestTile> {
           TextButton(
               child: Text('OK'),
               onPressed: () async{
-                  await DatabaseService().updateFeedback(rating, feedback, courier, customer);
+                  await DatabaseService(uid: widget.delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
                   Navigator.pop(context);
               }
           ),

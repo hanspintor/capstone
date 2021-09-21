@@ -21,9 +21,6 @@ class DatabaseService {
   // Delivery Prices Collection Reference
   final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
 
-  // Feedbacks Collection Reference
-  final CollectionReference feedbackCollection = FirebaseFirestore.instance.collection('Feedbacks');
-
   // Messages Collection Reference
   final CollectionReference messageCollection = FirebaseFirestore.instance.collection('Messages');
 
@@ -188,7 +185,7 @@ class DatabaseService {
       GeoPoint dropOffCoordinates, String itemDescription, String senderName,
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
-      int deliveryFee, String courierApproval, String deliveryStatus, GeoPoint courierLocation) async {
+      int deliveryFee, String courierApproval, String deliveryStatus, GeoPoint courierLocation, int rating, String feedback) async {
     await deliveryCollection
         .doc(uid)
         .set({
@@ -209,17 +206,16 @@ class DatabaseService {
       'Delivery Fee' : deliveryFee,
       'Courier Approval' : courierApproval,
       'Delivery Status' : deliveryStatus,
-      'Courier Location' : courierLocation
+      'Courier Location' : courierLocation,
+      'Rating': rating,
+      'Feedback': feedback,
     });
   }
 
-  //Create Feedback Document
-  Future updateFeedback(double rating, String feedback, DocumentReference courierRef,DocumentReference customerRef) async {
-    await feedbackCollection.doc(uid).set({
-      'Rating' : rating,
-      'Feedback' : feedback,
-      'Courier Reference' : courierRef,
-      'Customer Reference' : customerRef,
+  Future updateRatingFeedback(int rating, String feedback) async {
+    return await deliveryCollection.doc(uid).update({
+      'Rating': rating,
+      'Feedback': feedback,
     });
   }
 
@@ -298,6 +294,8 @@ class DatabaseService {
         courierApproval: (doc.data() as dynamic) ['Courier Approval'] ?? '',
         deliveryStatus: (doc.data() as dynamic) ['Delivery Status'] ?? '',
         courierLocation: (doc.data() as dynamic) ['Courier Location'] ?? '',
+        rating: (doc.data() as dynamic) ['Rating'] ?? '',
+        feedback: (doc.data() as dynamic) ['Feedback'] ?? '',
       );
     }).toList();
   }
