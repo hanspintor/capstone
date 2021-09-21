@@ -35,6 +35,7 @@ class _TransactionTileState extends State<TransactionTile> {
         if (snapshot.hasData) {
           //Delivery deliveryData = snapshot.data;
           int rating = widget.delivery.rating;
+          String feedback = widget.delivery.feedback;
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: StreamBuilder<Customer>(
