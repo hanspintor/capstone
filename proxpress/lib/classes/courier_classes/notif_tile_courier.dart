@@ -18,6 +18,7 @@ class _NotifTileCourierState extends State<NotifTileCourier> {
   int flag = 0;
   String uid;
   bool view = true;
+  String str;
   @override
   Widget build(BuildContext context) {
     uid = widget.delivery.customerRef.id;
@@ -25,6 +26,12 @@ class _NotifTileCourierState extends State<NotifTileCourier> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
+
+    if(widget.delivery.courierApproval == "Cancelled"){
+      str = "cancelled";
+    } else{
+      str = "requested";
+    }
     if(widget.delivery.courierApproval == "Approved" || widget.delivery.courierApproval == "Cancelled")
       view = false;
     else view = true;
@@ -42,7 +49,7 @@ class _NotifTileCourierState extends State<NotifTileCourier> {
                 ),
                 title: Text(
                     "${customerData.fName} ${customerData.lName} "
-                        "requested a delivery",
+                        "${str} a delivery",
                   style: TextStyle(
                     color: view ? Colors.black87 : Colors.black54,
                   ),

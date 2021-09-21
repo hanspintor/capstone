@@ -46,6 +46,8 @@ class _DeliveryTileState extends State<DeliveryTile> {
     uid = widget.delivery.customerRef.id;
     int flag = 0;
 
+
+
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     return user == null ? LoginScreen() : Padding(
@@ -64,7 +66,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                 // NotificationService().showNotification(2, name, notifDescrip, 1);
                 //print(name);
                  if(widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true){
-                    NotificationService().showNotification(1, name, notifDescrip, 1);
+                    NotificationService().showNotification(widget.lengthDelivery, name, notifDescrip, 1);
                    // NotificationService().showNotification(2, name, notifDescrip, 2);
                    // if(flag<widget.lengthDelivery){
                    //

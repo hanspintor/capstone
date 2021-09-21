@@ -14,18 +14,12 @@ class _NotifListCustomerState extends State<NotifListCustomer> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
-    return delivery == null ? UserLoading() : SingleChildScrollView(
-      child: SizedBox(
-        height: 500,
-        width: 500,
-        child: ListView.builder(
+    return delivery == null ? UserLoading() :  ListView.builder(
           itemCount: delivery.length,
           itemBuilder: (context, index){
             return NotifTileCustomer(delivery: delivery[index], lengthDeliv: delivery.length,);
           },
-        ),
-      ),
-    );
+        );
   }
 }
 
