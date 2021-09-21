@@ -62,7 +62,7 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                                   child: CircleAvatar(
                                     radius: 40,
                                     backgroundImage: NetworkImage(customerData.avatarUrl),
-                                    backgroundColor: Colors.transparent,
+                                    backgroundColor: Colors.white,
                                   ),
                                 ),
                               ],

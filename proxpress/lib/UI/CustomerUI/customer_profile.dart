@@ -37,11 +37,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
     final user = Provider.of<TheUser>(context);
     bool approved = true;
 
-    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-        .collection('Deliveries')
-        .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-        .snapshots()
-        .map(DatabaseService().deliveryDataListFromSnapshot);
+      if(user != null){
+        Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+            .collection('Deliveries')
+            .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+            .snapshots()
+            .map(DatabaseService().deliveryDataListFromSnapshot);
+
       return new GestureDetector(
         onTap: (){
           if(count != 0){
@@ -164,5 +166,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
             )
         ),
       );
+      } else{
+        return LoginScreen();
+      }
   }
 }
