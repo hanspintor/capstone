@@ -14,18 +14,12 @@ class _NotifListCourierState extends State<NotifListCourier> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
-    return delivery == null ? UserLoading() : SingleChildScrollView(
-      child: SizedBox(
-        height: 500,
-        width: 500,
-        child: ListView.builder(
+    return delivery == null ? UserLoading() : ListView.builder(
           itemCount: delivery.length,
           itemBuilder: (context, index){
             return NotifTileCourier(delivery: delivery[index]);
           },
-        ),
-      ),
-    );
+        );
   }
 }
 

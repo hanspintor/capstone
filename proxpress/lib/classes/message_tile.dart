@@ -33,14 +33,14 @@ class _MessageTileState extends State<MessageTile> {
     User user = _auth.currentUser;
 
     return user == null ? LoginScreen() :  Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: StreamBuilder<Message>(
-        stream: DatabaseService(uid: widget.message.uid).messageData,
-        builder: (context, snapshot) {
-          if(snapshot.hasData){
-            Message message = snapshot.data;
-            String time = DateFormat.jm().format(message.timeSent.toDate());
-            //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: StreamBuilder<Message>(
+          stream: DatabaseService(uid: widget.message.uid).messageData,
+          builder: (context, snapshot) {
+            if(snapshot.hasData){
+              Message message = snapshot.data;
+              String time = DateFormat.jm().format(message.timeSent.toDate());
+              //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
 
             if (widget.isCustomer) {
               if (message.sentBy.toString().contains('Customers')) {
