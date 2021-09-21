@@ -150,7 +150,6 @@ class _ChatPageState extends State<ChatPage> {
         //title: Text("PROExpress"),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(

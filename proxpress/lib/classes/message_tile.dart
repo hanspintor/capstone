@@ -33,7 +33,7 @@ class _MessageTileState extends State<MessageTile> {
     User user = _auth.currentUser;
 
     return user == null ? LoginScreen() :  Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
+        margin: EdgeInsets.symmetric(vertical: 10),
         child: StreamBuilder<Message>(
           stream: DatabaseService(uid: widget.message.uid).messageData,
           builder: (context, snapshot) {
