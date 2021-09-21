@@ -33,37 +33,37 @@ class _MessageTileState extends State<MessageTile> {
     User user = _auth.currentUser;
 
     return user == null ? LoginScreen() :  Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        child: StreamBuilder<Message>(
-          stream: DatabaseService(uid: widget.message.uid).messageData,
-          builder: (context, snapshot) {
-            if(snapshot.hasData){
-              Message message = snapshot.data;
-              String time = DateFormat.jm().format(message.timeSent.toDate());
-              //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: StreamBuilder<Message>(
+        stream: DatabaseService(uid: widget.message.uid).messageData,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            Message message = snapshot.data;
+            String time = DateFormat.jm().format(message.timeSent.toDate());
+            //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
 
-              if (widget.isCustomer) {
-                if (message.sentBy.toString().contains('Customers')) {
-                  return Text('${message.messageContent} :You \nTime Sent: ${time}', textAlign: TextAlign.right,);
-                } else if (message.sentBy.toString().contains('Couriers')) {
-                  return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.left,);
-                } else {
-                  return Container();
-                }
+            if (widget.isCustomer) {
+              if (message.sentBy.toString().contains('Customers')) {
+                return Text('${message.messageContent} :You \nTime Sent: ${time}', textAlign: TextAlign.right,);
+              } else if (message.sentBy.toString().contains('Couriers')) {
+                return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.left,);
               } else {
-                if (message.sentBy.toString().contains('Couriers')) {
-                  return Text('${message.messageContent} :You \nTime Sent: ${time}', textAlign: TextAlign.right,);
-                } else if (message.sentBy.toString().contains('Customers')) {
-                  return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.left,);
-                } else {
-                  return Container();
-                }
+                return Container();
               }
             } else {
-              return Container();
+              if (message.sentBy.toString().contains('Couriers')) {
+                return Text('${message.messageContent} :You \nTime Sent: ${time}', textAlign: TextAlign.right,);
+              } else if (message.sentBy.toString().contains('Customers')) {
+                return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.left,);
+              } else {
+                return Container();
+              }
             }
+          } else {
+            return Container();
           }
-        ),
-      );
+        }
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:proxpress/classes/firestore_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,23 +29,30 @@ class MessageList extends StatefulWidget {
 
 class _MessageListState extends State<MessageList> {
   @override
+  void initState(){
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      widget.scrollController.animateTo(
+        widget.scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 10),
+        curve: Curves.easeOut,);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     print(widget.messageList.length);
 
     if(widget.messageList.length != 0){
-      return widget.messageList == null ? UserLoading() : ListView.builder(
-        shrinkWrap: true,
-        controller: widget.scrollController,
-        itemCount: widget.messageList.length + 1,
-        itemBuilder: (context, index) {
-          if(index == widget.messageList.length){
-            return Container(
-              height: 50,
-            );
-          } else {
+      return widget.messageList == null ? UserLoading() : Flexible(
+        child: ListView.builder(
+          shrinkWrap: true,
+          controller: widget.scrollController,
+          itemCount: widget.messageList.length,
+          itemBuilder: (context, index) {
             return MessageTile(message: widget.messageList[index], isCustomer: widget.isCustomer);
-          }
-        },
+          },
+        ),
       );
     } else {
       return Row(

@@ -150,7 +150,6 @@ class _ChatPageState extends State<ChatPage> {
         //title: Text("PROExpress"),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -201,7 +200,12 @@ class _ChatPageState extends State<ChatPage> {
 
                     mergedMessageList.sort((a, b) => a.timeSent.compareTo(b.timeSent));
 
-                    return MessageList(messageList: mergedMessageList, isCustomer: isCustomer, scrollController: _scrollController);
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MessageList(messageList: mergedMessageList, isCustomer: isCustomer, scrollController: _scrollController),
+                      ],
+                    );
                   } else {
                     return Text('');
                   }
