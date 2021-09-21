@@ -31,7 +31,6 @@ class _ChatPageState extends State<ChatPage> {
   String message = '';
   bool isCustomer = false;
   ScrollController _scrollController = new ScrollController();
-
   Widget _buildMessageTextField() {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -47,16 +46,16 @@ class _ChatPageState extends State<ChatPage> {
             hintText: 'Type your message',
             suffixIcon: IconButton(
               icon: Icon(Icons.send),
-              onPressed: () async {
-                if (isCustomer) {
-                  await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
-                } else {
-                  await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
-                }
-                _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-                setState((){
-                  _controller.text = '';
-                });
+              onPressed: _controller.text == '' ? null : () async {
+                  if (isCustomer) {
+                    await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
+                  } else {
+                    await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
+                  }
+                  _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+                  setState(() {
+                    _controller.clear();
+                  });
               },
             ),
             border: OutlineInputBorder(
