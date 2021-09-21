@@ -3,6 +3,7 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -79,7 +80,7 @@ class _RequestTileState extends State<RequestTile> {
                                         TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                         TextSpan(text: "${deliveryData.deliveryStatus} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
                                         TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                        TextSpan(text: courierData.contactNo),
+                                        TextSpan(text: courierData.contactNo, style: TextStyle(color: Colors.black)),
                                       ],
                                       ),
                                     ),
@@ -221,7 +222,7 @@ class _RequestTileState extends State<RequestTile> {
                                           TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                           TextSpan(text: "${widget.delivery.deliveryStatus} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
                                           TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                          TextSpan(text: courierData.contactNo),
+                                          TextSpan(text: courierData.contactNo, style: TextStyle(color: Colors.black)),
                                         ],
                                         ),
                                       ),
@@ -348,7 +349,7 @@ class _RequestTileState extends State<RequestTile> {
                                           TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                           TextSpan(text: "${widget.delivery.courierApproval} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
                                           TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                          TextSpan(text: courierData.contactNo),
+                                          TextSpan(text: courierData.contactNo, style: TextStyle(color: Colors.black)),
                                         ],
                                         ),
                                       ),
@@ -470,7 +471,7 @@ class _RequestTileState extends State<RequestTile> {
                                           TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                           TextSpan(text: "${widget.delivery.courierApproval} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
                                           TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                          TextSpan(text: courierData.contactNo),
+                                          TextSpan(text: courierData.contactNo, style: TextStyle(color: Colors.black)),
                                         ],
                                         ),
                                       ),
@@ -564,9 +565,6 @@ class _RequestTileState extends State<RequestTile> {
   double rating = 0.0;
   String feedback  = '';
   void showFeedback(){
-    DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
-    DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id);
-
     showDialog(
       context : context,
       builder: (context) => AlertDialog(
