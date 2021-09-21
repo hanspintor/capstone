@@ -67,6 +67,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                 //print(name);
                  if(widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true){
                     NotificationService().showNotification(widget.lengthDelivery, name, notifDescrip, 1);
+                    DatabaseService(uid: user.uid).updateNotifPopUpStatusCourier(false);
                    // NotificationService().showNotification(2, name, notifDescrip, 2);
                    // if(flag<widget.lengthDelivery){
                    //
