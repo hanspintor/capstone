@@ -10,8 +10,9 @@ import 'package:proxpress/services/database.dart';
 
 class NotifTileCustomer extends StatefulWidget {
   final Delivery delivery;
+  final int lengthDeliv;
 
-  NotifTileCustomer({Key key, this.delivery}) : super(key: key);
+  NotifTileCustomer({Key key, this.delivery, this.lengthDeliv}) : super(key: key);
 
   @override
   State<NotifTileCustomer> createState() => _NotifTileCustomerState();
@@ -19,10 +20,11 @@ class NotifTileCustomer extends StatefulWidget {
 
 class _NotifTileCustomerState extends State<NotifTileCustomer> {
   int flag = 0;
+  int countList = 0;
   String uid;
   bool view = true;
-  bool accepted = true;
-  bool canceled = true;
+  bool accepted = false;
+  bool canceled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +32,21 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-
-
+    countList = widget.lengthDeliv;
     if(widget.delivery.courierApproval == "Approved"){
       accepted = true;
       view = false;
+      countList+=2;
+
     } else if(widget.delivery.courierApproval == "Cancelled"){
       canceled = true;
       view = false;
+      countList+=2;
     }
     else{
       view = true;
     }
+    print("Notification ${countList}");
     return user == null
         ? LoginScreen()
         : StreamBuilder<Courier>(

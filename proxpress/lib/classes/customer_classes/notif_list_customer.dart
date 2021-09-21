@@ -21,7 +21,7 @@ class _NotifListCustomerState extends State<NotifListCustomer> {
         child: ListView.builder(
           itemCount: delivery.length,
           itemBuilder: (context, index){
-            return NotifTileCustomer(delivery: delivery[index]);
+            return NotifTileCustomer(delivery: delivery[index], lengthDeliv: delivery.length,);
           },
         ),
       ),
