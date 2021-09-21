@@ -114,34 +114,49 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                 initialCameraPosition: _initialCameraPosition,
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                FutureBuilder<String>(
-                                  future: deliveryOngoing,
-                                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                                    if (snapshot.hasData) {
-                                      String deliveryOngoingUID = snapshot.data;
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FutureBuilder<String>(
+                                    future: deliveryOngoing,
+                                    builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                                      if (snapshot.hasData) {
+                                        String deliveryOngoingUID = snapshot.data;
 
-                                      return StreamBuilder<Delivery>(
-                                          stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              Delivery delivery = snapshot.data;
+                                        return StreamBuilder<Delivery>(
+                                            stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                Delivery delivery = snapshot.data;
 
-                                              if(delivery.deliveryStatus == "Ongoing"){
-                                                return Container(
-                                                    height: 25,
-                                                    child: (() {
-                                                      return ElevatedButton(
+                                                if(delivery.deliveryStatus == "Ongoing"){
+                                                  return Container(
+                                                      height: 25,
+                                                      child: (() {
+                                                        return ElevatedButton(
+                                                            child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                            onPressed: () {
+                                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: delivery)));
+                                                            }
+                                                        );
+                                                      }())
+                                                  );
+                                                } else{
+                                                  return Container(
+                                                      height: 25,
+                                                      child: (() {
+                                                        return ElevatedButton(
                                                           child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                          onPressed: () {
-                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: delivery)));
-                                                          }
-                                                      );
-                                                    }())
-                                                );
-                                              } else{
+                                                          onPressed: null,
+                                                        );
+                                                      }())
+                                                  );
+                                                }
+                                              }
+
+                                              else {
                                                 return Container(
                                                     height: 25,
                                                     child: (() {
@@ -153,35 +168,23 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                 );
                                               }
                                             }
-
-                                            else {
-                                              return Container(
-                                                  height: 25,
-                                                  child: (() {
-                                                    return ElevatedButton(
-                                                      child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                      onPressed: null,
-                                                    );
-                                                  }())
+                                        );
+                                      } else {
+                                        return Container(
+                                            height: 25,
+                                            child: (() {
+                                              return ElevatedButton(
+                                                child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                onPressed: null,
                                               );
-                                            }
-                                          }
-                                      );
-                                    } else {
-                                      return Container(
-                                          height: 25,
-                                          child: (() {
-                                            return ElevatedButton(
-                                              child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                              onPressed: null,
-                                            );
-                                          }())
-                                      );
-                                    }
-                                  },
+                                            }())
+                                        );
+                                      }
+                                    },
 
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

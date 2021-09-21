@@ -54,7 +54,7 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
                     Expanded(
                       child: !isClear ? NotifListCustomer() : Container(),
                     ),
-                    Container(
+                    isClear ? Container(
                       height: MediaQuery.of(context).size.height / 2,
                       child: Text(
                         caption,
@@ -62,7 +62,7 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
 
                         ),
                       ),
-                    ),
+                    ) : Container(),
                     Container(
                       height: MediaQuery.of(context).size.height / 20,
                       width: MediaQuery.of(context).size.width / 1,

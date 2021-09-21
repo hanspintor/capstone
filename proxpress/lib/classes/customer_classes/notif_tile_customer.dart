@@ -11,7 +11,7 @@ import 'package:proxpress/services/database.dart';
 class NotifTileCustomer extends StatefulWidget {
   final Delivery delivery;
 
-  NotifTileCustomer({ Key key, this.delivery}) : super(key: key);
+  NotifTileCustomer({Key key, this.delivery}) : super(key: key);
 
   @override
   State<NotifTileCustomer> createState() => _NotifTileCustomerState();
@@ -21,6 +21,9 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
   int flag = 0;
   String uid;
   bool view = true;
+  bool accepted = true;
+  bool canceled = true;
+
   @override
   Widget build(BuildContext context) {
     uid = widget.delivery.courierRef.id;
@@ -28,43 +31,103 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    if(widget.delivery.courierApproval == "Approved" || widget.delivery.courierApproval == "Cancelled")
+
+    if(widget.delivery.courierApproval == "Approved"){
+      accepted = true;
       view = false;
-    else view = true;
-    return user == null ? LoginScreen() : StreamBuilder<Courier>(
-      stream: DatabaseService(uid: uid).courierData,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
-          Courier courierData = snapshot.data;
-          return  Card(
-            child: ListTile(
-              selected: view,
-              leading: Icon(
-                Icons.fiber_manual_record,
-                size: 15,
-              ),
-              title: Text(
-                "${courierData.fName} ${courierData.lName} "
-                    "received your request.",
-                style: TextStyle(
-                  color: view ? Colors.black87 : Colors.black54,
-                ),
-              ),
-              onTap: (){
-                setState(() {
-                  view = false;
-                });
-              },
+    } else if(widget.delivery.courierApproval == "Cancelled"){
+      canceled = true;
+      view = false;
+    }
+    else{
+      view = true;
+    }
+    return user == null
+        ? LoginScreen()
+        : StreamBuilder<Courier>(
+            stream: DatabaseService(uid: uid).courierData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Courier courierData = snapshot.data;
 
-            ),
+
+                return Column(
+                  children: [
+                    Card(
+                      child: ListTile(
+                        selected: view,
+                        leading: Icon(
+                          Icons.fiber_manual_record,
+                          size: 15,
+                        ),
+                        title: Text(
+                          "${courierData.fName} ${courierData.lName} "
+                          "received your request.",
+                          style: TextStyle(
+                            color: view ? Colors.black87 : Colors.black54,
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            view = false;
+                          });
+                        },
+                      ),
+                    ),
+                    Visibility(
+                      visible: accepted,
+                      child: Card(
+                        child: ListTile(
+                          selected: view,
+                          leading: Icon(
+                            Icons.fiber_manual_record,
+                            size: 15,
+                          ),
+                          title: Text(
+                            "${courierData.fName} ${courierData.lName} "
+                                "accepted your request.",
+                            style: TextStyle(
+                              color: view ? Colors.black87 : Colors.black54,
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              view = false;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: canceled,
+                      child: Card(
+                        child: ListTile(
+                          selected: view,
+                          leading: Icon(
+                            Icons.fiber_manual_record,
+                            size: 15,
+                          ),
+                          title: Text(
+                            "${courierData.fName} ${courierData.lName} "
+                                "declined your request.",
+                            style: TextStyle(
+                              color: view ? Colors.black87 : Colors.black54,
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              view = false;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Center();
+              }
+            },
           );
-
-        } else {
-          return Center(
-
-          );
-        }
-      },
-    );
   }
 }
