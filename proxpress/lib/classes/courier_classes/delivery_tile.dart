@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -42,14 +43,24 @@ class _DeliveryTileState extends State<DeliveryTile> {
 
   @override
   Widget build(BuildContext context) {
-
     uid = widget.delivery.customerRef.id;
     int flag = 0;
 
-
-
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+
+    Future<bool> gotOngoingDelivery = FirebaseFirestore.instance.collection('Deliveries')
+        .where('Courier Approval', isEqualTo: 'Approved')
+        .where('Delivery Status', isEqualTo: 'Ongoing')
+        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+        .get().then((event) async {
+      if (event.docs.isNotEmpty) {
+        return true; //if it is a single document
+      } else {
+        return false;
+      }
+    });
+
     return user == null ? LoginScreen() : Padding(
           padding: const EdgeInsets.all(8.0),
           child: StreamBuilder<Customer>(
@@ -167,15 +178,32 @@ class _DeliveryTileState extends State<DeliveryTile> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Container(
-                                    height: 25,
-                                    child: ElevatedButton(
-                                        child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                        onPressed: () async{
-                                          await DatabaseService(uid: widget.delivery.uid).updateApproval('Approved');
-                                          await DatabaseService(uid: widget.delivery.uid).updateDeliveryStatus('Ongoing');
-                                        }
-                                    )
+                                FutureBuilder<bool>(
+                                  future: gotOngoingDelivery,
+                                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                                    print(gotOngoingDelivery);
+                                    if (snapshot.hasData) {
+                                      bool cantConfirm = snapshot.data;
+
+                                      return Container(
+                                          height: 25,
+                                          child: ElevatedButton(
+                                              child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                              onPressed: cantConfirm ? null : () async{
+                                                await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
+                                              }
+                                          )
+                                      );
+                                    } else {
+                                      return Container(
+                                          height: 25,
+                                          child: ElevatedButton(
+                                              child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                              onPressed: null,
+                                          )
+                                      );
+                                    }
+                                  }
                                 ),
                                 Container(
                                     padding: EdgeInsets.only(left: 10),
@@ -183,7 +211,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                     child: ElevatedButton(
                                         child: Text('Decline', style: TextStyle(color: Colors.white, fontSize: 10),),
                                         onPressed: () async{
-                                          await DatabaseService(uid: widget.delivery.uid).updateApproval('Rejected');
+                                          await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Rejected', 'Cancelled');
                                         }
                                     )
                                 ),

@@ -131,14 +131,9 @@ class DatabaseService {
     });
   }
   // Update delivery approval
-  Future updateApproval(String courierApproval) async {
+  Future updateApprovalAndDeliveryStatus(String courierApproval, String status) async {
     return await deliveryCollection.doc(uid).update({
       'Courier Approval' : courierApproval,
-    });
-  }
-  // Update Delivery Status
-  Future updateDeliveryStatus(String status) async {
-    return await deliveryCollection.doc(uid).update({
       'Delivery Status' : status,
     });
   }

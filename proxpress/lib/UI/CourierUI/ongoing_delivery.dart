@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
+import 'package:proxpress/UI/CourierUI/transaction_history.dart';
 import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/classes/courier_classes/delivery_list.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
+import 'package:proxpress/classes/directions_model.dart';
+import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -39,6 +43,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
             if(snapshot.hasData){
               Courier courierData = snapshot.data;
               approved = courierData.approved;
+
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
                   .where('Courier Approval', isEqualTo: 'Pending')
@@ -91,98 +96,260 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                       body: Center(
                         child: Column(
                           children: [
-                            Expanded(
-                              child: GoogleMap(
-                                myLocationButtonEnabled: false,
-                                zoomControlsEnabled: false,
-                                initialCameraPosition: _initialCameraPosition,
-                              ),
+                            FutureBuilder<String>(
+                              future: deliveryOngoing,
+                              builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.hasData) {
+                                  String deliveryOngoingUID = snapshot.data;
+
+                                  if (deliveryOngoingUID != '') {
+                                    return StreamBuilder<Delivery>(
+                                        stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            Delivery delivery = snapshot.data;
+
+                                            LatLng pickup_pos = LatLng(delivery.pickupCoordinates.latitude, delivery.pickupCoordinates.longitude,);
+                                            Marker _pickup = Marker(
+                                              markerId: const MarkerId('pickup'),
+                                              infoWindow: const InfoWindow(title: 'Pickup Location'),
+                                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                                              position: pickup_pos,
+                                            );
+
+                                            LatLng dropOff_pos = LatLng(delivery.dropOffCoordinates.latitude, delivery.dropOffCoordinates.longitude,);
+                                            Marker _dropOff = Marker(
+                                              markerId: const MarkerId('dropOff'),
+                                              infoWindow: const InfoWindow(title: 'Drop Off Location'),
+                                              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                                              position: dropOff_pos,
+                                            );
+
+                                            Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: _pickup.position, destination: _dropOff.position);
+
+                                            return FutureBuilder<Directions>(
+                                                future: _infoFetch,
+                                                builder: (context, AsyncSnapshot<Directions> snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    Directions _info = snapshot.data;
+
+                                                    GoogleMapController _googleMapController;
+                                                    Marker marker;
+
+                                                    return Expanded(
+                                                      child: Stack(
+                                                        alignment: Alignment.center,
+                                                        children: [
+                                                          GoogleMap(
+                                                            onMapCreated: (controller) {
+                                                              _googleMapController = controller;
+                                                              _googleMapController.animateCamera(
+                                                                  CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                                                              );
+
+                                                              _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
+                                                              _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                                                            },
+                                                            myLocationButtonEnabled: false,
+                                                            zoomControlsEnabled: false,
+                                                            initialCameraPosition: _initialCameraPosition,
+                                                            markers: {
+                                                              if (_pickup != null) _pickup,
+                                                              if (_dropOff != null) _dropOff,
+                                                              if(marker != null) marker,
+                                                            },
+                                                            polylines: {
+                                                              if (_info != null)
+                                                                Polyline(
+                                                                  polylineId: const PolylineId('overview_polyline'),
+                                                                  color: Colors.red,
+                                                                  width: 5,
+                                                                  points: _info.polylinePoints
+                                                                      .map((e) => LatLng(e.latitude, e.longitude))
+                                                                      .toList(),
+                                                                ),
+                                                            },
+                                                          ),
+                                                          Positioned(
+                                                            top: 20.0,
+                                                            child: Container(
+                                                              padding: const EdgeInsets.symmetric(
+                                                                vertical: 6.0,
+                                                                horizontal: 12.0,
+                                                              ),
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.white,
+                                                                borderRadius: BorderRadius.circular(20.0),
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: Colors.black26,
+                                                                    offset: Offset(0, 2),
+                                                                    blurRadius: 6.0,
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              child: Text(
+                                                                '${_info.totalDistance}, ${_info.totalDuration}',
+                                                                style: const TextStyle(
+                                                                  fontSize: 18.0,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    return Expanded(
+                                                      child: Stack(
+                                                        alignment: Alignment.center,
+                                                        children: [
+                                                          Positioned(
+                                                            top: 20.0,
+                                                            child: Container(
+                                                              padding: const EdgeInsets.symmetric(
+                                                                vertical: 6.0,
+                                                                horizontal: 12.0,
+                                                              ),
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.white,
+                                                                borderRadius: BorderRadius.circular(20.0),
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: Colors.black26,
+                                                                    offset: Offset(0, 2),
+                                                                    blurRadius: 6.0,
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              child: Text(
+                                                                'You currently have no ongoing delivery',
+                                                                style: const TextStyle(
+                                                                  fontSize: 18.0,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }
+                                                }
+                                            );
+                                          } else {
+                                            return Expanded(
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  Positioned(
+                                                    top: 20.0,
+                                                    child: Container(
+                                                      padding: const EdgeInsets.symmetric(
+                                                        vertical: 6.0,
+                                                        horizontal: 12.0,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.circular(20.0),
+                                                        boxShadow: const [
+                                                          BoxShadow(
+                                                            color: Colors.black26,
+                                                            offset: Offset(0, 2),
+                                                            blurRadius: 6.0,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      child: Text(
+                                                        'You currently have no ongoing delivery',
+                                                        style: const TextStyle(
+                                                          fontSize: 18.0,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                        }
+                                    );
+                                  } else {
+                                    return Expanded(
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Positioned(
+                                            top: 20.0,
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                vertical: 6.0,
+                                                horizontal: 12.0,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(20.0),
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    color: Colors.black26,
+                                                    offset: Offset(0, 2),
+                                                    blurRadius: 6.0,
+                                                  )
+                                                ],
+                                              ),
+                                              child: Text(
+                                                'You currently have no ongoing delivery',
+                                                style: const TextStyle(
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  return Expanded(
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Positioned(
+                                          top: 20.0,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 6.0,
+                                              horizontal: 12.0,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.black26,
+                                                  offset: Offset(0, 2),
+                                                  blurRadius: 6.0,
+                                                )
+                                              ],
+                                            ),
+                                            child: Text(
+                                              'You currently have no ongoing delivery',
+                                              style: const TextStyle(
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              }
                             ),
-                            // Container(
-                            //   margin: EdgeInsets.symmetric(vertical: 8),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.center,
-                            //     children: [
-                            //       FutureBuilder<String>(
-                            //         future: deliveryOngoing,
-                            //         builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                            //           if (snapshot.hasData) {
-                            //             String deliveryOngoingUID = snapshot.data;
-                            //
-                            //
-                            //              if(deliveryOngoingUID != ""){
-                            //                return StreamBuilder<Delivery>(
-                            //                    stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
-                            //                    builder: (context, snapshot) {
-                            //                      if (snapshot.hasData) {
-                            //                        Delivery delivery = snapshot.data;
-                            //
-                            //                        if(delivery.deliveryStatus == "Ongoing"){
-                            //                          return Container(
-                            //                              height: 25,
-                            //                              child: (() {
-                            //                                return ElevatedButton(
-                            //                                    child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                            //                                    onPressed: () {
-                            //                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: delivery)));
-                            //                                    }
-                            //                                );
-                            //                              }())
-                            //                          );
-                            //                        } else{
-                            //                          return Container(
-                            //                              height: 25,
-                            //                              child: (() {
-                            //                                return ElevatedButton(
-                            //                                  child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                            //                                  onPressed: null,
-                            //                                );
-                            //                              }())
-                            //                          );
-                            //                        }
-                            //                      }
-                            //
-                            //                      else {
-                            //                        return Container(
-                            //                            height: 25,
-                            //                            child: (() {
-                            //                              return ElevatedButton(
-                            //                                child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                            //                                onPressed: null,
-                            //                              );
-                            //                            }())
-                            //                        );
-                            //                      }
-                            //                    }
-                            //                );
-                            //              } else{
-                            //                return Container(
-                            //                    height: 25,
-                            //                    child: (() {
-                            //                      return ElevatedButton(
-                            //                        child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                            //                        onPressed: null,
-                            //                      );
-                            //                    }())
-                            //                );
-                            //              }
-                            //           } else {
-                            //             return Container(
-                            //                 height: 25,
-                            //                 child: (() {
-                            //                   return ElevatedButton(
-                            //                     child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
-                            //                     onPressed: null,
-                            //                   );
-                            //                 }())
-                            //             );
-                            //           }
-                            //         },
-                            //
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
@@ -290,7 +457,9 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                           ),
                                           SizedBox(height: 10),
                                           FloatingActionButton(
-                                            onPressed: (){
+                                            onPressed: () async {
+                                              await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
                                             },
                                             child: Icon(Icons.check_circle),
                                             backgroundColor: Colors.green,
