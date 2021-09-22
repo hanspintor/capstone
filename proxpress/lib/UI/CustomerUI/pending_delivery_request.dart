@@ -71,7 +71,7 @@ class _PendingDeliveryRequestState extends State<PendingDeliveryRequest> {
                                       TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                       TextSpan(text: "${delivery[index].courierApproval} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
                                       TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                      TextSpan(text: courierData.contactNo),
+                                      TextSpan(text: courierData.contactNo, style: TextStyle(color: Colors.black)),
                                     ],
                                     ),
                                   ),
@@ -139,8 +139,9 @@ class _PendingDeliveryRequestState extends State<PendingDeliveryRequest> {
                                         ),
                                         Container(
                                           height: 25,
-                                          child: ElevatedButton(
-                                            child: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                          child: ElevatedButton.icon(
+                                            icon: Icon(Icons.cancel, size: 20),
+                                            label: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 10),),
                                             onPressed: () async {
                                               await DatabaseService(uid: delivery_uid).customerCancelRequest();
                                             }

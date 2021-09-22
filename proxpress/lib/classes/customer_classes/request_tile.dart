@@ -150,8 +150,9 @@ class _RequestTileState extends State<RequestTile> {
                                                   Container(
                                                     height: 25,
                                                     child: (() {
-                                                      return ElevatedButton(
-                                                          child: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                      return ElevatedButton.icon(
+                                                        icon: Icon(Icons.local_shipping_rounded, size: 20),
+                                                          label: Text('View Delivery', style: TextStyle(color: Colors.white, fontSize: 10),),
                                                           onPressed: () {
                                                             Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryStatus(delivery: widget.delivery)));
                                                           }
@@ -162,8 +163,9 @@ class _RequestTileState extends State<RequestTile> {
                                                   Container(
                                                     height: 25,
                                                     child: (() {
-                                                      return ElevatedButton(
-                                                          child: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                      return ElevatedButton.icon(
+                                                        icon: Icon(Icons.message_rounded, size: 20),
+                                                          label: Text('Chat Courier', style: TextStyle(color: Colors.white, fontSize: 10),),
                                                           onPressed: () {
                                                             Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: widget.delivery)));
                                                           }
@@ -292,8 +294,9 @@ class _RequestTileState extends State<RequestTile> {
                                                 height: 25,
                                                 child: (() {
                                                   if (widget.delivery.deliveryStatus == "Delivered") {
-                                                    return ElevatedButton(
-                                                        child: Text('Send Feedback', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                    return ElevatedButton.icon(
+                                                      icon: Icon(Icons.feedback, size: 20),
+                                                        label: Text('Send Feedback', style: TextStyle(color: Colors.white, fontSize: 10),),
                                                         onPressed: () {
                                                           showFeedback();
                                                         }
@@ -317,7 +320,7 @@ class _RequestTileState extends State<RequestTile> {
               ),
             );
           }
-          else if(widget.delivery.courierApproval == 'Pending'){
+          else if(widget.delivery.courierApproval == 'Pending' || widget.delivery.deliveryStatus == 'Pending'){
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<Customer>(
@@ -417,8 +420,9 @@ class _RequestTileState extends State<RequestTile> {
                                             ),
                                             Container(
                                                 height: 25,
-                                                child: ElevatedButton(
-                                                    child: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                child: ElevatedButton.icon(
+                                                  icon: Icon(Icons.cancel),
+                                                    label: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 10),),
                                                     onPressed: () {
                                                     }
                                                 )
