@@ -56,6 +56,8 @@ dependencies:
   rxdart: ^0.27.2
   flutter_animarker: ^3.2.0
   modal_bottom_sheet: ^2.0.0
+  flutter_speed_dial: ^4.4.0
+  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:

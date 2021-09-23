@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/transaction_history.dart';
@@ -140,36 +143,36 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                       child: Stack(
                                                         alignment: Alignment.center,
                                                         children: [
-                                                          GoogleMap(
-                                                            onMapCreated: (controller) {
-                                                              _googleMapController = controller;
-                                                              _googleMapController.animateCamera(
-                                                                  CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-                                                              );
-
-                                                              _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
-                                                              _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
-                                                            },
-                                                            myLocationButtonEnabled: false,
-                                                            zoomControlsEnabled: false,
-                                                            initialCameraPosition: _initialCameraPosition,
-                                                            markers: {
-                                                              if (_pickup != null) _pickup,
-                                                              if (_dropOff != null) _dropOff,
-                                                              if(marker != null) marker,
-                                                            },
-                                                            polylines: {
-                                                              if (_info != null)
-                                                                Polyline(
-                                                                  polylineId: const PolylineId('overview_polyline'),
-                                                                  color: Colors.red,
-                                                                  width: 5,
-                                                                  points: _info.polylinePoints
-                                                                      .map((e) => LatLng(e.latitude, e.longitude))
-                                                                      .toList(),
-                                                                ),
-                                                            },
-                                                          ),
+                                                          // GoogleMap(
+                                                          //   onMapCreated: (controller) {
+                                                          //     _googleMapController = controller;
+                                                          //     _googleMapController.animateCamera(
+                                                          //         CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                                                          //     );
+                                                          //
+                                                          //     _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
+                                                          //     _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                                                          //   },
+                                                          //   myLocationButtonEnabled: false,
+                                                          //   zoomControlsEnabled: false,
+                                                          //   initialCameraPosition: _initialCameraPosition,
+                                                          //   markers: {
+                                                          //     if (_pickup != null) _pickup,
+                                                          //     if (_dropOff != null) _dropOff,
+                                                          //     if(marker != null) marker,
+                                                          //   },
+                                                          //   polylines: {
+                                                          //     if (_info != null)
+                                                          //       Polyline(
+                                                          //         polylineId: const PolylineId('overview_polyline'),
+                                                          //         color: Colors.red,
+                                                          //         width: 5,
+                                                          //         points: _info.polylinePoints
+                                                          //             .map((e) => LatLng(e.latitude, e.longitude))
+                                                          //             .toList(),
+                                                          //       ),
+                                                          //   },
+                                                          // ),
                                                           Positioned(
                                                             top: 20.0,
                                                             child: Container(
@@ -371,99 +374,120 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                       return Column(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          SizedBox(height: 10),
-                                          FloatingActionButton(
-                                            onPressed: (){
-                                              showMaterialModalBottomSheet(
-                                                backgroundColor: Colors.white,
-                                                context: context,
-                                                builder: (context) => SingleChildScrollView(
-                                                  controller: ModalScrollController.of(context),
-                                                  child: Container(
-                                                    height: 400,
-                                                      child: Card(
-                                                        child: Column(
-                                                          children: [
-                                                            ListTile(
-                                                              leading: Icon(Icons.info_rounded, color: Colors.black,),
-                                                              title: Text("Delivery Information",
-                                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                              ),
-                                                              subtitle: Text.rich(
-                                                                TextSpan(children: [
-                                                                  TextSpan(text: '\n'),
-                                                                  TextSpan(text: "Pick Up Address: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.pickupAddress}\n", style: Theme.of(context).textTheme.bodyText2),
-                                                                  TextSpan(text: '\n'),
-                                                                  TextSpan(text: "Drop Off Address: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.dropOffAddress}\n", style: Theme.of(context).textTheme.bodyText2),
-                                                                ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            ListTile(
-                                                              leading: Icon(Icons.phone_rounded,color: Colors.black,),
-                                                              title: Text("Contact Information",
-                                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                              ),
-                                                              subtitle: Text.rich(
-                                                                TextSpan(children: [
-                                                                  TextSpan(text: "Sender: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.pickupPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                  TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.pickupContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                  TextSpan(text: "\n"),
-                                                                  TextSpan(text: "Receiver: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.dropoffPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                  TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.dropoffContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            ListTile(
-                                                              leading: Icon(Icons.description,color: Colors.black,),
-                                                              title: Text("Additional Information", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                                              subtitle: Container(
-                                                                padding: EdgeInsets.only(top: 5),
-                                                                child: Text.rich(
-                                                                  TextSpan(children: [
-                                                                    TextSpan(text: "Item Description: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                    TextSpan(text: "${delivery.itemDescription}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                    TextSpan(text: "Specific Instructions: \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                    TextSpan(text: "${delivery.specificInstructions}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                  ],
+                                          SpeedDial(
+                                            animatedIcon: AnimatedIcons.menu_close,
+                                            children: [
+                                              SpeedDialChild(
+                                                  child: Icon(Icons.check_rounded, color: Colors.white,),
+                                                  backgroundColor: Colors.green,
+                                                  labelBackgroundColor: Colors.green,
+                                                  labelStyle: TextStyle(color: Colors.white),
+                                                  label: 'Notify Delivery',
+                                                onTap: (){
+                                                  //await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
+                                                  //Navigator.push(context, PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade));
+                                                  //showToast('Customer Notified');
+                                                  // await Fluttertoast.showToast(
+                                                  //     msg: "This is Center Short Toast",
+                                                  //     toastLength: Toast.LENGTH_SHORT,
+                                                  //     gravity: ToastGravity.CENTER,
+                                                  //     timeInSecForIosWeb: 1,
+                                                  //     backgroundColor: Colors.red,
+                                                  //     textColor: Colors.white,
+                                                  //     fontSize: 16.0
+                                                  // );
+                                                  print('clicked');
+                                                }
+                                              ),
+                                              SpeedDialChild(
+                                                  child: Icon(Icons.message_rounded, color: Colors.white,),
+                                                  backgroundColor: Colors.red,
+                                                  labelBackgroundColor: Colors.red,
+                                                  labelStyle: TextStyle(color: Colors.white),
+                                                  label: 'Message Customer',
+                                                  onTap: (){
+                                                    Navigator.push(context, PageTransition(child: ChatPage(delivery: delivery), type: PageTransitionType.rightToLeftWithFade));
+                                                  }
+                                              ),
+                                              SpeedDialChild(
+                                                  child: Icon(Icons.info_rounded, color: Colors.white,),
+                                                  backgroundColor: Colors.red,
+                                                  labelBackgroundColor: Colors.red,
+                                                  labelStyle: TextStyle(color: Colors.white),
+                                                  label: 'Delivery Info',
+                                                  onTap: () {
+                                                    showMaterialModalBottomSheet(
+                                                      backgroundColor: Colors.white,
+                                                      context: context,
+                                                      builder: (context) => SingleChildScrollView(
+                                                        controller: ModalScrollController.of(context),
+                                                        child: Container(
+                                                          height: 500,
+                                                          child: Card(
+                                                            child: Column(
+                                                              children: [
+                                                                ListTile(
+                                                                  leading: Icon(Icons.info_rounded, color: Colors.black,),
+                                                                  title: Text("Delivery Information",
+                                                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                  ),
+                                                                  subtitle: Text.rich(
+                                                                    TextSpan(children: [
+                                                                      TextSpan(text: '\n'),
+                                                                      TextSpan(text: "Pick Up Address: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "${delivery.pickupAddress}\n", style: Theme.of(context).textTheme.bodyText2),
+                                                                      TextSpan(text: '\n'),
+                                                                      TextSpan(text: "Drop Off Address: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "${delivery.dropOffAddress}\n", style: Theme.of(context).textTheme.bodyText2),
+                                                                    ],
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
+                                                                ListTile(
+                                                                  leading: Icon(Icons.phone_rounded,color: Colors.black,),
+                                                                  title: Text("Contact Information",
+                                                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                  ),
+                                                                  subtitle: Text.rich(
+                                                                    TextSpan(children: [
+                                                                      TextSpan(text: "Sender: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "${delivery.pickupPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                                      TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "${delivery.pickupContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                                      TextSpan(text: "\n"),
+                                                                      TextSpan(text: "Receiver: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "${delivery.dropoffPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                                      TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "${delivery.dropoffContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                                    ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                ListTile(
+                                                                  leading: Icon(Icons.description,color: Colors.black,),
+                                                                  title: Text("Additional Information", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                                                  subtitle: Container(
+                                                                    padding: EdgeInsets.only(top: 5),
+                                                                    child: Text.rich(
+                                                                      TextSpan(children: [
+                                                                        TextSpan(text: "Item Description: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                        TextSpan(text: "${delivery.itemDescription}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                                        TextSpan(text: "Specific Instructions: \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                        TextSpan(text: "${delivery.specificInstructions}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                                      ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
+                                                          ),
                                                         ),
                                                       ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: Icon(Icons.info_rounded),
-                                            heroTag: 'info',
-                                          ),
-                                          SizedBox(height: 10),
-                                          FloatingActionButton(
-                                            onPressed: (){
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(delivery: delivery)));
-                                            },
-                                            child: Icon(Icons.message_rounded),
-                                            heroTag: 'message',
-                                          ),
-                                          SizedBox(height: 10),
-                                          FloatingActionButton(
-                                            onPressed: () async {
-                                              await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
-                                            },
-                                            child: Icon(Icons.check_circle),
-                                            backgroundColor: Colors.green,
-                                            heroTag: 'check',
+                                                    );
+                                                  }
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       );
@@ -515,4 +539,8 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
     }
     else return LoginScreen();
   }
+  // Future showToast(String message) async {
+  //   await Fluttertoast.cancel();
+  //   Fluttertoast.showToast(msg: message, fontSize: 18);
+  // }
 }
