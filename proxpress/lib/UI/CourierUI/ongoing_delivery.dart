@@ -21,6 +21,7 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 class OngoingDelivery extends StatefulWidget {
   @override
@@ -37,6 +38,8 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+
     final user = Provider.of<TheUser>(context);
     bool approved = false;
     if(user != null) {
@@ -69,6 +72,9 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
               return WillPopScope(
                   onWillPop: () async {
                     print("Back Button Pressed");
+                    if(isDialOpen.value) {
+                      isDialOpen.value = false;
+                    }
                     return false;
                   },
                   child: StreamProvider<List<Delivery>>.value(
@@ -376,6 +382,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                         children: [
                                           SpeedDial(
                                             animatedIcon: AnimatedIcons.menu_close,
+                                            openCloseDial: isDialOpen,
                                             children: [
                                               SpeedDialChild(
                                                   child: Icon(Icons.check_rounded, color: Colors.white,),
@@ -383,10 +390,26 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                   labelBackgroundColor: Colors.green,
                                                   labelStyle: TextStyle(color: Colors.white),
                                                   label: 'Notify Delivery',
-                                                onTap: () {
-                                                  //showToast('Customer Notified');
-                                                  Navigator.push(context, PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade));
-                                                  DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
+                                                onTap: () async {
+                                                  showMaterialModalBottomSheet(
+                                                    context: context,
+                                                    builder: (context) => Container(
+                                                      height: 100,
+                                                      child: Card(
+                                                        child:SlideAction(
+                                                          child: Text('Slide to Confirm', style: TextStyle(color: Colors.white),),
+                                                          elevation: 4,
+                                                          innerColor: Colors.white,
+                                                          outerColor: Colors.green,
+                                                          onSubmit: () async {
+                                                            showToast('Customer Notified');
+                                                            await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
+                                                            Navigator.push(context, PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade));
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
                                                 }
                                               ),
                                               SpeedDialChild(
@@ -511,6 +534,6 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
   }
   Future showToast(String message) async {
     await Fluttertoast.cancel();
-    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.red, textColor: Colors.white);
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 }

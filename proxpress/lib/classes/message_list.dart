@@ -30,12 +30,12 @@ class MessageList extends StatefulWidget {
 class _MessageListState extends State<MessageList> {
   @override
   void initState(){
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      widget.scrollController.animateTo(
-        widget.scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 10),
-        curve: Curves.easeOut,);
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   widget.scrollController.animateTo(
+    //     widget.scrollController.position.maxScrollExtent,
+    //     duration: const Duration(milliseconds: 10),
+    //     curve: Curves.easeOut,);
+    // });
     super.initState();
   }
 
