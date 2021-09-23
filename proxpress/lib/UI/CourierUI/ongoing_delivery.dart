@@ -143,36 +143,36 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                       child: Stack(
                                                         alignment: Alignment.center,
                                                         children: [
-                                                          // GoogleMap(
-                                                          //   onMapCreated: (controller) {
-                                                          //     _googleMapController = controller;
-                                                          //     _googleMapController.animateCamera(
-                                                          //         CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-                                                          //     );
-                                                          //
-                                                          //     _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
-                                                          //     _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
-                                                          //   },
-                                                          //   myLocationButtonEnabled: false,
-                                                          //   zoomControlsEnabled: false,
-                                                          //   initialCameraPosition: _initialCameraPosition,
-                                                          //   markers: {
-                                                          //     if (_pickup != null) _pickup,
-                                                          //     if (_dropOff != null) _dropOff,
-                                                          //     if(marker != null) marker,
-                                                          //   },
-                                                          //   polylines: {
-                                                          //     if (_info != null)
-                                                          //       Polyline(
-                                                          //         polylineId: const PolylineId('overview_polyline'),
-                                                          //         color: Colors.red,
-                                                          //         width: 5,
-                                                          //         points: _info.polylinePoints
-                                                          //             .map((e) => LatLng(e.latitude, e.longitude))
-                                                          //             .toList(),
-                                                          //       ),
-                                                          //   },
-                                                          // ),
+                                                          GoogleMap(
+                                                            onMapCreated: (controller) {
+                                                              _googleMapController = controller;
+                                                              _googleMapController.animateCamera(
+                                                                  CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                                                              );
+
+                                                              _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
+                                                              _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                                                            },
+                                                            myLocationButtonEnabled: false,
+                                                            zoomControlsEnabled: false,
+                                                            initialCameraPosition: _initialCameraPosition,
+                                                            markers: {
+                                                              if (_pickup != null) _pickup,
+                                                              if (_dropOff != null) _dropOff,
+                                                              if(marker != null) marker,
+                                                            },
+                                                            polylines: {
+                                                              if (_info != null)
+                                                                Polyline(
+                                                                  polylineId: const PolylineId('overview_polyline'),
+                                                                  color: Colors.red,
+                                                                  width: 5,
+                                                                  points: _info.polylinePoints
+                                                                      .map((e) => LatLng(e.latitude, e.longitude))
+                                                                      .toList(),
+                                                                ),
+                                                            },
+                                                          ),
                                                           Positioned(
                                                             top: 20.0,
                                                             child: Container(
@@ -383,20 +383,10 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                   labelBackgroundColor: Colors.green,
                                                   labelStyle: TextStyle(color: Colors.white),
                                                   label: 'Notify Delivery',
-                                                onTap: (){
-                                                  //await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
-                                                  //Navigator.push(context, PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade));
+                                                onTap: () {
                                                   //showToast('Customer Notified');
-                                                  // await Fluttertoast.showToast(
-                                                  //     msg: "This is Center Short Toast",
-                                                  //     toastLength: Toast.LENGTH_SHORT,
-                                                  //     gravity: ToastGravity.CENTER,
-                                                  //     timeInSecForIosWeb: 1,
-                                                  //     backgroundColor: Colors.red,
-                                                  //     textColor: Colors.white,
-                                                  //     fontSize: 16.0
-                                                  // );
-                                                  print('clicked');
+                                                  Navigator.push(context, PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade));
+                                                  DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
                                                 }
                                               ),
                                               SpeedDialChild(
@@ -450,12 +440,12 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                                   ),
                                                                   subtitle: Text.rich(
                                                                     TextSpan(children: [
-                                                                      TextSpan(text: "Sender: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "Pickup Point Person: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                                                       TextSpan(text: "${delivery.pickupPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
                                                                       TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                                                       TextSpan(text: "${delivery.pickupContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
                                                                       TextSpan(text: "\n"),
-                                                                      TextSpan(text: "Receiver: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                                      TextSpan(text: "Drop Off Point Person: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                                                       TextSpan(text: "${delivery.dropoffPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
                                                                       TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                                                       TextSpan(text: "${delivery.dropoffContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
@@ -498,31 +488,11 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                 },
                               );
                             }
-                            else return Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SizedBox(height: 10),
-                                FloatingActionButton(
-                                  onPressed: null,
-                                  child: Icon(Icons.info_rounded),
-                                  backgroundColor: Colors.grey,
-                                  heroTag: 'info',
-                                ),
-                                SizedBox(height: 10),
-                                FloatingActionButton(
-                                  onPressed: null,
-                                  child: Icon(Icons.message_rounded),
-                                  backgroundColor: Colors.grey,
-                                  heroTag: 'message',
-                                ),
-                                SizedBox(height: 10),
-                                FloatingActionButton(
-                                  onPressed: null,
-                                  child: Icon(Icons.check_circle),
-                                  backgroundColor: Colors.grey,
-                                  heroTag: 'check',
-                                ),
-                              ],
+                            else return FloatingActionButton(
+                              onPressed: null,
+                              child: Icon(Icons.menu),
+                              backgroundColor: Colors.grey,
+                              heroTag: 'null',
                             );
                           }
                           else return Container();
@@ -539,8 +509,8 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
     }
     else return LoginScreen();
   }
-  // Future showToast(String message) async {
-  //   await Fluttertoast.cancel();
-  //   Fluttertoast.showToast(msg: message, fontSize: 18);
-  // }
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.red, textColor: Colors.white);
+  }
 }
