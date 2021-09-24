@@ -17,6 +17,19 @@ import 'package:provider/provider.dart';
 class CourierProfile extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
+
+  Widget _buildStars(int rate){
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        return Icon(
+          index < rate ? Icons.star : Icons.star_border, color: Colors.amber,
+        );
+      }),
+    );
+  }
+
+
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
@@ -144,11 +157,22 @@ class CourierProfile extends StatelessWidget {
                                     double rating = 0.0;
                                     double total = 0.0;
                                     double stars = 0;
+                                    double star1 = 0;
+                                    double star2 = 0;
+                                    double star3 = 0;
+                                    double star4 = 0;
+                                    double star5 = 0;
+
                                     for(int i = 0; i < deliveryData.length; i++){
                                       if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
                                         if(deliveryData[i].courierRef.id == courierData.uid){
                                           rating += deliveryData[i].rating;
                                           total++;
+                                          if(deliveryData[i].rating == 1) star1++;
+                                          else if(deliveryData[i].rating == 2) star2++;
+                                          else if(deliveryData[i].rating == 3) star3++;
+                                          else if(deliveryData[i].rating == 4) star4++;
+                                          else if(deliveryData[i].rating == 5) star5++;
                                           print('instance');
                                         }
                                       }
@@ -159,7 +183,7 @@ class CourierProfile extends StatelessWidget {
                                       subtitle: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('${stars}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text('${stars.ceil()}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                           Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: List.generate(5, (index) {
@@ -171,6 +195,58 @@ class CourierProfile extends StatelessWidget {
                                           Padding(
                                             padding: const EdgeInsets.only(left: 4),
                                             child: Text("Ratings ${total.toInt()}", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 20),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    _buildStars(5),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                      child: Text('${star5.toInt()}'),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    _buildStars(4),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                      child: Text('${star4.toInt()}'),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    _buildStars(3),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                      child: Text('${star3.toInt()}'),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    _buildStars(2),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                      child: Text('${star2.toInt()}'),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    _buildStars(1),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                      child: Text('${star1.toInt()}'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
