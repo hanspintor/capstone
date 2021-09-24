@@ -11,6 +11,7 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:favorite_button/favorite_button.dart';
 
 class RequestTile extends StatefulWidget {
   final Delivery delivery;
@@ -572,7 +573,17 @@ class _RequestTileState extends State<RequestTile> {
     showDialog(
       context : context,
       builder: (context) => AlertDialog(
-        title: Text('How\'s My Service?'),
+        title: Row(
+          children: [
+            Text('How\'s My Service?'),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 25),
+              child: FavoriteButton(
+                iconSize: 50,
+              ),
+            ),
+          ],
+        ),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
