@@ -21,21 +21,36 @@ class _DeliveryListState extends State<DeliveryList> {
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
 
-    return delivery == null ? UserLoading() : SingleChildScrollView(
-      child: SizedBox(
-        height: 500,
-        width: 500,
-        child: ListView.builder(
-          itemCount: delivery.length,
-          itemBuilder: (context, index) {
-            return DeliveryTile(delivery: delivery[index],
-              lengthDelivery: delivery.length,
-              notifPopUpStatus: widget.notifPopUpStatus,
-              notifPopUpCounter: widget.notifPopUpCounter,
-            );
-          },
-        ),
-      ),
-    );
+    if (delivery.length != 0) {
+      return delivery == null ? UserLoading() : ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: delivery.length,
+        itemBuilder: (context, index) {
+          return DeliveryTile(delivery: delivery[index],
+            lengthDelivery: delivery.length,
+            notifPopUpStatus: widget.notifPopUpStatus,
+            notifPopUpCounter: widget.notifPopUpCounter,
+          );
+        },
+      );
+    } else {
+      return Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                'You currently have no pending requests.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
   }
 }

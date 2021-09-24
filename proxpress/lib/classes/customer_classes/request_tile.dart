@@ -299,7 +299,7 @@ class _RequestTileState extends State<RequestTile> {
                                                     return ElevatedButton.icon(
                                                       icon: Icon(Icons.feedback, size: 20),
                                                         label: Text('Send Feedback', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                        onPressed: () {
+                                                        onPressed: !(widget.delivery.rating == 0 && widget.delivery.feedback == '') ? null : () {
                                                           showFeedback();
                                                         }
                                                     );
@@ -582,11 +582,7 @@ class _RequestTileState extends State<RequestTile> {
               builder: (context, snapshot) {
                 print(snapshot.hasData );
                 if(snapshot.hasData){
-
                   Customer customerData = snapshot.data;
-
-
-                  //localMap.addEntries(localAddMap.entries);
                   return Container(
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       child:  FavoriteButton(
@@ -608,7 +604,7 @@ class _RequestTileState extends State<RequestTile> {
                   return Container();
                 }
               }
-            ),
+            )
           ],
         ),
         content: Column(

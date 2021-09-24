@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/classes/courier_classes/feedback_tile.dart';
 import 'package:proxpress/classes/courier_classes/transaction_tile.dart';
 import 'package:proxpress/models/deliveries.dart';
 
-class TransactionList extends StatefulWidget {
+class FeedbackList extends StatefulWidget {
 
   @override
-  _TransactionListState createState() => _TransactionListState();
+  _FeedbackListState createState() => _FeedbackListState();
 }
 
-class _TransactionListState extends State<TransactionList> {
+class _FeedbackListState extends State<FeedbackList> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
@@ -20,7 +21,7 @@ class _TransactionListState extends State<TransactionList> {
       shrinkWrap: true,
       itemCount: delivery.length,
       itemBuilder: (context, index) {
-        return TransactionTile(delivery: delivery[index]);
+        return FeedbackTile(delivery: delivery[index]);
       },
     );
   }

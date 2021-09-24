@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/message_list.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -37,6 +38,14 @@ class _ChatPageState extends State<ChatPage> {
       child: Container(
         padding: EdgeInsets.all(10),
         child: TextField(
+          onTap: () {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 1000),
+                curve: Curves.easeOut,);
+            });
+          },
           controller: _controller,
           textCapitalization: TextCapitalization.sentences,
           autocorrect: true,
