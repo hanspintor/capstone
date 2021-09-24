@@ -27,9 +27,29 @@ class RequestTile extends StatefulWidget {
 }
 
 class _RequestTileState extends State<RequestTile> {
+
+
+
   int flag = 0;
   @override
   Widget build(BuildContext context) {
+    // must get this from cloud firestore
+    Map currentBookmarks = {};
+
+    // this what happens when clicking bookmark button (1st time)
+    print(currentBookmarks.length);
+    Map addBookmark = {'courier${currentBookmarks.length}': 'courier${currentBookmarks.length}\'s UID'};
+    currentBookmarks.addAll(addBookmark);
+    print(currentBookmarks);
+
+    // this what happens when clicking bookmark button (2nd time)
+    print(currentBookmarks.length);
+    Map addBookmark2 = {'courier${currentBookmarks.length}': 'courier${currentBookmarks.length}\'s UID'};
+    currentBookmarks.addAll(addBookmark2);
+
+    print(currentBookmarks.length);
+    print(currentBookmarks);
+
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
@@ -583,20 +603,35 @@ class _RequestTileState extends State<RequestTile> {
                 print(snapshot.hasData );
                 if(snapshot.hasData){
                   Customer customerData = snapshot.data;
+
+                  bool isFavorited = false;
+
+                  Map<String, DocumentReference> localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
+                  print(localMap);
+
+                  Map <String, DocumentReference> localAddMap = {'Courier_Ref${localMap.length}' : widget.delivery.courierRef};
+                  print(localAddMap);
+
+                  localMap.forEach((key, value){
+                    print(value);
+                    if (value == widget.delivery.courierRef) {
+                      isFavorited = true;
+                    }
+                  });
+
                   return Container(
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       child:  FavoriteButton(
+                        isFavorite: isFavorited,
                         iconSize: 50,
                         valueChanged: (_isFavorite) {
                           print('Is Favorite $_isFavorite)');
-                          Map<String, DocumentReference> localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
-                          print(localMap);
 
-                          Map <String, DocumentReference> localAddMap = {'Courier_Ref${localMap.length}' : widget.delivery.courierRef};
-                           print(localAddMap);
-                           localMap.addAll(localAddMap);
-                           print(localMap);
-                          DatabaseService(uid: widget.delivery.customerRef.id).updateCustomerCourierRef(localMap);
+                          if (!isFavorited) {
+                            localMap.addAll(localAddMap);
+                            print(localMap);
+                            DatabaseService(uid: widget.delivery.customerRef.id).updateCustomerCourierRef(localMap);
+                          }
                         },
                       ),
                   );
