@@ -577,14 +577,37 @@ class _RequestTileState extends State<RequestTile> {
         title: Row(
           children: [
             Text('How\'s My Service?'),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 35),
-              child:  FavoriteButton(
-                iconSize: 50,
-                valueChanged: (_isFavorite) {
-                  print('Is Favorite $_isFavorite)');
-                },
-              )
+            StreamBuilder<Customer>(
+              stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
+              builder: (context, snapshot) {
+                print(snapshot.hasData );
+                if(snapshot.hasData){
+
+                  Customer customerData = snapshot.data;
+
+
+                  //localMap.addEntries(localAddMap.entries);
+                  return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child:  FavoriteButton(
+                        iconSize: 50,
+                        valueChanged: (_isFavorite) {
+                          print('Is Favorite $_isFavorite)');
+                          Map<String, DocumentReference> localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
+                          print(localMap);
+
+                          Map <String, DocumentReference> localAddMap = {'Courier_Ref${localMap.length}' : widget.delivery.courierRef};
+                           print(localAddMap);
+                           localMap.addAll(localAddMap);
+                           print(localMap);
+                          DatabaseService(uid: widget.delivery.customerRef.id).updateCustomerCourierRef(localMap);
+                        },
+                      ),
+                  );
+                }else {
+                  return Container();
+                }
+              }
             ),
           ],
         ),

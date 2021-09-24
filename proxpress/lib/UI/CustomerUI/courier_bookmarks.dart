@@ -38,11 +38,12 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     bool approved = true;
-    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-        .collection('Deliveries')
-        .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-        .snapshots()
-        .map(DatabaseService().deliveryDataListFromSnapshot);
+    if(user != null){
+      Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+          .collection('Deliveries')
+          .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+          .snapshots()
+          .map(DatabaseService().deliveryDataListFromSnapshot);
 
       return new GestureDetector(
         onTap: (){
@@ -98,12 +99,12 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child:  Text(
-                            "Bookmarked Couriers",
-                            style: TextStyle(
-                              fontSize: 25,
-                            ),
+                          "Bookmarked Couriers",
+                          style: TextStyle(
+                            fontSize: 25,
                           ),
                         ),
+                      ),
                       Card(
                         margin: EdgeInsets.all(20),
 
@@ -126,5 +127,8 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
               )),
         ),
       );
+    } else{
+      return LoginScreen();
+    }
   }
 }

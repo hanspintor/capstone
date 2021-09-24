@@ -40,6 +40,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String _currentPassword;
   String _newPassword;
   String _confirmPassword;
+  List bookmarks;
   bool checkCurrentPassword = true;
   static Timer _sessionTimer;
   static Timer _sessionTimerPrint;
@@ -430,6 +431,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                           customerData.avatarUrl,
                                           customerData.notifStatus,
                                           customerData.currentNotif,
+                                          customerData.courier_ref[''],
                                         );
 
                                         if (profilePicture != null) {

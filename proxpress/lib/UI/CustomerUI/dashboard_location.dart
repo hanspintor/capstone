@@ -92,7 +92,22 @@ class _DashboardLocationState extends State<DashboardLocation>{
     final user = Provider.of<TheUser>(context);
 
     bool approved = true;
+    // must get this from cloud firestore
+    Map currentBookmarks = {};
 
+    // this what happens when clicking bookmark button (1st time)
+    print(currentBookmarks.length);
+    Map addBookmark = {'courier${currentBookmarks.length}': 'courier${currentBookmarks.length}\'s UID'};
+    currentBookmarks.addAll(addBookmark);
+    print(currentBookmarks);
+
+    // this what happens when clicking bookmark button (2nd time)
+    print(currentBookmarks.length);
+    Map addBookmark2 = {'courier${currentBookmarks.length}': 'courier${currentBookmarks.length}\'s UID'};
+    currentBookmarks.addAll(addBookmark2);
+
+    print(currentBookmarks.length);
+    print(currentBookmarks);
     return new GestureDetector(
       onTap: (){
         if(count != 0){

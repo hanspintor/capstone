@@ -26,7 +26,10 @@ class DatabaseService {
 
 
   // Create/Update a Customer Document
-  Future updateCustomerData(String fname, String lname, String email, String contactNo, String password, String address, String avatarUrl, bool notifStatus, int currentNotif) async {
+  Future updateCustomerData(String fname, String lname, String email, String contactNo,
+      String password, String address, String avatarUrl, bool notifStatus, int currentNotif,
+      Map courier_ref
+      ) async {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -37,8 +40,10 @@ class DatabaseService {
       'Avatar URL' : avatarUrl,
       'Notification Status' : notifStatus,
       'Current Notification' : currentNotif,
+      'Bookmarks' : courier_ref,
     });
   }
+
 
   // Update Customer Password in Auth
   Future<void> AuthupdateCustomerPassword(String password) {
@@ -55,6 +60,15 @@ class DatabaseService {
         .doc(uid)
         .update({
       'Avatar URL': avatarUrl,
+    });
+  }
+  Future updateCustomerCourierRef(Map reference) async {
+    await customerCollection
+        .doc(uid)
+        .update({
+      'Bookmarks' : reference
+    }).then((_) {
+      print("success!");
     });
   }
 
@@ -237,6 +251,7 @@ class DatabaseService {
         avatarUrl: (doc.data() as dynamic) ['Avatar URL']?? '',
         notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
         currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
+        courier_ref: (doc.data() as dynamic) ['Courier_Ref'] ?? ''
       );
     }).toList();
   }
@@ -353,6 +368,8 @@ class DatabaseService {
       avatarUrl: snapshot['Avatar URL'],
       notifStatus: snapshot['Notification Status'],
       currentNotif: snapshot['Current Notification'],
+      courier_ref: snapshot['Bookmarks']
+
     );
   }
 

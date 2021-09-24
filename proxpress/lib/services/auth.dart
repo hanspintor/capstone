@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proxpress/models/user.dart';
@@ -45,14 +46,16 @@ class AuthService {
   }
 
   // Sign Up email and password for Customer
-  Future SignUpCustomer(String email, String password, String Fname, String Lname, String ContactNo, String Address, String avatarUrl, bool notifStatus, int currentNotif) async {
+  Future SignUpCustomer(String email, String password, String Fname, String Lname, String ContactNo, String Address,
+      String avatarUrl, bool notifStatus, int currentNotif, Map courier_ref) async {
     try{
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // FirebaseUser before
       User user = result.user;
       //await FileStorage(uid: user.uid);
-      await DatabaseService(uid: user.uid).updateCustomerData(Fname, Lname, email, ContactNo, password, Address, avatarUrl, notifStatus, currentNotif);
+      await DatabaseService(uid: user.uid).updateCustomerData(Fname, Lname, email, ContactNo, password,
+          Address, avatarUrl, notifStatus, currentNotif, courier_ref);
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());

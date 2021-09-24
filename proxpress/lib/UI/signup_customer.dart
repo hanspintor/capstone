@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -19,6 +21,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
   String address;
   bool agree = false;
   bool slide = false;
+  Map  courier_ref;
 
   bool loading = false;
   final AuthService _auth = AuthService();
@@ -283,7 +286,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
 
                               if (regKey.currentState.validate()){
                                 setState(() => loading = true); // loading = true;
-                                dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address, defaultProfilePic, false, 0);
+                                dynamic result = await _auth.SignUpCustomer(email, password, fName, lName, contactNo, address, defaultProfilePic, false, 0, courier_ref);
                                 if(result == null){
                                   setState((){
                                     error = 'Email already taken';

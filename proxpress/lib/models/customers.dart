@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/services/auth.dart';
 class Customer{
   final String uid;
@@ -10,10 +11,12 @@ class Customer{
   final String avatarUrl;
   final bool notifStatus;
   final int currentNotif;
-
+  final Map courier_ref;
   final AuthService _auth = AuthService();
 
-  Customer({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.avatarUrl, this.notifStatus, this.currentNotif});
+  Customer({this.uid, this.fName, this.lName, this.email,
+    this.contactNo, this.password, this.address, this.avatarUrl,
+    this.notifStatus, this.currentNotif, this.courier_ref});
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCustomerPassword(password);
