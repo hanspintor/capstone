@@ -299,7 +299,7 @@ class _RequestTileState extends State<RequestTile> {
                                                     return ElevatedButton.icon(
                                                       icon: Icon(Icons.feedback, size: 20),
                                                         label: Text('Send Feedback', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                        onPressed: () {
+                                                        onPressed: !(widget.delivery.rating == 0 && widget.delivery.feedback == '') ? null : () {
                                                           showFeedback();
                                                         }
                                                     );
@@ -580,7 +580,7 @@ class _RequestTileState extends State<RequestTile> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 25),
               child: FavoriteButton(
-                iconSize: 50,
+                iconSize: 50, valueChanged: (result) {print(result);},
               ),
             ),
           ],

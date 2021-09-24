@@ -15,17 +15,13 @@ class _TransactionListState extends State<TransactionList> {
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
 
-    return delivery == null ? UserLoading() : SingleChildScrollView(
-      child: SizedBox(
-        height: 500,
-        width: 500,
-        child: ListView.builder(
-          itemCount: delivery.length,
-          itemBuilder: (context, index) {
-            return TransactionTile(delivery: delivery[index]);
-          },
-        ),
-      ),
+    return delivery == null ? UserLoading() : ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: delivery.length,
+      itemBuilder: (context, index) {
+        return TransactionTile(delivery: delivery[index]);
+      },
     );
   }
 }
