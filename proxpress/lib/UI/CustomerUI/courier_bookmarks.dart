@@ -45,6 +45,13 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
           .snapshots()
           .map(DatabaseService().deliveryDataListFromSnapshot);
 
+      Stream<List<Courier>> courierList = FirebaseFirestore.instance
+          .collection('Deliveries')
+          .where('Bookmarks' )
+          .snapshots()
+          .map(DatabaseService().courierDataListFromSnapshot);
+
+
       return new GestureDetector(
         onTap: (){
           if(count != 0){
@@ -91,37 +98,36 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
               ),
               drawer: MainDrawerCustomer(),
               endDrawer: NotifDrawerCustomer(),
-              body: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child:  Text(
-                          "Bookmarked Couriers",
-                          style: TextStyle(
-                            fontSize: 25,
+              body: StreamProvider<List<Courier>>.value(
+                value: courierList,
+                initialData: [],
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child:  Text(
+                            "Bookmarked Couriers",
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
                           ),
                         ),
-                      ),
-                      Card(
-                        margin: EdgeInsets.all(20),
 
-                        shadowColor: Colors.black,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                      ),
-                      // Container(
-                      //   margin: EdgeInsets.only(
-                      //       top: 10, bottom: 10, left: 100, right: 100),
-                      //   child: TextFormField(
-                      //     decoration: InputDecoration(
-                      //         labelText: 'Search',
-                      //         prefixIcon: Icon(Icons.search_rounded)),
-                      //   ),
-                      // ),
-                      //CourierList(),
-                    ],
+                        // Container(
+                        //   margin: EdgeInsets.only(
+                        //       top: 10, bottom: 10, left: 100, right: 100),
+                        //   child: TextFormField(
+                        //     decoration: InputDecoration(
+                        //         labelText: 'Search',
+                        //         prefixIcon: Icon(Icons.search_rounded)),
+                        //   ),
+                        // ),
+                        //CourierList(),
+                      ],
+                    ),
                   ),
                 ),
               )),
