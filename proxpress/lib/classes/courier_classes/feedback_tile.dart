@@ -33,34 +33,36 @@ class _FeedbackTileState extends State<FeedbackTile> {
           int rating = widget.delivery.rating;
           String feedback = widget.delivery.feedback;
 
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: StreamBuilder<Customer>(
-                stream: DatabaseService(uid: uid).customerData,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    Customer customerData = snapshot.data;
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        child: ListTile(
-                            title: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: List.generate(5, (index) {
-                                return Icon(
-                                  index < rating ? Icons.star : Icons.star_border, color: Colors.amber,
-                                );
-                              }),
-                            ),
-                            subtitle: Text(feedback)
+          if(widget.delivery.rating != 0 && widget.delivery.feedback != ""){
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StreamBuilder<Customer>(
+                  stream: DatabaseService(uid: uid).customerData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          child: ListTile(
+                              title: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: List.generate(5, (index) {
+                                  return Icon(
+                                    index < rating ? Icons.star : Icons.star_border, color: Colors.amber,
+                                  );
+                                }),
+                              ),
+                              subtitle: Text(feedback)
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
+                    else return Container();
                   }
-                  else return Container();
-                }
-            ),
-          );
+              ),
+            );
+          }
+          return Container();
         }
         else {
           return Container();
