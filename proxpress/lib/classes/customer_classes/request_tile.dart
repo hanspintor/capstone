@@ -578,10 +578,13 @@ class _RequestTileState extends State<RequestTile> {
           children: [
             Text('How\'s My Service?'),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 25),
-              child: FavoriteButton(
+              margin: EdgeInsets.symmetric(horizontal: 35),
+              child:  FavoriteButton(
                 iconSize: 50,
-              ),
+                valueChanged: (_isFavorite) {
+                  print('Is Favorite $_isFavorite)');
+                },
+              )
             ),
           ],
         ),
