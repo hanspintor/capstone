@@ -36,14 +36,7 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final AuthService _auth = AuthService();
-  static Timer _sessionTimer;
-  static Timer _sessionTimerPrint;
-  int count = 0;
-  int duration = 1;
-  void handleTimeOut() async{
-    await _auth.signOut();
-  }
+
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -58,92 +51,75 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
 
 
 
-      return new GestureDetector(
-        onTap: (){
-          if(count != 0){
-            print("Session Revived");
-          } else {
-            print("Session Started");
-            count=1;
-          }
-          _sessionTimer?.cancel();
-          _sessionTimer = new Timer(Duration(minutes: duration), handleTimeOut);
-          _sessionTimerPrint?.cancel();
-          _sessionTimerPrint = new Timer(Duration(minutes: duration), () {
-            print("Session Expired");
-          });
-
-        },
-        child: user == null ? LoginScreen():StreamProvider<List<Courier>>.value(
-          value: DatabaseService().courierList,
-          child: Scaffold(
-            drawerEnableOpenDragGesture: false,
-            endDrawerEnableOpenDragGesture: false,
-            key: _scaffoldKey,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              iconTheme: IconThemeData(
-                color: Color(0xfffb0d0d),
-              ),
-              actions: [
-                StreamProvider<List<Delivery>>.value(
-                    value: deliveryList,
-                    initialData: [],
-                    child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
-                ),
-              ],
-              flexibleSpace: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Image.asset(
-                  "assets/PROExpress-logo.png",
-                  height: 120,
-                  width: 120,
-                ),
-              ),
-              //title: Text("PROExpress"),
+      return user == null ? LoginScreen():StreamProvider<List<Courier>>.value(
+        value: DatabaseService().courierList,
+        child: Scaffold(
+          drawerEnableOpenDragGesture: false,
+          endDrawerEnableOpenDragGesture: false,
+          key: _scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(
+              color: Color(0xfffb0d0d),
             ),
-            drawer: MainDrawerCustomer(),
-            endDrawer: NotifDrawerCustomer(),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child:  Text(
-                        "Bookmarked Couriers",
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
+            actions: [
+              StreamProvider<List<Delivery>>.value(
+                  value: deliveryList,
+                  initialData: [],
+                  child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+              ),
+            ],
+            flexibleSpace: Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Image.asset(
+                "assets/PROExpress-logo.png",
+                height: 120,
+                width: 120,
+              ),
+            ),
+            //title: Text("PROExpress"),
+          ),
+          drawer: MainDrawerCustomer(),
+          endDrawer: NotifDrawerCustomer(),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child:  Text(
+                      "Bookmarked Couriers",
+                      style: TextStyle(
+                        fontSize: 25,
                       ),
                     ),
-                     PinLocation(
-                      locKey: locKey, textFieldPickup: textFieldPickup,
-                      textFieldDropOff: textFieldDropOff, isBookmarks: notBookmarks,
-                    ),
-                    Card(
-                      margin: EdgeInsets.all(20),
-                      shadowColor: Colors.black,
-                      child: CourierBookmarkTile(appear: false,),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  ),
+                   PinLocation(
+                    locKey: locKey, textFieldPickup: textFieldPickup,
+                    textFieldDropOff: textFieldDropOff, isBookmarks: notBookmarks,
+                  ),
+                  Card(
+                    margin: EdgeInsets.all(20),
+                    shadowColor: Colors.black,
+                    child: CourierBookmarkTile(appear: false,),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
 
-                    ),
-                  // Container(
-                  //   margin: EdgeInsets.only(
-                  //       top: 10, bottom: 10, left: 100, right: 100),
-                  //   child: TextFormField(
-                  //     decoration: InputDecoration(
-                  //         labelText: 'Search',
-                  //         prefixIcon: Icon(Icons.search_rounded)),
-                  //   ),
-                  // ),
-                  //CourierList(),
-                  ],
-                ),
+                  ),
+                // Container(
+                //   margin: EdgeInsets.only(
+                //       top: 10, bottom: 10, left: 100, right: 100),
+                //   child: TextFormField(
+                //     decoration: InputDecoration(
+                //         labelText: 'Search',
+                //         prefixIcon: Icon(Icons.search_rounded)),
+                //   ),
+                // ),
+                //CourierList(),
+                ],
               ),
-            )
-          ),
+            ),
+          )
         ),
       );
     } else{
