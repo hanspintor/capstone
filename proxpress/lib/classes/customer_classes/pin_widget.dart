@@ -88,7 +88,8 @@ class _PinLocationState extends State<PinLocation> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(
+          margin: widget.isBookmarks ? EdgeInsets.only(
+              right: 40, left: 40, bottom: 0, top: 0): EdgeInsets.only(
               right: 40, left: 40, bottom: 40, top: 100),
           child: Form(
             key: widget.locKey,
@@ -171,6 +172,78 @@ class _PinLocationState extends State<PinLocation> {
                       },
                     ),
                   ),
+                  Visibility(
+                    visible: widget.isBookmarks,
+                    child: ElevatedButton(
+                      child: Text(
+                        'Pin Location',
+                        style:
+                        TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xfffb0d0d)),
+                      onPressed: () async {
+                        if (widget.locKey.currentState.validate()) {
+                          print("${pickupCoordinates.latitude}, ${pickupCoordinates.longitude}, ${dropOffCoordinates.latitude}, ${dropOffCoordinates.longitude}");
+
+                          Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates, destination: dropOffCoordinates);
+
+                          print("??? ${_infoFetch.totalDistance}");
+                          String distanceRemoveKM = '';
+                          bool isKM = false;
+
+                          if (_infoFetch.totalDistance.contains('km')) {
+                            isKM = true;
+                            distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 3);
+                          } else {
+                            distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 2);
+                          }
+
+                          bool hasPendingRequest = await checkIfHasPendingRequest(user.uid);
+
+                          if (!hasPendingRequest){
+                            if(!widget.isBookmarks){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DashboardCustomer(
+                                          pickupAddress: pickupAddress,
+                                          pickupCoordinates: pickupCoordinates,
+                                          dropOffAddress: dropOffAddress,
+                                          dropOffCoordinates: dropOffCoordinates,
+                                          distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
+                                        ),
+                                  )
+                              );
+                            } else{
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        CourierBookmarkTile(
+                                          pickupAddress: pickupAddress,
+                                          pickupCoordinates: pickupCoordinates,
+                                          dropOffAddress: dropOffAddress,
+                                          dropOffCoordinates: dropOffCoordinates,
+                                          distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
+                                        ),
+                                  )
+                              );
+                            }
+                          } else {
+                            setState((){
+                              error = 'You still have one pending request.';
+                            });
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red, fontSize: 14.0),
+                  ),
                 ],
               ),
               shadowColor: Colors.black,
@@ -178,76 +251,77 @@ class _PinLocationState extends State<PinLocation> {
                   borderRadius:
                   BorderRadius.all(Radius.circular(10))),
             ),
+
           ),
         ),
-        ElevatedButton(
-          child: Text(
-            'Pin Location',
-            style:
-            TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          style: ElevatedButton.styleFrom(
-              primary: Color(0xfffb0d0d)),
-          onPressed: () async {
-            if (widget.locKey.currentState.validate()) {
-              print("${pickupCoordinates.latitude}, ${pickupCoordinates.longitude}, ${dropOffCoordinates.latitude}, ${dropOffCoordinates.longitude}");
+        Visibility(
+          visible: widget.isBookmarks ? false : true,
+          child: ElevatedButton(
+            child: Text(
+              'Pin Location',
+              style:
+              TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: Color(0xfffb0d0d)),
+            onPressed: () async {
+              if (widget.locKey.currentState.validate()) {
+                print("${pickupCoordinates.latitude}, ${pickupCoordinates.longitude}, ${dropOffCoordinates.latitude}, ${dropOffCoordinates.longitude}");
 
-              Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates, destination: dropOffCoordinates);
+                Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates, destination: dropOffCoordinates);
 
-              print("??? ${_infoFetch.totalDistance}");
-              String distanceRemoveKM = '';
-              bool isKM = false;
+                print("??? ${_infoFetch.totalDistance}");
+                String distanceRemoveKM = '';
+                bool isKM = false;
 
-              if (_infoFetch.totalDistance.contains('km')) {
-                isKM = true;
-                distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 3);
-              } else {
-                distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 2);
-              }
-
-              bool hasPendingRequest = await checkIfHasPendingRequest(user.uid);
-
-              if (!hasPendingRequest){
-                if(!widget.isBookmarks){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            DashboardCustomer(
-                              pickupAddress: pickupAddress,
-                              pickupCoordinates: pickupCoordinates,
-                              dropOffAddress: dropOffAddress,
-                              dropOffCoordinates: dropOffCoordinates,
-                              distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
-                            ),
-                      )
-                  );
-                } else{
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CourierBookmarkTile(
-                              pickupAddress: pickupAddress,
-                              pickupCoordinates: pickupCoordinates,
-                              dropOffAddress: dropOffAddress,
-                              dropOffCoordinates: dropOffCoordinates,
-                              distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
-                            ),
-                      )
-                  );
+                if (_infoFetch.totalDistance.contains('km')) {
+                  isKM = true;
+                  distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 3);
+                } else {
+                  distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 2);
                 }
-              } else {
-                setState((){
-                  error = 'You still have one pending request.';
-                });
+
+                bool hasPendingRequest = await checkIfHasPendingRequest(user.uid);
+
+                if (!hasPendingRequest){
+                  if(!widget.isBookmarks){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DashboardCustomer(
+                                pickupAddress: pickupAddress,
+                                pickupCoordinates: pickupCoordinates,
+                                dropOffAddress: dropOffAddress,
+                                dropOffCoordinates: dropOffCoordinates,
+                                distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
+                              ),
+                        )
+                    );
+                  } else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CourierBookmarkTile(
+                                pickupAddress: pickupAddress,
+                                pickupCoordinates: pickupCoordinates,
+                                dropOffAddress: dropOffAddress,
+                                dropOffCoordinates: dropOffCoordinates,
+                                distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
+                                appear: true,
+                              ),
+                        )
+                    );
+                  }
+                } else {
+                  setState((){
+                    error = 'You still have one pending request.';
+                  });
+                }
               }
-            }
-          },
-        ),
-        Text(
-          error,
-          style: TextStyle(color: Colors.red, fontSize: 14.0),
+            },
+          ),
         ),
       ],
     );

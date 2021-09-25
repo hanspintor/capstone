@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/classes/customer_classes/courier_bookmarks_tile.dart';
 import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -117,13 +118,14 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                         ),
                       ),
                     ),
+                     PinLocation(
+                      locKey: locKey, textFieldPickup: textFieldPickup,
+                      textFieldDropOff: textFieldDropOff, isBookmarks: notBookmarks,
+                    ),
                     Card(
                       margin: EdgeInsets.all(20),
                       shadowColor: Colors.black,
-                      child: PinLocation(
-                        locKey: locKey, textFieldPickup: textFieldPickup,
-                        textFieldDropOff: textFieldDropOff, isBookmarks: notBookmarks,
-                      ),
+                      child: CourierBookmarkTile(appear: false,),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
 
                     ),
