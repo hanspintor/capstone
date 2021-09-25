@@ -17,7 +17,6 @@ import 'menu_drawer_customer.dart';
 import 'notif_drawer_customer.dart';
 
 class CourierBookmarks extends StatefulWidget {
-
   @override
   _CourierBookmarksState createState() => _CourierBookmarksState();
 }
