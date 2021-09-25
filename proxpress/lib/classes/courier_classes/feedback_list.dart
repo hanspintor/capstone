@@ -6,6 +6,12 @@ import 'package:proxpress/classes/courier_classes/transaction_tile.dart';
 import 'package:proxpress/models/deliveries.dart';
 
 class FeedbackList extends StatefulWidget {
+  final List<Delivery> delivery;
+
+  FeedbackList({
+    Key key,
+    @required this.delivery,
+  }) : super(key: key);
 
   @override
   _FeedbackListState createState() => _FeedbackListState();
@@ -14,14 +20,14 @@ class FeedbackList extends StatefulWidget {
 class _FeedbackListState extends State<FeedbackList> {
   @override
   Widget build(BuildContext context) {
-    final delivery = Provider.of<List<Delivery>>(context);
+    //final delivery = Provider.of<List<Delivery>>(context);
 
-    return delivery == null ? UserLoading() : ListView.builder(
+    return widget.delivery == null ? UserLoading() : ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: delivery.length,
+      itemCount: widget.delivery.length,
       itemBuilder: (context, index) {
-        return FeedbackTile(delivery: delivery[index]);
+        return FeedbackTile(delivery: widget.delivery[index]);
       },
     );
   }

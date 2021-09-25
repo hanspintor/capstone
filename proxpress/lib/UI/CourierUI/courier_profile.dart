@@ -338,7 +338,7 @@ class CourierProfile extends StatelessWidget {
                                                     title: Text('Feedbacks', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                                     subtitle: Column(
                                                       children: [
-                                                        FeedbackList(),
+                                                        FeedbackList(delivery: deliveryData),
                                                       ],
                                                     ),
                                                   ),
