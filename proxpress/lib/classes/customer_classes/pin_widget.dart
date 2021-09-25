@@ -227,6 +227,7 @@ class _PinLocationState extends State<PinLocation> {
                                           dropOffAddress: dropOffAddress,
                                           dropOffCoordinates: dropOffCoordinates,
                                           distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
+                                          appear: true,
                                         ),
                                   )
                               );

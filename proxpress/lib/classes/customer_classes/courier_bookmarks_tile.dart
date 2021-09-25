@@ -504,14 +504,19 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                     }
                   },
                 ),
-                Container(
-                  child: Text(
-                    "Pin first the location",
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
+                Visibility(
+                  visible: courierRefs.length == 0
+                  || widget.appear
+                      ? false : true,
+                  child: Container(
+                    child: Text(
+                      "Pin first the location",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
                   ),
                 )
