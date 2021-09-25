@@ -25,13 +25,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final AuthService _auth = AuthService();
-  static Timer _sessionTimer;
-  static Timer _sessionTimerPrint;
-  int count = 0;
-  int duration = 1;
-  void handleTimeOut() async{
-    await _auth.signOut();
-  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -44,127 +38,110 @@ class _CustomerProfileState extends State<CustomerProfile> {
             .snapshots()
             .map(DatabaseService().deliveryDataListFromSnapshot);
 
-      return new GestureDetector(
-        onTap: (){
-          if(count != 0){
-            print("Session Revived");
-          } else {
-            print("Session Started");
-            count=1;
-          }
-          _sessionTimer?.cancel();
-          _sessionTimer = new Timer(Duration(minutes: duration), handleTimeOut);
-          _sessionTimerPrint?.cancel();
-          _sessionTimerPrint = new Timer(Duration(minutes: duration), () {
-            print("Session Expired");
-          });
-
-        },
-        child: user == null ? LoginScreen() : Scaffold(
-            drawerEnableOpenDragGesture: false,
-            endDrawerEnableOpenDragGesture: false,
-            key:_scaffoldKey,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
-              actions: [
-                StreamProvider<List<Delivery>>.value(
-                    value: deliveryList,
-                    initialData: [],
-                    child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
-                )
-              ],
-              flexibleSpace: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Image.asset(
-                  "assets/PROExpress-logo.png",
-                  height: 120,
-                  width: 120,
-                ),
+      return user == null ? LoginScreen() : Scaffold(
+          drawerEnableOpenDragGesture: false,
+          endDrawerEnableOpenDragGesture: false,
+          key:_scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
+            actions: [
+              StreamProvider<List<Delivery>>.value(
+                  value: deliveryList,
+                  initialData: [],
+                  child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+              )
+            ],
+            flexibleSpace: Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Image.asset(
+                "assets/PROExpress-logo.png",
+                height: 120,
+                width: 120,
               ),
-              //title: Text("PROExpress"),
             ),
-            drawer: MainDrawerCustomer(),
-            endDrawer: NotifDrawerCustomer(),
-            body: SingleChildScrollView(
-              child: StreamBuilder<Customer>(
-                  stream: DatabaseService(uid: user.uid).customerData,
-                  builder: (context,snapshot){
-                    if(snapshot.hasData){
-                      Customer customerData = snapshot.data;
-                      return Center(
-                        child: Container(
-                          width: 350,
-                          child: Card(
-                            margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  child: CircleAvatar(
-                                    radius: 80,
-                                    backgroundImage: NetworkImage(customerData.avatarUrl),
-                                    backgroundColor: Colors.white,
+            //title: Text("PROExpress"),
+          ),
+          drawer: MainDrawerCustomer(),
+          endDrawer: NotifDrawerCustomer(),
+          body: SingleChildScrollView(
+            child: StreamBuilder<Customer>(
+                stream: DatabaseService(uid: user.uid).customerData,
+                builder: (context,snapshot){
+                  if(snapshot.hasData){
+                    Customer customerData = snapshot.data;
+                    return Center(
+                      child: Container(
+                        width: 350,
+                        child: Card(
+                          margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                child: CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage: NetworkImage(customerData.avatarUrl),
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '${customerData.fName} ${customerData.lName}',
+                                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Container(
+                                  padding: EdgeInsets.only(top: 5, left: 2),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.home_rounded, size: 20,)),
+                                          Text(customerData.address, style: TextStyle(fontSize: 15)),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.alternate_email_rounded, size: 20,)),
+                                          Text(customerData.email, style: TextStyle(fontSize: 15)),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.phone_rounded, size: 20,)),
+                                          Text(customerData.contactNo, style: TextStyle(fontSize: 15)),
+                                        ],
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                                        width: 125,
+                                        child: ElevatedButton.icon(
+                                          icon: Icon(Icons.edit_rounded, size: 15),
+                                          label: Text('Edit Profile', style: TextStyle(fontSize: 15),),
+                                          style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                                          onPressed: (){
+                                            Navigator.pushNamed(context, '/customerUpdate');
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '${customerData.fName} ${customerData.lName}',
-                                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Container(
-                                    padding: EdgeInsets.only(top: 5, left: 2),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.home_rounded, size: 20,)),
-                                            Text(customerData.address, style: TextStyle(fontSize: 15)),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.alternate_email_rounded, size: 20,)),
-                                            Text(customerData.email, style: TextStyle(fontSize: 15)),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.phone_rounded, size: 20,)),
-                                            Text(customerData.contactNo, style: TextStyle(fontSize: 15)),
-                                          ],
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                          width: 125,
-                                          child: ElevatedButton.icon(
-                                            icon: Icon(Icons.edit_rounded, size: 15),
-                                            label: Text('Edit Profile', style: TextStyle(fontSize: 15),),
-                                            style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                                            onPressed: (){
-                                              Navigator.pushNamed(context, '/customerUpdate');
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
                         ),
-                      );
-                    }
-                    else{
-                      return UserLoading();
-                    }
+                      ),
+                    );
                   }
-              ),
+                  else{
+                    return UserLoading();
+                  }
+                }
+            ),
 
-            )
-        ),
+          )
       );
       } else{
         return LoginScreen();

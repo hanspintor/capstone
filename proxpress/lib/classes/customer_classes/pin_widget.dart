@@ -58,7 +58,7 @@ class _PinLocationState extends State<PinLocation> {
   String dropOffAddress;
   LatLng dropOffCoordinates;
 
- double distance;
+  double distance;
 
   dynamic pickupDetails;
   dynamic dropOffDetails;
