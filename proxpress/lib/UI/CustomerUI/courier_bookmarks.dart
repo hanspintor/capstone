@@ -17,13 +17,11 @@ import 'menu_drawer_customer.dart';
 import 'notif_drawer_customer.dart';
 
 class CourierBookmarks extends StatefulWidget {
-
   @override
   _CourierBookmarksState createState() => _CourierBookmarksState();
 }
 
 class _CourierBookmarksState extends State<CourierBookmarks> {
-
   String deliveryPriceUid;
   double deliveryFee = 0.0;
   bool notBookmarks = true;
@@ -42,16 +40,16 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     bool approved = true;
-    if(user != null){
+
+    if(user != null) {
       Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
           .collection('Deliveries')
           .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
           .snapshots()
           .map(DatabaseService().deliveryDataListFromSnapshot);
 
-
-
-      return user == null ? LoginScreen():StreamProvider<List<Courier>>.value(
+      return StreamProvider<List<Courier>>.value(
+        initialData: [],
         value: DatabaseService().courierList,
         child: Scaffold(
           drawerEnableOpenDragGesture: false,
@@ -95,16 +93,11 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                       ),
                     ),
                   ),
-                   PinLocation(
-                    locKey: locKey, textFieldPickup: textFieldPickup,
-                    textFieldDropOff: textFieldDropOff, isBookmarks: notBookmarks,
-                  ),
-                  Card(
-                    margin: EdgeInsets.all(20),
-                    shadowColor: Colors.black,
-                    child: CourierBookmarkTile(appear: false,),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-
+                  PinLocation(
+                    locKey: locKey,
+                    textFieldPickup: textFieldPickup,
+                    textFieldDropOff: textFieldDropOff,
+                    isBookmarks: true,
                   ),
                 // Container(
                 //   margin: EdgeInsets.only(
@@ -122,7 +115,7 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
           )
         ),
       );
-    } else{
+    } else {
       return LoginScreen();
     }
   }
