@@ -136,8 +136,10 @@ class _DashboardLocationState extends State<DashboardLocation>{
                           ),
                         ),
                         PinLocation(
-                          locKey: locKey, textFieldPickup: textFieldPickup,
-                          textFieldDropOff: textFieldDropOff, isBookmarks: notBookmarks,
+                          locKey: locKey,
+                          textFieldPickup: textFieldPickup,
+                          textFieldDropOff: textFieldDropOff,
+                          isBookmarks: false,
                         )
                       ],
                     ),

@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
+import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/delivery_prices.dart';
@@ -41,17 +43,19 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    return StreamBuilder<Customer>(
+
+    if (user != null) {
+      return StreamBuilder<Customer>(
         stream: DatabaseService(uid: user.uid).customerData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Customer customer = snapshot.data;
 
             Map<String, DocumentReference> localBookmarks =
-                Map<String, DocumentReference>.from(customer.courier_ref);
+            Map<String, DocumentReference>.from(customer.courier_ref);
 
             List<DocumentReference> courierRefs =
-                localBookmarks.values.toList();
+            localBookmarks.values.toList();
 
             return Stack(
               alignment: Alignment.center,
@@ -268,15 +272,15 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                                   fontSize: 10),
                                                             ),
                                                             onPressed: /*widget.courier.status == "Offline" ? null :*/ () {
-                                                              // Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                                              //     CustomerRemarks(
-                                                              //       courierUID: widget.courier.uid,
-                                                              //       pickupAddress: widget.pickupAddress,
-                                                              //       pickupCoordinates: widget.pickupCoordinates,
-                                                              //       dropOffAddress: widget.dropOffAddress,
-                                                              //       dropOffCoordinates: widget.dropOffCoordinates,
-                                                              //       deliveryFee: deliveryFee.toInt(),),
-                                                              // ));
+                                                              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                                  CustomerRemarks(
+                                                                    courierUID: courier.uid,
+                                                                    pickupAddress: widget.pickupAddress,
+                                                                    pickupCoordinates: widget.pickupCoordinates,
+                                                                    dropOffAddress: widget.dropOffAddress,
+                                                                    dropOffCoordinates: widget.dropOffCoordinates,
+                                                                    deliveryFee: deliveryFee.toInt(),),
+                                                              ));
                                                             })),
                                                   ),
                                                 ],
@@ -506,7 +510,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                 ),
                 Visibility(
                   visible: courierRefs.length == 0
-                  || widget.appear
+                      || widget.appear
                       ? false : true,
                   child: Container(
                     child: Text(
@@ -521,12 +525,15 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                   ),
                 )
               ],
-
             );
             return Container();
           } else {
             return Container();
           }
-        });
+        }
+      );
+    } else {
+      return Container();
+    }
   }
 }
