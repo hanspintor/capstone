@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_animarker/flutter_map_marker_animation.dart';
+import 'package:flutter_animarker/widgets/animarker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
@@ -35,6 +41,89 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
   );
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  StreamSubscription _locationSubscription;
+  Location _locationTracker = Location();
+  GoogleMapController _controller;
+  Marker marker;
+  bool gpsPressed = false;
+
+  @override
+  void initState() {
+    // final FirebaseAuth auth = FirebaseAuth.instance;
+    // final User user = auth.currentUser;
+    //
+    // Future<String> deliveryOngoing = FirebaseFirestore.instance.collection('Deliveries')
+    //     .where('Courier Approval', isEqualTo: 'Approved')
+    //     .where('Delivery Status', isEqualTo: 'Ongoing')
+    //     .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+    //     .get().then((event) async {
+    //   if (event.docs.isNotEmpty) {
+    //     return event.docs.first.id.toString(); //if it is a single document
+    //   } else {
+    //     return '';
+    //   }
+    // });
+    // getCurrentLocation('deliveryOngoingUID');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (_locationSubscription != null) {
+      _locationSubscription.cancel();
+    }
+  }
+
+  void updateMarker(LocationData newLocalData, String uid) async {
+    LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
+    GeoPoint courierLocation = GeoPoint(newLocalData.latitude, newLocalData.longitude);
+
+    print("${newLocalData.latitude}, ${newLocalData.longitude}");
+
+    print(uid);
+
+    await DatabaseService(uid: uid).updateCourierLocation(courierLocation);
+
+    this.setState(() {
+      marker = Marker(
+        markerId: MarkerId("home"),
+        position: latlng,
+        draggable: false,
+        zIndex: 2,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+        infoWindow: const InfoWindow(title: 'Courier Location'),
+      );
+    });
+  }
+
+  void getCurrentLocation(String uid) async {
+    try {
+      var location = await _locationTracker.getLocation();
+
+      updateMarker(location, uid);
+
+      if (_locationSubscription != null) {
+        _locationSubscription.cancel();
+      }
+
+      _locationSubscription = _locationTracker.onLocationChanged.listen((newLocalData) {
+        if (_controller != null) {
+          // _controller.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+          //     target: LatLng(newLocalData.latitude, newLocalData.longitude),
+          //     tilt: 0,
+          //     zoom: 18.00)));
+          updateMarker(newLocalData, uid);
+        }
+      });
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        debugPrint("Permission Denied");
+      }
+    }
+  }
+
+  bool flag = true;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +131,26 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
 
     final user = Provider.of<TheUser>(context);
     bool approved = false;
+
+    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+        .collection('Deliveries')
+        .where('Courier Approval', isEqualTo: 'Pending')
+        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+        .snapshots()
+        .map(DatabaseService().deliveryDataListFromSnapshot);
+
+    Future<String> deliveryOngoing = FirebaseFirestore.instance.collection('Deliveries')
+        .where('Courier Approval', isEqualTo: 'Approved')
+        .where('Delivery Status', isEqualTo: 'Ongoing')
+        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+        .get().then((event) async {
+      if (event.docs.isNotEmpty) {
+        return event.docs.first.id.toString(); //if it is a single document
+      } else {
+        return '';
+      }
+    });
+
     if(user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
@@ -49,25 +158,6 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
             if(snapshot.hasData){
               Courier courierData = snapshot.data;
               approved = courierData.approved;
-
-              Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-                  .collection('Deliveries')
-                  .where('Courier Approval', isEqualTo: 'Pending')
-                  .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
-                  .snapshots()
-                  .map(DatabaseService().deliveryDataListFromSnapshot);
-
-              Future<String> deliveryOngoing = FirebaseFirestore.instance.collection('Deliveries')
-                  .where('Courier Approval', isEqualTo: 'Approved')
-                  .where('Delivery Status', isEqualTo: 'Ongoing')
-                  .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
-                  .get().then((event) async {
-                if (event.docs.isNotEmpty) {
-                  return event.docs.first.id.toString(); //if it is a single document
-                } else {
-                  return '';
-                }
-              });
 
               return WillPopScope(
                   onWillPop: () async {
@@ -112,6 +202,12 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                   String deliveryOngoingUID = snapshot.data;
 
                                   if (deliveryOngoingUID != '') {
+                                    if (flag) {
+                                      getCurrentLocation(deliveryOngoingUID);
+                                    }
+                                    flag = false;
+                                    print(flag);
+
                                     return StreamBuilder<Delivery>(
                                         stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,
                                         builder: (context, snapshot) {
@@ -142,22 +238,19 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                   if (snapshot.hasData) {
                                                     Directions _info = snapshot.data;
 
-                                                    GoogleMapController _googleMapController;
-                                                    Marker marker;
-
                                                     return Expanded(
                                                       child: Stack(
                                                         alignment: Alignment.center,
                                                         children: [
                                                           GoogleMap(
                                                             onMapCreated: (controller) {
-                                                              _googleMapController = controller;
-                                                              _googleMapController.animateCamera(
+                                                              _controller = controller;
+                                                              _controller.animateCamera(
                                                                   CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
                                                               );
 
-                                                              _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
-                                                              _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                                                              _controller.showMarkerInfoWindow(MarkerId('pickup'));
+                                                              _controller.showMarkerInfoWindow(MarkerId('dropOff'));
                                                             },
                                                             myLocationButtonEnabled: false,
                                                             zoomControlsEnabled: false,
@@ -165,7 +258,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                             markers: {
                                                               if (_pickup != null) _pickup,
                                                               if (_dropOff != null) _dropOff,
-                                                              if(marker != null) marker,
+                                                              if (marker != null) marker,
                                                             },
                                                             polylines: {
                                                               if (_info != null)
@@ -367,7 +460,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                         builder: (context, AsyncSnapshot<dynamic> snapshot){
                           if(snapshot.hasData){
                             String deliveryOngoingUID = snapshot.data;
-                            print(deliveryOngoingUID);
+                            //print(deliveryOngoingUID);
 
                             if(deliveryOngoingUID != ""){
                               return StreamBuilder<Delivery>(
@@ -403,6 +496,9 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                           outerColor: Colors.green,
                                                           onSubmit: () async {
                                                             showToast('Customer Notified');
+                                                            if (_locationSubscription != null) {
+                                                              _locationSubscription.cancel();
+                                                            }
                                                             await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
                                                             Navigator.push(context, PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade));
                                                           },

@@ -221,6 +221,12 @@ class DatabaseService {
     });
   }
 
+  Future updateCourierLocation(GeoPoint courierLocation) async {
+    return await deliveryCollection.doc(uid).update({
+      'Courier Location': courierLocation,
+    });
+  }
+
   Future updateRatingFeedback(int rating, String feedback) async {
     return await deliveryCollection.doc(uid).update({
       'Rating': rating,
