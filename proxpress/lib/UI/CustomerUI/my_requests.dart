@@ -125,7 +125,7 @@ class _MyRequestsState extends State<MyRequests> {
                               initialData: [],
                               value: deliveryRequestPending,
                               child: Card(
-                                child: PendingDeliveryRequest(),
+                                child: RequestList(),
                               ),
                             ),
                             SizedBox(height: 10),

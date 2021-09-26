@@ -54,6 +54,9 @@ class _RequestTileState extends State<RequestTile> {
           else if (widget.delivery.deliveryStatus == 'Delivered'){
             color = Colors.green;
           }
+          else if (widget.delivery.deliveryStatus == 'Cancelled'){
+            color = Colors.red;
+          }
 
           if(widget.delivery.deliveryStatus == 'Ongoing'){
             return Padding(
@@ -100,6 +103,31 @@ class _RequestTileState extends State<RequestTile> {
                                       ),
                                       child: Column(
                                         children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ListTile(
+                                                leading: Icon(Icons.payments_rounded, color: Colors.red),
+                                                title: Text("Payment Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                                subtitle: Container(
+                                                  padding: EdgeInsets.only(top: 5),
+                                                  child: Text.rich(
+                                                    TextSpan(children: [
+                                                      TextSpan(text: "Mode of Payment: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                      TextSpan(text: "${widget.delivery.paymentOption}\n", style: Theme.of(context).textTheme.bodyText2),
+                                                      TextSpan(text: '\n'),
+                                                      TextSpan(text: "Who Will Pay: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                      TextSpan(text: "${widget.delivery.whoWillPay}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                      TextSpan(text: '\n'),
+                                                      TextSpan(text: "Delivery Fee: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                      TextSpan(text: "\₱${widget.delivery.deliveryFee}\n",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                    ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                           Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -248,6 +276,31 @@ class _RequestTileState extends State<RequestTile> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 ListTile(
+                                                  leading: Icon(Icons.payments_rounded, color: Colors.red),
+                                                  title: Text("Payment Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                                  subtitle: Container(
+                                                    padding: EdgeInsets.only(top: 5),
+                                                    child: Text.rich(
+                                                      TextSpan(children: [
+                                                        TextSpan(text: "Mode of Payment: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                        TextSpan(text: "${widget.delivery.paymentOption}\n", style: Theme.of(context).textTheme.bodyText2),
+                                                        TextSpan(text: '\n'),
+                                                        TextSpan(text: "Who Will Pay: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                        TextSpan(text: "${widget.delivery.whoWillPay}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                        TextSpan(text: '\n'),
+                                                        TextSpan(text: "Delivery Fee: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                        TextSpan(text: "\₱${widget.delivery.deliveryFee}\n",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                      ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
                                                   leading: Icon(Icons.info_rounded, color: Colors.red),
                                                   title: Text("Additional Information", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                                   subtitle: Container(
@@ -376,6 +429,31 @@ class _RequestTileState extends State<RequestTile> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 ListTile(
+                                                  leading: Icon(Icons.payments_rounded, color: Colors.red),
+                                                  title: Text("Payment Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                                  subtitle: Container(
+                                                    padding: EdgeInsets.only(top: 5),
+                                                    child: Text.rich(
+                                                      TextSpan(children: [
+                                                        TextSpan(text: "Mode of Payment: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                        TextSpan(text: "${widget.delivery.paymentOption}\n", style: Theme.of(context).textTheme.bodyText2),
+                                                        TextSpan(text: '\n'),
+                                                        TextSpan(text: "Who Will Pay: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                        TextSpan(text: "${widget.delivery.whoWillPay}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                        TextSpan(text: '\n'),
+                                                        TextSpan(text: "Delivery Fee: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                        TextSpan(text: "\₱${widget.delivery.deliveryFee}\n",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                      ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
                                                   leading: Icon(Icons.info_rounded, color: Colors.red),
                                                   title: Text("Additional Information", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                                   subtitle: Container(
@@ -495,6 +573,31 @@ class _RequestTileState extends State<RequestTile> {
                                         ),
                                         child: Column(
                                           children: [
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  leading: Icon(Icons.payments_rounded, color: Colors.red),
+                                                  title: Text("Payment Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                                  subtitle: Container(
+                                                    padding: EdgeInsets.only(top: 5),
+                                                    child: Text.rich(
+                                                      TextSpan(children: [
+                                                        TextSpan(text: "Mode of Payment: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                        TextSpan(text: "${widget.delivery.paymentOption}\n", style: Theme.of(context).textTheme.bodyText2),
+                                                        TextSpan(text: '\n'),
+                                                        TextSpan(text: "Who Will Pay: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                                        TextSpan(text: "${widget.delivery.whoWillPay}\n",style: Theme.of(context).textTheme.bodyText2),
+                                                        TextSpan(text: '\n'),
+                                                        TextSpan(text: "Delivery Fee: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                        TextSpan(text: "\₱${widget.delivery.deliveryFee}\n",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black)),
+                                                      ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                             Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [

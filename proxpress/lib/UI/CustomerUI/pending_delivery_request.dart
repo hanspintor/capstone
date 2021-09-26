@@ -70,6 +70,10 @@ class _PendingDeliveryRequestState extends State<PendingDeliveryRequest> {
                                     TextSpan(children: [
                                       TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                       TextSpan(text: "${delivery[index].courierApproval} \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, color: color)),
+                                      TextSpan(text: "Payment Method: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                      TextSpan(text: "${delivery[index].paymentOption}\n", style: TextStyle(color: Colors.black)),
+                                      TextSpan(text: "Delivery Fee: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                      TextSpan(text: "\₱${delivery[index].deliveryFee}\n", style: TextStyle(color: Colors.black)),
                                       TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
                                       TextSpan(text: courierData.contactNo, style: TextStyle(color: Colors.black)),
                                     ],

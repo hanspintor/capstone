@@ -246,11 +246,6 @@ class _CourierTileState extends State<CourierTile> {
                                               _buildStars(1),
                                             ],
                                           ),
-                                          ListTile(
-                                            title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                            trailing: Text("\₱${fee}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),
