@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animarker/flutter_map_marker_animation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -30,71 +31,10 @@ class DeliveryStatus extends StatefulWidget {
 
 class _DeliveryStatusState extends State<DeliveryStatus> {
   GoogleMapController _googleMapController;
-  double rating = 0;
-  StreamSubscription _locationSubscription;
   Marker marker;
-
-  void updateMarkerAndCircle(GeoPoint courierLocation){
-    LatLng latlng = LatLng(courierLocation.latitude, courierLocation.longitude);
-
-    this.setState(() {
-      marker = Marker(
-        markerId: MarkerId("home"),
-        position: latlng,
-        rotation: courierLocation.latitude,
-        draggable: false,
-        zIndex: 2,
-        flat: true,
-        //anchor: Offset(.5,.5),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-        infoWindow: const InfoWindow(title: 'Courier Location'),
-      );
-    });
-  }
-
-
-  Future<Uint8List> getMarker() async{
-    ByteData byteData = await DefaultAssetBundle.of(context).load("assets/courier.png");
-    return byteData.buffer.asUint8List();
-  }
-
-
-  void getCurrentLocation(GeoPoint courierLocation) async {
-    try{
-      updateMarkerAndCircle(courierLocation);
-
-      if(_locationSubscription != null){
-        _locationSubscription.cancel();
-      }
-
-
-        if(_googleMapController != null) {
-          _googleMapController.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-            bearing: 192.8334901295799,
-            target: LatLng(courierLocation.latitude, courierLocation.longitude), //widget.delivery.courierLocation.latitude, widget.delivery.courierLocation.longitude
-            tilt: 0,
-            zoom: 15,
-          )));
-          updateMarkerAndCircle(courierLocation);
-        }
-    } on PlatformException catch (e){
-      if (e.code == 'PERMISSION_DENIED'){
-        debugPrint("Permission Denied");
-      }
-    }
-  }
-
-  @override
-  void dispose(){
-    if(_locationSubscription != null){
-      _locationSubscription.cancel();
-    }
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<TheUser>(context);
     LatLng pickup_pos = LatLng(widget.delivery.pickupCoordinates.latitude, widget.delivery.pickupCoordinates.longitude,);
     Marker _pickup = Marker(
       markerId: const MarkerId('pickup'),
@@ -112,11 +52,19 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
     );
 
     Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: _pickup.position, destination: _dropOff.position);
-    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-        .collection('Deliveries')
-        .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-        .snapshots()
-        .map(DatabaseService().deliveryDataListFromSnapshot);
+
+    // Stream<Delivery> getUpdatedCourLoc = DatabaseService(uid: widget.delivery.uid).deliveryData;
+    //
+    // getUpdatedCourLoc.listen((event) {
+    //   setState((){
+    //     marker = Marker(
+    //       markerId: const MarkerId("courier"),
+    //       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+    //       infoWindow: const InfoWindow(title: 'Courier Location'),
+    //       position: LatLng(event.courierLocation.latitude, event.courierLocation.longitude),
+    //     );
+    //   });
+    // });
 
     return Scaffold(
       appBar: AppBar(
@@ -159,120 +107,94 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         //title: Text("PROExpress"),
       ),
       body: Center(
-        // child: Column(
-        //   children: [
-        //     Container(
-        //       margin: EdgeInsets.fromLTRB(0, 20, 40, 10),
-        //         child: Lottie.asset('assets/delivery.json')
-        //     ),
-        //     Row(
-        //       children: [
-        //         Container(
-        //           margin: EdgeInsets.fromLTRB(50, 0, 0, 10),
-        //           child: Text('Delivery in Progress',
-        //             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        //           ),
-        //         ),
-        //         Container(
-        //           margin: EdgeInsets.only(top: 6),
-        //           child: SizedBox(
-        //             height: 50,
-        //               width: 50,
-        //               child: Lottie.asset('assets/dots.json')
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ],
-        // ),
         child: Column(
           children: [
             FutureBuilder<Directions>(
-              future: _infoFetch,
-              builder: (context, AsyncSnapshot<Directions> snapshot) {
-                if (snapshot.hasData) {
-                  Directions _info = snapshot.data;
+                future: _infoFetch,
+                builder: (context, AsyncSnapshot<Directions> snapshot) {
+                  if (snapshot.hasData) {
+                    Directions _info = snapshot.data;
 
-                  CameraPosition _initialCameraPosition = CameraPosition(
-                    target: LatLng(13.621980880497976, 123.19477396693487),
-                    zoom: 15,
-                  );
+                    CameraPosition _initialCameraPosition = CameraPosition(
+                      target: LatLng(13.621980880497976, 123.19477396693487),
+                      zoom: 15,
+                    );
 
-                  return Expanded(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        GoogleMap(
-                          onMapCreated: (controller) {
-                            _googleMapController = controller;
-                            _googleMapController.animateCamera(
-                              CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-                            );
+                    return Expanded(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          GoogleMap(
+                            onMapCreated: (controller) {
+                              _googleMapController = controller;
+                              _googleMapController.animateCamera(
+                                  CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                              );
 
-                            _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
-                            _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
-                          },
-                          myLocationButtonEnabled: false,
-                          zoomControlsEnabled: false,
-                          initialCameraPosition: _initialCameraPosition,
-                          markers: {
-                            if (_pickup != null) _pickup,
-                            if (_dropOff != null) _dropOff,
-                            if(marker != null) marker,
-                          },
-                          polylines: {
-                            if (_info != null)
-                              Polyline(
-                                polylineId: const PolylineId('overview_polyline'),
-                                color: Colors.red,
-                                width: 5,
-                                points: _info.polylinePoints
-                                    .map((e) => LatLng(e.latitude, e.longitude))
-                                    .toList(),
+                              _googleMapController.showMarkerInfoWindow(MarkerId('pickup'));
+                              _googleMapController.showMarkerInfoWindow(MarkerId('dropOff'));
+                            },
+                            myLocationButtonEnabled: false,
+                            zoomControlsEnabled: false,
+                            initialCameraPosition: _initialCameraPosition,
+                            markers: {
+                              if (_pickup != null) _pickup,
+                              if (_dropOff != null) _dropOff,
+                              if(marker != null) marker,
+                            },
+                            polylines: {
+                              if (_info != null)
+                                Polyline(
+                                  polylineId: const PolylineId('overview_polyline'),
+                                  color: Colors.red,
+                                  width: 5,
+                                  points: _info.polylinePoints
+                                      .map((e) => LatLng(e.latitude, e.longitude))
+                                      .toList(),
+                                ),
+                            },
+                          ),
+                          Positioned(
+                            top: 20.0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 6.0,
+                                horizontal: 12.0,
                               ),
-                          },
-                        ),
-                        Positioned(
-                          top: 20.0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 6.0,
-                              horizontal: 12.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20.0),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 6.0,
-                                )
-                              ],
-                            ),
-                            child: Text(
-                              '${_info.totalDistance}, ${_info.totalDuration}',
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(0, 2),
+                                    blurRadius: 6.0,
+                                  )
+                                ],
+                              ),
+                              child: Text(
+                                '${_info.totalDistance}, ${_info.totalDuration}',
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [CircularProgressIndicator()]
-                    ),
-                  );
+                        ],
+                      ),
+                    );
+                  } else {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [CircularProgressIndicator()]
+                      ),
+                    );
+                  }
                 }
-              }
             ),
           ],
         ),
@@ -283,20 +205,26 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
             if (snapshot.hasData) {
               Delivery deliveryData = snapshot.data;
               return FloatingActionButton.extended(
-                label: Text('Courier Location'),
+                  label: Text('Courier Location'),
                   icon: Container(
-                    height: 20,
+                      height: 20,
                       width: 20,
                       child: Image.asset('assets/courier.png')
                   ),
                   onPressed: () {
-                    getCurrentLocation(deliveryData.courierLocation);
-                    print(deliveryData.courierLocation.latitude);
-                    print(deliveryData.courierLocation.longitude);
+                    setState((){
+                      marker = Marker(
+                        markerId: const MarkerId("courier"),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+                        infoWindow: const InfoWindow(title: 'Courier Location'),
+                        position: LatLng(deliveryData.courierLocation.latitude, deliveryData.courierLocation.longitude),
+                      );
+                    });
                   });
             } else
               return Container();
-          }),
+          }
+      ),
     );
   }
 }
