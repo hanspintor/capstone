@@ -83,7 +83,7 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child:  Text(
