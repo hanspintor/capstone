@@ -11,8 +11,8 @@ import 'courier_bookmarks_tile.dart';
 
 class PinLocation extends StatefulWidget {
   final GlobalKey<FormState> locKey;
-  final TextEditingController textFieldPickup;
-  final TextEditingController textFieldDropOff;
+   TextEditingController textFieldPickup;
+   TextEditingController textFieldDropOff;
   final bool isBookmarks;
 
   PinLocation({
@@ -179,84 +179,7 @@ class _PinLocationState extends State<PinLocation> {
                       },
                     ),
                   ),
-                  Visibility(
-                    visible: widget.isBookmarks,
-                    child: ElevatedButton(
-                      child: Text(
-                        'Pin Location',
-                        style:
-                        TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          primary: Color(0xfffb0d0d)),
-                      onPressed: () async {
-                        if (widget.locKey.currentState.validate()) {
-                          Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates, destination: dropOffCoordinates);
 
-                          if (_infoFetch.totalDistance.contains('km')) {
-                            setState((){
-                              isKM = true;
-                              distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 3);
-                            });
-                          } else {
-                            setState((){
-                              distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 2);
-                            });
-                          }
-
-                          // bool hasPendingRequest = await checkIfHasPendingRequest(user.uid);
-
-                          setState((){
-                            distance = isKM ? double.parse(
-                                distanceRemoveKM) : double.parse(
-                                distanceRemoveKM) / 1000;
-                          });
-
-                          if (!widget.isBookmarks) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DashboardCustomer(
-                                        pickupAddress: pickupAddress,
-                                        pickupCoordinates: pickupCoordinates,
-                                        dropOffAddress: dropOffAddress,
-                                        dropOffCoordinates: dropOffCoordinates,
-                                        distance: distance,
-                                      ),
-                                )
-                            );
-                          } else {
-                            print(pickupAddress);
-                            print(pickupCoordinates);
-                            print(dropOffAddress);
-                            print(dropOffCoordinates);
-                            print(distance);
-                            setState((){
-                              print('nice');
-                              appear = true;
-                            });
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           CourierBookmarkTile(
-                            //             pickupAddress: pickupAddress,
-                            //             pickupCoordinates: pickupCoordinates,
-                            //             dropOffAddress: dropOffAddress,
-                            //             dropOffCoordinates: dropOffCoordinates,
-                            //             distance: isKM ? double.parse(
-                            //                 distanceRemoveKM) : double.parse(
-                            //                 distanceRemoveKM) / 1000,
-                            //             appear: true,
-                            //           ),
-                            //     )
-                            // );
-                          }
-                        }
-                      },
-                    ),
-                  ),
                 ],
               ),
               shadowColor: Colors.black,
@@ -266,18 +189,79 @@ class _PinLocationState extends State<PinLocation> {
             ),
           ),
         ),
-        widget.isBookmarks ? Card(
-          margin: EdgeInsets.all(20),
-          shadowColor: Colors.black,
-          child: CourierBookmarkTile(
-            pickupAddress: pickupAddress ?? '',
-            pickupCoordinates: pickupCoordinates ?? LatLng(0,0),
-            dropOffAddress: dropOffAddress ?? '',
-            dropOffCoordinates: dropOffCoordinates ?? LatLng(0,0),
-            distance: distance ?? 0,
-            appear: appear,),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-        ) : Container(),
+        Visibility(
+          visible: widget.isBookmarks,
+          child: ElevatedButton(
+            child: Text(
+              'Pin Location',
+              style:
+              TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: Color(0xfffb0d0d)),
+            onPressed: () async {
+              if (widget.locKey.currentState.validate()) {
+                Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates, destination: dropOffCoordinates);
+
+                if (_infoFetch.totalDistance.contains('km')) {
+                  setState((){
+                    isKM = true;
+                    distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 3);
+                  });
+                } else {
+                  setState((){
+                    distanceRemoveKM = _infoFetch.totalDistance.substring(0, _infoFetch.totalDistance.length - 2);
+                  });
+                }
+
+                // bool hasPendingRequest = await checkIfHasPendingRequest(user.uid);
+
+                setState((){
+                  distance = isKM ? double.parse(
+                      distanceRemoveKM) : double.parse(
+                      distanceRemoveKM) / 1000;
+                });
+
+                if (!widget.isBookmarks) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            DashboardCustomer(
+                              pickupAddress: pickupAddress,
+                              pickupCoordinates: pickupCoordinates,
+                              dropOffAddress: dropOffAddress,
+                              dropOffCoordinates: dropOffCoordinates,
+                              distance: distance,
+                            ),
+                      )
+                  );
+                } else {
+                  print(pickupAddress);
+                  print(pickupCoordinates);
+                  print(dropOffAddress);
+                  print(dropOffCoordinates);
+                  print(distance);
+                  setState((){
+                    print('nice');
+                    appear = true;
+                    widget.textFieldPickup.clear();
+                    widget.textFieldDropOff.clear();
+                  });
+
+                  Navigator.pop(context, LocalDataBookmark(
+                      appear: appear, distance: distance,
+                      pickupAddress: pickupAddress, pickupCoordinates: pickupCoordinates,
+                    dropOffAddress: dropOffAddress, dropOffCoordinates: dropOffCoordinates
+                  ));
+                  setState(() {
+
+                  });
+                }
+              }
+            },
+          ),
+        ),
         !widget.isBookmarks ? Visibility(
           visible: !widget.isBookmarks,
           child: ElevatedButton(
@@ -318,22 +302,8 @@ class _PinLocationState extends State<PinLocation> {
                             ),
                       )
                   );
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CourierBookmarkTile(
-                              pickupAddress: pickupAddress,
-                              pickupCoordinates: pickupCoordinates,
-                              dropOffAddress: dropOffAddress,
-                              dropOffCoordinates: dropOffCoordinates,
-                              distance: isKM ? double.parse(distanceRemoveKM) : double.parse(distanceRemoveKM) / 1000,
-                              appear: true,
-                            ),
-                      )
-                  );
                 }
+
               }
             },
           ),
@@ -341,4 +311,17 @@ class _PinLocationState extends State<PinLocation> {
       ],
     );
   }
+}
+class LocalDataBookmark{
+  bool appear;
+  double distance;
+  String pickupAddress;
+  LatLng pickupCoordinates;
+  String dropOffAddress;
+  LatLng dropOffCoordinates;
+
+
+  LocalDataBookmark({this.appear, this.distance, this.pickupAddress, this.pickupCoordinates,
+    this.dropOffAddress, this.dropOffCoordinates
+  });
 }

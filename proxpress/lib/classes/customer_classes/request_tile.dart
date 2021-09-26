@@ -34,22 +34,6 @@ class _RequestTileState extends State<RequestTile> {
   int flag = 0;
   @override
   Widget build(BuildContext context) {
-    // must get this from cloud firestore
-    Map currentBookmarks = {};
-
-    // this what happens when clicking bookmark button (1st time)
-    print(currentBookmarks.length);
-    Map addBookmark = {'courier${currentBookmarks.length}': 'courier${currentBookmarks.length}\'s UID'};
-    currentBookmarks.addAll(addBookmark);
-    print(currentBookmarks);
-
-    // this what happens when clicking bookmark button (2nd time)
-    print(currentBookmarks.length);
-    Map addBookmark2 = {'courier${currentBookmarks.length}': 'courier${currentBookmarks.length}\'s UID'};
-    currentBookmarks.addAll(addBookmark2);
-
-    print(currentBookmarks.length);
-    print(currentBookmarks);
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;

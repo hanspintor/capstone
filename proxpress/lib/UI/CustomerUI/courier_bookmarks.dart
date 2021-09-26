@@ -93,12 +93,29 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                       ),
                     ),
                   ),
-                  PinLocation(
-                    locKey: locKey,
-                    textFieldPickup: textFieldPickup,
-                    textFieldDropOff: textFieldDropOff,
-                    isBookmarks: true,
+                  Card(
+                    margin: EdgeInsets.all(20),
+                    shadowColor: Colors.black,
+                    child: CourierBookmarkTile(appear: false,),
                   ),
+                  // PinLocation(
+                  //   locKey: locKey,
+                  //   textFieldPickup: textFieldPickup,
+                  //   textFieldDropOff: textFieldDropOff,
+                  //   isBookmarks: true,
+                  // ),
+                  // widget.isBookmarks ? Card(
+                  //   margin: EdgeInsets.all(20),
+                  //   shadowColor: Colors.black,
+                  //   child: CourierBookmarkTile(
+                  //     pickupAddress: pickupAddress ?? '',
+                  //     pickupCoordinates: pickupCoordinates ?? LatLng(0,0),
+                  //     dropOffAddress: dropOffAddress ?? '',
+                  //     dropOffCoordinates: dropOffCoordinates ?? LatLng(0,0),
+                  //     distance: distance ?? 0,
+                  //     appear: appear,),
+                  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  // ) : Container(),
                 // Container(
                 //   margin: EdgeInsets.only(
                 //       top: 10, bottom: 10, left: 100, right: 100),

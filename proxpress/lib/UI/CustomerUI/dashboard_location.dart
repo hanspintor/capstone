@@ -46,11 +46,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  static Timer _sessionTimer;
-  static Timer _sessionTimerPrint;
-  void handleTimeOut() async{
-    await _auth.signOut();
-  }
+
 
 
 
@@ -62,96 +58,80 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
     bool approved = true;
 
-    return new GestureDetector(
-      onTap: (){
-        if(count != 0){
-          print("Session Revived");
-        } else {
-          print("Session Started");
-          count=1;
-        }
-        _sessionTimer?.cancel();
-        _sessionTimer = new Timer(Duration(minutes: duration), handleTimeOut);
-        _sessionTimerPrint?.cancel();
-        _sessionTimerPrint = new Timer(Duration(minutes: duration), () {
-          print("Session Expired");
-        });
-      },
-      child: user == null ? LoginScreen() : StreamBuilder<Customer>(
-        stream: DatabaseService(uid: user.uid).customerData,
-        builder: (context, snapshot) {
-          if(snapshot.hasData){
-            Customer customerData = snapshot.data;
+    return user == null ? LoginScreen() : StreamBuilder<Customer>(
+      stream: DatabaseService(uid: user.uid).customerData,
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          Customer customerData = snapshot.data;
 
-            Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-                .collection('Deliveries')
-                .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-                .snapshots()
-                .map(DatabaseService().deliveryDataListFromSnapshot);
+          Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+              .collection('Deliveries')
+              .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
+              .snapshots()
+              .map(DatabaseService().deliveryDataListFromSnapshot);
 
-            return WillPopScope(
-              onWillPop: () async {
-                print("Back Button pressed");
-                return false;
-              },
-              child: Scaffold(
-                drawerEnableOpenDragGesture: false,
-                endDrawerEnableOpenDragGesture: false,
-                key: _scaffoldKey,
-                appBar: AppBar(
-                  backgroundColor: Colors.white,
-                  iconTheme: IconThemeData(
-                    color: Color(0xfffb0d0d),
-                  ),
-                  actions: [
-                    StreamProvider<List<Delivery>>.value(
-                        value: deliveryList,
-                        initialData: [],
-                        child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
-                    )
-                  ],
-                  flexibleSpace: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Image.asset(
-                      "assets/PROExpress-logo.png",
-                      height: 120,
-                      width: 120,
-                    ),
-                  ),
-                  //title: Text("PROExpress"),
+          return WillPopScope(
+            onWillPop: () async {
+              print("Back Button pressed");
+              return false;
+            },
+            child: Scaffold(
+              drawerEnableOpenDragGesture: false,
+              endDrawerEnableOpenDragGesture: false,
+              key: _scaffoldKey,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                iconTheme: IconThemeData(
+                  color: Color(0xfffb0d0d),
                 ),
-                drawer: MainDrawerCustomer(),
-                endDrawer: NotifDrawerCustomer(),
-                body: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Text("Welcome, ${customerData.fName}!",
-                            style: TextStyle(
-                              fontSize: 25,
-                            ),
+                actions: [
+                  StreamProvider<List<Delivery>>.value(
+                      value: deliveryList,
+                      initialData: [],
+                      child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+                  )
+                ],
+                flexibleSpace: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Image.asset(
+                    "assets/PROExpress-logo.png",
+                    height: 120,
+                    width: 120,
+                  ),
+                ),
+                //title: Text("PROExpress"),
+              ),
+              drawer: MainDrawerCustomer(),
+              endDrawer: NotifDrawerCustomer(),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text("Welcome, ${customerData.fName}!",
+                          style: TextStyle(
+                            fontSize: 25,
                           ),
                         ),
-                        PinLocation(
-                          locKey: locKey,
-                          textFieldPickup: textFieldPickup,
-                          textFieldDropOff: textFieldDropOff,
-                          isBookmarks: false,
-                        )
-                      ],
-                    ),
+                      ),
+                      PinLocation(
+                        locKey: locKey,
+                        textFieldPickup: textFieldPickup,
+                        textFieldDropOff: textFieldDropOff,
+                        isBookmarks: false,
+                      )
+                    ],
                   ),
                 ),
               ),
-            );
-          } else {
-            return UserLoading();
-          }
+            ),
+          );
+        } else {
+          return UserLoading();
         }
-      ),
+      }
     );
   }
 }
