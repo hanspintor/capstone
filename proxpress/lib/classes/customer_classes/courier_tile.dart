@@ -393,9 +393,8 @@ class _CourierTileState extends State<CourierTile> {
                                 child: Text('View Feedbacks', style: TextStyle(color: Colors.white, fontSize: 10),),
                                 onPressed: (){
                                   showMaterialModalBottomSheet(
-                                    expand: true,
                                       context: context,
-                                      builder: (context) => _bottomSheet(),
+                                      builder: (context) => SizedBox(height: 660, child: _bottomSheet()),
                                   );
                                 },
                               ),

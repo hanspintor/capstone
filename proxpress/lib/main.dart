@@ -34,7 +34,8 @@ Future<void> main() async {
   NotificationService().initNotification();
   await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.white,
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark
   ));
   runApp(PROXpressApp());
 }
