@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/customer_classes/courier_list.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
@@ -72,13 +74,14 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<TheUser>(context);
+
     print(widget.pickupAddress);
     print(widget.pickupCoordinates.toString());
 
     print(widget.dropOffAddress);
     print(widget.dropOffCoordinates.toString());
 
-    final user = Provider.of<TheUser>(context);
     return user == null ? LoginScreen() : StreamProvider<List<Courier>>.value(
       value: DatabaseService().courierList,
       initialData: [],
