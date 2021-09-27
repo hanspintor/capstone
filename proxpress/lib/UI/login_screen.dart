@@ -66,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           child: TextFormField(
+                                autofillHints: [AutofillHints.email],
                                 validator: (val) => val.isEmpty ? 'Email is Required': null,
                                 decoration: InputDecoration(
                                 labelText: "Email",

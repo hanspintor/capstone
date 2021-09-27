@@ -132,26 +132,27 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
 
-    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-        .collection('Deliveries')
-        .where('Courier Approval', isEqualTo: 'Pending')
-        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
-        .snapshots()
-        .map(DatabaseService().deliveryDataListFromSnapshot);
 
-    Future<String> deliveryOngoing = FirebaseFirestore.instance.collection('Deliveries')
-        .where('Courier Approval', isEqualTo: 'Approved')
-        .where('Delivery Status', isEqualTo: 'Ongoing')
-        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
-        .get().then((event) async {
-      if (event.docs.isNotEmpty) {
-        return event.docs.first.id.toString(); //if it is a single document
-      } else {
-        return '';
-      }
-    });
 
     if(user != null) {
+      Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+          .collection('Deliveries')
+          .where('Courier Approval', isEqualTo: 'Pending')
+          .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+          .snapshots()
+          .map(DatabaseService().deliveryDataListFromSnapshot);
+
+      Future<String> deliveryOngoing = FirebaseFirestore.instance.collection('Deliveries')
+          .where('Courier Approval', isEqualTo: 'Approved')
+          .where('Delivery Status', isEqualTo: 'Ongoing')
+          .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+          .get().then((event) async {
+        if (event.docs.isNotEmpty) {
+          return event.docs.first.id.toString(); //if it is a single document
+        } else {
+          return '';
+        }
+      });
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
           builder: (context,snapshot){
