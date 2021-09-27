@@ -81,102 +81,92 @@ class _MyRequestsState extends State<MyRequests> {
                     print("Back Button Pressed");
                     return false;
                   },
-                  child: Scaffold(
-                    drawerEnableOpenDragGesture: false,
-                    endDrawerEnableOpenDragGesture: false,
-                    key: _scaffoldKey,
-                    appBar: AppBar(
-                      backgroundColor: Colors.white,
-                      iconTheme: IconThemeData(color: Color(0xfffb0d0d)
-                      ),
-                      actions: <Widget>[
-                        StreamProvider<List<Delivery>>.value(
-                            value: deliveryList,
-                            initialData: [],
-                            child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
-                        )
-                        //NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
-                      ],
-                      flexibleSpace: Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Image.asset(
-                          "assets/PROExpress-logo.png",
-                          height: 120,
-                          width: 120,
+                  child: DefaultTabController(
+                    length: 4,
+                    child: Scaffold(
+                      drawerEnableOpenDragGesture: false,
+                      endDrawerEnableOpenDragGesture: false,
+                      key: _scaffoldKey,
+                      appBar: AppBar(
+                        backgroundColor: Colors.white,
+                        iconTheme: IconThemeData(color: Color(0xfffb0d0d)
+                        ),
+                        actions: <Widget>[
+                          StreamProvider<List<Delivery>>.value(
+                              value: deliveryList,
+                              initialData: [],
+                              child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+                          )
+                          //NotifCounter(scaffoldKey: _scaffoldKey,approved: approved,)
+                        ],
+                        flexibleSpace: Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Image.asset(
+                            "assets/PROExpress-logo.png",
+                            height: 120,
+                            width: 120,
+                          ),
                         ),
                       ),
-                    ),
-                    drawer: MainDrawerCustomer(),
-                    endDrawer: NotifDrawerCustomer(),
-                    body: SingleChildScrollView(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text("My Request",
-                                style: TextStyle(
-                                  fontSize: 25,
+                      drawer: MainDrawerCustomer(),
+                      endDrawer: NotifDrawerCustomer(),
+                      body: SingleChildScrollView(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              TabBar(
+                                tabs: [
+                                  Tab(child: Text("Pending", style: TextStyle(color: Colors.black),)),
+                                  Tab(child: Text("Ongoing", style: TextStyle(color: Colors.black),)),
+                                  Tab(child: Text("Finished", style: TextStyle(color: Colors.black),)),
+                                  Tab(child: Text("Cancelled", style: TextStyle(color: Colors.black),)),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 560,
+                                child: TabBarView(
+                                    children: [
+                                      SingleChildScrollView(
+                                        child: StreamProvider<List<Delivery>>.value(
+                                          initialData: [],
+                                          value: deliveryRequestPending,
+                                          child: Card(
+                                            child: RequestList(),
+                                          ),
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: StreamProvider<List<Delivery>>.value(
+                                          initialData: [],
+                                          value: deliveryListDelivered,
+                                          child: Card(
+                                            child: RequestList(),
+                                          ),
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: StreamProvider<List<Delivery>>.value(
+                                          initialData: [],
+                                          value: deliveryListOngoing,
+                                          child: Card(
+                                            child: RequestList(),
+                                          ),
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: StreamProvider<List<Delivery>>.value(
+                                          initialData: [],
+                                          value: deliveryListCancelled,
+                                          child: Card(
+                                            child: RequestList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ]
                                 ),
                               ),
-                            ),
-                            StreamProvider<List<Delivery>>.value(
-                              initialData: [],
-                              value: deliveryRequestPending,
-                              child: Card(
-                                child: RequestList(),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text("Ongoing Delivery",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                ),
-                              ),
-                            ),
-                            StreamProvider<List<Delivery>>.value(
-                              initialData: [],
-                              value: deliveryListOngoing,
-                              child: Card(
-                                child: RequestList(),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text("Finished Transactions",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                ),
-                              ),
-                            ),
-                            StreamProvider<List<Delivery>>.value(
-                              initialData: [],
-                              value: deliveryListDelivered,
-                              child: Card(
-                                child: RequestList(),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text("Cancelled Requests",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                ),
-                              ),
-                            ),
-                            StreamProvider<List<Delivery>>.value(
-                              initialData: [],
-                              value: deliveryListCancelled,
-                              child: Card(
-                                child: RequestList(),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
