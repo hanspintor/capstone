@@ -98,7 +98,6 @@ class _CourierDashboardState extends State<CourierDashboard> {
                       drawer: MainDrawerCourier(),
                       endDrawer: NotifDrawerCourier(),
                       body: Column(
-
                         children: [
                           SizedBox(height: 10),
                           Align(

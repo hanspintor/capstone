@@ -100,75 +100,90 @@ class _DashboardLocationState extends State<DashboardLocation>{
               ),
               drawer: MainDrawerCustomer(),
               endDrawer: NotifDrawerCustomer(),
-              body: !user.emailVerified ? Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              body: Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.redAccent)
-                    ),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.info,
-                        color: Colors.red,
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text("Welcome, ${customerData.fName}!",
+                      style: TextStyle(
+                        fontSize: 25,
                       ),
-                      title: Text(
-                        "Kindly verify your email ${user.email} to use the app.",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueAccent)
-                    ),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.quiz,
-                        color: Colors.red,
-                      ),
-                      title: Text(
-                        "After verifying please relogin to access our features",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
+                  !user.emailVerified ? Container(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black)
+                          ),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.info,
+                              color: Colors.red,
+                            ),
+                            title: Text(
+                              "Kindly verify your email ${user.email} to use the app.",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
 
-                    ),
-                  ),
-                  //verifyCond(),
-                  VerifyEmail()
-                ],
-              )
-                  : SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Text("Welcome, ${customerData.fName}!",
-                          style: TextStyle(
-                            fontSize: 25,
                           ),
                         ),
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black)
+                          ),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.quiz,
+                              color: Colors.red,
+                            ),
+                            title: Text(
+                              "After verifying please relogin to access our features",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+
+                          ),
+                        ),
+                        //verifyCond(),
+                        VerifyEmail()
+                      ],
+                    ),
+                  )
+                      : SingleChildScrollView(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Text("Welcome, ${customerData.fName}!",
+                              style: TextStyle(
+                                fontSize: 25,
+                              ),
+                            ),
+                          ),
+                          PinLocation(
+                            locKey: locKey,
+                            textFieldPickup: textFieldPickup,
+                            textFieldDropOff: textFieldDropOff,
+                            isBookmarks: false,
+                          )
+                        ],
                       ),
-                      PinLocation(
-                        locKey: locKey,
-                        textFieldPickup: textFieldPickup,
-                        textFieldDropOff: textFieldDropOff,
-                        isBookmarks: false,
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           );
