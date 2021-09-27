@@ -6,10 +6,10 @@ class UserLoading extends StatelessWidget{
     @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red[400],
+      color: Colors.white,
       child: Center(
-        child: SpinKitDualRing(
-          color: Colors.white,
+        child: SpinKitRing(
+          color: Colors.red,
           size: 50.0,
         ),
       ),

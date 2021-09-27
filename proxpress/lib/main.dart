@@ -27,12 +27,15 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/wrapper.dart';
 import 'package:proxpress/classes/customer_classes/customer_updating_form.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
   await Firebase.initializeApp();
-  //runApp(DevicePreview(builder: (context) => PROXpressApp()));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.white,
+  ));
   runApp(PROXpressApp());
 }
 
