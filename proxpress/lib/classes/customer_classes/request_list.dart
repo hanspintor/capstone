@@ -6,6 +6,13 @@ import 'package:proxpress/classes/customer_classes/request_tile.dart';
 import 'package:proxpress/models/deliveries.dart';
 
 class RequestList extends StatefulWidget {
+  final String message;
+
+  RequestList({
+    Key key,
+    @required this.message,
+  }) : super(key: key);
+
   @override
   _RequestListState createState() => _RequestListState();
 }
@@ -30,8 +37,7 @@ class _RequestListState extends State<RequestList> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Text(
-              'You currently have no request.',
+            child: Text(widget.message,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,

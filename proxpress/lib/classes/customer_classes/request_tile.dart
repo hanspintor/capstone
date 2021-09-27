@@ -508,7 +508,8 @@ class _RequestTileState extends State<RequestTile> {
                                                 child: ElevatedButton.icon(
                                                   icon: Icon(Icons.cancel),
                                                     label: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                    onPressed: () {
+                                                    onPressed: () async{
+                                                      await DatabaseService(uid: deliveryData.uid).customerCancelRequest();
                                                     }
                                                 )
                                             ),

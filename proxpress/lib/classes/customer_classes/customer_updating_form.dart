@@ -184,7 +184,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 ],
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 decoration: InputDecoration(labelText:
                                 'First Name:',
@@ -192,13 +193,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 onChanged: (val) => setState(() => _currentFName = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 decoration: InputDecoration(labelText:
                                 'Last Name:',
@@ -206,13 +208,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 onChanged: (val) => setState(() => _currentLName = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 decoration: InputDecoration(labelText:
                                 'Address:',
@@ -220,14 +223,15 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 keyboardType: TextInputType.streetAddress,
                                 onChanged: (val) => setState(() => _currentAddress = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
 
                                 decoration: InputDecoration(labelText:
@@ -236,7 +240,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 validator: (String val){
@@ -252,7 +256,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 onChanged: (val) => setState(() => _currentEmail = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 decoration: InputDecoration(labelText:
                                 'Contact No:',
@@ -260,7 +265,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 maxLength: 11,
@@ -286,7 +291,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 ),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 obscureText: true,
                                 decoration: InputDecoration(labelText:
@@ -299,7 +305,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   ),
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 validator: (String val){
@@ -313,7 +319,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 onChanged: (val) => setState(() => _currentPassword = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 obscureText: true,
                                 decoration: InputDecoration(labelText:
@@ -321,7 +328,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                     fontStyle: FontStyle.italic,
-                                    color: Colors.green,
+                                    color: Colors.black,
                                   ),
                                 ),
                                 validator: (String val){
@@ -340,7 +347,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 onChanged: (val) => setState(() => _newPassword = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 obscureText: true,
                                 decoration: InputDecoration(labelText:
@@ -348,7 +356,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 validator: (String val){

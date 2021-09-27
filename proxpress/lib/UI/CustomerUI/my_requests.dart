@@ -131,7 +131,7 @@ class _MyRequestsState extends State<MyRequests> {
                                           initialData: [],
                                           value: deliveryRequestPending,
                                           child: Card(
-                                            child: RequestList(),
+                                            child: RequestList(message: 'You currently have no pending requests.',),
                                           ),
                                         ),
                                       ),
@@ -140,7 +140,7 @@ class _MyRequestsState extends State<MyRequests> {
                                           initialData: [],
                                           value: deliveryListDelivered,
                                           child: Card(
-                                            child: RequestList(),
+                                            child: RequestList(message: 'You currently have no ongoing deliveries.'),
                                           ),
                                         ),
                                       ),
@@ -149,7 +149,7 @@ class _MyRequestsState extends State<MyRequests> {
                                           initialData: [],
                                           value: deliveryListOngoing,
                                           child: Card(
-                                            child: RequestList(),
+                                            child: RequestList(message: 'You have no finished transactions.'),
                                           ),
                                         ),
                                       ),
@@ -158,7 +158,7 @@ class _MyRequestsState extends State<MyRequests> {
                                           initialData: [],
                                           value: deliveryListCancelled,
                                           child: Card(
-                                            child: RequestList(),
+                                            child: RequestList(message: 'You have no cancelled transactions.'),
                                           ),
                                         ),
                                       ),

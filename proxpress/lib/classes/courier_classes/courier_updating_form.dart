@@ -219,7 +219,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ],
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 decoration: InputDecoration(labelText:
                                 'First Name:',
@@ -227,13 +228,14 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 onChanged: (val) => setState(() => _currentFName = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 decoration: InputDecoration(labelText:
                                 'Last Name:',
@@ -241,13 +243,14 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 onChanged: (val) => setState(() => _currentLName = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 decoration: InputDecoration(labelText:
                                 'Address:',
@@ -255,14 +258,15 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 keyboardType: TextInputType.streetAddress,
                                 onChanged: (val) => setState(() => _currentAddress = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 initialValue: _currentEmail,
                                 decoration: InputDecoration(labelText:
@@ -271,7 +275,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 validator: (String val){
@@ -287,7 +291,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 onChanged: (val) => setState(() => _currentEmail = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 initialValue: "${courierData.contactNo}",
                                 decoration: InputDecoration(labelText:
@@ -296,7 +301,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 maxLength: 11,
@@ -312,7 +317,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               ),
                             ),
 
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 initialValue: "${courierData.vehicleColor}",
                                 decoration: InputDecoration(labelText:
@@ -321,7 +327,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 onChanged: (val) => setState(() => _vehicleColor = val),
@@ -338,7 +344,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 obscureText: true,
                                 decoration: InputDecoration(labelText:
@@ -351,7 +358,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   ),
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 validator: (String val){
@@ -365,7 +372,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 onChanged: (val) => setState(() => _currentPassword = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 obscureText: true,
                                 decoration: InputDecoration(labelText:
@@ -373,7 +381,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                     fontStyle: FontStyle.italic,
-                                    color: Colors.green,
+                                    color: Colors.black,
                                   ),
                                 ),
                                 validator: (String val){
@@ -392,7 +400,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 onChanged: (val) => setState(() => _newPassword = val),
                               ),
                             ),
-                            Container(
+                            Padding(
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
                                 obscureText: true,
                                 decoration: InputDecoration(labelText:
@@ -400,7 +409,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: Colors.green
+                                      color: Colors.black
                                   ),
                                 ),
                                 validator: (String val){

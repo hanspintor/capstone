@@ -70,19 +70,35 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 builder: (context,snapshot){
                   if(snapshot.hasData){
                     Customer customerData = snapshot.data;
-                    return Center(
-                      child: Container(
-                        width: 350,
-                        child: Card(
-                          margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+                    return Column(
+                      children: [
+                        Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              SizedBox(height: 20,),
+                              CircleAvatar(
+                                radius: 80,
+                                backgroundImage: NetworkImage(customerData.avatarUrl),
+                                backgroundColor: Colors.white,
+                              ),
                               Container(
-                                child: CircleAvatar(
-                                  radius: 80,
-                                  backgroundImage: NetworkImage(customerData.avatarUrl),
-                                  backgroundColor: Colors.white,
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                width: 360,
+                                child: TextButton.icon(
+                                  icon: Icon(Icons.edit_rounded, size: 15, color: Colors.red),
+                                  label: Text('Edit Profile', style: TextStyle(fontSize: 15, color: Colors.red),),
+                                  style : ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(30.0),
+                                          )
+                                      ),
+                                      side: MaterialStateProperty.all(BorderSide(color: Colors.red))
+                                  ),
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, '/customerUpdate');
+                                  },
                                 ),
                               ),
                               ListTile(
@@ -113,18 +129,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                           Text(customerData.contactNo, style: TextStyle(fontSize: 15)),
                                         ],
                                       ),
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                        width: 125,
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.edit_rounded, size: 15),
-                                          label: Text('Edit Profile', style: TextStyle(fontSize: 15),),
-                                          style : ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                                          onPressed: (){
-                                            Navigator.pushNamed(context, '/customerUpdate');
-                                          },
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -132,7 +136,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ],
                           ),
                         ),
-                      ),
+                      ],
                     );
                   }
                   else{
