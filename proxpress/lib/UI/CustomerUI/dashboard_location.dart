@@ -9,6 +9,7 @@ import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
+import 'package:proxpress/classes/verify.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/secrets.dart';
@@ -32,7 +33,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
   final bool notBookmarks = false;
   int duration = 60;
-  int count = 0;
+  int flag = 0;
   final AuthService _auth = AuthService();
   final textFieldPickup = TextEditingController();
   final textFieldDropOff = TextEditingController();
@@ -46,16 +47,20 @@ class _DashboardLocationState extends State<DashboardLocation>{
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
-
-
-
+  // verifyCond(){
+  //   if(flag <= 0){
+  //     print("outside");
+  //     VerifyEmail();
+  //     flag++;
+  //   }
+  //   return Container();
+  // }
 
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<TheUser>(context);
-
+    final auth = FirebaseAuth.instance;
+    User user = auth.currentUser;
     bool approved = true;
 
     return user == null ? LoginScreen() : StreamBuilder<Customer>(
@@ -63,7 +68,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
       builder: (context, snapshot) {
         if(snapshot.hasData){
           Customer customerData = snapshot.data;
-
+          print("Email: ${user.emailVerified}");
           Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
               .collection('Deliveries')
               .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
@@ -85,7 +90,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                   color: Color(0xfffb0d0d),
                 ),
                 actions: [
-                  StreamProvider<List<Delivery>>.value(
+                   StreamProvider<List<Delivery>>.value(
                       value: deliveryList,
                       initialData: [],
                       child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
@@ -103,7 +108,53 @@ class _DashboardLocationState extends State<DashboardLocation>{
               ),
               drawer: MainDrawerCustomer(),
               endDrawer: NotifDrawerCustomer(),
-              body: SingleChildScrollView(
+              body: !user.emailVerified ? Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.redAccent)
+                    ),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.info,
+                        color: Colors.black,
+                      ),
+                      title: Text(
+                        "Kindly verify your email ${user.email} to use the app.",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blueAccent)
+                    ),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.quiz,
+                        color: Colors.black,
+                      ),
+                      title: Text(
+                        "After verifying please relogin to access our features",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+
+                    ),
+                  ),
+                  //verifyCond(),
+                  VerifyEmail()
+                ],
+              )
+
+                  : SingleChildScrollView(
                 child: Center(
                   child: Column(
                     children: [
@@ -136,46 +187,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
   }
 }
 
-class VerifyEmail extends StatefulWidget {
 
-  @override
-  _VerifyEmailState createState() => _VerifyEmailState();
-}
 
-class _VerifyEmailState extends State<VerifyEmail> {
-  final auth = FirebaseAuth.instance;
-  User user;
-  Timer timer;
 
-  @override
-  void initState(){
-    user = auth.currentUser;
-    user.sendEmailVerification();
 
-    timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      checkEmailVerified();
-    });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-
-  Future<void> checkEmailVerified() async {
-    user = auth.currentUser;
-    await user.reload();
-    if(user.emailVerified){
-      timer.cancel();
-
-    }
-  }
-}

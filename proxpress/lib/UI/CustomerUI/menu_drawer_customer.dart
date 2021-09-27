@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/auth.dart';
@@ -33,9 +34,14 @@ void selectedItem(BuildContext context, int index){
 class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
 
   final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
+    final auth = FirebaseAuth.instance;
+    User user1 = auth.currentUser;
     final user = Provider.of<TheUser>(context);
+
+
     return user == null ? LoginScreen() : Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -82,30 +88,30 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.account_circle_rounded, color: Color(0xfffb0d0d),),
-                  title: Text('Profile', style: TextStyle(color: Color(0xfffb0d0d))),
-                  onTap: () {
+                  leading: Icon(Icons.account_circle_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Profile', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified ? null : () {
                     selectedItem(context, 0);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.place, color: Color(0xfffb0d0d),),
-                  title: Text('Pin Location', style: TextStyle(color: Color(0xfffb0d0d))),
-                  onTap: () {
+                  leading: Icon(Icons.place, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Pin Location', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified ? null : () {
                     selectedItem(context, 1);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.bookmark, color: Color(0xfffb0d0d),),
-                  title: Text('Courier Bookmarks', style: TextStyle(color: Color(0xfffb0d0d))),
-                  onTap: () {
+                  leading: Icon(Icons.bookmark, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey),
+                  title: Text('Courier Bookmarks', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified ? null : () {
                     selectedItem(context, 2);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.notification_important_rounded, color: Color(0xfffb0d0d),),
-                  title: Text('Delivery Status', style: TextStyle(color: Color(0xfffb0d0d))),
-                  onTap: () {
+                  leading: Icon(Icons.notification_important_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Delivery Status', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified ? null : () {
                     selectedItem(context, 3);
                   },
                 ),

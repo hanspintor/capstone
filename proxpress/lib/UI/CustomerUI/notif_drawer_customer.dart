@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
@@ -25,7 +26,9 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
   @override
   Widget build(BuildContext context) {
     bool approved = false;
-    final user = Provider.of<TheUser>(context);
+    final auth = FirebaseAuth.instance;
+    User user = auth.currentUser;
+
     if(flag <= 0){
       isClear = true;
       caption = "No data found";

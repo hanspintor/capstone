@@ -63,7 +63,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
-                onPressed: !widget.approved ? null : () async{
+                onPressed: !widget.approved || !user.emailVerified ? null : () async{
                   setFalse();
                   await DatabaseService(uid: user.uid).updateNotifCounterCustomer(delivery.length);
                   await DatabaseService(uid: user.uid).updateNotifStatusCustomer(viewable);
