@@ -71,7 +71,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
-                onPressed: !widget.approved ? null : () async{
+                onPressed: !widget.approved || !user.emailVerified ? null : () async{
                   setFalse();
 
 

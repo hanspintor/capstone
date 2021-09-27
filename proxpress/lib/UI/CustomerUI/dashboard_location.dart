@@ -2,26 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
-import 'package:proxpress/classes/directions_model.dart';
-import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/classes/verify.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/auth.dart';
-import 'package:proxpress/services/secrets.dart';
 import 'menu_drawer_customer.dart';
 import 'notif_drawer_customer.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'dart:math' show cos, sqrt, asin;
 
 class DashboardLocation extends StatefulWidget{
@@ -118,13 +110,14 @@ class _DashboardLocationState extends State<DashboardLocation>{
                     child: ListTile(
                       leading: Icon(
                         Icons.info,
-                        color: Colors.black,
+                        color: Colors.red,
                       ),
                       title: Text(
                         "Kindly verify your email ${user.email} to use the app.",
                         style: TextStyle(
                           fontSize: 15,
                           fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold
                         ),
                       ),
 
@@ -137,13 +130,14 @@ class _DashboardLocationState extends State<DashboardLocation>{
                     child: ListTile(
                       leading: Icon(
                         Icons.quiz,
-                        color: Colors.black,
+                        color: Colors.red,
                       ),
                       title: Text(
                         "After verifying please relogin to access our features",
                         style: TextStyle(
                           fontSize: 15,
                           fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold
                         ),
                       ),
 
@@ -153,7 +147,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                   VerifyEmail()
                 ],
               )
-
                   : SingleChildScrollView(
                 child: Center(
                   child: Column(
