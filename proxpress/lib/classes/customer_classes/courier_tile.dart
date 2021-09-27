@@ -75,7 +75,7 @@ class _CourierTileState extends State<CourierTile> {
               child: StreamBuilder <List<Delivery>>(
                   stream: DatabaseService().deliveryList,
                   builder: (context, snapshot) {
-                    if(snapshot.hasData){
+                    if(snapshot.hasData && snapshot.data.length != 0){
                       List<Delivery> deliveryData = snapshot.data;
                       double rating = 0.0;
                       double total = 0.0;
@@ -266,7 +266,180 @@ class _CourierTileState extends State<CourierTile> {
                         ],
                       );
                     }
-                    else return Container();
+                    else {
+                      double rating = 0.0;
+                      double total = 0.0;
+                      double stars = 0;
+                      double star1 = 0;
+                      double star2 = 0;
+                      double star3 = 0;
+                      double star4 = 0;
+                      double star5 = 0;
+                      int fee = 0;
+                      return Column(
+                        children: [
+                          Card(
+                            child: ListTile(
+                              subtitle: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text('Rating', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text.rich(
+                                          TextSpan(children: [
+                                            TextSpan(text:'${stars.ceil()}', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)),
+                                            TextSpan(text:'/5', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                          ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    trailing: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: List.generate(5, (index) {
+                                            return Icon(
+                                              index < stars ? Icons.star : Icons.star_border, color: Colors.amber,
+                                            );
+                                          }),
+                                        ),
+                                        Text("Ratings ${total.toInt()}", style: TextStyle(fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                  ),
+                                  ListTile(
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Text('${star5.toInt()}'),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Container(
+                                                  height: 5,
+                                                  width: 120,
+                                                  child: LinearProgressIndicator(
+                                                    backgroundColor: Colors.black12,
+                                                    color: Colors.amber,
+                                                    value: total,
+                                                  ),
+                                                ),
+                                              ),
+                                              _buildStars(5),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Text('${star4.toInt()}'),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Container(
+                                                  height: 5,
+                                                  width: 120,
+                                                  child: LinearProgressIndicator(
+                                                    backgroundColor: Colors.black12,
+                                                    color: Colors.amber,
+                                                    value: total,
+                                                  ),
+                                                ),
+                                              ),
+                                              _buildStars(4),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Text('${star3.toInt()}'),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Container(
+                                                  height: 5,
+                                                  width: 120,
+                                                  child: LinearProgressIndicator(
+                                                    backgroundColor: Colors.black12,
+                                                    color: Colors.amber,
+                                                    value: total,
+                                                  ),
+                                                ),
+                                              ),
+                                              _buildStars(3),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Text('${star2.toInt()}'),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Container(
+                                                  height: 5,
+                                                  width: 120,
+                                                  child: LinearProgressIndicator(
+                                                    backgroundColor: Colors.black12,
+                                                    color: Colors.amber,
+                                                    value: total,
+                                                  ),
+                                                ),
+                                              ),
+                                              _buildStars(2),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Text('${star1.toInt()}'),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Container(
+                                                  height: 5,
+                                                  width: 120,
+                                                  child: LinearProgressIndicator(
+                                                    backgroundColor: Colors.black12,
+                                                    color: Colors.amber,
+                                                    value: total,
+                                                  ),
+                                                ),
+                                              ),
+                                              _buildStars(1),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 30,),
+                                  ListTile(
+                                    title: Text('Feedbacks', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                                    subtitle: Column(
+                                      children: [
+
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                   }
               ),
             );
