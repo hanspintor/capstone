@@ -164,15 +164,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                     child: Center(
                       child: Column(
                         children: [
-                          SizedBox(height: 10),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text("Welcome, ${customerData.fName}!",
-                              style: TextStyle(
-                                fontSize: 25,
-                              ),
-                            ),
-                          ),
                           PinLocation(
                             locKey: locKey,
                             textFieldPickup: textFieldPickup,

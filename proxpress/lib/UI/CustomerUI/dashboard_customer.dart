@@ -142,17 +142,12 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                       ),
                     ),
                   ),
-                  Card(
-                    margin: EdgeInsets.all(20),
-                    child: CourierList(
-                              pickupAddress: widget.pickupAddress,
-                              pickupCoordinates: widget.pickupCoordinates,
-                              dropOffAddress: widget.dropOffAddress,
-                              dropOffCoordinates: widget.dropOffCoordinates,
-                              distance: widget.distance,),
-                    shadowColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                  ),
+                  CourierList(
+                            pickupAddress: widget.pickupAddress,
+                            pickupCoordinates: widget.pickupCoordinates,
+                            dropOffAddress: widget.dropOffAddress,
+                            dropOffCoordinates: widget.dropOffCoordinates,
+                            distance: widget.distance,),
                 ],
               ),
             ),
