@@ -1,3 +1,4 @@
+import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,63 +33,70 @@ class _MessageTileState extends State<MessageTile> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    return user == null ? LoginScreen() :  Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        child: StreamBuilder<Message>(
-          stream: DatabaseService(uid: widget.message.uid).messageData,
-          builder: (context, snapshot) {
-            if(snapshot.hasData){
-              Message message = snapshot.data;
-              String time = DateFormat.jm().format(message.timeSent.toDate());
-              //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
+    return user == null ? LoginScreen() :  Padding(
+      padding: const EdgeInsets.all(20),
+      child: StreamBuilder<Message>(
+        stream: DatabaseService(uid: widget.message.uid).messageData,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            Message message = snapshot.data;
+            String time = DateFormat.jm().format(message.timeSent.toDate());
+            //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
 
-            if (widget.isCustomer) {
-              if (message.sentBy.toString().contains('Customers')) {
-                return Container(
-                  child: Text(
-                    '${message.messageContent} :You \nTime Sent: ${time}',
-                    textAlign: TextAlign.right,
-                  ),
-                );
-              } else if (message.sentBy.toString().contains('Couriers')) {
-                return Container(
-                  child: Text(
-                    'Message: ${message.messageContent} \nTime Sent: ${time}',
-                    textAlign: TextAlign.left,
-                  ),
-                );
-              } else {
-                return Container();
-              }
+          if (widget.isCustomer) {
+            if (message.sentBy.toString().contains('Customers')) {
+              return BubbleNormal(
+                color: Colors.red,
+                textStyle: TextStyle(color: Colors.white),
+                isSender: true,
+                text: '${message.messageContent} \n${time}',
+              );
+            } else if (message.sentBy.toString().contains('Couriers')) {
+              return BubbleNormal(
+                color: Colors.black26,
+                textStyle: TextStyle(color: Colors.black),
+                isSender: false,
+                text: '${message.messageContent} \n${time}',
+              );
             } else {
-              if (message.sentBy.toString().contains('Couriers')) {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                  ),
-                  child: Text(
-                    '${message.messageContent} :You \nTime Sent: ${time}',
-                    textAlign: TextAlign.right,
-                  ),
-                );
-              } else if (message.sentBy.toString().contains('Customers')) {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                  ),
-                  child: Text(
-                    'Message: ${message.messageContent}'
-                        ' \nTime Sent: ${time}', textAlign: TextAlign.left,),
-                );
-              } else {
-                return Container();
-              }
+              return Container();
             }
           } else {
-            return Container();
+            if (message.sentBy.toString().contains('Couriers')) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  BubbleNormal(
+                    color: Colors.red,
+                    textStyle: TextStyle(color: Colors.white),
+                    isSender: true,
+                    text: '${message.messageContent}',
+                  ),
+                  Text("$time"),
+                ],
+              );
+            } else if (message.sentBy.toString().contains('Customers')) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BubbleNormal(
+                    color: Colors.black26,
+                    textStyle: TextStyle(color: Colors.black),
+                    isSender: false,
+                    text: '${message.messageContent}',
+                  ),
+                  Text("$time"),
+                ],
+              );
+            } else {
+              return Container();
+            }
           }
+        } else {
+          return Container();
         }
-      ),
+      }
+        ),
     );
   }
 }

@@ -33,56 +33,53 @@ class _ChatPageState extends State<ChatPage> {
   bool isCustomer = false;
   ScrollController _scrollController = new ScrollController();
   Widget _buildMessageTextField() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.transparent,
-              width: 3
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.transparent,
+            width: 3
+        ),
+      ),
+      padding: EdgeInsets.all(4),
+      child: TextField(
+        onTap: () {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.easeOut,);
+          });
+        },
+        controller: _controller,
+        textCapitalization: TextCapitalization.sentences,
+        autocorrect: true,
+        enableSuggestions: true,
+        decoration: InputDecoration(
+          filled: true,
+          hintText: 'Type your message',
+          suffixIcon: IconButton(
+            icon: Icon(Icons.send),
+            onPressed: _controller.text == '' ? null : () async {
+                if (isCustomer) {
+                  await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
+                } else {
+                  await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
+                }
+                _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+                setState(() {
+                  _controller.clear();
+                });
+            },
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(width: 0),
+            gapPadding: 10,
+            borderRadius: BorderRadius.circular(7),
           ),
         ),
-        padding: EdgeInsets.all(4),
-        child: TextField(
-          onTap: () {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              _scrollController.animateTo(
-                _scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 1000),
-                curve: Curves.easeOut,);
-            });
-          },
-          controller: _controller,
-          textCapitalization: TextCapitalization.sentences,
-          autocorrect: true,
-          enableSuggestions: true,
-          decoration: InputDecoration(
-            filled: true,
-            hintText: 'Type your message',
-            suffixIcon: IconButton(
-              icon: Icon(Icons.send),
-              onPressed: _controller.text == '' ? null : () async {
-                  if (isCustomer) {
-                    await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
-                  } else {
-                    await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
-                  }
-                  _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-                  setState(() {
-                    _controller.clear();
-                  });
-              },
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(width: 0),
-              gapPadding: 10,
-              borderRadius: BorderRadius.circular(7),
-            ),
-          ),
-          onChanged: (value) => setState(() {
-            message = value;
-          }),
-        )
-      ),
+        onChanged: (value) => setState(() {
+          message = value;
+        }),
+      )
     );
   }
 
@@ -125,6 +122,64 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
+        title: isCustomer ? StreamBuilder<Courier>(
+            stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Courier courier = snapshot.data;
+
+                return Wrap(
+                  spacing: 10,
+                  children: [
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: NetworkImage(courier.avatarUrl),
+                      backgroundColor: Colors.white,
+                    ),
+                    Text(
+                      "${courier.fName} ${courier.lName}",
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Text('Loading');
+              }
+            }
+        ) : StreamBuilder<Customer>(
+            stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Customer customer = snapshot.data;
+
+                return Wrap(
+                  spacing: 10,
+                  children: [
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: NetworkImage(customer.avatarUrl),
+                      backgroundColor: Colors.white,
+                    ),
+                    Text(
+                      "${customer.fName} ${customer.lName}",
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black
+                      ),
+
+                    ),
+                  ],
+                );
+              } else {
+                return Text('Loading');
+              }
+            }
+        ),
         actions: [
           IconButton(icon: Icon(
             Icons.help_outline,
@@ -152,71 +207,14 @@ class _ChatPageState extends State<ChatPage> {
             iconSize: 25,
           ),
         ],
-        flexibleSpace: Container(
-          margin: EdgeInsets.only(top: 10),
-          child: Image.asset(
-            "assets/PROExpress-logo.png",
-            height: 120,
-            width: 120,
-          ),
-        ),
         //title: Text("PROExpress"),
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(5),
-              color: Colors.red,
-
-              child: isCustomer ? StreamBuilder<Courier>(
-                  stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      Courier courier = snapshot.data;
-
-                      return Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                            "${courier.fName} ${courier.lName}",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
-                            ),
-                        ),
-                      );
-                    } else {
-                      return Text('Loading');
-                    }
-                  }
-              ) : StreamBuilder<Customer>(
-                  stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      Customer customer = snapshot.data;
-
-                      return Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                            "${customer.fName} ${customer.lName}",
-                             style: TextStyle(
-                             fontSize: 25,
-                             fontWeight: FontWeight.bold,
-                             color: Colors.white
-                          ),
-
-                        ),
-                      );
-                    } else {
-                      return Text('Loading');
-                    }
-                  }
-              ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * .28,
+              height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * .25,
               color: Colors.white70,
               child:
               // StreamProvider<List<Message>>.value(

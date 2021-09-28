@@ -203,9 +203,9 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                   String deliveryOngoingUID = snapshot.data;
 
                                   if (deliveryOngoingUID != '') {
-                                    if (flag) {
-                                      getCurrentLocation(deliveryOngoingUID);
-                                    }
+                                    // if (flag) {
+                                    //   getCurrentLocation(deliveryOngoingUID);
+                                    // }
                                     flag = false;
                                     //print(flag);
 
