@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String _confirmPassword;
   List bookmarks;
   bool checkCurrentPassword = true;
-  final AuthService _auth = AuthService();
+  final auth = FirebaseAuth.instance;
 
   File profilePicture;
   bool uploadedNewPic = false;
@@ -65,6 +66,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     Stream<Customer> customerStream;
+    User user1 = auth.currentUser;
 
     if(user != null)
       customerStream = DatabaseService(uid: user.uid).customerData;
@@ -389,6 +391,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                     primary: Color(0xfffb0d0d),
                                   ),
                                   onPressed: _isLoading ? null : () async {
+                                    print (user1.emailVerified);
+                                    if(user1.emailVerified){
+                                      Navigator.pushNamed(context, '/dashboardLocation');
+                                    }
+
                                     setState((){
                                       _isLoading = true;
                                     });
@@ -404,7 +411,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                         validCustomer.updateCurrentEmail(_currentEmail);
                                       if(_newPassword != null)
                                         validCustomer.updateCurrentPassword(_newPassword);
-
                                       await DatabaseService(uid: user.uid)
                                           .updateCustomerData(
                                         _currentFName ?? customerData.fName,
@@ -416,7 +422,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                         customerData.avatarUrl,
                                         customerData.notifStatus,
                                         customerData.currentNotif,
-                                        customerData.courier_ref[''],
+                                        customerData.courier_ref,
                                       );
 
                                       if (profilePicture != null) {
