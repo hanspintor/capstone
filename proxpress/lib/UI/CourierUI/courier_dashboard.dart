@@ -97,87 +97,89 @@ class _CourierDashboardState extends State<CourierDashboard> {
                       ),
                       drawer: MainDrawerCourier(),
                       endDrawer: NotifDrawerCourier(),
-                      body: Column(
-                        children: [
-                          SizedBox(height: 10),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text("Welcome, ${courierData.fName}!",
-                              style: TextStyle(
-                                fontSize: 25,
+                      body: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text("Welcome, ${courierData.fName}!",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                ),
                               ),
                             ),
-                          ),
-                          !approved || !user1.emailVerified ? Container(
-                            child: Column(
-                              children: [
-                                !approved ? Container(
-                                  child: _welcomeMessage(),
-                                ) : Visibility(
-                                  visible: false,
-                                  child: Container(),
-                                ),
-                                !user1.emailVerified ? Container(
-                                  margin: EdgeInsets.all(20),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.black)
-                                        ),
-                                        child: ListTile(
-                                          leading: Icon(
-                                            Icons.info,
-                                            color: Colors.red,
-                                          ),
-                                          title: Text(
-                                            "Kindly verify your email ${user1.email} to use the app.",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontStyle: FontStyle.italic,
-                                                fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.black)
-                                        ),
-                                        child: ListTile(
-                                          leading: Icon(
-                                            Icons.quiz,
-                                            color: Colors.red,
-                                          ),
-                                          title: Text(
-                                            "After verifying please relogin to access our features",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontStyle: FontStyle.italic,
-                                                fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-
-                                        ),
-                                      ),
-                                      //verifyCond(),
-                                      VerifyEmail()
-                                    ],
+                            !approved || !user1.emailVerified ? Container(
+                              child: Column(
+                                children: [
+                                  !approved ? Container(
+                                    child: _welcomeMessage(),
+                                  ) : Visibility(
+                                    visible: false,
+                                    child: Container(),
                                   ),
-                                ) : Visibility(
-                                  visible: false,
-                                  child: Container(),
-                                ),
-                              ],
-                            ),
-                          )
-                              : Card(
-                            margin: EdgeInsets.all(20),
-                            child:  DeliveryList(notifPopUpStatus: notifPopUpStatus,notifPopUpCounter: notifCounter,),
-                          ),
+                                  !user1.emailVerified ? Container(
+                                    margin: EdgeInsets.all(20),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(color: Colors.black)
+                                          ),
+                                          child: ListTile(
+                                            leading: Icon(
+                                              Icons.info,
+                                              color: Colors.red,
+                                            ),
+                                            title: Text(
+                                              "Kindly verify your email ${user1.email} to use the app.",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
 
-                        ],
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(color: Colors.black)
+                                          ),
+                                          child: ListTile(
+                                            leading: Icon(
+                                              Icons.quiz,
+                                              color: Colors.red,
+                                            ),
+                                            title: Text(
+                                              "After verifying please relogin to access our features",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontStyle: FontStyle.italic,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+
+                                          ),
+                                        ),
+                                        //verifyCond(),
+                                        VerifyEmail()
+                                      ],
+                                    ),
+                                  ) : Visibility(
+                                    visible: false,
+                                    child: Container(),
+                                  ),
+                                ],
+                              ),
+                            )
+                                : Card(
+                              margin: EdgeInsets.all(20),
+                              child:  DeliveryList(notifPopUpStatus: notifPopUpStatus,notifPopUpCounter: notifCounter,),
+                            ),
+
+                          ],
+                        ),
                       ),
                     ),
                   )

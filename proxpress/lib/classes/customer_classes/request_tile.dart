@@ -696,7 +696,7 @@ class _RequestTileState extends State<RequestTile> {
 
                     bool isFavorited = false;
 
-                    Map<String, DocumentReference> localMap;
+                    Map<String, DocumentReference> localMap = {};
                     Map<String, DocumentReference> localAddMap;
 
                     if (customerData.courier_ref != null) {
