@@ -35,6 +35,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     User user1 = auth.currentUser;
 
 
+
       if(user != null){
         Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
             .collection('Deliveries')
@@ -42,7 +43,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
             .snapshots()
             .map(DatabaseService().deliveryDataListFromSnapshot);
 
-
+      if(!user1.emailVerified){
+        ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+          ..showSnackBar(SnackBar(content:
+          Text("Relogin your account to get a new email to your new email address")));
+      }
 
       return user == null ? LoginScreen() : Scaffold(
           drawerEnableOpenDragGesture: false,
