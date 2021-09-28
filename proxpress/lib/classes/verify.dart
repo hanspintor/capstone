@@ -45,7 +45,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
       timer.cancel();
       print("verified");
       ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text("Your email is now verified you can now relogin")));
+        ..showSnackBar(SnackBar(content: Text("Your email is now verified")));
       Navigator.pushNamed(context, '/dashboardLocation');
     }
   }

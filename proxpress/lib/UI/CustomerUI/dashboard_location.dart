@@ -135,26 +135,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
                           ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)
-                          ),
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.quiz,
-                              color: Colors.red,
-                            ),
-                            title: Text(
-                              "After verifying please relogin to access our features",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-
-                          ),
-                        ),
                         //verifyCond(),
                         VerifyEmail()
                       ],
