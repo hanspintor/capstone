@@ -696,11 +696,16 @@ class _RequestTileState extends State<RequestTile> {
 
                     bool isFavorited = false;
 
-                    Map<String, DocumentReference> localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
-                    print(localMap);
+                    Map<String, DocumentReference> localMap;
+                    Map<String, DocumentReference> localAddMap;
 
-                    Map <String, DocumentReference> localAddMap = {'Courier_Ref${localMap.length}' : widget.delivery.courierRef};
-                    print(localAddMap);
+                    if (customerData.courier_ref != null) {
+                      localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
+                    } else {
+                      localAddMap = {};
+                    }
+
+                    localAddMap = {'Courier_Ref${localMap.length}' : widget.delivery.courierRef};
 
                     localMap.forEach((key, value){
                       print(value);

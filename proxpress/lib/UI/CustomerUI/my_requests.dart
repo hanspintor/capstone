@@ -138,7 +138,7 @@ class _MyRequestsState extends State<MyRequests> {
                                       SingleChildScrollView(
                                         child: StreamProvider<List<Delivery>>.value(
                                           initialData: [],
-                                          value: deliveryListDelivered,
+                                          value: deliveryListOngoing,
                                           child: Card(
                                             child: RequestList(message: 'You currently have no ongoing deliveries.'),
                                           ),
@@ -147,7 +147,7 @@ class _MyRequestsState extends State<MyRequests> {
                                       SingleChildScrollView(
                                         child: StreamProvider<List<Delivery>>.value(
                                           initialData: [],
-                                          value: deliveryListOngoing,
+                                          value: deliveryListDelivered,
                                           child: Card(
                                             child: RequestList(message: 'You have no finished transactions.'),
                                           ),
