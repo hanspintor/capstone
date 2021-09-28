@@ -207,7 +207,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                       getCurrentLocation(deliveryOngoingUID);
                                     }
                                     flag = false;
-                                    print(flag);
+                                    //print(flag);
 
                                     return StreamBuilder<Delivery>(
                                         stream: DatabaseService(uid: deliveryOngoingUID).deliveryData,

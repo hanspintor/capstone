@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class VerifyEmail extends StatefulWidget {
 
@@ -43,7 +44,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
     if(user.emailVerified){
       timer.cancel();
       print("verified");
-
+      ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text("Your email is now verified you can now relogin")));
     }
   }
 }

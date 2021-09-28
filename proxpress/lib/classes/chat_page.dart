@@ -36,7 +36,12 @@ class _ChatPageState extends State<ChatPage> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.transparent,
+              width: 3
+          ),
+        ),
+        padding: EdgeInsets.all(4),
         child: TextField(
           onTap: () {
             SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -70,7 +75,7 @@ class _ChatPageState extends State<ChatPage> {
             border: OutlineInputBorder(
               borderSide: BorderSide(width: 0),
               gapPadding: 10,
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(7),
             ),
           ),
           onChanged: (value) => setState(() {
@@ -161,14 +166,27 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(border: Border.all(), color: Colors.red),
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(5),
+              color: Colors.red,
+
               child: isCustomer ? StreamBuilder<Courier>(
                   stream: DatabaseService(uid: widget.delivery.courierRef.id).courierData,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       Courier courier = snapshot.data;
 
-                      return Text("${courier.fName} ${courier.lName}");
+                      return Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                            "${courier.fName} ${courier.lName}",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                            ),
+                        ),
+                      );
                     } else {
                       return Text('Loading');
                     }
@@ -179,7 +197,18 @@ class _ChatPageState extends State<ChatPage> {
                     if (snapshot.hasData) {
                       Customer customer = snapshot.data;
 
-                      return Text("${customer.fName} ${customer.lName}");
+                      return Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                            "${customer.fName} ${customer.lName}",
+                             style: TextStyle(
+                             fontSize: 25,
+                             fontWeight: FontWeight.bold,
+                             color: Colors.white
+                          ),
+
+                        ),
+                      );
                     } else {
                       return Text('Loading');
                     }
@@ -188,7 +217,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Container(
               height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * .28,
-              decoration: BoxDecoration(border: Border.all()),
+              color: Colors.white70,
               child:
               // StreamProvider<List<Message>>.value(
               //   value: messageListCustomerToCour,

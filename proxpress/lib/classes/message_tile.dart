@@ -44,17 +44,42 @@ class _MessageTileState extends State<MessageTile> {
 
             if (widget.isCustomer) {
               if (message.sentBy.toString().contains('Customers')) {
-                return Text('${message.messageContent} :You \nTime Sent: ${time}', textAlign: TextAlign.right,);
+                return Container(
+                  child: Text(
+                    '${message.messageContent} :You \nTime Sent: ${time}',
+                    textAlign: TextAlign.right,
+                  ),
+                );
               } else if (message.sentBy.toString().contains('Couriers')) {
-                return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.left,);
+                return Container(
+                  child: Text(
+                    'Message: ${message.messageContent} \nTime Sent: ${time}',
+                    textAlign: TextAlign.left,
+                  ),
+                );
               } else {
                 return Container();
               }
             } else {
               if (message.sentBy.toString().contains('Couriers')) {
-                return Text('${message.messageContent} :You \nTime Sent: ${time}', textAlign: TextAlign.right,);
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: Text(
+                    '${message.messageContent} :You \nTime Sent: ${time}',
+                    textAlign: TextAlign.right,
+                  ),
+                );
               } else if (message.sentBy.toString().contains('Customers')) {
-                return Text('Message: ${message.messageContent} \nTime Sent: ${time}', textAlign: TextAlign.left,);
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: Text(
+                    'Message: ${message.messageContent}'
+                        ' \nTime Sent: ${time}', textAlign: TextAlign.left,),
+                );
               } else {
                 return Container();
               }
