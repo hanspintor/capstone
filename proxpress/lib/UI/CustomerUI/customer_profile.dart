@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
@@ -30,6 +31,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     bool approved = true;
+    final auth = FirebaseAuth.instance;
+    User user1 = auth.currentUser;
+
 
       if(user != null){
         Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
@@ -37,6 +41,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
             .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
             .snapshots()
             .map(DatabaseService().deliveryDataListFromSnapshot);
+
+
 
       return user == null ? LoginScreen() : Scaffold(
           drawerEnableOpenDragGesture: false,
@@ -70,6 +76,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 builder: (context,snapshot){
                   if(snapshot.hasData){
                     Customer customerData = snapshot.data;
+
+
                     return Column(
                       children: [
                         Center(

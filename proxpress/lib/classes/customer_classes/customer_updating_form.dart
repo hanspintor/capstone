@@ -67,7 +67,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     final user = Provider.of<TheUser>(context);
     Stream<Customer> customerStream;
     User user1 = auth.currentUser;
-
     if(user != null)
       customerStream = DatabaseService(uid: user.uid).customerData;
 
@@ -115,9 +114,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                   builder: (context,snapshot){
                     if(snapshot.hasData){
                       Customer customerData = snapshot.data;
-
                       fetchedUrl = customerData.avatarUrl;
-
                       return Form(
                         key: _updateKey,
                         child: Column(
@@ -391,10 +388,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                     primary: Color(0xfffb0d0d),
                                   ),
                                   onPressed: _isLoading ? null : () async {
-                                    print (user1.emailVerified);
-                                    if(user1.emailVerified){
-                                      Navigator.pushNamed(context, '/dashboardLocation');
-                                    }
+
 
                                     setState((){
                                       _isLoading = true;
@@ -425,11 +419,12 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                         customerData.courier_ref,
                                       );
 
+
                                       if (profilePicture != null) {
                                         await UploadFile.uploadFile(saveDestination, profilePicture);
 
                                         savedUrl = await firebase_storage.FirebaseStorage.instance
-                                            .ref(saveDestination)
+                                              .ref(saveDestination)
                                             .getDownloadURL();
 
                                         if (savedUrl != null || savedUrl == 'null') {
@@ -441,7 +436,15 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                         });
                                       }
 
-                                      Navigator.pop(context, false);
+
+                                      print("${user1.email}");
+                                      print ("${user1.emailVerified}");
+                                      print(_currentEmail);
+
+
+
+                                        Navigator.pop(context, false);
+
                                     }
                                   },
                                 ),
