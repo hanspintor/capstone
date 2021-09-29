@@ -239,7 +239,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                     await DatabaseService(uid: user.uid).updateNotifStatusCustomer(true);
                     await DatabaseService(uid: widget.courier.id).updateNotifPopUpStatusCourier(true);
                     DatabaseService(uid: widget.courier.id).updateNotifPopUpCounterCourier(0);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardLocation()));
+                    Navigator.pushNamed(context, '/template');
                   },
                 ),
                 SizedBox(height: 20),

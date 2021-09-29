@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
@@ -75,14 +76,12 @@ class _PinLocationState extends State<PinLocation> {
 
                         pickupDetails = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
 
-                        print("sad $pickupDetails");
-
-                        //print("niceee ${pickupDetails.address}");
-                        widget.textFieldPickup.text = pickupDetails.toString();
-                        //widget.textFieldPickup.selection = TextSelection.fromPosition(TextPosition(offset: 0));
-
-                        //print("niceee2 ${pickupDetails.coordinates.toString()}");
-                        pickupCoordinates = LatLng(pickupDetails.latitude, pickupDetails.longitude);
+                        if (pickupDetails != null) {
+                          List<Placemark> placemarks = await placemarkFromCoordinates(pickupDetails.latitude, pickupDetails.longitude);
+                          widget.textFieldPickup.text = "${placemarks[0].street}, ${placemarks[0].locality}";
+                          widget.textFieldPickup.selection = TextSelection.fromPosition(TextPosition(offset: 0));
+                          pickupCoordinates = LatLng(pickupDetails.latitude, pickupDetails.longitude);
+                        }
 
                         setState(() => pickupAddress = widget.textFieldPickup.text);
                       },
@@ -110,14 +109,12 @@ class _PinLocationState extends State<PinLocation> {
 
                         dropOffDetails = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
 
-                        print("sad $pickupDetails");
-
-                        //print("niceee ${dropOffDetails.address}");
-                        widget.textFieldDropOff.text = dropOffDetails.toString();
-                        //widget.textFieldDropOff.selection = TextSelection.fromPosition(TextPosition(offset: 0));
-
-                        //print("niceee2 ${dropOffDetails.coordinates.toString()}");
-                        dropOffCoordinates = LatLng(dropOffDetails.latitude, dropOffDetails.longitude);
+                        if (dropOffDetails != null) {
+                          List<Placemark> placemarks = await placemarkFromCoordinates(dropOffDetails.latitude, dropOffDetails.longitude);
+                          widget.textFieldDropOff.text = "${placemarks[0].street}, ${placemarks[0].locality}";
+                          widget.textFieldDropOff.selection = TextSelection.fromPosition(TextPosition(offset: 0));
+                          dropOffCoordinates = LatLng(dropOffDetails.latitude, dropOffDetails.longitude);
+                        }
 
                         setState(() => dropOffAddress = widget.textFieldDropOff.text);
                       },

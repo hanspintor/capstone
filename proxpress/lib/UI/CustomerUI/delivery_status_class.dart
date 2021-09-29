@@ -48,7 +48,6 @@ class _MyRequestsState extends State<MyRequests> {
                   .collection('Deliveries')
                   .where('Courier Approval', isEqualTo: 'Pending')
                   .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-                  .limit(1)
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
