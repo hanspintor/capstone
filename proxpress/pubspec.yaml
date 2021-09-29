@@ -59,6 +59,7 @@ dependencies:
   flutter_speed_dial: ^4.4.0
   fluttertoast: ^8.0.8
   chat_bubbles: ^1.1.0
+  flutter_osm_plugin: ^0.21.0
 
 dev_dependencies:
   flutter_test:
@@ -72,7 +73,6 @@ flutter_launcher_name:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

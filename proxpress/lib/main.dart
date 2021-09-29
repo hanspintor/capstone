@@ -22,7 +22,6 @@ import 'UI/CourierUI/ongoing_delivery.dart';
 import 'UI/CustomerUI/courier_bookmarks.dart';
 import 'UI/CustomerUI/customer_profile.dart';
 import 'UI/CustomerUI/customer_remarks.dart';
-import 'UI/CustomerUI/pin_location_map.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/wrapper.dart';
@@ -80,9 +79,6 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/customerRemarks':
               return PageTransition(child: CustomerRemarks(), type: PageTransitionType.rightToLeftWithFade);
-              break;
-            case '/pinLocationMap':
-              return PageTransition(child: PinLocationMap(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/customerProfile':
               return PageTransition(child: CustomerProfile(), type: PageTransitionType.rightToLeftWithFade);
