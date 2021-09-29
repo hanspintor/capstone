@@ -5,21 +5,26 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'auth.dart';
 
-class CourierTile extends StatelessWidget {
+class CourierTile extends StatefulWidget {
   final Courier courier;
   String savedPassword;
   CourierTile({this.courier, this.savedPassword});
 
   @override
-  Widget build(BuildContext context) {
-    String driversLicenseFront_ = courier.driversLicenseFront_;
-    String driversLicenseBack_ = courier.driversLicenseBack_;
-    String nbiClearancePhoto_ = courier.nbiClearancePhoto_;
-    String vehicleRegistrationOR_ = courier.vehicleRegistrationOR_;
-    String vehicleRegistrationCR_ = courier.vehicleRegistrationCR_;
-    String vehiclePhoto_ = courier.vehiclePhoto_;
+  State<CourierTile> createState() => _CourierTileState();
+}
 
-    bool approved = courier.approved;
+class _CourierTileState extends State<CourierTile> {
+  @override
+  Widget build(BuildContext context) {
+    String driversLicenseFront_ = widget.courier.driversLicenseFront_;
+    String driversLicenseBack_ = widget.courier.driversLicenseBack_;
+    String nbiClearancePhoto_ = widget.courier.nbiClearancePhoto_;
+    String vehicleRegistrationOR_ = widget.courier.vehicleRegistrationOR_;
+    String vehicleRegistrationCR_ = widget.courier.vehicleRegistrationCR_;
+    String vehiclePhoto_ = widget.courier.vehiclePhoto_;
+
+    bool approved = widget.courier.approved;
 
     final AuthService _auth = AuthService();
 
@@ -30,12 +35,12 @@ class CourierTile extends StatelessWidget {
         children: [
           TableRow(
             children: [
-              Align(child: Text("${courier.fName} ${courier.lName}")),
-              Align(child: Text(courier.address)),
-              Align(child: Text(courier.email)),
-              Align(child: Text(courier.contactNo)),
-              Align(child: Text(courier.vehicleType)),
-              Align(child: Text(courier.vehicleColor)),
+              Align(child: Text("${widget.courier.fName} ${widget.courier.lName}")),
+              Align(child: Text(widget.courier.address)),
+              Align(child: Text(widget.courier.email)),
+              Align(child: Text(widget.courier.contactNo)),
+              Align(child: Text(widget.courier.vehicleType)),
+              Align(child: Text(widget.courier.vehicleColor)),
               Align(
                 child: Column(
                   children: [
@@ -74,7 +79,7 @@ class CourierTile extends StatelessWidget {
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
                         onPressed: approved ? null : () async {
-                          await DatabaseService(uid: courier.uid).approveCourier();
+                          await DatabaseService(uid: widget.courier.uid).approveCourier();
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
@@ -102,7 +107,7 @@ class CourierTile extends StatelessWidget {
                                         TextButton(
                                           child: Text("Yes"),
                                           onPressed: () async {
-                                            await _auth.deleteUser(courier.email, courier.password, savedPassword);
+                                            await _auth.deleteUser(widget.courier.email, widget.courier.password, widget.savedPassword);
                                             Navigator.pop(context);
                                           },
                                         ),
@@ -128,6 +133,49 @@ class CourierTile extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                          ),
+                          child: Text('Notify Reason'),
+                          onPressed: () {
+                            String _adminMessage = " ";
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                    content: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text("Notify the courier for the reason of rejection"),
+                                        TextFormField(
+                                          maxLines: 2,
+                                          maxLength: 200,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          keyboardType: TextInputType.multiline,
+                                          onChanged: (val) => setState(() => _adminMessage = val),
+                                        ),
+                                      ],
+                                    ),
+
+                                    actions: [
+                                      TextButton(
+                                        child: Text("Send"),
+                                        onPressed: () async {
+                                          await DatabaseService(uid: widget.courier.uid).updateCourierMessage(_adminMessage);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ])
+                            );
+                          },
+                        ),
+                    )
                   ],
                 ),
               ),
