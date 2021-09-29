@@ -34,7 +34,7 @@ class Wrapper extends StatelessWidget {
 
           print("Customer $count");
           if(count <= 0){
-            Navigator.pushNamed(context, '/dashboardLocation');
+            Navigator.pushNamed(context, '/template');
             count++;
           }
 

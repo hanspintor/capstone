@@ -35,133 +35,101 @@ class _CustomerProfileState extends State<CustomerProfile> {
     User user1 = auth.currentUser;
 
 
+      if(user != null)
+      {
+        if(!user1.emailVerified){
+          ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+            ..showSnackBar(SnackBar(content:
+            Text("Relogin your account to get a new email to your new email address")));
+        }
 
-      if(user != null){
-        Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-            .collection('Deliveries')
-            .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-            .snapshots()
-            .map(DatabaseService().deliveryDataListFromSnapshot);
-
-      if(!user1.emailVerified){
-        ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-          ..showSnackBar(SnackBar(content:
-          Text("Relogin your account to get a new email to your new email address")));
-      }
-
-      return user == null ? LoginScreen() : Scaffold(
-          drawerEnableOpenDragGesture: false,
-          endDrawerEnableOpenDragGesture: false,
-          key:_scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
-            actions: [
-              StreamProvider<List<Delivery>>.value(
-                  value: deliveryList,
-                  initialData: [],
-                  child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
-              )
-            ],
-            flexibleSpace: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Image.asset(
-                "assets/PROExpress-logo.png",
-                height: 120,
-                width: 120,
-              ),
-            ),
-            //title: Text("PROExpress"),
-          ),
-          drawer: MainDrawerCustomer(),
-          endDrawer: NotifDrawerCustomer(),
-          body: SingleChildScrollView(
-            child: StreamBuilder<Customer>(
-                stream: DatabaseService(uid: user.uid).customerData,
-                builder: (context,snapshot){
-                  if(snapshot.hasData){
-                    Customer customerData = snapshot.data;
+        return user == null ? LoginScreen() : SingleChildScrollView(
+          child: StreamBuilder<Customer>(
+              stream: DatabaseService(uid: user.uid).customerData,
+              builder: (context,snapshot){
+                if(snapshot.hasData){
+                  Customer customerData = snapshot.data;
 
 
-                    return Column(
-                      children: [
-                        Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(height: 20,),
-                              CircleAvatar(
-                                radius: 80,
-                                backgroundImage: NetworkImage(customerData.avatarUrl),
-                                backgroundColor: Colors.white,
+                  return Column(
+                    children: [
+                      Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(height: 20,),
+                            CircleAvatar(
+                              radius: 80,
+                              backgroundImage: NetworkImage(customerData.avatarUrl),
+                              backgroundColor: Colors.white,
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              width: 360,
+                              child: TextButton.icon(
+                                icon: Icon(Icons.edit_rounded, size: 15, color: Colors.red),
+                                label: Text('Edit Profile', style: TextStyle(fontSize: 15, color: Colors.red),),
+                                style : ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(30.0),
+                                        )
+                                    ),
+                                    side: MaterialStateProperty.all(BorderSide(color: Colors.red))
+                                ),
+                                onPressed: (){
+                                  Navigator.pushNamed(context, '/customerUpdate');
+                                },
                               ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                width: 360,
-                                child: TextButton.icon(
-                                  icon: Icon(Icons.edit_rounded, size: 15, color: Colors.red),
-                                  label: Text('Edit Profile', style: TextStyle(fontSize: 15, color: Colors.red),),
-                                  style : ButtonStyle(
-                                      shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(30.0),
-                                          )
-                                      ),
-                                      side: MaterialStateProperty.all(BorderSide(color: Colors.red))
-                                  ),
-                                  onPressed: (){
-                                    Navigator.pushNamed(context, '/customerUpdate');
-                                  },
+                            ),
+                            ListTile(
+                              title: Text(
+                                '${customerData.fName} ${customerData.lName}',
+                                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Container(
+                                padding: EdgeInsets.only(top: 5, left: 2),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.home_rounded, size: 20,)),
+                                        Text(customerData.address, style: TextStyle(fontSize: 15)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.alternate_email_rounded, size: 20,)),
+                                        Text(customerData.email, style: TextStyle(fontSize: 15)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.phone_rounded, size: 20,)),
+                                        Text(customerData.contactNo, style: TextStyle(fontSize: 15)),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                              ListTile(
-                                title: Text(
-                                  '${customerData.fName} ${customerData.lName}',
-                                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Container(
-                                  padding: EdgeInsets.only(top: 5, left: 2),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.home_rounded, size: 20,)),
-                                          Text(customerData.address, style: TextStyle(fontSize: 15)),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.alternate_email_rounded, size: 20,)),
-                                          Text(customerData.email, style: TextStyle(fontSize: 15)),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.phone_rounded, size: 20,)),
-                                          Text(customerData.contactNo, style: TextStyle(fontSize: 15)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         ),
-                      ],
-                    );
-                  }
-                  else{
-                    return UserLoading();
-                  }
+                      ),
+                    ],
+                  );
                 }
-            ),
+                else{
+                  return UserLoading();
+                }
+              }
+          ),
 
-          )
-      );
+        );
       } else{
-        return LoginScreen();
+        return Container();
       }
+
   }
 }

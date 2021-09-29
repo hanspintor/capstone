@@ -41,99 +41,33 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
     User user = _auth.currentUser;
     bool approved = true;
 
-    if(user != null) {
-      Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-          .collection('Deliveries')
-          .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-          .snapshots()
-          .map(DatabaseService().deliveryDataListFromSnapshot);
-
-      return StreamProvider<List<Courier>>.value(
-        initialData: [],
-        value: DatabaseService().courierList,
-        child: Scaffold(
-          drawerEnableOpenDragGesture: false,
-          endDrawerEnableOpenDragGesture: false,
-          key: _scaffoldKey,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(
-              color: Color(0xfffb0d0d),
-            ),
-            actions: [
-              StreamProvider<List<Delivery>>.value(
-                  value: deliveryList,
-                  initialData: [],
-                  child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
+    return StreamProvider<List<Courier>>.value(
+      initialData: [],
+      value: DatabaseService().courierList,
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child:  Text(
+                  "Bookmarked Couriers",
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+              Card(
+                margin: EdgeInsets.all(20),
+                shadowColor: Colors.black,
+                child: CourierBookmarkTile(appear: false,),
               ),
             ],
-            flexibleSpace: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Image.asset(
-                "assets/PROExpress-logo.png",
-                height: 120,
-                width: 120,
-              ),
-            ),
-            //title: Text("PROExpress"),
           ),
-          drawer: MainDrawerCustomer(),
-          endDrawer: NotifDrawerCustomer(),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child:  Text(
-                      "Bookmarked Couriers",
-                      style: TextStyle(
-                        fontSize: 25,
-                      ),
-                    ),
-                  ),
-                  Card(
-                    margin: EdgeInsets.all(20),
-                    shadowColor: Colors.black,
-                    child: CourierBookmarkTile(appear: false,),
-                  ),
-                  // PinLocation(
-                  //   locKey: locKey,
-                  //   textFieldPickup: textFieldPickup,
-                  //   textFieldDropOff: textFieldDropOff,
-                  //   isBookmarks: true,
-                  // ),
-                  // widget.isBookmarks ? Card(
-                  //   margin: EdgeInsets.all(20),
-                  //   shadowColor: Colors.black,
-                  //   child: CourierBookmarkTile(
-                  //     pickupAddress: pickupAddress ?? '',
-                  //     pickupCoordinates: pickupCoordinates ?? LatLng(0,0),
-                  //     dropOffAddress: dropOffAddress ?? '',
-                  //     dropOffCoordinates: dropOffCoordinates ?? LatLng(0,0),
-                  //     distance: distance ?? 0,
-                  //     appear: appear,),
-                  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                  // ) : Container(),
-                // Container(
-                //   margin: EdgeInsets.only(
-                //       top: 10, bottom: 10, left: 100, right: 100),
-                //   child: TextFormField(
-                //     decoration: InputDecoration(
-                //         labelText: 'Search',
-                //         prefixIcon: Icon(Icons.search_rounded)),
-                //   ),
-                // ),
-                //CourierList(),
-                ],
-              ),
-            ),
-          )
         ),
-      );
-    } else {
-      return LoginScreen();
-    }
+      ),
+    );
+
   }
 }

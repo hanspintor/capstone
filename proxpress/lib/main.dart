@@ -29,6 +29,8 @@ import 'package:proxpress/wrapper.dart';
 import 'package:proxpress/classes/customer_classes/customer_updating_form.dart';
 import 'package:flutter/services.dart';
 
+import 'UI/CustomerUI/proxpress_template_customer.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
@@ -122,6 +124,9 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/myRequests':
               return PageTransition(child: MyRequests(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/template':
+              return PageTransition(child: AppBarTemp(), type: PageTransitionType.rightToLeftWithFade);
               break;
             default:
               return null;

@@ -26,81 +26,32 @@ class _DashboardLocationState extends State<DashboardLocation>{
   final bool notBookmarks = false;
   int duration = 60;
   int flag = 0;
-  final AuthService _auth = AuthService();
   final textFieldPickup = TextEditingController();
   final textFieldDropOff = TextEditingController();
 
 
-
-  void _openEndDrawer() {
-    _scaffoldKey.currentState.openEndDrawer();
-  }
-
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // verifyCond(){
-  //   if(flag <= 0){
-  //     print("outside");
-  //     VerifyEmail();
-  //     flag++;
-  //   }
-  //   return Container();
-  // }
 
 
   @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
     User user = auth.currentUser;
-    bool approved = true;
 
-    return user == null ? LoginScreen() : StreamBuilder<Customer>(
+    return  StreamBuilder<Customer>(
       stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot) {
         if(snapshot.hasData){
           Customer customerData = snapshot.data;
-          print("Email: ${user.emailVerified}");
+          //print("Email: ${user.emailVerified}");
           Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
               .collection('Deliveries')
               .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
               .snapshots()
               .map(DatabaseService().deliveryDataListFromSnapshot);
 
-          return WillPopScope(
-            onWillPop: () async {
-              print("Back Button pressed");
-              return false;
-            },
-            child: Scaffold(
-              drawerEnableOpenDragGesture: false,
-              endDrawerEnableOpenDragGesture: false,
-              key: _scaffoldKey,
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                iconTheme: IconThemeData(
-                  color: Color(0xfffb0d0d),
-                ),
-                actions: [
-                   StreamProvider<List<Delivery>>.value(
-                      value: deliveryList,
-                      initialData: [],
-                      child: NotifCounterCustomer(scaffoldKey: _scaffoldKey, approved: approved,)
-                  )
-                ],
-                flexibleSpace: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Image.asset(
-                    "assets/PROExpress-logo.png",
-                    height: 120,
-                    width: 120,
-                  ),
-                ),
-                //title: Text("PROExpress"),
-              ),
-              drawer: MainDrawerCustomer(),
-              endDrawer: NotifDrawerCustomer(),
-              body: Column(
+          return SingleChildScrollView(
+            child: Column(
                 children: [
                   SizedBox(height: 10),
                   Align(
@@ -156,7 +107,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                   ),
                 ],
               ),
-            ),
           );
         } else {
           return UserLoading();

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:proxpress/UI/CustomerUI/proxpress_template_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/Load/user_load.dart';
@@ -13,20 +15,40 @@ class MainDrawerCustomer extends StatefulWidget {
   @override
   _MainDrawerCustomerState createState() => _MainDrawerCustomerState();
 }
-void selectedItem(BuildContext context, int index){
+void selectedItem(BuildContext context, int index,) async {
   Navigator.of(context).pop();
   switch (index){
     case 0:
-      Navigator.pushNamed(context, '/customerProfile');
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp(
+          currentPage: "Profile",
+        ), type: PageTransitionType.rightToLeft),
+      );
       break;
     case 1:
-      Navigator.pushNamed(context, '/dashboardLocation');
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp(
+          currentPage: "Dashboard",
+        ), type: PageTransitionType.rightToLeft),
+      );
       break;
     case 2:
-      Navigator.pushNamed(context, '/courierBookmarks');
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp(
+          currentPage: "Bookmarks",
+        ), type: PageTransitionType.rightToLeft),
+      );
       break;
     case 3:
-      Navigator.pushNamed(context, '/myRequests');
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp(
+          currentPage: "Requests",
+        ), type: PageTransitionType.rightToLeft),
+      );
       break;
   }
 }
@@ -125,7 +147,7 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
               icon: Icon(Icons.logout_rounded),
               label: Text('Logout'),
               onPressed: () async{
-                await _auth.signOut();
+                await auth.signOut();
                 //Navigator.pushNamed(context, '/loginScreen');
                 // if(result == null){
                 //   return LoadScreen();
