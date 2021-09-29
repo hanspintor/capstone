@@ -45,18 +45,28 @@ class _MessageTileState extends State<MessageTile> {
 
           if (widget.isCustomer) {
             if (message.sentBy.toString().contains('Customers')) {
-              return BubbleNormal(
-                color: Colors.red,
-                textStyle: TextStyle(color: Colors.white),
-                isSender: true,
-                text: '${message.messageContent} \n${time}',
+              return Column(
+                children: [
+                  BubbleNormal(
+                    color: Colors.red,
+                    textStyle: TextStyle(color: Colors.white),
+                    isSender: true,
+                    text: '${message.messageContent}',
+                  ),
+                  Text("$time", style: TextStyle(fontSize: 10)),
+                ],
               );
             } else if (message.sentBy.toString().contains('Couriers')) {
-              return BubbleNormal(
-                color: Colors.black26,
-                textStyle: TextStyle(color: Colors.black),
-                isSender: false,
-                text: '${message.messageContent} \n${time}',
+              return Column(
+                children: [
+                  BubbleNormal(
+                    color: Colors.black26,
+                    textStyle: TextStyle(color: Colors.black),
+                    isSender: false,
+                    text: '${message.messageContent}',
+                  ),
+                  Text("$time", style: TextStyle(fontSize: 10)),
+                ],
               );
             } else {
               return Container();
@@ -72,7 +82,7 @@ class _MessageTileState extends State<MessageTile> {
                     isSender: true,
                     text: '${message.messageContent}',
                   ),
-                  Text("$time"),
+                  Text("$time", style: TextStyle(fontSize: 10)),
                 ],
               );
             } else if (message.sentBy.toString().contains('Customers')) {
@@ -81,11 +91,11 @@ class _MessageTileState extends State<MessageTile> {
                 children: [
                   BubbleNormal(
                     color: Colors.black26,
-                    textStyle: TextStyle(color: Colors.black),
+                    textStyle: TextStyle(color: Colors.black,),
                     isSender: false,
                     text: '${message.messageContent}',
                   ),
-                  Text("$time"),
+                  Text("$time", style: TextStyle(fontSize: 10),),
                 ],
               );
             } else {
