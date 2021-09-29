@@ -45,7 +45,7 @@ class Wrapper extends StatelessWidget {
           DatabaseService(uid: user.uid).updateStatus(status);
           if(count <= 0)
           {
-            Navigator.pushNamed(context, '/courierDashboard');
+            Navigator.pushNamed(context, '/template1');
             count++;
           }
 

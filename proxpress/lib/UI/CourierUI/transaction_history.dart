@@ -25,14 +25,12 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-    bool approved = false;
-    if(user != null) {
+
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
           builder: (context,snapshot){
             if(snapshot.hasData){
               Courier courierData = snapshot.data;
-              approved = courierData.approved;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
                   .where('Delivery Status', isEqualTo: 'Delivered')
@@ -40,63 +38,32 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
-              return WillPopScope(
-                  onWillPop: () async {
-                    print("Back Button Pressed");
-                    return false;
-                  },
-                  child: StreamProvider<List<Delivery>>.value(
-                    initialData: [],
-                    value: deliveryList,
-                    child: Scaffold(
-                      drawerEnableOpenDragGesture: false,
-                      endDrawerEnableOpenDragGesture: false,
-                      key: _scaffoldKey,
-                      appBar: AppBar(
-                        backgroundColor: Colors.white,
-                        iconTheme: IconThemeData(color: Color(0xfffb0d0d)
-                        ),
-                        actions: <Widget>[
-                          NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,)
-                        ],
-                        flexibleSpace: Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Image.asset(
-                            "assets/PROExpress-logo.png",
-                            height: 120,
-                            width: 120,
+              return StreamProvider<List<Delivery>>.value(
+                initialData: [],
+                value: deliveryList,
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text("Transaction History",
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
                           ),
                         ),
-                      ),
-                      drawer: MainDrawerCourier(),
-                      endDrawer: NotifDrawerCourier(),
-                      body: SingleChildScrollView(
-                        child: Center(
-                          child: Column(
-                            children: [
-                              SizedBox(height: 10),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Text("Transaction History",
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                  ),
-                                ),
-                              ),
-                              TransactionList(),
-                            ],
-                          ),
-                        ),
-                      ),
+                        TransactionList(),
+                      ],
                     ),
-                  )
+                  ),
+                ),
               );
             } else {
               return UserLoading();
             }
           }
       );
-    }
-    else return LoginScreen();
   }
 }
