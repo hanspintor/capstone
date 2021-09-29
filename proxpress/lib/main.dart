@@ -6,7 +6,7 @@ import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
-import 'package:proxpress/UI/CustomerUI/my_requests.dart';
+import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:proxpress/UI/signup_courier.dart';
@@ -19,6 +19,7 @@ import 'package:proxpress/classes/courier_classes/courier_updating_form.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/notification.dart';
 import 'UI/CourierUI/ongoing_delivery.dart';
+import 'UI/CourierUI/proxpress_template_courier.dart';
 import 'UI/CustomerUI/courier_bookmarks.dart';
 import 'UI/CustomerUI/customer_profile.dart';
 import 'UI/CustomerUI/customer_remarks.dart';
@@ -27,6 +28,8 @@ import 'package:proxpress/models/user.dart';
 import 'package:proxpress/wrapper.dart';
 import 'package:proxpress/classes/customer_classes/customer_updating_form.dart';
 import 'package:flutter/services.dart';
+
+import 'UI/CustomerUI/proxpress_template_customer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -118,6 +121,12 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/myRequests':
               return PageTransition(child: MyRequests(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/template':
+              return PageTransition(child: AppBarTemp(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/template1':
+              return PageTransition(child: AppBarTemp1(), type: PageTransitionType.rightToLeftWithFade);
               break;
             default:
               return null;

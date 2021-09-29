@@ -57,7 +57,7 @@ class _ChatPageState extends State<ChatPage> {
           filled: true,
           hintText: 'Type your message',
           suffixIcon: IconButton(
-            icon: Icon(Icons.send),
+            icon: Icon(Icons.send, color: Colors.red),
             onPressed: _controller.text == '' ? null : () async {
                 if (isCustomer) {
                   await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
@@ -71,9 +71,9 @@ class _ChatPageState extends State<ChatPage> {
             },
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(width: 0),
+            //borderSide: BorderSide(width: 0),
             gapPadding: 10,
-            borderRadius: BorderRadius.circular(7),
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
         onChanged: (value) => setState(() {

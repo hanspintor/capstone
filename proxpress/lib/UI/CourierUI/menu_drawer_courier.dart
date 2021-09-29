@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/CourierUI/proxpress_template_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
@@ -17,16 +19,31 @@ void selectedItem(BuildContext context, int index){
   Navigator.of(context).pop();
   switch (index){
     case 0:
-      Navigator.pushNamed(context, '/courierProfile');
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp1(
+          currentPage: "Profile",
+        ), type: PageTransitionType.rightToLeft),
+      );
       break;
     case 1:
-      Navigator.pushNamed(context, '/courierDashboard');
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp1(
+          currentPage: "Dashboard",
+        ), type: PageTransitionType.rightToLeft),
+      );
       break;
     case 2:
       Navigator.pushNamed(context, '/ongoingDelivery');
       break;
     case 3:
-      Navigator.pushNamed(context, '/transactionHistory');
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp1(
+          currentPage: "Transaction",
+        ), type: PageTransitionType.rightToLeft),
+      );
       break;
   }
 }
