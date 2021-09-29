@@ -25,6 +25,7 @@ class DatabaseService {
         vehicleRegistrationOR_: (doc.data() as dynamic) ['Vehicle OR URL'] ?? '',
         vehicleRegistrationCR_: (doc.data() as dynamic) ['Vehicle CR URL'] ?? '',
         vehiclePhoto_: (doc.data() as dynamic) ['Vehicle Photo URL'] ?? '',
+        adminMessage: (doc.data() as dynamic) ['Admin Message'] ?? '',
       );
     }).toList();
   }
@@ -43,5 +44,13 @@ class DatabaseService {
 
   Future deleteCourierDocument() {
     return courierCollection.doc(uid).delete();
+  }
+
+  Future updateCourierMessage(String adminMessage) async {
+    await courierCollection
+        .doc(uid)
+        .update({
+      'Admin Message': adminMessage,
+    });
   }
 }
