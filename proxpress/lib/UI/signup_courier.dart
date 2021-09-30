@@ -663,7 +663,11 @@ class _SignupCourierState extends State<SignupCourier> {
                                   deliveryPriceRef = FirebaseFirestore.instance.collection('Delivery Prices').doc(deliveryPriceUid);
 
                                   //setState(() => loading = true); // loading = true;
-                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0);
+                                  String welcomeMessage = "Thank you for registering in PROXpress. "
+                                      "Please wait for up to 24 hours for the admin to check and verify your uploaded credentials. "
+                                      "This is to ensure that you are qualified to be a courier in our app.";
+
+                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0, welcomeMessage);
                                   if(result == null){
                                     setState((){
                                       error = 'Email already taken';

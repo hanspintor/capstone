@@ -93,7 +93,7 @@ class DatabaseService {
       String vehicleRegistrationOR_, String vehicleRegistrationCR_,
       String vehiclePhoto_, DocumentReference deliveryPriceRef,
       bool notifStatus, int currentNotif, bool notifPopStatus,
-      int notifPopCounter) async {
+      int notifPopCounter, String adminMessage) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -116,7 +116,8 @@ class DatabaseService {
       'Notification Status' : notifStatus,
       'Current Notification' : currentNotif,
       'Notification Pop Up Status' : notifPopStatus,
-      'Current Notification Pop Up' : notifPopCounter
+      'Current Notification Pop Up' : notifPopCounter,
+      'Admin Message' : adminMessage,
     });
   }
 
@@ -431,7 +432,8 @@ class DatabaseService {
       notifStatus: snapshot['Notification Status'],
       currentNotif: snapshot['Current Notification'],
       NotifPopStatus: snapshot['Notification Pop Up Status'],
-      NotifPopCounter: snapshot['Current Notification Pop Up']
+      NotifPopCounter: snapshot['Current Notification Pop Up'],
+      adminMessage: snapshot['Admin Message']
     );
   }
 

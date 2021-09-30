@@ -203,6 +203,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                       courierData.currentNotif,
                                       courierData.NotifPopStatus,
                                       courierData.NotifPopCounter,
+                                      courierData.adminMessage,
                                     );
 
                                     if (profilePicture != null) {
