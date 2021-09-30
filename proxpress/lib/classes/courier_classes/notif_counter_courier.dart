@@ -57,8 +57,12 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
       builder: (context, snapshot) {
        if(snapshot.hasData){
          List<Notifications> n = snapshot.data;
+         if(notif.length == 0){
+           viewable = false;
+         }
+
          n.forEach((element) {
-           if(element.seen){
+           if(!element.seen){
              viewable = false;
            } else{
              viewable = true;

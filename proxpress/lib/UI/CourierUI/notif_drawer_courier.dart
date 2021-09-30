@@ -70,10 +70,13 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
                       child: ElevatedButton.icon(
                         icon: Icon(Icons.clear),
                         label: Text('Clear'),
-                        onPressed: (){
-                          setState(() {
-                            flag = 0;
-                          });
+                        onPressed: () async {
+
+                          var collection = FirebaseFirestore.instance.collection('Notifications');
+                          var snapshots = await collection.get();
+                          for (var doc in snapshots.docs) {
+                            await doc.reference.delete();
+                          }
 
                         },
                         style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
