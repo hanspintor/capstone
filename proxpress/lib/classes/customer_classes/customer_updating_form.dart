@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/auth.dart';
@@ -69,7 +71,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     User user1 = auth.currentUser;
     if(user != null)
       customerStream = DatabaseService(uid: user.uid).customerData;
-
       return user == null ? LoginScreen() : WillPopScope(
         child: Scaffold(
             drawerEnableOpenDragGesture: false,
@@ -115,6 +116,82 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                     if(snapshot.hasData){
                       Customer customerData = snapshot.data;
                       fetchedUrl = customerData.avatarUrl;
+
+                      Widget saveChanges() {
+                        return Container(
+                          margin: EdgeInsets.only(right: 20),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: ElevatedButton.icon(
+                              icon: Icon(Icons.save),
+                              label: Text('Save Changes', style: TextStyle(color: Colors.white, fontSize:15),),
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xfffb0d0d),
+                              ),
+                              onPressed: () async {
+
+
+                                setState((){
+                                  _isLoading = true;
+                                });
+                                final Customer validCustomer = Customer();
+
+                                if(_currentPassword != null)
+                                  checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
+                                setState(() {
+
+                                });
+                                if (_updateKey.currentState.validate() && checkCurrentPassword) {
+                                  if(_currentEmail != null)
+                                    validCustomer.updateCurrentEmail(_currentEmail);
+                                  if(_newPassword != null)
+                                    validCustomer.updateCurrentPassword(_newPassword);
+                                  await DatabaseService(uid: user.uid)
+                                      .updateCustomerData(
+                                    _currentFName ?? customerData.fName,
+                                    _currentLName ?? customerData.lName,
+                                    _currentEmail ?? customerData.email,
+                                    _currentContactNo ?? customerData.contactNo,
+                                    _confirmPassword ?? customerData.password,
+                                    _currentAddress ?? customerData.address,
+                                    customerData.avatarUrl,
+                                    customerData.notifStatus,
+                                    customerData.currentNotif,
+                                    customerData.courier_ref,
+                                  );
+
+
+                                  if (profilePicture != null) {
+                                    await UploadFile.uploadFile(saveDestination, profilePicture);
+
+                                    savedUrl = await firebase_storage.FirebaseStorage.instance
+                                        .ref(saveDestination)
+                                        .getDownloadURL();
+
+                                    if (savedUrl != null || savedUrl == 'null') {
+                                      await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
+                                    }
+
+                                    setState(() {
+                                      fetchedUrl = savedUrl;
+                                    });
+                                  }
+
+
+                                  print("${user1.email}");
+                                  print ("${user1.emailVerified}");
+                                  print(_currentEmail);
+
+
+
+                                  Navigator.pop(context, false);
+
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      }
                       return Form(
                         key: _updateKey,
                         child: Column(
@@ -184,272 +261,316 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
-                                decoration: InputDecoration(labelText:
-                                'First Name:',
-                                  hintText: "${customerData.fName}",
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black
-                                  ),
-                                ),
-                                onChanged: (val) => setState(() => _currentFName = val),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
-                                decoration: InputDecoration(labelText:
-                                'Last Name:',
-                                  hintText: "${customerData.lName}",
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black
-                                  ),
-                                ),
-                                onChanged: (val) => setState(() => _currentLName = val),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
-                                decoration: InputDecoration(labelText:
-                                'Address:',
-                                  hintText: "${customerData.address}",
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black
-                                  ),
-                                ),
-                                keyboardType: TextInputType.streetAddress,
-                                onChanged: (val) => setState(() => _currentAddress = val),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
+                              padding: const EdgeInsets.fromLTRB(0,20,0,0),
+                              child: Column(
+                                children: [
+                                  OutlinedButton(
+                                    child: ListTile(
+                                      title: Text('Full Name', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      subtitle: Text("${customerData.fName} ${customerData.lName}"),
+                                      trailing: Icon(Icons.chevron_right_rounded),
+                                    ),
+                                    onPressed: () {
+                                      showMaterialModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => SingleChildScrollView(
+                                          controller: ModalScrollController.of(context),
+                                          child: Container(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                  child: Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8),
+                                                        child: TextFormField(
+                                                          decoration: InputDecoration(labelText:
+                                                          'First Name:',
+                                                            hintText: "${customerData.fName}",
+                                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                            labelStyle: TextStyle(
+                                                                fontStyle: FontStyle.italic,
+                                                                color: Colors.black
+                                                            ),
+                                                          ),
+                                                          onChanged: (val) => setState(() => _currentFName = val),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.all(8),
+                                                        child: TextFormField(
+                                                          decoration: InputDecoration(labelText:
+                                                          'Last Name:',
+                                                            hintText: "${customerData.lName}",
+                                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                            labelStyle: TextStyle(
+                                                                fontStyle: FontStyle.italic,
+                                                                color: Colors.black
+                                                            ),
+                                                          ),
+                                                          onChanged: (val) => setState(() => _currentLName = val),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                saveChanges(),
+                                              ],
 
-                                decoration: InputDecoration(labelText:
-                                'Email:',
-                                  hintText: "${customerData.email}",
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black
-                                  ),
-                                ),
-                                validator: (String val){
-                                  if(val.isEmpty){
-                                    return null;
-                                  }
-                                  else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
-                                    return 'Please Enter a Valid Email Address';
-                                  }
-                                  else
-                                    return null;
-                                },
-                                onChanged: (val) => setState(() => _currentEmail = val),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
-                                decoration: InputDecoration(labelText:
-                                'Contact No:',
-                                  hintText: "${customerData.contactNo}",
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black
-                                  ),
-                                ),
-                                maxLength: 11,
-                                keyboardType: TextInputType.number,
-                                validator: (String val){
-                                  if(val.length < 11 && val.length > 0){
-                                    return 'Your contact number should be 11 digits';
-                                  }
-                                  else
-                                    return null;
-                                },
-                                onChanged: (val) => setState(() => _currentContactNo = val),
-                              ),
-                            ),
-                            Container(
-                              child: Center(
-                                child: Text(
-                                  "Manage Password",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
-                                obscureText: true,
-                                decoration: InputDecoration(labelText:
-                                'Password:',
-                                  hintText: dots(customerData.password.length),
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  errorText: (checkCurrentPassword ?
-                                  null :
-                                  "Please double check your current password"
-                                  ),
-                                  labelStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black
-                                  ),
-                                ),
-                                validator: (String val){
-                                  if(val.length < 8 && val.length > 0){
-                                    return 'Password should be 8 characters long';
-                                  }
-                                  else
-                                    return null;
-                                },
-                                //initialValue: "${customerData.password}",
-                                onChanged: (val) => setState(() => _currentPassword = val),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
-                                obscureText: true,
-                                decoration: InputDecoration(labelText:
-                                'New Password:',
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                validator: (String val){
-                                  if(val.length < 8 && val.length > 0){
-                                    return 'Password should be 8 characters long';
-                                  } else if(_currentPassword != null){
-                                    if(val.isEmpty){
-                                      return 'Kindly provide your new password';
-                                    } else {
-                                      return null;
-                                    }
-                                  }
-                                  else
-                                    return null;
-                                },
-                                onChanged: (val) => setState(() => _newPassword = val),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: TextFormField(
-                                obscureText: true,
-                                decoration: InputDecoration(labelText:
-                                'Repeat Password:',
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.black
-                                  ),
-                                ),
-                                validator: (String val){
-                                  if(_currentPassword != null){
-                                    if(val.isEmpty){
-                                      return "Kindly provide repeat password for verification";
-                                    } else if(_newPassword != val){
-                                      return "Password does not match";
-                                    } else {
-                                      return null;
-                                    }
-                                  }
-                                  else
-                                    return null;
-                                },
-                                onChanged: (val) => setState(() => _confirmPassword = val),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(right: 20),
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: ElevatedButton.icon(
-                                  icon: _isLoading ? CircularProgressIndicator() : Icon(Icons.save),
-                                  label: Text(
-                                    _isLoading ? 'Loading...' : 'Save Changes',
-                                    style: TextStyle(color: Colors.white, fontSize:15),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Color(0xfffb0d0d),
-                                  ),
-                                  onPressed: _isLoading ? null : () async {
-
-
-                                    setState((){
-                                      _isLoading = true;
-                                    });
-                                    final Customer validCustomer = Customer();
-
-                                    if(_currentPassword != null)
-                                      checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
-                                    setState(() {
-
-                                    });
-                                    if (_updateKey.currentState.validate() && checkCurrentPassword) {
-                                      if(_currentEmail != null)
-                                        validCustomer.updateCurrentEmail(_currentEmail);
-                                      if(_newPassword != null)
-                                        validCustomer.updateCurrentPassword(_newPassword);
-                                      await DatabaseService(uid: user.uid)
-                                          .updateCustomerData(
-                                        _currentFName ?? customerData.fName,
-                                        _currentLName ?? customerData.lName,
-                                        _currentEmail ?? customerData.email,
-                                        _currentContactNo ?? customerData.contactNo,
-                                        _confirmPassword ?? customerData.password,
-                                        _currentAddress ?? customerData.address,
-                                        customerData.avatarUrl,
-                                        customerData.notifStatus,
-                                        customerData.currentNotif,
-                                        customerData.courier_ref,
+                                            ),
+                                          ),
+                                        ),
                                       );
+                                    },
+                                  ),
+                                  OutlinedButton(
+                                    child: ListTile(
+                                      title: Text('Address', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      subtitle: Text("${customerData.address}"),
+                                      trailing: Icon(Icons.chevron_right_rounded),
+                                    ),
+                                    onPressed: () {
+                                      showMaterialModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => SingleChildScrollView(
+                                          controller: ModalScrollController.of(context),
+                                          child: Container(
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                                  child: TextFormField(
+                                                    decoration: InputDecoration(
+                                                      hintText: "${customerData.address}",
+                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                      labelStyle: TextStyle(
+                                                          fontStyle: FontStyle.italic,
+                                                          color: Colors.black
+                                                      ),
+                                                    ),
+                                                    keyboardType: TextInputType.streetAddress,
+                                                    onChanged: (val) => setState(() => _currentAddress = val),
+                                                  ),
+                                                ),
+                                                saveChanges(),
+                                              ],
 
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  OutlinedButton(
+                                      child: ListTile(
+                                        title: Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
+                                        subtitle: Text("${customerData.email}"),
+                                        trailing: Icon(Icons.chevron_right_rounded),
+                                      ),
+                                      onPressed: () {
+                                        showMaterialModalBottomSheet(
+                                          context: context,
+                                          builder: (context) => SingleChildScrollView(
+                                            controller: ModalScrollController.of(context),
+                                            child: Container(
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                        hintText: "${customerData.email}",
+                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                        labelStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic,
+                                                            color: Colors.black
+                                                        ),
+                                                      ),
+                                                      validator: (String val){
+                                                        if(val.isEmpty){
+                                                          return null;
+                                                        }
+                                                        else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
+                                                          return 'Please Enter a Valid Email Address';
+                                                        }
+                                                        else
+                                                          return null;
+                                                      },
+                                                      onChanged: (val) => setState(() => _currentEmail = val),
+                                                    ),
+                                                  ),
+                                                  saveChanges(),
+                                                ],
 
-                                      if (profilePicture != null) {
-                                        await UploadFile.uploadFile(saveDestination, profilePicture);
-
-                                        savedUrl = await firebase_storage.FirebaseStorage.instance
-                                              .ref(saveDestination)
-                                            .getDownloadURL();
-
-                                        if (savedUrl != null || savedUrl == 'null') {
-                                          await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
-                                        }
-
-                                        setState(() {
-                                          fetchedUrl = savedUrl;
-                                        });
+                                              ),
+                                            ),
+                                          ),
+                                        );
                                       }
-
-
-                                      print("${user1.email}");
-                                      print ("${user1.emailVerified}");
-                                      print(_currentEmail);
-
-
-
-                                        Navigator.pop(context, false);
-
-                                    }
-                                  },
-                                ),
+                                  ),
+                                  OutlinedButton(
+                                    child: ListTile(
+                                      title: Text('Contact Number', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      subtitle: Text("${customerData.contactNo}"),
+                                      trailing: Icon(Icons.chevron_right_rounded),
+                                    ),
+                                    onPressed: (){
+                                      showMaterialModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => SingleChildScrollView(
+                                          controller: ModalScrollController.of(context),
+                                          child: Container(
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                                  child: TextFormField(
+                                                    decoration: InputDecoration(
+                                                      hintText: "${customerData.contactNo}",
+                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                      labelStyle: TextStyle(
+                                                          fontStyle: FontStyle.italic,
+                                                          color: Colors.black
+                                                      ),
+                                                    ),
+                                                    maxLength: 11,
+                                                    keyboardType: TextInputType.number,
+                                                    validator: (String val){
+                                                      if(val.length < 11 && val.length > 0){
+                                                        return 'Your contact number should be 11 digits';
+                                                      }
+                                                      else
+                                                        return null;
+                                                    },
+                                                    onChanged: (val) => setState(() => _currentContactNo = val),
+                                                  ),
+                                                ),
+                                                saveChanges(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  OutlinedButton(
+                                    child: ListTile(
+                                      title: Text('Change Password', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      subtitle: Text(dots(customerData.password.length)),
+                                      trailing: Icon(Icons.chevron_right_rounded),
+                                    ),
+                                    onPressed: () {
+                                      showMaterialModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => SingleChildScrollView(
+                                          controller: ModalScrollController.of(context),
+                                          child: Container(
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                  child: Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(15),
+                                                        child: TextFormField(
+                                                          obscureText: true,
+                                                          decoration: InputDecoration(labelText:
+                                                          'Password:',
+                                                            hintText: dots(customerData.password.length),
+                                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                            errorText: (checkCurrentPassword ?
+                                                            null :
+                                                            "Please double check your current password"
+                                                            ),
+                                                            labelStyle: TextStyle(
+                                                                fontStyle: FontStyle.italic,
+                                                                color: Colors.black
+                                                            ),
+                                                          ),
+                                                          validator: (String val){
+                                                            if(val.length < 8 && val.length > 0){
+                                                              return 'Password should be 8 characters long';
+                                                            }
+                                                            else
+                                                              return null;
+                                                          },
+                                                          //initialValue: "${customerData.password}",
+                                                          onChanged: (val) => setState(() => _currentPassword = val),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(15),
+                                                        child: TextFormField(
+                                                          obscureText: true,
+                                                          decoration: InputDecoration(labelText:
+                                                          'New Password:',
+                                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                            labelStyle: TextStyle(
+                                                              fontStyle: FontStyle.italic,
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                          validator: (String val){
+                                                            if(val.length < 8 && val.length > 0){
+                                                              return 'Password should be 8 characters long';
+                                                            } else if(_currentPassword != null){
+                                                              if(val.isEmpty){
+                                                                return 'Kindly provide your new password';
+                                                              } else {
+                                                                return null;
+                                                              }
+                                                            }
+                                                            else
+                                                              return null;
+                                                          },
+                                                          onChanged: (val) => setState(() => _newPassword = val),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(15),
+                                                        child: TextFormField(
+                                                          obscureText: true,
+                                                          decoration: InputDecoration(labelText:
+                                                          'Repeat Password:',
+                                                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                            labelStyle: TextStyle(
+                                                                fontStyle: FontStyle.italic,
+                                                                color: Colors.black
+                                                            ),
+                                                          ),
+                                                          validator: (String val){
+                                                            if(_currentPassword != null){
+                                                              if(val.isEmpty){
+                                                                return "Kindly provide repeat password for verification";
+                                                              } else if(_newPassword != val){
+                                                                return "Password does not match";
+                                                              } else {
+                                                                return null;
+                                                              }
+                                                            }
+                                                            else
+                                                              return null;
+                                                          },
+                                                          onChanged: (val) => setState(() => _confirmPassword = val),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                saveChanges(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
                           ],
                         ),
                       );
