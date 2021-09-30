@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/notifications.dart';
 import 'notif_tile_courier.dart';
 
 class NotifListCourier extends StatefulWidget {
@@ -13,11 +14,13 @@ class NotifListCourier extends StatefulWidget {
 class _NotifListCourierState extends State<NotifListCourier> {
   @override
   Widget build(BuildContext context) {
-    final delivery = Provider.of<List<Delivery>>(context);
-    return delivery == null ? UserLoading() : ListView.builder(
-          itemCount: delivery.length,
+    final notif = Provider.of<List<Notifications>>(context);
+    
+    notif.sort((a, b) => a.time.compareTo(b.time));
+    return notif == null ? UserLoading() : ListView.builder(
+          itemCount: notif.length,
           itemBuilder: (context, index){
-            return NotifTileCourier(delivery: delivery[index]);
+            return NotifTileCourier(notif: notif[index]);
           },
         );
   }

@@ -14,7 +14,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.2"
+    version: "2.8.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -552,7 +552,7 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.11"
+    version: "0.12.10"
   meta:
     dependency: transitive
     description:
@@ -858,7 +858,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.3"
+    version: "0.4.2"
   timezone:
     dependency: "direct main"
     description:
@@ -886,7 +886,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.12"
+    version: "6.0.10"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -958,5 +958,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
-  flutter: ">=2.5.0"
+  dart: ">=2.13.0 <3.0.0"
+  flutter: ">=2.2.0"

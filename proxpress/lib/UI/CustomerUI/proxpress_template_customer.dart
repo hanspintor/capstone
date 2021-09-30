@@ -102,6 +102,7 @@ class _AppBarTempState extends State<AppBarTemp>{
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !approved || !user.emailVerified ? null : () async{
+                  _openEndDrawer();
                 },
                 iconSize: 25,
               ),

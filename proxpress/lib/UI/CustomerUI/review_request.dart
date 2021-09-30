@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
+import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 
 class ReviewRequest extends StatefulWidget {
@@ -51,6 +53,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _isLoading = false;
+  String notifM = "";
 
   @override
   Widget build(BuildContext context) {
@@ -235,10 +238,16 @@ class _ReviewRequestState extends State<ReviewRequest> {
                       0,
                       ''
                     );
-                    await DatabaseService(uid: widget.courier.id).updateNotifStatusCourier(true);
-                    await DatabaseService(uid: user.uid).updateNotifStatusCustomer(true);
-                    await DatabaseService(uid: widget.courier.id).updateNotifPopUpStatusCourier(true);
-                    DatabaseService(uid: widget.courier.id).updateNotifPopUpCounterCourier(0);
+                    await FirebaseFirestore.instance
+                        .collection('Customers')
+                        .doc(widget.customer.id)
+                        .get()
+                        .then((DocumentSnapshot documentSnapshot) {
+                      if (documentSnapshot.exists) {
+                        notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} requested a delivery";
+                      }
+                    });
+                    await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier, Timestamp.now());
                     Navigator.pushNamed(context, '/template');
                   },
                 ),

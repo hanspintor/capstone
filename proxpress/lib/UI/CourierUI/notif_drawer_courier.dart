@@ -7,6 +7,7 @@ import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/courier_classes/notif_list_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/notifications.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
 
@@ -36,20 +37,21 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
           Courier courierData = snapshot.data;
           approved = courierData.approved;
 
-          Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-              .collection('Deliveries')
-              .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
-              .snapshots()
-              .map(DatabaseService().deliveryDataListFromSnapshot);
+          DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
 
-          return !approved ? CourierDashboard() : StreamProvider<List<Delivery>>.value(
-            value: deliveryList,
+          Stream<List<Notifications>> notifList = FirebaseFirestore.instance
+            .collection('Notifications')
+            .where('Sent To', isEqualTo: courier)
+            .snapshots()
+            .map(DatabaseService().notifListFromSnapshot);
+
+          return !approved ? CourierDashboard() : StreamProvider<List<Notifications>>.value(
+            value: notifList,
             initialData: [],
             child: Drawer(
               child: Column(
                   mainAxisSize : MainAxisSize.max,
                   children: [
-
                     Expanded(
                         child: !isClear ? NotifListCourier() : Container(),
                     ),

@@ -96,7 +96,7 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                         ],
                         flexibleSpace: Container(
                           margin: EdgeInsets.only(top: 10),
-                          child: Image.asset(
+                            child: Image.asset(
                             "assets/PROExpress-logo.png",
                             height: 120,
                             width: 120,

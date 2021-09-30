@@ -4,6 +4,7 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
 import 'package:proxpress/models/messages.dart';
+import 'package:proxpress/models/notifications.dart';
 
 class DatabaseService {
   final String uid;
@@ -23,6 +24,9 @@ class DatabaseService {
 
   // Messages Collection Reference
   final CollectionReference messageCollection = FirebaseFirestore.instance.collection('Messages');
+
+  // Notifications Collection Reference
+  final CollectionReference notifCollection = FirebaseFirestore.instance.collection('Notifications');
 
 
   // Create/Update a Customer Document
@@ -116,6 +120,17 @@ class DatabaseService {
     });
   }
 
+  Future createNotificationData(String notifMessage, DocumentReference sentBy,
+      DocumentReference sentTo, Timestamp time,
+      ) async {
+    return await notifCollection.doc(uid).set({
+      'Notification Message': notifMessage,
+      'Sent By' : sentBy,
+      'Sent To' : sentTo,
+      'Time Sent' : time,
+    });
+  }
+
   // Together with Courier Creation, Update Credentials URL
   Future updateCourierCredentials(String driversLicenseFront_, String driversLicenseBack_, String nbiClearancePhoto_, String vehicleRegistrationOR_, String vehicleRegistrationCR_, String vehiclePhoto_) async {
     await courierCollection
@@ -129,6 +144,8 @@ class DatabaseService {
       'Vehicle Photo URL': vehiclePhoto_,
     });
   }
+
+
   // Update Courier Password in Auth
   Future<void> AuthupdateCourierPassword(String password) {
     return courierCollection
@@ -340,7 +357,17 @@ class DatabaseService {
       );
     }).toList();
   }
-
+  List<Notifications> notifListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return Notifications(
+        uid: doc.id,
+        notifMessage: (doc.data() as dynamic) ['Notification Message'] ?? '',
+        time: (doc.data() as dynamic) ['Time Sent'] ?? '',
+        sentBy: (doc.data() as dynamic) ['Sent By'] ?? '',
+        sentTo: (doc.data() as dynamic) ['Sent To'] ?? '',
+      );
+    }).toList();
+  }
   // Get list of data from Customers Collection
   Stream<List<Customer>> get customerList {
     return customerCollection.snapshots().map(_customerDataListFromSnapshot);
@@ -453,6 +480,16 @@ class DatabaseService {
       sentTo: snapshot['Sent To']
     );
   }
+  // Get Notification Data using StreamBuilder
+  Notifications _notficationDataFromSnapshot(DocumentSnapshot snapshot){
+    return Notifications(
+        uid: uid,
+        notifMessage: snapshot['Notification Message'],
+        time: snapshot['Time Sent'],
+        sentBy: snapshot['Sent By'],
+        sentTo: snapshot['Sent To']
+    );
+  }
 
   // Get Customer Document Data
   Stream<Customer> get customerData{
@@ -477,5 +514,9 @@ class DatabaseService {
   // Get Message Document Data
   Stream<Message> get messageData{
     return messageCollection.doc(uid).snapshots().map(_messageDataFromSnapshot);
+  }
+
+  Stream<Notifications> get notificationData{
+    return notifCollection.doc(uid).snapshots().map(_notficationDataFromSnapshot);
   }
 }
