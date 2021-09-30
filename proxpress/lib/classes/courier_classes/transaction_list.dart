@@ -15,13 +15,33 @@ class _TransactionListState extends State<TransactionList> {
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
 
-    return delivery == null ? UserLoading() : ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: delivery.length,
-      itemBuilder: (context, index) {
-        return TransactionTile(delivery: delivery[index]);
-      },
-    );
+    if(delivery.length != 0){
+      return delivery == null ? UserLoading() : ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: delivery.length,
+        itemBuilder: (context, index) {
+          return TransactionTile(delivery: delivery[index]);
+        },
+      );
+    }
+    else{
+      return Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                'You currently have no pending requests.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
   }
 }

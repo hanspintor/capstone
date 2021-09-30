@@ -213,11 +213,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star5.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -234,11 +234,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star4.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -255,11 +255,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star3.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -276,11 +276,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star2.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -297,11 +297,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star1.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -404,11 +404,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star5.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -425,11 +425,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star4.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -446,11 +446,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star3.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -467,11 +467,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star2.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -488,11 +488,11 @@ class CourierProfile extends StatelessWidget {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Text('${star1.toInt()}'),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.only(right: 20),
+                                                                  padding: const EdgeInsets.only(right: 10),
                                                                   child: Container(
                                                                     height: 5,
                                                                     width: 120,
@@ -597,11 +597,11 @@ class CourierProfile extends StatelessWidget {
                                                           Row(
                                                             children: [
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Text('${star5.toInt()}'),
                                                               ),
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Container(
                                                                   height: 5,
                                                                   width: 120,
@@ -618,11 +618,11 @@ class CourierProfile extends StatelessWidget {
                                                           Row(
                                                             children: [
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Text('${star4.toInt()}'),
                                                               ),
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Container(
                                                                   height: 5,
                                                                   width: 120,
@@ -639,11 +639,11 @@ class CourierProfile extends StatelessWidget {
                                                           Row(
                                                             children: [
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Text('${star3.toInt()}'),
                                                               ),
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Container(
                                                                   height: 5,
                                                                   width: 120,
@@ -660,11 +660,11 @@ class CourierProfile extends StatelessWidget {
                                                           Row(
                                                             children: [
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Text('${star2.toInt()}'),
                                                               ),
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Container(
                                                                   height: 5,
                                                                   width: 120,
@@ -681,11 +681,11 @@ class CourierProfile extends StatelessWidget {
                                                           Row(
                                                             children: [
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Text('${star1.toInt()}'),
                                                               ),
                                                               Padding(
-                                                                padding: const EdgeInsets.only(right: 20),
+                                                                padding: const EdgeInsets.only(right: 10),
                                                                 child: Container(
                                                                   height: 5,
                                                                   width: 120,
@@ -734,8 +734,6 @@ class CourierProfile extends StatelessWidget {
                     ),
                   ],
                 ),
-
-
               ),
             );
           } else {
