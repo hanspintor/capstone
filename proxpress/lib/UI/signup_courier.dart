@@ -28,6 +28,7 @@ class _SignupCourierState extends State<SignupCourier> {
   String email;
   String contactNo;
   String password;
+  String confirmPassword;
   String address;
   bool loading = false;
   bool agree = false;
@@ -172,6 +173,31 @@ class _SignupCourierState extends State<SignupCourier> {
       },
     );
   }
+  Widget _buildConfirmPassword(){
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Confirm Password'),
+      obscureText: true,
+      validator: (String value){
+        if(password != null){
+          if(value.isEmpty){
+            return "Password does not match";
+          } else if(confirmPassword != password){
+            return "Password does not match";
+          } else {
+            return null;
+          }
+        }
+        else
+          return null;
+      },
+      onSaved: (String value){
+        confirmPassword = value;
+      },
+      onChanged: (val){
+        setState(() => confirmPassword = val);
+      },
+    );
+  }
   Widget _buildAddress(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Home Address'),
@@ -280,6 +306,7 @@ class _SignupCourierState extends State<SignupCourier> {
                           _buildEmail(),
                           _buildContactNo(),
                           _buildPassword(),
+                          _buildConfirmPassword(),
                           _buildAddress(),
                           Container(
                             child: Column(
