@@ -12,6 +12,7 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/notifications.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
@@ -28,9 +29,9 @@ class AppBarTemp1 extends StatefulWidget {
 class _AppBarTemp1State extends State<AppBarTemp1> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String currentPage = "Dashboard";
-  void _openEndDrawer() {
-    _scaffoldKey.currentState.openEndDrawer();
-  }
+  // void _openEndDrawer() {
+  //   _scaffoldKey.currentState.openEndDrawer();
+  // }
 
   pagePicker(){
     if(widget.currentPage != null) {
@@ -70,6 +71,13 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
               Courier courierData = snapshot.data;
               approved = courierData.approved;
 
+              DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
+              Stream<List<Notifications>> notifList = FirebaseFirestore.instance
+                  .collection('Notifications')
+                  .where('Sent To', isEqualTo: courier)
+                  .snapshots()
+                  .map(DatabaseService().notifListFromSnapshot);
+
               return WillPopScope(
                   onWillPop: () async {
                     print("Back Button Pressed");
@@ -84,15 +92,12 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                         iconTheme: IconThemeData(color: Color(0xfffb0d0d)
                         ),
                         actions: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.notifications_none_rounded),
-                            onPressed: !approved || !user1.emailVerified ? null : () async{
+                          StreamProvider<List<Notifications>>.value(
+                            value: notifList,
+                            initialData: [],
+                            child:  NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,),
+                          )
 
-                              _openEndDrawer();
-                            },
-                            iconSize: 25,
-                          ),
-                          //NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,)
                         ],
                         flexibleSpace: Container(
                           margin: EdgeInsets.only(top: 10),

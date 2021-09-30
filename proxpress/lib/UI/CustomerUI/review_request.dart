@@ -247,7 +247,8 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} requested a delivery";
                       }
                     });
-                    await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier, Timestamp.now());
+                    bool isSeen = false;
+                    await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier, Timestamp.now(), isSeen);
                     Navigator.pushNamed(context, '/template');
                   },
                 ),

@@ -121,13 +121,14 @@ class DatabaseService {
   }
 
   Future createNotificationData(String notifMessage, DocumentReference sentBy,
-      DocumentReference sentTo, Timestamp time,
+      DocumentReference sentTo, Timestamp time, bool IsSeen
       ) async {
     return await notifCollection.doc(uid).set({
       'Notification Message': notifMessage,
       'Sent By' : sentBy,
       'Sent To' : sentTo,
       'Time Sent' : time,
+      'Seen' : IsSeen
     });
   }
 
@@ -174,24 +175,9 @@ class DatabaseService {
       'Courier Approval' : 'Cancelled',
     });
   }
-  Future updateNotifCounterCourier(int notifC) async {
-    return await courierCollection.doc(uid).update({
-      'Current Notification': notifC,
-    });
-  }
-  Future updateNotifStatusCourier(bool viewable) async {
-    return await courierCollection.doc(uid).update({
-      'Notification Status': viewable,
-    });
-  }
-  Future updateNotifPopUpStatusCourier(bool popUpStatus) async {
-    return await courierCollection.doc(uid).update({
-      'Notification Pop Up Status': popUpStatus,
-    });
-  }
-  Future updateNotifPopUpCounterCourier(int counter) async {
-    return await courierCollection.doc(uid).update({
-      'Current Notification Pop Up': counter,
+  Future updateNotifSeenCourier(bool isSeen) async {
+    return await notifCollection.doc(uid).update({
+      'Seen': isSeen,
     });
   }
 
@@ -365,6 +351,7 @@ class DatabaseService {
         time: (doc.data() as dynamic) ['Time Sent'] ?? '',
         sentBy: (doc.data() as dynamic) ['Sent By'] ?? '',
         sentTo: (doc.data() as dynamic) ['Sent To'] ?? '',
+        seen: (doc.data() as dynamic) ['Seen'] ?? '',
       );
     }).toList();
   }
@@ -481,13 +468,14 @@ class DatabaseService {
     );
   }
   // Get Notification Data using StreamBuilder
-  Notifications _notficationDataFromSnapshot(DocumentSnapshot snapshot){
+  Notifications notficationDataFromSnapshot(DocumentSnapshot snapshot){
     return Notifications(
         uid: uid,
         notifMessage: snapshot['Notification Message'],
         time: snapshot['Time Sent'],
         sentBy: snapshot['Sent By'],
-        sentTo: snapshot['Sent To']
+        sentTo: snapshot['Sent To'],
+        seen: snapshot['Seen']
     );
   }
 
@@ -517,6 +505,6 @@ class DatabaseService {
   }
 
   Stream<Notifications> get notificationData{
-    return notifCollection.doc(uid).snapshots().map(_notficationDataFromSnapshot);
+    return notifCollection.doc(uid).snapshots().map(notficationDataFromSnapshot);
   }
 }

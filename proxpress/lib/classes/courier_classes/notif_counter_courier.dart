@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:proxpress/services/database.dart';
@@ -22,16 +24,11 @@ class NotifCounterCourier extends StatefulWidget {
 }
 
 class _NotifCounterCourierState extends State<NotifCounterCourier> {
-  bool viewable;
+  bool viewable = true;
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
 
-  void setFalse(){
-    setState(() {
-      viewable = false;
-    });
-  }
   int notifs;
 
   @override
@@ -43,72 +40,76 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
 
   @override
   Widget build(BuildContext context) {
-    final delivery = Provider.of<List<Delivery>>(context);
+    final notif = Provider.of<List<Notifications>>(context);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-
-    return StreamBuilder <Courier>(
-      stream: DatabaseService(uid: user.uid).courierData,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
-          Courier notifData = snapshot.data;
-
-          if(notifData.currentNotif != delivery.length){
-            if(notifData.currentNotif < delivery.length){
-              notifs = delivery.length - notifData.currentNotif;
-            } else{
-              notifs = notifData.currentNotif - delivery.length;
-            }
-          } else{
-            notifs = delivery.length;
-          }
-
-          if(notifs == 0){
-            viewable = false;
-          }
-          return Stack(
-            children: [
-              IconButton(
-                icon: Icon(Icons.notifications_none_rounded),
-                onPressed: !widget.approved || !user.emailVerified ? null : () async{
-                  setFalse();
+    DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
+    Stream<List<Notifications>> notifList = FirebaseFirestore.instance
+        .collection('Notifications')
+        .where('Sent To', isEqualTo: courier)
+        .snapshots()
+        .map(DatabaseService().notifListFromSnapshot);
 
 
-                  await DatabaseService(uid: user.uid).updateNotifCounterCourier(delivery.length);
-                  await DatabaseService(uid: user.uid).updateNotifStatusCourier(viewable);
-                  _openEndDrawer();
-                },
-                iconSize: 25,
-              ),
-              Visibility(
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                visible: notifData.notifStatus,
-                child: Container(
-                  margin: EdgeInsets.only(left: 25, top: 5),
-                  height: 20,
-                  width: 30,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red
-                  ),
-                  child: Center(
-                    child: Text(
-                      notifs.toString(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          );
-        } else return Container();
-      },
+    return StreamBuilder<List<Notifications>>(
+      stream: notifList,
+      builder: (context, snapshot) {
+       if(snapshot.hasData){
+         List<Notifications> n = snapshot.data;
+         n.forEach((element) {
+           if(element.seen){
+             viewable = false;
+           } else{
+             viewable = true;
+           }
+         });
+         return Stack(
+           children: [
+             IconButton(
+               icon: Icon(Icons.notifications_none_rounded),
+               onPressed: !widget.approved || !user.emailVerified ? null : () async{
+                 _openEndDrawer();
+
+                 n.forEach((element) async {
+                   await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
+                 });
+
+               },
+               iconSize: 25,
+             ),
+             Visibility(
+               maintainSize: true,
+               maintainAnimation: true,
+               maintainState: true,
+               visible: viewable,
+               child: Container(
+                 margin: EdgeInsets.only(left: 25, top: 5),
+                 height: 20,
+                 width: 30,
+                 decoration: BoxDecoration(
+                     shape: BoxShape.circle,
+                     color: Colors.red
+                 ),
+                 child: Center(
+                   child: Text(
+                     "${notif.length}",
+                     style: TextStyle(
+                         color: Colors.white,
+                         fontWeight: FontWeight.bold
+                     ),
+                   ),
+                 ),
+               ),
+             )
+           ],
+         );
+
+       }else{
+         return Container();
+       }
+
+      }
     );
   }
 }
