@@ -25,7 +25,6 @@ class NotifCounterCourier extends StatefulWidget {
 
 class _NotifCounterCourierState extends State<NotifCounterCourier> {
   bool viewable = true;
-  int flag = 0;
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
@@ -61,17 +60,14 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
            viewable = false;
          }
 
-         n.forEach((element) {
-            if(flag <= 0){
-              print("${element.sentBy.id} ${element.seen}");
-              if(element.seen == false){
-                viewable = true;
-              } else{
-                viewable = false;
-              }
-              flag++;
-            }
-         });
+         for(int x = 0; x<n.length; x++){
+           print("${n[x].sentBy.id} ${n[x].seen}");
+           if(n[0].seen == false){
+             viewable = true;
+           } else {
+             viewable = false;
+           }
+         }
          return Stack(
            children: [
              IconButton(
