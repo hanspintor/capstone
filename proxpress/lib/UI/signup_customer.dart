@@ -21,6 +21,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
   String email;
   String contactNo;
   String password;
+  String confirmPassword;
   String address;
   bool agree = false;
   bool slide = false;
@@ -133,6 +134,33 @@ class _SignupCustomerState extends State<SignupCustomer> {
       },
     );
   }
+
+  Widget _buildConfirmPassword(){
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Confirm Password'),
+      obscureText: true,
+      validator: (String value){
+        if(password != null){
+          if(value.isEmpty){
+            return "Password does not match";
+          } else if(confirmPassword != password){
+            return "Password does not match";
+          } else {
+            return null;
+          }
+        }
+        else
+          return null;
+      },
+      onSaved: (String value){
+        confirmPassword = value;
+      },
+      onChanged: (val){
+        setState(() => confirmPassword = val);
+      },
+    );
+  }
+
   Widget _buildAddress(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Home Address'),
@@ -217,12 +245,13 @@ class _SignupCustomerState extends State<SignupCustomer> {
                           _buildEmail(),
                           _buildContactNo(),
                           _buildPassword(),
+                          _buildConfirmPassword(),
                           _buildAddress(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container (
+                              Container(
                                 child: Checkbox(
                                     value: agree,
                                     onChanged: (value){

@@ -129,11 +129,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 primary: Color(0xfffb0d0d),
                               ),
                               onPressed: () async {
-
-
-                                setState((){
-                                  _isLoading = true;
-                                });
                                 final Customer validCustomer = Customer();
 
                                 if(_currentPassword != null)

@@ -23,25 +23,6 @@ class _CourierDashboardState extends State<CourierDashboard> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
-
-  Widget _welcomeMessage(){
-    String welcomeMessage = "Thank you for registering in PROXpress. "
-        "Please wait for up to 24 hours for the admin to check and verify your uploaded credentials. "
-        "This is to ensure that you are qualified to be a courier in our app.";
-
-    return Container(
-      margin: EdgeInsets.fromLTRB(20, 40, 20, 0),
-      child: Align(
-        child: Text(welcomeMessage,
-          textAlign: TextAlign.justify,
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -65,6 +46,23 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
+              print(courierData.adminMessage);
+
+              Widget _welcomeMessage(){
+                String welcomeMessage = courierData.adminMessage;
+                print(welcomeMessage);
+                return Container(
+                  margin: EdgeInsets.fromLTRB(20, 40, 20, 0),
+                  child: Align(
+                    child: Text(welcomeMessage,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                );
+              }
 
               return StreamProvider<List<Delivery>>.value(
                 initialData: [],

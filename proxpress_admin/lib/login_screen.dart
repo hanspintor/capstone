@@ -37,51 +37,56 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Form(
                     key: _formKey,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 800),
-                          child: TextFormField(
-                              textInputAction: TextInputAction.next,
-                              validator: (val) => val.isEmpty ? 'Email is Required': null,
-                              decoration: InputDecoration(
-                                labelText: "Email",
-                                prefixIcon: Icon(Icons.email_rounded),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(800,50,800, 50),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                child: TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    validator: (val) => val.isEmpty ? 'Email is Required': null,
+                                    decoration: InputDecoration(
+                                      labelText: "Email",
+                                      prefixIcon: Icon(Icons.email_rounded),
+                                    ),
+                                    onSaved: (String value){
+                                      email = value;
+                                    },
+                                    onChanged: (val){
+                                      setState(() => email = val);
+                                    }
+                                ),
                               ),
-                              onSaved: (String value){
-                                email = value;
-                              },
-                              onChanged: (val){
-                                setState(() => email = val);
-                              }
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 800,),
-                          child: TextFormField(
-                              textInputAction: TextInputAction.next,
-                              obscureText: true,
-                              validator: (String value){
-                                if(value.isEmpty){
-                                  return 'Password is Required';
-                                }
-                                else return null;
-                              },
-                              onSaved: (String value){
-                                password = value;
-                              },
-                              decoration: InputDecoration(
-                                labelText: "Password",
-                                prefixIcon: Icon(Icons.lock),
+                              Container(
+                                child: TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    obscureText: true,
+                                    validator: (String value){
+                                      if(value.isEmpty){
+                                        return 'Password is Required';
+                                      }
+                                      else return null;
+                                    },
+                                    onSaved: (String value){
+                                      password = value;
+                                    },
+                                    decoration: InputDecoration(
+                                      labelText: "Password",
+                                      prefixIcon: Icon(Icons.lock),
+                                    ),
+                                    onChanged: (val){
+                                      setState(() => password = val);
+                                    }
+                                ),
                               ),
-                              onChanged: (val){
-                                setState(() => password = val);
-                              }
+                            ],
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 15),
-                          height: MediaQuery.of(context).size.height / 25,
-                          width: MediaQuery.of(context).size.width / 24,
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState.validate()){

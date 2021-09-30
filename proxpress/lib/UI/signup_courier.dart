@@ -28,6 +28,7 @@ class _SignupCourierState extends State<SignupCourier> {
   String email;
   String contactNo;
   String password;
+  String confirmPassword;
   String address;
   bool loading = false;
   bool agree = false;
@@ -172,6 +173,31 @@ class _SignupCourierState extends State<SignupCourier> {
       },
     );
   }
+  Widget _buildConfirmPassword(){
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Confirm Password'),
+      obscureText: true,
+      validator: (String value){
+        if(password != null){
+          if(value.isEmpty){
+            return "Password does not match";
+          } else if(confirmPassword != password){
+            return "Password does not match";
+          } else {
+            return null;
+          }
+        }
+        else
+          return null;
+      },
+      onSaved: (String value){
+        confirmPassword = value;
+      },
+      onChanged: (val){
+        setState(() => confirmPassword = val);
+      },
+    );
+  }
   Widget _buildAddress(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Home Address'),
@@ -280,6 +306,7 @@ class _SignupCourierState extends State<SignupCourier> {
                           _buildEmail(),
                           _buildContactNo(),
                           _buildPassword(),
+                          _buildConfirmPassword(),
                           _buildAddress(),
                           Container(
                             child: Column(
@@ -636,7 +663,11 @@ class _SignupCourierState extends State<SignupCourier> {
                                   deliveryPriceRef = FirebaseFirestore.instance.collection('Delivery Prices').doc(deliveryPriceUid);
 
                                   //setState(() => loading = true); // loading = true;
-                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0);
+                                  String welcomeMessage = "Thank you for registering in PROXpress. "
+                                      "Please wait for up to 24 hours for the admin to check and verify your uploaded credentials. "
+                                      "This is to ensure that you are qualified to be a courier in our app.";
+
+                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0, welcomeMessage);
                                   if(result == null){
                                     setState((){
                                       error = 'Email already taken';

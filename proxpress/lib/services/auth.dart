@@ -70,7 +70,7 @@ class AuthService {
       String vehicleColor, String driversLicenseFront_,
       String driversLicenseBack_, String nbiClearancePhoto_,
       vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_,
-      deliveryPriceRef, notifStatus, currentNotif, notifPopStatus, notifPopCounter) async {
+      deliveryPriceRef, notifStatus, currentNotif, notifPopStatus, notifPopCounter, String adminMessage) async {
     try{
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -80,7 +80,7 @@ class AuthService {
       await DatabaseService(uid: user.uid).updateCourierData(
           Fname, Lname, email, ContactNo, password, Address, Status, avatarUrl,
           approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_,
-          deliveryPriceRef, notifStatus, currentNotif, notifPopStatus, notifPopCounter);
+          deliveryPriceRef, notifStatus, currentNotif, notifPopStatus, notifPopCounter, adminMessage);
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());
