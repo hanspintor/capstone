@@ -5,8 +5,9 @@ import 'package:proxpress/classes/directions_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DirectionsRepository {
+  // http://project-osrm.org/docs/v5.5.1/api/#general-options
   static const String _baseUrl =
-      'https://maps.googleapis.com/maps/api/directions/json?';
+      'https://router.project-osrm.org/route/v1/car/';
 
   final Dio _dio;
 
@@ -17,12 +18,7 @@ class DirectionsRepository {
     @required LatLng destination,
   }) async {
     final response = await _dio.get(
-      _baseUrl,
-      queryParameters: {
-        'origin': '${origin.latitude},${origin.longitude}',
-        'destination': '${destination.latitude},${destination.longitude}',
-        'key': Secrets.API_KEY,
-      },
+      _baseUrl + '${origin.longitude},${origin.latitude};${destination.longitude},${destination.latitude}',
     );
 
     // Check if response is successful
