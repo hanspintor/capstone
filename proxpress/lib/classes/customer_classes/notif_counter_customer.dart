@@ -24,6 +24,7 @@ class NotifCounterCustomer extends StatefulWidget {
 
 class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
   bool viewable;
+  int flag = 0;
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
@@ -51,9 +52,10 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
 
           for(int x = 0; x<n.length; x++){
-            print("${n[x].sentBy.id} ${n[x].seen}");
-            if(n[0].seen == false){
+            print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
+            if(n[x].seen == false){
               viewable = true;
+              break;
             } else {
               viewable = false;
             }
