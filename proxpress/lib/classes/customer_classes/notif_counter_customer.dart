@@ -27,7 +27,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
-
+  int flag = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +52,14 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
 
           n.forEach((element) {
-            if(element.seen == false){
-              viewable = true;
-            } else{
-              viewable = false;
+            if(flag <= 0){
+              print("${element.sentBy.id} ${element.seen}");
+              if(element.seen == false){
+                viewable = true;
+              } else{
+                viewable = false;
+              }
+              flag++;
             }
           });
           return Stack(
