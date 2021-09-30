@@ -46,7 +46,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
-              print(courierData.adminMessage);
+
 
               Widget _welcomeMessage(){
                 String welcomeMessage = courierData.adminMessage;

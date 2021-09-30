@@ -62,10 +62,10 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
          }
 
          n.forEach((element) {
-           if(!element.seen){
-             viewable = false;
-           } else{
+           if(element.seen == false){
              viewable = true;
+           } else{
+             viewable = false;
            }
          });
          return Stack(

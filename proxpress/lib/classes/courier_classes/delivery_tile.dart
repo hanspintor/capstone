@@ -33,7 +33,8 @@ class DeliveryTile extends StatefulWidget {
 
 class _DeliveryTileState extends State<DeliveryTile> {
   String uid;
-
+  bool isSeen = false;
+  String notifM = "";
   @override
   void initState(){
     super.initState();
@@ -189,6 +190,18 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                           child: ElevatedButton(
                                               child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
                                               onPressed: cantConfirm ? null : () async{
+                                                bool isSeen = false;
+
+                                                await FirebaseFirestore.instance
+                                                    .collection('Couriers')
+                                                    .doc(widget.delivery.courierRef.id)
+                                                    .get()
+                                                    .then((DocumentSnapshot documentSnapshot) {
+                                                  if (documentSnapshot.exists) {
+                                                    notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} accepted your request";
+                                                  }
+                                                });
+                                                await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef, widget.delivery.customerRef, Timestamp.now(), isSeen);
                                                 await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
                                               }
                                           )
@@ -210,6 +223,17 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                     child: ElevatedButton(
                                         child: Text('Decline', style: TextStyle(color: Colors.white, fontSize: 10),),
                                         onPressed: () async{
+
+                                          await FirebaseFirestore.instance
+                                              .collection('Couriers')
+                                              .doc(widget.delivery.courierRef.id)
+                                              .get()
+                                              .then((DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists) {
+                                              notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} decline your request";
+                                            }
+                                          });
+                                          await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef, widget.delivery.customerRef, Timestamp.now(), isSeen);
                                           await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Rejected', 'Cancelled');
                                         }
                                     )

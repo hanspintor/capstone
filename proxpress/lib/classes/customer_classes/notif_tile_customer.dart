@@ -6,13 +6,13 @@ import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/notifications.dart';
 import 'package:proxpress/services/database.dart';
 
 class NotifTileCustomer extends StatefulWidget {
-  final Delivery delivery;
-  final int lengthDeliv;
+  final Notifications notif;
 
-  NotifTileCustomer({Key key, this.delivery, this.lengthDeliv}) : super(key: key);
+  NotifTileCustomer({Key key, this.notif}) : super(key: key);
 
   @override
   State<NotifTileCustomer> createState() => _NotifTileCustomerState();
@@ -28,111 +28,29 @@ class _NotifTileCustomerState extends State<NotifTileCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    uid = widget.delivery.courierRef.id;
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    countList = widget.lengthDeliv;
-    if(widget.delivery.courierApproval == "Approved"){
-      accepted = true;
-      view = false;
-      countList+=2;
 
-    } else if(widget.delivery.courierApproval == "Cancelled"){
-      canceled = true;
-      view = false;
-      countList+=2;
-    }
-    else{
-      view = true;
-    }
-    print("Notification ${countList}");
-    return user == null
-        ? LoginScreen()
-        : StreamBuilder<Courier>(
-            stream: DatabaseService(uid: uid).courierData,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                Courier courierData = snapshot.data;
-
-
-                return Column(
-                  children: [
-                    Card(
-                      child: ListTile(
-                        selected: view,
-                        leading: Icon(
-                          Icons.fiber_manual_record,
-                          size: 15,
-                        ),
-                        title: Text(
-                          "${courierData.fName} ${courierData.lName} "
-                          "received your request.",
-                          style: TextStyle(
-                            color: view ? Colors.black87 : Colors.black54,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            view = false;
-                          });
-                        },
-                      ),
-                    ),
-                    Visibility(
-                      visible: accepted,
-                      child: Card(
-                        child: ListTile(
-                          selected: view,
-                          leading: Icon(
-                            Icons.fiber_manual_record,
-                            size: 15,
-                          ),
-                          title: Text(
-                            "${courierData.fName} ${courierData.lName} "
-                                "accepted your request.",
-                            style: TextStyle(
-                              color: view ? Colors.black87 : Colors.black54,
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              view = false;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: canceled,
-                      child: Card(
-                        child: ListTile(
-                          selected: view,
-                          leading: Icon(
-                            Icons.fiber_manual_record,
-                            size: 15,
-                          ),
-                          title: Text(
-                            "${courierData.fName} ${courierData.lName} "
-                                "declined your request.",
-                            style: TextStyle(
-                              color: view ? Colors.black87 : Colors.black54,
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              view = false;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return Center();
-              }
-            },
-          );
+    return Card(
+      child: ListTile(
+        selected: view,
+        leading: Icon(
+          Icons.fiber_manual_record,
+          size: 15,
+        ),
+        title: Text(
+          "${widget.notif.notifMessage}",
+          style: TextStyle(
+            color: view ? Colors.black87 : Colors.black54,
+          ),
+        ),
+        onTap: () {
+          setState(() {
+            view = false;
+          });
+        },
+      ),
+    );
   }
 }

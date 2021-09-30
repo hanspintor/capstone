@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/notifications.dart';
 
 import 'package:proxpress/services/database.dart';
 
@@ -26,48 +28,45 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
 
-  void setFalse(){
-    setState(() {
-      viewable = false;
-    });
-  }
-  int notifs;
 
   @override
   Widget build(BuildContext context) {
-    final delivery = Provider.of<List<Delivery>>(context);
+    final notif = Provider.of<List<Notifications>>(context);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
+    DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
+    Stream<List<Notifications>> notifList = FirebaseFirestore.instance
+        .collection('Notifications')
+        .where('Sent To', isEqualTo: customer)
+        .snapshots()
+        .map(DatabaseService().notifListFromSnapshot);
 
-    return StreamBuilder <Customer>(
-      stream: DatabaseService(uid: user.uid).customerData,
+    return StreamBuilder <List<Notifications>>(
+      stream: notifList,
       builder: (context, snapshot){
         if(snapshot.hasData){
-          Customer notifData = snapshot.data;
-          //showNotifcation();
-          if(notifData.currentNotif != delivery.length){
-            if(notifData.currentNotif < delivery.length){
-              notifs = delivery.length - notifData.currentNotif;
-            } else{
-              notifs = notifData.currentNotif - delivery.length;
-            }
-          } else{
-            notifs = delivery.length;
-          }
-
-          if(notifs == 0){
+          List<Notifications> n = snapshot.data;
+          if(notif.length == 0){
             viewable = false;
           }
+
+          n.forEach((element) {
+            if(element.seen == false){
+              viewable = true;
+            } else{
+              viewable = false;
+            }
+          });
           return Stack(
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
                 onPressed: !widget.approved || !user.emailVerified ? null : () async{
-                  setFalse();
-                  await DatabaseService(uid: user.uid).updateNotifCounterCustomer(delivery.length);
-                  await DatabaseService(uid: user.uid).updateNotifStatusCustomer(viewable);
                   _openEndDrawer();
+                  n.forEach((element) async {
+                    await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
+                  });
                 },
                 iconSize: 25,
               ),
@@ -75,7 +74,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                 maintainSize: true,
                 maintainAnimation: true,
                 maintainState: true,
-                visible: notifData.notifStatus,
+                visible: viewable,
                 child: Container(
                   margin: EdgeInsets.only(left: 25, top: 5),
                   height: 20,
@@ -86,7 +85,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                   ),
                   child: Center(
                     child: Text(
-                      notifs.toString(),
+                      "${notif.length}",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold

@@ -8,6 +8,7 @@ import 'package:proxpress/classes/customer_classes/notif_list_customer.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/notifications.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
 import '../login_screen.dart';
@@ -41,14 +42,16 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
         if(snapshot.hasData){
           Customer customerData = snapshot.data;
 
-          Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-              .collection('Deliveries')
-              .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-              .snapshots()
-              .map(DatabaseService().deliveryDataListFromSnapshot);
+          DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
 
-          return approved ? DashboardLocation() : StreamProvider<List<Delivery>>.value(
-            value: deliveryList,
+          Stream<List<Notifications>> notifList = FirebaseFirestore.instance
+              .collection('Notifications')
+              .where('Sent To', isEqualTo: customer)
+              .snapshots()
+              .map(DatabaseService().notifListFromSnapshot);
+
+          return approved ? DashboardLocation() : StreamProvider<List<Notifications>>.value(
+            value: notifList,
             initialData: [],
             child: Drawer(
               child: Column(
