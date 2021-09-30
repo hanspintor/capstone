@@ -42,12 +42,12 @@ class _ChatPageState extends State<ChatPage> {
       padding: EdgeInsets.all(4),
       child: TextField(
         onTap: () {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 1000),
-              curve: Curves.easeOut,);
-          });
+          // SchedulerBinding.instance.addPostFrameCallback((_) {
+          //   _scrollController.animateTo(
+          //     _scrollController.position.maxScrollExtent,
+          //     duration: const Duration(milliseconds: 1000),
+          //     curve: Curves.easeOut,);
+          // });
         },
         controller: _controller,
         textCapitalization: TextCapitalization.sentences,

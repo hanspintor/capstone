@@ -176,9 +176,7 @@ class _PinLocationState extends State<PinLocation> {
                 GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
                 GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
 
-                double distanceEnMetres = await distance2point(pickupCoordinates_, dropOffCoordinates_) / 1000;
-
-                print(distanceEnMetres);
+                Directions _infoFetch = await DirectionsRepository().getDirections(origin: LatLng(pickupCoordinates_.latitude, pickupCoordinates_.longitude), destination: LatLng(dropOffCoordinates_.latitude, dropOffCoordinates_.longitude));
 
                 if (!widget.isBookmarks) {
                   Navigator.push(
@@ -190,7 +188,7 @@ class _PinLocationState extends State<PinLocation> {
                           pickupCoordinates: pickupCoordinates,
                           dropOffAddress: dropOffAddress,
                           dropOffCoordinates: dropOffCoordinates,
-                          distance: distanceEnMetres,
+                          distance: _infoFetch.totalDistance,
                         ),
                     )
                   );
@@ -204,7 +202,7 @@ class _PinLocationState extends State<PinLocation> {
                   Navigator.pop(context,
                     LocalDataBookmark(
                       appear: appear,
-                      distance: distanceEnMetres,
+                      distance: _infoFetch.totalDistance,
                       pickupAddress: pickupAddress,
                       pickupCoordinates: pickupCoordinates,
                       dropOffAddress: dropOffAddress,
@@ -243,9 +241,9 @@ class _PinLocationState extends State<PinLocation> {
                 GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
                 GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
 
-                double distanceEnMetres = await distance2point(pickupCoordinates_, dropOffCoordinates_) / 1000;
+                Directions _infoFetch = await DirectionsRepository().getDirections(origin: LatLng(pickupCoordinates_.latitude, pickupCoordinates_.longitude), destination: LatLng(dropOffCoordinates_.latitude, dropOffCoordinates_.longitude));
 
-                print(distanceEnMetres);
+                print(_infoFetch.totalDistance);
 
                 if(!widget.isBookmarks){
                   Navigator.push(
@@ -257,7 +255,7 @@ class _PinLocationState extends State<PinLocation> {
                           pickupCoordinates: pickupCoordinates,
                           dropOffAddress: dropOffAddress,
                           dropOffCoordinates: dropOffCoordinates,
-                          distance: distanceEnMetres,
+                          distance: _infoFetch.totalDistance,
                         ),
                     )
                   );
