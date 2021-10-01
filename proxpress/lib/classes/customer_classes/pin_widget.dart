@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
@@ -74,7 +75,7 @@ class _PinLocationState extends State<PinLocation> {
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
 
-                        pickupDetails = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+                        pickupDetails = await Navigator.push(context, PageTransition(child: SearchPage(), type: PageTransitionType.bottomToTop));
 
                         if (pickupDetails != null) {
                           List<Placemark> placemarks = await placemarkFromCoordinates(pickupDetails.latitude, pickupDetails.longitude);
@@ -107,7 +108,7 @@ class _PinLocationState extends State<PinLocation> {
                       onTap: () async {
                         FocusScope.of(context).requestFocus(new FocusNode());
 
-                        dropOffDetails = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+                        dropOffDetails = await Navigator.push(context, PageTransition(child: SearchPage(), type: PageTransitionType.bottomToTop));
 
                         if (dropOffDetails != null) {
                           List<Placemark> placemarks = await placemarkFromCoordinates(dropOffDetails.latitude, dropOffDetails.longitude);
