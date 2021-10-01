@@ -101,22 +101,21 @@ class _ChatPageState extends State<ChatPage> {
 
 
     //ScrollDown();
-    Stream<List<Message>> messageListCustomerToCour = FirebaseFirestore.instance
+    Stream<CustomerToCour> messageListCustomerToCour = FirebaseFirestore.instance
         .collection('Messages')
         .where('Sent By', isEqualTo: customer)
         .where('Sent To', isEqualTo: courier)
         //.orderBy('Time Sent', descending: false)
         .snapshots()
-        .map(DatabaseService().messageDataListFromSnapshot);
+        .map(DatabaseService().messageDataListFromSnapshot3);
 
-    Stream<List<Message>> messageListCourToCustomer = FirebaseFirestore.instance
+    Stream<CourToCustomer> messageListCourToCustomer = FirebaseFirestore.instance
         .collection('Messages')
         .where('Sent By', isEqualTo: courier)
         .where('Sent To', isEqualTo: customer)
         //.orderBy('Time Sent', descending: false)
         .snapshots()
-        .map(DatabaseService().messageDataListFromSnapshot);
-
+        .map(DatabaseService().messageDataListFromSnapshot2);
 
     return Scaffold(
       appBar: AppBar(
@@ -216,41 +215,49 @@ class _ChatPageState extends State<ChatPage> {
             Container(
               height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * .25,
               color: Colors.white70,
-              child:
-              // StreamProvider<List<Message>>.value(
-              //   value: messageListCustomerToCour,
-              //   initialData: [],
-              //   child: MessageList(),
-              // ),
-              StreamBuilder(
-                stream: CombineLatestStream.list([
-                  messageListCustomerToCour,
-                  messageListCourToCustomer,
-                ]),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<List<Message>> twoMessageLists = snapshot.data;
-
-                    List<Message> mergedMessageList = twoMessageLists[0] + twoMessageLists[1];
-
-                    mergedMessageList.sort((a, b) => a.timeSent.compareTo(b.timeSent));
-
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        MessageList(messageList: mergedMessageList, isCustomer: isCustomer, scrollController: _scrollController),
-                      ],
-                    );
-                  } else {
-                    return Text('');
-                  }
-                }
+              child: MultiProvider(
+                providers: [
+                  StreamProvider<CourToCustomer>.value(initialData: CourToCustomer(), value: messageListCourToCustomer),
+                  StreamProvider<CustomerToCour>.value(initialData: CustomerToCour(), value: messageListCustomerToCour),
+                ],
+                child: MessageListCombiner(isCustomer: isCustomer, scrollController: _scrollController),
               ),
             ),
             _buildMessageTextField(),
           ]
         ),
       ),
+    );
+  }
+}
+
+class MessageListCombiner extends StatelessWidget {
+  final bool isCustomer;
+  final ScrollController scrollController;
+
+  const MessageListCombiner({
+    Key key,
+    @required this.isCustomer,
+    @required this.scrollController,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final customerToCour = Provider.of<CustomerToCour>(context);
+    final courToCustomer = Provider.of<CourToCustomer>(context);
+
+    List<Message> mergedMessageList = [];
+
+    if (customerToCour.value != null && courToCustomer.value != null)
+      mergedMessageList = courToCustomer.value + customerToCour.value;
+
+    mergedMessageList.sort((a, b) => a.timeSent.compareTo(b.timeSent));
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        MessageList(messageList: mergedMessageList, isCustomer: isCustomer, scrollController: scrollController),
+      ],
     );
   }
 }

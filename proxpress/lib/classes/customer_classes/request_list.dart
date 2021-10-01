@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/customer_classes/request_tile.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/services/database.dart';
 
 class RequestList extends StatefulWidget {
   final String message;
@@ -28,7 +29,11 @@ class _RequestListState extends State<RequestList> {
         shrinkWrap: true,
         itemCount: delivery.length,
         itemBuilder: (context, index) {
-          return RequestTile(delivery: delivery[index]);
+          return StreamProvider<Delivery>.value(
+            initialData: Delivery(),
+            value: DatabaseService(uid: delivery[index].uid).deliveryData,
+            child: RequestTile(),
+          );
         },
       );
     }

@@ -314,12 +314,13 @@ class _TopSearchWidgetState extends State<TopSearchWidget> {
       valueListenable: notifierAutoCompletion,
       builder: (ctx, isVisible, child) {
         return AnimatedContainer(
+          margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
           duration: Duration(
             milliseconds: 500,
           ),
           height: isVisible ? MediaQuery.of(context).size.height / 4 : 0,
           child: Card(
-            child: child,
+            child: child
           ),
         );
       },
@@ -329,8 +330,10 @@ class _TopSearchWidgetState extends State<TopSearchWidget> {
         builder: (ctx, snap) {
           if (snap.hasData) {
             return ListView.builder(
-              itemExtent: 50.0,
+              padding: EdgeInsets.zero,
+              itemCount: snap.data.length,
               itemBuilder: (ctx, index) {
+                print(snap.data[index].address.country);
                 return ListTile(
                   title: Text(
                     snap.data[index].address.toString(),
@@ -352,7 +355,6 @@ class _TopSearchWidgetState extends State<TopSearchWidget> {
                   },
                 );
               },
-              itemCount: snap.data.length,
             );
           }
           if (snap.connectionState == ConnectionState.waiting) {

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -344,6 +345,15 @@ class DatabaseService {
       );
     }).toList();
   }
+
+  CourToCustomer messageDataListFromSnapshot2(QuerySnapshot snapshot){
+    return CourToCustomer(value: messageDataListFromSnapshot(snapshot));
+  }
+
+  CustomerToCour messageDataListFromSnapshot3(QuerySnapshot snapshot){
+    return CustomerToCour(value: messageDataListFromSnapshot(snapshot));
+  }
+
   List<Notifications> notifListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
       return Notifications(
@@ -509,4 +519,16 @@ class DatabaseService {
   Stream<Notifications> get notificationData{
     return notifCollection.doc(uid).snapshots().map(notficationDataFromSnapshot);
   }
+}
+
+class CourToCustomer {
+  final List<Message> value;
+
+  CourToCustomer({ this.value });
+}
+
+class CustomerToCour {
+  final List<Message> value;
+
+  CustomerToCour({ this.value });
 }

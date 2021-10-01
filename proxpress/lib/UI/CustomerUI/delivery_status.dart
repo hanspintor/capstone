@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -25,6 +26,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
   Widget build(BuildContext context) {
     GeoPoint _pickup = GeoPoint(latitude: widget.delivery.pickupCoordinates.latitude, longitude: widget.delivery.pickupCoordinates.longitude);
     GeoPoint _dropOff = GeoPoint(latitude: widget.delivery.dropOffCoordinates.latitude, longitude: widget.delivery.dropOffCoordinates.longitude);
+    GeoPoint _courierLoc = GeoPoint(latitude: widget.delivery.courierLocation.latitude, longitude: widget.delivery.courierLocation.longitude);
 
     print(_pickup);
     print(_dropOff);
@@ -100,6 +102,17 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                   );
 
                   StaticPositionGeoPoint dropOff = StaticPositionGeoPoint(
+                      'dropOff',
+                      MarkerIcon(
+                        icon: Icon(
+                          Icons.location_on_rounded,
+                          size: 100,
+                        ),
+                      ),
+                      [_dropOff]
+                  );
+
+                  StaticPositionGeoPoint courier = StaticPositionGeoPoint(
                       'dropOff',
                       MarkerIcon(
                         icon: Icon(
@@ -206,32 +219,44 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
           ],
         ),
       ),
-      floatingActionButton: StreamBuilder<Delivery>(
-          stream: DatabaseService(uid: widget.delivery.uid).deliveryData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              Delivery deliveryData = snapshot.data;
-              return FloatingActionButton.extended(
-                  label: Text('Courier Location'),
-                  icon: Container(
-                      height: 20,
-                      width: 20,
-                      child: Image.asset('assets/courier.png')
-                  ),
-                  onPressed: () {
-                    setState((){
-                      // marker = Marker(
-                      //   markerId: const MarkerId("courier"),
-                      //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-                      //   infoWindow: const InfoWindow(title: 'Courier Location'),
-                      //   position: LatLng(deliveryData.courierLocation.latitude, deliveryData.courierLocation.longitude),
-                      // );
-                    });
-                  });
-            } else
-              return Container();
-          }
+      floatingActionButton: StreamProvider<Delivery>.value(
+        initialData: Delivery(),
+        value: DatabaseService(uid: widget.delivery.uid).deliveryData,
+        child: CourierLocationButton(),
       ),
+    );
+  }
+}
+
+class CourierLocationButton extends StatefulWidget {
+  const CourierLocationButton({Key key}) : super(key: key);
+
+  @override
+  State<CourierLocationButton> createState() => _CourierLocationButtonState();
+}
+
+class _CourierLocationButtonState extends State<CourierLocationButton> {
+  @override
+  Widget build(BuildContext context) {
+    final delivery = Provider.of<Delivery>(context);
+
+    return FloatingActionButton.extended(
+        label: Text('Courier Location'),
+        icon: Container(
+            height: 20,
+            width: 20,
+            child: Image.asset('assets/courier.png')
+        ),
+        onPressed: () {
+          setState((){
+            // marker = Marker(
+            //   markerId: const MarkerId("courier"),
+            //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+            //   infoWindow: const InfoWindow(title: 'Courier Location'),
+            //   position: LatLng(delivery.courierLocation.latitude, delivery.courierLocation.longitude),
+            // );
+          });
+        }
     );
   }
 }
