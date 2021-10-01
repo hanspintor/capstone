@@ -16,6 +16,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
+import 'package:proxpress/UI/CourierUI/proxpress_template_courier.dart';
 import 'package:proxpress/UI/CourierUI/transaction_history.dart';
 import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/classes/courier_classes/delivery_list.dart';
@@ -537,7 +538,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                         _locationSubscription.cancel();
                                                       }
                                                       await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
-                                                      Navigator.push(context, PageTransition(child: TransactionHistory(), type: PageTransitionType.rightToLeftWithFade));
+                                                      Navigator.push(context, PageTransition(child: AppBarTemp1(currentPage: "Transaction",), type: PageTransitionType.rightToLeftWithFade));
                                                     },
                                                   ),
                                                 ),

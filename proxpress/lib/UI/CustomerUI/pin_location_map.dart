@@ -16,9 +16,6 @@ class _LocationAppExampleState extends State<LocationAppExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("search picker example"),
-      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -105,66 +102,141 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPickerLocation(
-      controller: controller,
-      appBarPicker: AppBar(
-        title: TextField(
-          controller: textEditingController,
-          onEditingComplete: () async {
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            suffix: ValueListenableBuilder<TextEditingValue>(
-              valueListenable: textEditingController,
-              builder: (ctx, text, child) {
-                if (text.text.isNotEmpty) {
-                  return child;
-                }
-                return SizedBox.shrink();
+    return Stack(
+      children: [
+        CustomPickerLocation(
+          controller: controller,
+
+          // appBarPicker: AppBar(
+          //   backgroundColor: Colors.white,
+          //   iconTheme: IconThemeData(
+          //       color: Colors.black
+          //   ),
+          //   centerTitle: true,
+          //   title: TextField(
+          //     controller: textEditingController,
+          //     onEditingComplete: () async {
+          //       FocusScope.of(context).requestFocus(new FocusNode());
+          //     },
+          //     decoration: InputDecoration(
+          //       prefixIcon: Icon(
+          //         Icons.search,
+          //         color: Colors.black,
+          //       ),
+          //       suffix: ValueListenableBuilder<TextEditingValue>(
+          //         valueListenable: textEditingController,
+          //         builder: (ctx, text, child) {
+          //           if (text.text.isNotEmpty) {
+          //             return child;
+          //           }
+          //           return SizedBox.shrink();
+          //         },
+          //         child: InkWell(
+          //           focusNode: FocusNode(),
+          //           onTap: () {
+          //             textEditingController.clear();
+          //             controller.setSearchableText("");
+          //             FocusScope.of(context).requestFocus(new FocusNode());
+          //           },
+          //           child: Icon(
+          //             Icons.close,
+          //             size: 12,
+          //             color: Colors.black,
+          //           ),
+          //         ),
+          //       ),
+          //       filled: true,
+          //       border: OutlineInputBorder(
+          //         //gapPadding: 10,
+          //         borderRadius: BorderRadius.circular(30),
+          //       ),
+          //       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30)), borderSide: BorderSide.none),
+          //       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30)), borderSide: BorderSide.none),
+          //     ),
+          //   ),
+          // ),
+          topWidgetPicker: TopSearchWidget(),
+          bottomWidgetPicker: Positioned(
+            bottom: 12,
+            right: 8,
+            child: FloatingActionButton(
+              onPressed: () async {
+                GeoPoint p = await controller.selectAdvancedPositionPicker();
+                Navigator.pop(context, p);
               },
-              child: InkWell(
-                focusNode: FocusNode(),
-                onTap: () {
-                  textEditingController.clear();
-                  controller.setSearchableText("");
+              child: Icon(Icons.location_on_rounded),
+            ),
+          ),
+          initZoom: 17,
+        ),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(80,30,50,0),
+          child: Container(
+            height: 50,
+            width: 600,
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              child: TextField(
+                controller: textEditingController,
+                onEditingComplete: () async {
                   FocusScope.of(context).requestFocus(new FocusNode());
                 },
-                child: Icon(
-                  Icons.close,
-                  size: 16,
-                  color: Colors.black,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  suffix: ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: textEditingController,
+                    builder: (ctx, text, child) {
+                      if (text.text.isNotEmpty) {
+                        return child;
+                      }
+                      return SizedBox.shrink();
+                    },
+                    child: InkWell(
+                      focusNode: FocusNode(),
+                      onTap: () {
+                        textEditingController.clear();
+                        controller.setSearchableText("");
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                      },
+                      child: Icon(
+                        Icons.close,
+                        size: 12,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    //gapPadding: 10,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30)), borderSide: BorderSide.none),
+                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30)), borderSide: BorderSide.none),
                 ),
               ),
             ),
-            focusColor: Colors.black,
-            filled: true,
-            hintText: "search",
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            fillColor: Colors.grey[300],
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red),
-            ),
           ),
         ),
-      ),
-      topWidgetPicker: TopSearchWidget(),
-      bottomWidgetPicker: Positioned(
-        bottom: 12,
-        right: 8,
-        child: FloatingActionButton(
-          onPressed: () async {
-            GeoPoint p = await controller.selectAdvancedPositionPicker();
-            Navigator.pop(context, p);
-          },
-          child: Icon(Icons.arrow_forward),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(5,27,50,0),
+          child: Card(
+            color: Colors.transparent,
+            elevation: 0,
+            child: IconButton(
+                icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+            ),
+          )
         ),
-      ),
-      initZoom: 14,
+      ],
     );
   }
 }
