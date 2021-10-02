@@ -46,6 +46,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
     int flag = 0;
     int cont = 0;
 
+
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
     Stream<List<Notifications>> notifList = FirebaseFirestore.instance
         .collection('Notifications')
@@ -71,17 +72,13 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
              viewable = false;
            }
          }
+
          for(int i = 0; i<n.length; i++){
            if(n[i].seen == false){
-             if(n[i].notifMessage.contains("successfully")){
-               title = "Item Delivered";
-             } else if(n[i].notifMessage.contains("declined")){
-               title = "Request Declined";
-             } else if(n[i].notifMessage.contains("accepted")){
-               title = "Request Accepted";
-             } else{
+             if(n[i].notifMessage.contains("requested")){
                title = "Customer Request";
              }
+
              NotificationService().showNotification(i, title, n[i].notifMessage, i);
              flag++;
 
