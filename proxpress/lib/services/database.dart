@@ -430,7 +430,8 @@ class DatabaseService {
       currentNotif: snapshot['Current Notification'],
       NotifPopStatus: snapshot['Notification Pop Up Status'],
       NotifPopCounter: snapshot['Current Notification Pop Up'],
-      adminMessage: snapshot['Admin Message']
+      adminMessage: snapshot['Admin Message'],
+      adminCredentialsResponse: snapshot['Credential Response'],
     );
   }
 

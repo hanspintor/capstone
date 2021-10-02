@@ -245,7 +245,7 @@ class _CourierTileState extends State<CourierTile> {
                                           TextButton(
                                             child: Text("Send"),
                                             onPressed: () async {
-                                              //await DatabaseService(uid: widget.courier.uid).updateCourierMessage(_adminMessage);
+                                              await DatabaseService(uid: widget.courier.uid).updateCourierMessage(_adminMessage);
                                               await DatabaseService(uid: widget.courier.uid).updateCredentials(credentials);
                                               Navigator.pop(context);
                                             },
