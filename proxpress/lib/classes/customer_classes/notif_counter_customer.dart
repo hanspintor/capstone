@@ -6,7 +6,8 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/notifications.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/notification.dart';
 
@@ -29,6 +30,13 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
 
+
+  @override
+  void initState(){
+    super.initState();
+
+    tz.initializeTimeZones();
+  }
   @override
   Widget build(BuildContext context) {
     final notif = Provider.of<List<Notifications>>(context);
@@ -51,8 +59,8 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
         if(snapshot.hasData){
           List<Notifications> n = snapshot.data;
 
-
-
+          String title = "";
+          
 
           for(int x = 0; x<n.length; x++){
             print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
@@ -65,7 +73,14 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
           for(int i = 0; i<n.length; i++){
             if(n[i].seen == false){
-              //NotificationService().showNotification(i, "Courier", n[i].notifMessage, i);
+              if(n[i].notifMessage.contains("successfully")){
+                title = "Item Delivered";
+              } else if(n[i].notifMessage.contains("declined")){
+                title = "Request Declined";
+              } else if(n[i].notifMessage.contains("accepted")){
+                title = "Request Accepted";
+              }
+              NotificationService().showNotification(i, title, n[i].notifMessage, i);
               flag++;
 
             }

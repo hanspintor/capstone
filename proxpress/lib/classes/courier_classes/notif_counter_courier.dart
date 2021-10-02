@@ -60,7 +60,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
        if(snapshot.hasData){
          List<Notifications> n = snapshot.data;
 
-
+         String title = "";
 
          for(int x = 0; x<n.length; x++){
            print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
@@ -73,7 +73,16 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
          }
          for(int i = 0; i<n.length; i++){
            if(n[i].seen == false){
-             //NotificationService().showNotification(i, "Customer", n[i].notifMessage, i);
+             if(n[i].notifMessage.contains("successfully")){
+               title = "Item Delivered";
+             } else if(n[i].notifMessage.contains("declined")){
+               title = "Request Declined";
+             } else if(n[i].notifMessage.contains("accepted")){
+               title = "Request Accepted";
+             } else{
+               title = "Customer Request";
+             }
+             NotificationService().showNotification(i, title, n[i].notifMessage, i);
              flag++;
 
            }

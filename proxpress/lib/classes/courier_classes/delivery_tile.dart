@@ -230,7 +230,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                               .get()
                                               .then((DocumentSnapshot documentSnapshot) {
                                             if (documentSnapshot.exists) {
-                                              notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} decline your request";
+                                              notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} declined your request";
                                             }
                                           });
                                           await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef, widget.delivery.customerRef, Timestamp.now(), isSeen);
