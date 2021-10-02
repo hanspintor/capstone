@@ -14,9 +14,7 @@ import 'package:proxpress/services/database.dart';
 import '../login_screen.dart';
 
 class NotifDrawerCustomer extends StatefulWidget {
-  final bool onCloseNotif;
 
-  NotifDrawerCustomer({this.onCloseNotif});
 
   @override
   _NotifDrawerCustomerState createState() => _NotifDrawerCustomerState();

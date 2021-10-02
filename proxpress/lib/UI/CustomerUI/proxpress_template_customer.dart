@@ -84,7 +84,7 @@ class _AppBarTempState extends State<AppBarTemp>{
     final auth = FirebaseAuth.instance;
     User user = auth.currentUser;
     bool approved = true;
-    bool onCloseNotif = false;
+
     if(user != null){
       DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
       Stream<List<Notifications>> notifList = FirebaseFirestore.instance
@@ -93,7 +93,7 @@ class _AppBarTempState extends State<AppBarTemp>{
           .snapshots()
           .map(DatabaseService().notifListFromSnapshot);
 
-      return user == null ? LoginScreen() : WillPopScope(
+      return WillPopScope(
         onWillPop: () async {
           print("Back Button pressed");
           return currentPage == "Dashboard" ? false : true;
@@ -124,13 +124,8 @@ class _AppBarTempState extends State<AppBarTemp>{
               ),
               //title: Text("PROExpress"),
             ),
-            onEndDrawerChanged: (isOpen) {
-              // write your callback implementation here
-              onCloseNotif = isOpen;
-              print('end drawer callback isOpen=$isOpen');
-            },
             drawer: MainDrawerCustomer(),
-            endDrawer: NotifDrawerCustomer(onCloseNotif: onCloseNotif),
+            endDrawer: NotifDrawerCustomer(),
             body: pagePicker()
         ),
       );
