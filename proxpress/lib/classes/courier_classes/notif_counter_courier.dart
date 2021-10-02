@@ -43,6 +43,8 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
     final notif = Provider.of<List<Notifications>>(context);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+    int flag = 0;
+    int cont = 0;
 
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
     Stream<List<Notifications>> notifList = FirebaseFirestore.instance
@@ -57,10 +59,6 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
       builder: (context, snapshot) {
        if(snapshot.hasData){
          List<Notifications> n = snapshot.data;
-         if(notif.length == 0){
-           viewable = false;
-         }
-
          for(int x = 0; x<n.length; x++){
            print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
            if(n[x].seen == false){
@@ -69,6 +67,18 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
            } else {
              viewable = false;
            }
+         }
+         for(int i = 0; i<n.length; i++){
+           if(n[i].seen == false){
+             flag++;
+
+           }
+           cont = flag;
+         }
+
+         cont = (cont / 2).toInt();
+         if(notif.length == 0 || cont == 0){
+           viewable = false;
          }
          return Stack(
            children: [
@@ -99,7 +109,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
                  ),
                  child: Center(
                    child: Text(
-                     "${notif.length}",
+                     "${cont.toString()}",
                      style: TextStyle(
                          color: Colors.white,
                          fontWeight: FontWeight.bold

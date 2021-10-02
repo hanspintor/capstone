@@ -23,8 +23,7 @@ class NotifCounterCustomer extends StatefulWidget {
 }
 
 class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
-  bool viewable;
-  int flag = 0;
+
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
@@ -34,6 +33,10 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
     final notif = Provider.of<List<Notifications>>(context);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+    bool notifPressed = false;
+    bool viewable;
+    int flag = 0;
+    int cont = 0;
 
     DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
     Stream<List<Notifications>> notifList = FirebaseFirestore.instance
@@ -47,9 +50,9 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           List<Notifications> n = snapshot.data;
-          if(notif.length == 0){
-            viewable = false;
-          }
+
+
+
 
           for(int x = 0; x<n.length; x++){
             print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
@@ -60,6 +63,19 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
               viewable = false;
             }
           }
+          for(int i = 0; i<n.length; i++){
+            if(n[i].seen == false){
+              flag++;
+
+            }
+            cont = flag;
+          }
+
+          cont = (cont / 2).toInt();
+          if(notif.length == 0 || cont == 0){
+            viewable = false;
+          }
+          print("cont ${cont}");
           return Stack(
             children: [
               IconButton(
@@ -68,6 +84,9 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                   _openEndDrawer();
                   n.forEach((element) async {
                     await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
+                  });
+                  setState(() {
+                    notifPressed = true;
                   });
                 },
                 iconSize: 25,
@@ -87,7 +106,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                   ),
                   child: Center(
                     child: Text(
-                      "${notif.length}",
+                      "${cont.toString()}",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold
