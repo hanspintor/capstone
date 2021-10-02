@@ -76,7 +76,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
            cont = flag;
          }
 
-         cont = (cont / 2).toInt();
+         cont = cont ~/ 2;
          if(notif.length == 0 || cont == 0){
            viewable = false;
          }

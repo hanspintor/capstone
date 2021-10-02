@@ -33,7 +33,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
     final notif = Provider.of<List<Notifications>>(context);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    bool notifPressed = false;
     bool viewable;
     int flag = 0;
     int cont = 0;
@@ -70,8 +69,8 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
             }
             cont = flag;
           }
-
-          cont = (cont / 2).toInt();
+          
+          cont = cont ~/ 2;
           if(notif.length == 0 || cont == 0){
             viewable = false;
           }
@@ -84,9 +83,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                   _openEndDrawer();
                   n.forEach((element) async {
                     await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
-                  });
-                  setState(() {
-                    notifPressed = true;
                   });
                 },
                 iconSize: 25,
