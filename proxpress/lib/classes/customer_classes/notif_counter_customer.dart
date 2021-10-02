@@ -65,7 +65,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
           for(int i = 0; i<n.length; i++){
             if(n[i].seen == false){
-              NotificationService().showNotification(i, "Courier", n[i].notifMessage, i);
+              //NotificationService().showNotification(i, "Courier", n[i].notifMessage, i);
               flag++;
 
             }
