@@ -53,6 +53,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
   @override
   Widget build(BuildContext context) {
     ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+    String notifM = "";
 
     final user = Provider.of<TheUser>(context);
     bool approved = false;
@@ -462,8 +463,19 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                       setState(() {
                                                         mapController = MapController();
                                                       });
+                                                      await cloud.FirebaseFirestore.instance
+                                                          .collection('Couriers')
+                                                          .doc(delivery.courierRef.id)
+                                                          .get()
+                                                          .then((cloud.DocumentSnapshot documentSnapshot) {
+                                                        if (documentSnapshot.exists) {
+                                                          notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} successfully delivered your item";
+                                                        }
+                                                      });
+                                                      bool isSeen = false;
                                                       await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
-                                                      await Navigator.push(context, PageTransition(child: AppBarTemp1(currentPage: "Transaction",), type: PageTransitionType.rightToLeftWithFade));
+                                                      await DatabaseService().createNotificationData(notifM, delivery.courierRef, delivery.customerRef, cloud.Timestamp.now(), isSeen);
+                                                      Navigator.push(context, PageTransition(child: AppBarTemp1(currentPage: "Transaction",), type: PageTransitionType.rightToLeftWithFade));
                                                       showToast('Customer Notified');
                                                     },
                                                   ),

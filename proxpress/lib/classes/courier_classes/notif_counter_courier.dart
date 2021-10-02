@@ -46,6 +46,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
     int flag = 0;
     int cont = 0;
 
+
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
     Stream<List<Notifications>> notifList = FirebaseFirestore.instance
         .collection('Notifications')
@@ -60,7 +61,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
        if(snapshot.hasData){
          List<Notifications> n = snapshot.data;
 
-
+         String title = "";
 
          for(int x = 0; x<n.length; x++){
            print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
@@ -71,9 +72,14 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
              viewable = false;
            }
          }
+
          for(int i = 0; i<n.length; i++){
            if(n[i].seen == false){
-             NotificationService().showNotification(i, "Customer", n[i].notifMessage, i);
+             if(n[i].notifMessage.contains("requested")){
+               title = "Customer Request";
+             }
+
+             NotificationService().showNotification(i, title, n[i].notifMessage, i);
              flag++;
 
            }

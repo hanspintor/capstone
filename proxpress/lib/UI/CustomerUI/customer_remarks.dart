@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/review_request.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -425,8 +426,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                     if (locKey.currentState.validate()){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => ReviewRequest(
+                        PageTransition(
+                            child: ReviewRequest(
                                 customer: customer,
                                 courier: courier,
                                 pickupAddress: widget.pickupAddress,
@@ -441,7 +442,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                                 whoWillPay: whoWillPay,
                                 specificInstructions: specificInstructions,
                                 paymentOption: paymentOption,
-                                deliveryFee: widget.deliveryFee)
+                                deliveryFee: widget.deliveryFee),
+                            type: PageTransitionType.bottomToTop
                         )
                       );
                     }

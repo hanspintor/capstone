@@ -93,7 +93,7 @@ class _AppBarTempState extends State<AppBarTemp>{
           .snapshots()
           .map(DatabaseService().notifListFromSnapshot);
 
-      return user == null ? LoginScreen() : WillPopScope(
+      return WillPopScope(
         onWillPop: () async {
           print("Back Button pressed");
           return currentPage == "Dashboard" ? false : true;

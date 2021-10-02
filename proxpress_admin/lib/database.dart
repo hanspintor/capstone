@@ -26,6 +26,7 @@ class DatabaseService {
         vehicleRegistrationCR_: (doc.data() as dynamic) ['Vehicle CR URL'] ?? '',
         vehiclePhoto_: (doc.data() as dynamic) ['Vehicle Photo URL'] ?? '',
         adminMessage: (doc.data() as dynamic) ['Admin Message'] ?? '',
+        adminCredentialsResponse : (doc.data() as dynamic) ['Credential Response'] ?? '',
       );
     }).toList();
   }
@@ -39,6 +40,13 @@ class DatabaseService {
         .doc(uid)
         .update({
       'Admin Approved': true,
+    });
+  }
+  Future updateCredentials(List adminCredentialsResponse) async {
+    await FirebaseFirestore.instance.collection('Couriers')
+        .doc(uid)
+        .update({
+      'Credential Response': adminCredentialsResponse,
     });
   }
 

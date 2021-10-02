@@ -23,7 +23,7 @@ class PROXpressApp extends StatelessWidget{
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        home: LoginScreen(),
+        home: Dashboard(),
       ),
     );
   }
