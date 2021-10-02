@@ -8,6 +8,7 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/notifications.dart';
 
 import 'package:proxpress/services/database.dart';
+import 'package:proxpress/services/notification.dart';
 
 class NotifCounterCustomer extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -64,12 +65,13 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
           for(int i = 0; i<n.length; i++){
             if(n[i].seen == false){
+              NotificationService().showNotification(i, "Courier", n[i].notifMessage, i);
               flag++;
 
             }
             cont = flag;
           }
-          
+
           cont = cont ~/ 2;
           if(notif.length == 0 || cont == 0){
             viewable = false;

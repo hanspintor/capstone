@@ -59,6 +59,9 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
       builder: (context, snapshot) {
        if(snapshot.hasData){
          List<Notifications> n = snapshot.data;
+
+
+
          for(int x = 0; x<n.length; x++){
            print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
            if(n[x].seen == false){
@@ -70,6 +73,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
          }
          for(int i = 0; i<n.length; i++){
            if(n[i].seen == false){
+             NotificationService().showNotification(i, "Customer", n[i].notifMessage, i);
              flag++;
 
            }
