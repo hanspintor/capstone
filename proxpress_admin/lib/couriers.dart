@@ -17,6 +17,27 @@ class Courier{
   final String vehicleRegistrationCR_;
   final String vehiclePhoto_;
   final String adminMessage;
+  final List adminCredentialsResponse;
 
-  Courier({this.uid, this.fName, this.lName, this.email, this.contactNo, this.password, this.address, this.status, this.approved, this.vehicleType, this.vehicleColor, this.driversLicenseFront_, this.driversLicenseBack_, this.nbiClearancePhoto_, this.vehicleRegistrationOR_, this.vehicleRegistrationCR_, this.vehiclePhoto_, this.adminMessage});
+  Courier({
+  this.uid,
+  this.fName,
+  this.lName,
+  this.email,
+  this.contactNo,
+  this.password,
+  this.address,
+  this.status,
+  this.approved,
+  this.vehicleType,
+  this.vehicleColor,
+  this.driversLicenseFront_,
+  this.driversLicenseBack_,
+  this.nbiClearancePhoto_,
+  this.vehicleRegistrationOR_,
+  this.vehicleRegistrationCR_,
+  this.vehiclePhoto_,
+  this.adminMessage,
+  this.adminCredentialsResponse,
+  });
 }
