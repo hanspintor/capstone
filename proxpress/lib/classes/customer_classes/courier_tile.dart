@@ -3,6 +3,7 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/courier_classes/feedback_list.dart';
@@ -775,14 +776,15 @@ class _CourierTileState extends State<CourierTile> {
                                     child: Text('Request', style: TextStyle(color: Colors.white, fontSize: 10),),
                                     onPressed: /*widget.courier.status == "Offline" ? null :*/ () {
 
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                          CustomerRemarks(
+                                      Navigator.push(context, PageTransition(
+                                        child: CustomerRemarks(
                                             courierUID: widget.courier.uid,
                                             pickupAddress: widget.pickupAddress,
                                             pickupCoordinates: widget.pickupCoordinates,
                                             dropOffAddress: widget.dropOffAddress,
                                             dropOffCoordinates: widget.dropOffCoordinates,
                                             deliveryFee: deliveryFee.toInt(),),
+                                          type: PageTransitionType.bottomToTop
                                       ));
                                     }
                                 )

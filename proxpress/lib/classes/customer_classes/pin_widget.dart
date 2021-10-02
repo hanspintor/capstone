@@ -182,15 +182,15 @@ class _PinLocationState extends State<PinLocation> {
                 if (!widget.isBookmarks) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                        DashboardCustomer(
+                    PageTransition(
+                      child: DashboardCustomer(
                           pickupAddress: pickupAddress,
                           pickupCoordinates: pickupCoordinates,
                           dropOffAddress: dropOffAddress,
                           dropOffCoordinates: dropOffCoordinates,
                           distance: _infoFetch.totalDistance,
-                        ),
+                      ),
+                      type: PageTransitionType.bottomToTop
                     )
                   );
                 } else {
@@ -249,15 +249,15 @@ class _PinLocationState extends State<PinLocation> {
                 if(!widget.isBookmarks){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                        DashboardCustomer(
+                    PageTransition(
+                      child: DashboardCustomer(
                           pickupAddress: pickupAddress,
                           pickupCoordinates: pickupCoordinates,
                           dropOffAddress: dropOffAddress,
                           dropOffCoordinates: dropOffCoordinates,
                           distance: _infoFetch.totalDistance,
                         ),
+                        type: PageTransitionType.bottomToTop
                     )
                   );
                 }

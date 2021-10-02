@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
@@ -250,6 +251,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                     bool isSeen = false;
                     await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier, Timestamp.now(), isSeen);
                     Navigator.pushNamed(context, '/template');
+                    showToast('Your request has been sent.');
                   },
                 ),
                 SizedBox(height: 20),
@@ -259,5 +261,9 @@ class _ReviewRequestState extends State<ReviewRequest> {
         ),
       ),
     );
+  }
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.red, textColor: Colors.white);
   }
 }
