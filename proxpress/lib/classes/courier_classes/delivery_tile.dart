@@ -34,6 +34,7 @@ class DeliveryTile extends StatefulWidget {
 class _DeliveryTileState extends State<DeliveryTile> {
   String uid;
   bool isSeen = false;
+  bool popsOnce = true;
   String notifM = "";
   @override
   void initState(){
@@ -201,7 +202,8 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                     notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} accepted your request";
                                                   }
                                                 });
-                                                await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef, widget.delivery.customerRef, Timestamp.now(), isSeen);
+                                                await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
+                                                    widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
                                                 await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
                                               }
                                           )
@@ -233,7 +235,8 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                               notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} declined your request";
                                             }
                                           });
-                                          await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef, widget.delivery.customerRef, Timestamp.now(), isSeen);
+                                          await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
+                                            widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
                                           await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Rejected', 'Cancelled');
                                         }
                                     )

@@ -9,6 +9,8 @@ class Notifications{
   final DocumentReference sentTo;
   final Timestamp time;
   final bool seen;
+  final bool popsOnce;
 
-  Notifications({ this.uid, this.notifMessage, this.time, this.sentBy, this.sentTo, this.seen });
+  Notifications({ this.uid, this.notifMessage, this.time,
+    this.sentBy, this.sentTo, this.seen, this.popsOnce });
 }

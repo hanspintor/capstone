@@ -473,8 +473,10 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                         }
                                                       });
                                                       bool isSeen = false;
+                                                      bool popsOnce = true;
                                                       await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
-                                                      await DatabaseService().createNotificationData(notifM, delivery.courierRef, delivery.customerRef, cloud.Timestamp.now(), isSeen);
+                                                      await DatabaseService().createNotificationData(notifM, delivery.courierRef,
+                                                          delivery.customerRef, cloud.Timestamp.now(), isSeen, popsOnce);
                                                       Navigator.push(context, PageTransition(child: AppBarTemp1(currentPage: "Transaction",), type: PageTransitionType.rightToLeftWithFade));
                                                       showToast('Customer Notified');
                                                     },

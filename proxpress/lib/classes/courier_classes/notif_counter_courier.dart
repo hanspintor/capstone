@@ -78,8 +78,10 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
              if(n[i].notifMessage.contains("requested")){
                title = "Customer Request";
              }
-
-             NotificationService().showNotification(i, title, n[i].notifMessage, i);
+             if(n[i].popsOnce == true){
+               NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
+               DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
+             }
              flag++;
 
            }

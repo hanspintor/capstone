@@ -25,7 +25,7 @@ class NotifCounterCustomer extends StatefulWidget {
 }
 
 class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
-
+  int detector = 0;
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
@@ -34,11 +34,11 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
   @override
   void initState(){
     super.initState();
-
     tz.initializeTimeZones();
   }
   @override
   Widget build(BuildContext context) {
+    bool runOnce = false;
     final notif = Provider.of<List<Notifications>>(context);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
@@ -60,7 +60,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           List<Notifications> n = snapshot.data;
 
           String title = "";
-          
 
           for(int x = 0; x<n.length; x++){
             print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
@@ -80,13 +79,15 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
               } else if(n[i].notifMessage.contains("accepted")){
                 title = "Request Accepted";
               }
-              NotificationService().showNotification(i, title, n[i].notifMessage, i);
+              if(n[i].popsOnce == true){
+                NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
+                DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
+              }
               flag++;
 
             }
             cont = flag;
           }
-
           cont = cont ~/ 2;
           if(notif.length == 0 || cont == 0){
             viewable = false;

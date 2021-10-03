@@ -123,14 +123,16 @@ class DatabaseService {
   }
 
   Future createNotificationData(String notifMessage, DocumentReference sentBy,
-      DocumentReference sentTo, Timestamp time, bool IsSeen
+      DocumentReference sentTo, Timestamp time, bool IsSeen, bool popsOnce
       ) async {
     return await notifCollection.doc(uid).set({
       'Notification Message': notifMessage,
       'Sent By' : sentBy,
       'Sent To' : sentTo,
       'Time Sent' : time,
-      'Seen' : IsSeen
+      'Seen' : IsSeen,
+      'Notch' : popsOnce,
+
     });
   }
 
@@ -182,7 +184,11 @@ class DatabaseService {
       'Seen': isSeen,
     });
   }
-
+  Future updateNotifNotchCourier(bool popsOnce) async {
+    return await notifCollection.doc(uid).update({
+      'Notch': popsOnce,
+    });
+  }
   Future updateNotifCounterCustomer(int notifC) async {
     return await customerCollection.doc(uid).update({
       'Current Notification': notifC,
@@ -363,6 +369,7 @@ class DatabaseService {
         sentBy: (doc.data() as dynamic) ['Sent By'] ?? '',
         sentTo: (doc.data() as dynamic) ['Sent To'] ?? '',
         seen: (doc.data() as dynamic) ['Seen'] ?? '',
+        popsOnce: (doc.data() as dynamic) ['Notch'] ?? '',
       );
     }).toList();
   }
@@ -488,7 +495,8 @@ class DatabaseService {
         time: snapshot['Time Sent'],
         sentBy: snapshot['Sent By'],
         sentTo: snapshot['Sent To'],
-        seen: snapshot['Seen']
+        seen: snapshot['Seen'],
+        popsOnce: snapshot['Notch']
     );
   }
 

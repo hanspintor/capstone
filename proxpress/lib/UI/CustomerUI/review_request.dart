@@ -249,7 +249,9 @@ class _ReviewRequestState extends State<ReviewRequest> {
                       }
                     });
                     bool isSeen = false;
-                    await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier, Timestamp.now(), isSeen);
+                    bool popsOnce = true;
+                    await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier,
+                        Timestamp.now(), isSeen, popsOnce);
                     Navigator.pushNamed(context, '/template');
                     showToast('Your request has been sent.');
                   },
