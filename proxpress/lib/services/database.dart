@@ -94,7 +94,7 @@ class DatabaseService {
       String vehicleRegistrationOR_, String vehicleRegistrationCR_,
       String vehiclePhoto_, DocumentReference deliveryPriceRef,
       bool notifStatus, int currentNotif, bool notifPopStatus,
-      int notifPopCounter, String adminMessage) async {
+      int notifPopCounter, String adminMessage, List adminCredentialsResponse) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name' : lname,
@@ -119,6 +119,7 @@ class DatabaseService {
       'Notification Pop Up Status' : notifPopStatus,
       'Current Notification Pop Up' : notifPopCounter,
       'Admin Message' : adminMessage,
+      'Credential Response' : adminCredentialsResponse,
     });
   }
 
@@ -197,6 +198,18 @@ class DatabaseService {
   Future updateNotifStatusCustomer(bool viewable) async {
     return await customerCollection.doc(uid).update({
       'Notification Status': viewable,
+    });
+  }
+
+  Future updateAdminMessage(String adminMessage) async {
+    return await courierCollection.doc(uid).update({
+      'Admin Message': adminMessage,
+    });
+  }
+
+  Future updateCredentialsResponse(List adminCredentialsResponse) async {
+    return await courierCollection.doc(uid).update({
+      'Credential Response': adminCredentialsResponse,
     });
   }
   // Create Delivery Document

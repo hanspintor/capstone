@@ -73,6 +73,13 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
+              bool allCredentialsValid = courierData.adminCredentialsResponse[0]  == false &&
+                  courierData.adminCredentialsResponse[1] == false &&
+                  courierData.adminCredentialsResponse[2] == false &&
+                  courierData.adminCredentialsResponse[3] == false &&
+                  courierData.adminCredentialsResponse[4] == false &&
+                  courierData.adminCredentialsResponse[5] == false ? true : false;
+
 
               Widget _welcomeMessage(){
                 String welcomeMessage = courierData.adminMessage;
@@ -380,13 +387,6 @@ class _CourierDashboardState extends State<CourierDashboard> {
                     ),
                     onPressed: () async {
 
-                      // bool picsLoaded = driversLicenseFront != null &&
-                      //     driversLicenseBack != null &&
-                      //     nbiClearancePhoto != null &&
-                      //     vehicleRegistrationOR != null &&
-                      //     vehicleRegistrationCR != null &&
-                      //     vehiclePhoto != null ? true : false;
-
                       bool picsLoaded(){
                         if(courierData.adminCredentialsResponse[0] && driversLicenseFront != null){
                           return true;
@@ -477,6 +477,8 @@ class _CourierDashboardState extends State<CourierDashboard> {
                               }
 
                               await DatabaseService(uid: user.uid).updateCourierCredentials(driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
+                              await DatabaseService(uid: user.uid).updateAdminMessage("Your credentials have been updated, please wait for the confirmation.");
+                              await DatabaseService(uid: user.uid).updateCredentialsResponse([false,false,false,false,false,false]);
 
                             } catch(e) {
                               print(e.toString());
@@ -489,6 +491,13 @@ class _CourierDashboardState extends State<CourierDashboard> {
                     }
                 );
               }
+
+              // bool allCredentialsValid = courierData.adminCredentialsResponse[0]  == false &&
+              //     courierData.adminCredentialsResponse[1] == false &&
+              //     courierData.adminCredentialsResponse[2] == false &&
+              //     courierData.adminCredentialsResponse[3] == false &&
+              //     courierData.adminCredentialsResponse[4] == false &&
+              //     courierData.adminCredentialsResponse[5] == false ? true : false;
 
               return StreamProvider<List<Delivery>>.value(
                 initialData: [],
@@ -521,7 +530,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                         courierData.adminCredentialsResponse[3] ? _updateCredential4() : Container(),
                                         courierData.adminCredentialsResponse[4] ? _updateCredential5() : Container(),
                                         courierData.adminCredentialsResponse[5] ? _updateCredential6() : Container(),
-                                        _updateCredentialButton(),
+                                        !allCredentialsValid ? _updateCredentialButton(): Container(),
                                       ],
                                     ),
                                   ),
