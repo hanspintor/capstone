@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/models/couriers.dart';
-import 'package:proxpress/models/user.dart';
-import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
 
 class ReviewRequest extends StatefulWidget {
   final DocumentReference customer;
@@ -55,11 +50,11 @@ class _ReviewRequestState extends State<ReviewRequest> {
 
   bool _isLoading = false;
   String notifM = "";
+  bool paymentSuccess = false;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<TheUser>(context);
-
+    print(widget.paymentOption);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawerEnableOpenDragGesture: false,
@@ -208,52 +203,122 @@ class _ReviewRequestState extends State<ReviewRequest> {
                 ElevatedButton.icon(
                   icon: _isLoading ? CircularProgressIndicator() : Icon(Icons.send),
                   label: Text(
-                    _isLoading ? 'Sending...' : 'Send Request',
+                    _isLoading ? 'Sending...' : widget.paymentOption == 'Online Payment' ? 'Pay and Send Request' : 'Send Request',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
                   onPressed: _isLoading ? null : () async {
-
                     setState(() {
                       _isLoading = true;
                     });
-                    await DatabaseService().updateDelivery(
-                        widget.customer,
-                        widget.courier,
-                        widget.pickupAddress,
-                        widget.pickupGeoPoint,
-                        widget.dropOffAddress,
-                        widget.dropOffGeoPoint,
-                        widget.itemDescription,
-                        widget.pickupPointPerson,
-                        widget.pickupContactNum,
-                        widget.dropOffPointPerson,
-                        widget.dropOffContactNum,
-                        widget.whoWillPay,
-                        widget.specificInstructions,
-                        widget.paymentOption,
-                        widget.deliveryFee,
-                        'Pending',
-                        'Pending',
-                      GeoPoint(13.621980880497976, 123.19477396693487),
-                      0,
-                      ''
-                    );
-                    await FirebaseFirestore.instance
-                        .collection('Customers')
-                        .doc(widget.customer.id)
-                        .get()
-                        .then((DocumentSnapshot documentSnapshot) {
-                      if (documentSnapshot.exists) {
-                        notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} requested a delivery";
-                      }
-                    });
-                    bool isSeen = false;
-                    bool popsOnce = true;
-                    await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier,
-                        Timestamp.now(), isSeen, popsOnce);
-                    Navigator.pushNamed(context, '/template');
-                    showToast('Your request has been sent.');
+                    if (widget.paymentOption == 'Online Payment') {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => UsePaypal(
+                              sandboxMode: true,
+                              clientId: "AWkipu6yPY27RjsDwrzbLeNJUHWUT03QaLP0jN844XGAX5okIhXtYfe2C_vL0gl1IOb-UqsVvow4VP0r",
+                              secretKey: "EJvqqFJFsJ4IsSNYp279b2TeQKYgpa-riHjrlxazhoKV4if33xWrR3nwzDn0Y7tIYlslNjlXMyK683-E",
+                              returnURL: "https://samplesite.com/return",
+                              cancelURL: "https://samplesite.com/cancel",
+                              transactions: [
+                                {
+                                  "amount": {
+                                    "total": '${widget.deliveryFee}',
+                                    "currency": "PHP",
+                                    "details": {
+                                      "subtotal": '${widget.deliveryFee}',
+                                      "shipping": '0',
+                                      "shipping_discount": 0
+                                    }
+                                  },
+                                  "description":
+                                  "The payment transaction description.",
+                                  // "payment_options": {
+                                  //   "allowed_payment_method":
+                                  //       "INSTANT_FUNDING_SOURCE"
+                                  // },
+                                  "item_list": {
+                                    "items": [
+                                      {
+                                        "name": "Delivery",
+                                        "quantity": 1,
+                                        "price": '${widget.deliveryFee}',
+                                        "currency": "PHP"
+                                      }
+                                    ],
+
+                                    // shipping address is not required though
+                                    "shipping_address": {
+                                      "recipient_name": "",
+                                      "line1": "",
+                                      "line2": "",
+                                      "city": "",
+                                      "country_code": "PH",
+                                      "postal_code": "",
+                                      "phone": "",
+                                      "state": ""
+                                    },
+                                  }
+                                }
+                              ],
+                              note: "Contact us for any questions on your order.",
+                              onSuccess: (Map params) async {
+                                print("onSuccess: $params");
+                              },
+                              onError: (error) {
+                                print("onError: $error");
+                              },
+                              onCancel: (params) {
+                                print('cancelled: $params');
+                              }),
+                        ),
+                      ).then((value) => paymentSuccess = value);
+                    }
+
+                    if (paymentSuccess) {
+                      await DatabaseService().updateDelivery(
+                          widget.customer,
+                          widget.courier,
+                          widget.pickupAddress,
+                          widget.pickupGeoPoint,
+                          widget.dropOffAddress,
+                          widget.dropOffGeoPoint,
+                          widget.itemDescription,
+                          widget.pickupPointPerson,
+                          widget.pickupContactNum,
+                          widget.dropOffPointPerson,
+                          widget.dropOffContactNum,
+                          widget.whoWillPay,
+                          widget.specificInstructions,
+                          widget.paymentOption,
+                          widget.deliveryFee,
+                          'Pending',
+                          'Pending',
+                          GeoPoint(13.621980880497976, 123.19477396693487),
+                          0,
+                          ''
+                      );
+                      await FirebaseFirestore.instance
+                          .collection('Customers')
+                          .doc(widget.customer.id)
+                          .get()
+                          .then((DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists) {
+                          notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} requested a delivery";
+                        }
+                      });
+                      bool isSeen = false;
+                      bool popsOnce = true;
+                      await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier,
+                          Timestamp.now(), isSeen, popsOnce);
+                      Navigator.pushNamed(context, '/template');
+                      showToast('Your request has been sent.');
+                    } else {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      showToast('Payment failed!');
+                    }
                   },
                 ),
                 SizedBox(height: 20),
@@ -266,6 +331,6 @@ class _ReviewRequestState extends State<ReviewRequest> {
   }
   Future showToast(String message) async {
     await Fluttertoast.cancel();
-    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.red, textColor: Colors.white);
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 }

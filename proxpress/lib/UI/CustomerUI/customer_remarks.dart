@@ -260,58 +260,58 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     );
   }
 
-  Widget _buildRadioPayment(){
-    return Column(
-      children: [
-        ListTile(
-          title: Container(
-            child: Row(
-              children: [
-                Image.asset("assets/gcash.png", height: 50, width: 50,),
-                Text("GCash"),
-              ],
-            ),
-          ),
-          leading: Radio(
-            value: 'Gcash',
-            groupValue: onlinePayment,
-            onChanged: (value) {
-              setState(() {
-                onlinePayment = value;
-              });
-            },
-            activeColor: Color(0xfffb0d0d),
-          ),
-        ),
-        ListTile(
-          title: Container(
-            child: Row(
-              children: [
-                Container(
-                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Image.asset("assets/paymaya.png", height: 25, width: 25,)
-                ),
-                Container(
-                    margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    child: Text("Paymaya")
-                ),
-              ],
-            ),
-          ),
-          leading: Radio(
-            value: 'Paymaya',
-            groupValue: onlinePayment,
-            onChanged: (value) {
-              setState(() {
-                onlinePayment = value;
-              });
-            },
-            activeColor: Color(0xfffb0d0d),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildRadioPayment(){
+  //   return Column(
+  //     children: [
+  //       ListTile(
+  //         title: Container(
+  //           child: Row(
+  //             children: [
+  //               Image.asset("assets/gcash.png", height: 50, width: 50,),
+  //               Text("GCash"),
+  //             ],
+  //           ),
+  //         ),
+  //         leading: Radio(
+  //           value: 'Gcash',
+  //           groupValue: onlinePayment,
+  //           onChanged: (value) {
+  //             setState(() {
+  //               onlinePayment = value;
+  //             });
+  //           },
+  //           activeColor: Color(0xfffb0d0d),
+  //         ),
+  //       ),
+  //       ListTile(
+  //         title: Container(
+  //           child: Row(
+  //             children: [
+  //               Container(
+  //                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+  //                   child: Image.asset("assets/paymaya.png", height: 25, width: 25,)
+  //               ),
+  //               Container(
+  //                   margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+  //                   child: Text("Paymaya")
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         leading: Radio(
+  //           value: 'Paymaya',
+  //           groupValue: onlinePayment,
+  //           onChanged: (value) {
+  //             setState(() {
+  //               onlinePayment = value;
+  //             });
+  //           },
+  //           activeColor: Color(0xfffb0d0d),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -406,7 +406,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                           _buildWhoWillPay(),
                           _buildSpecificInstructions(),
                           _buildDropDown(),
-                          paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 5),
+                          // paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 5),
                         ],
                       ),
                       shadowColor: Colors.black,
