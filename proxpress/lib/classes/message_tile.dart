@@ -4,8 +4,10 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/classes/hero_page.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -42,30 +44,66 @@ class _MessageTileState extends State<MessageTile> {
             Message message = snapshot.data;
             String time = DateFormat.jm().format(message.timeSent.toDate());
             //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
-
+            bool _validURL = Uri.parse(message.messageContent).isAbsolute;
+            print("Content ${message.messageContent} valid ? ${_validURL}");
           if (widget.isCustomer) {
             if (message.sentBy.toString().contains('Customers')) {
+
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  BubbleNormal(
+                  !_validURL ? BubbleNormal(
                     color: Colors.red,
                     textStyle: TextStyle(color: Colors.white),
                     isSender: true,
                     text: '${message.messageContent}',
+
+                  ) : GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        PageTransition(child: HeroPage(url: message.messageContent,), type: PageTransitionType.fade),
+                      );
+                    },
+                    child: Hero(
+                      tag: message.uid,
+                      child: Image.network(
+                        message.messageContent,
+                        width: 200,
+
+                      ),
+                    ),
                   ),
-                  Text("$time", style: TextStyle(fontSize: 10)),
+                  Text("$time", style: TextStyle(fontSize: 10))
                 ],
               );
             } else if (message.sentBy.toString().contains('Couriers')) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BubbleNormal(
+                  !_validURL ? BubbleNormal(
                     color: Colors.black26,
                     textStyle: TextStyle(color: Colors.black),
                     isSender: false,
                     text: '${message.messageContent}',
+
+                  ) : GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        PageTransition(child: HeroPage(url: message.messageContent,), type: PageTransitionType.fade),
+                      );
+                    },
+                    child: Hero(
+                      tag: message.uid,
+                      child: Image.network(
+                        message.messageContent,
+                        width: 200,
+
+                      ),
+                    ),
                   ),
-                  Text("$time", style: TextStyle(fontSize: 10)),
+                  Text("$time", style: TextStyle(fontSize: 10))
                 ],
               );
             } else {
@@ -76,11 +114,19 @@ class _MessageTileState extends State<MessageTile> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  BubbleNormal(
+                  !_validURL ? BubbleNormal(
                     color: Colors.red,
                     textStyle: TextStyle(color: Colors.white),
                     isSender: true,
                     text: '${message.messageContent}',
+
+                  ) : Hero(
+                    tag: message.uid,
+                    child: Image.network(
+                      message.messageContent,
+                      width: 200,
+                      height: 200,
+                    ),
                   ),
                   Text("$time", style: TextStyle(fontSize: 10)),
                 ],
@@ -89,11 +135,19 @@ class _MessageTileState extends State<MessageTile> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BubbleNormal(
+                  !_validURL ? BubbleNormal(
                     color: Colors.black26,
-                    textStyle: TextStyle(color: Colors.black,),
+                    textStyle: TextStyle(color: Colors.black),
                     isSender: false,
                     text: '${message.messageContent}',
+
+                  ) : Hero(
+                    tag: message.uid,
+                    child: Image.network(
+                      message.messageContent,
+                      width: 200,
+                      height: 200,
+                    ),
                   ),
                   Text("$time", style: TextStyle(fontSize: 10),),
                 ],

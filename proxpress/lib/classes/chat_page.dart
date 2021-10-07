@@ -1,6 +1,9 @@
 import 'dart:async';
-
+import 'dart:io';
+import 'package:path/path.dart' as path;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,6 +16,7 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/messages.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:proxpress/services/upload_file.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatPage extends StatefulWidget {
@@ -31,34 +35,40 @@ class _ChatPageState extends State<ChatPage> {
   final _controller = TextEditingController();
   String message = '';
   bool isCustomer = false;
+  bool picture = true;
+  File profilePicture;
+  bool uploadedNewPic = false;
+  String savedUrl = '';
+  String saveDestination = '';
+  String fetchedUrl;
   ScrollController _scrollController = new ScrollController();
   Widget _buildMessageTextField() {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.transparent,
-            width: 3
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.transparent,
+              width: 3
+          ),
         ),
-      ),
-      padding: EdgeInsets.all(4),
-      child: TextField(
-        onTap: () {
-          // SchedulerBinding.instance.addPostFrameCallback((_) {
-          //   _scrollController.animateTo(
-          //     _scrollController.position.maxScrollExtent,
-          //     duration: const Duration(milliseconds: 1000),
-          //     curve: Curves.easeOut,);
-          // });
-        },
-        controller: _controller,
-        textCapitalization: TextCapitalization.sentences,
-        autocorrect: true,
-        enableSuggestions: true,
-        decoration: InputDecoration(
-          filled: true,
-          hintText: 'Type your message',
-          suffixIcon: IconButton(
-            icon: Icon(Icons.send, color: Colors.red),
-            onPressed: _controller.text == '' ? null : () async {
+        padding: EdgeInsets.all(4),
+        child: TextField(
+          onTap: () {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 1000),
+                curve: Curves.easeOut,);
+            });
+          },
+          controller: _controller,
+          textCapitalization: TextCapitalization.sentences,
+          autocorrect: true,
+          enableSuggestions: true,
+          decoration: InputDecoration(
+            filled: true,
+            hintText: 'Type your message',
+            suffixIcon: _controller.text != '' ? IconButton(
+              icon: Icon(Icons.send, color: Colors.red),
+              onPressed: _controller.text == '' ? null : () async {
                 if (isCustomer) {
                   await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
                 } else {
@@ -68,18 +78,96 @@ class _ChatPageState extends State<ChatPage> {
                 setState(() {
                   _controller.clear();
                 });
-            },
+              },
+            ) : Container(
+              width: 100,
+              child: Row(
+                children: [
+                  IconButton(
+                    iconSize: 25,
+                    icon: Icon(
+                      Icons.insert_photo,
+                    ),
+                    onPressed:  () async {
+                      print("picture here..");
+
+                      CollectionReference messageCollection = FirebaseFirestore.instance.collection('Messages');
+
+
+
+                      String datetime = DateTime.now().toString();
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                      final pathProfiePicUploaded = result.files.single.path;
+                      setState(() {
+                        profilePicture = File(pathProfiePicUploaded);
+                      });
+
+                      String MessageUid = "";
+
+
+                      if (profilePicture != null) {
+                        if (isCustomer) {
+                          await DatabaseService().createMessageData("Sent a photo", Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
+                        } else {
+                          await DatabaseService().createMessageData("Sent a photo", Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
+                        }
+                        _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+                         await messageCollection.orderBy("Time Sent", descending: true).limit(1).get().then((value){
+                           MessageUid = value.docs.first.id;
+                         });
+
+                         final profilePictureDestination = 'Messages/${MessageUid}/profilepic_${MessageUid}_$datetime';
+
+                         print(path.basename(profilePicture.path));
+                        await UploadFile.uploadFile(profilePictureDestination, profilePicture);
+
+                        savedUrl = await firebase_storage.FirebaseStorage.instance
+                            .ref(profilePictureDestination)
+                            .getDownloadURL();
+
+
+
+                        if (savedUrl != null || savedUrl == 'null') {
+                            print(savedUrl);
+                           await DatabaseService(uid: MessageUid).updateMessage(savedUrl);
+                        }
+
+                        setState(() {
+                          fetchedUrl = savedUrl;
+                        });
+                      }
+
+                    },
+                  ),
+
+                  IconButton(
+                    icon: Icon(Icons.send, color: Colors.red),
+                    onPressed: _controller.text == '' ? null : () async {
+                      if (isCustomer) {
+                        await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.customerRef, widget.delivery.courierRef);
+                      } else {
+                        await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
+                      }
+                      _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+                      setState(() {
+                        _controller.clear();
+                      });
+                    },
+                  ),
+
+                ],
+              ),
+            ),
+            border: OutlineInputBorder(
+              //borderSide: BorderSide(width: 0),
+              gapPadding: 10,
+              borderRadius: BorderRadius.circular(30),
+            ),
           ),
-          border: OutlineInputBorder(
-            //borderSide: BorderSide(width: 0),
-            gapPadding: 10,
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-        onChanged: (value) => setState(() {
-          message = value;
-        }),
-      )
+          onChanged: (value) => setState(() {
+            message = value;
+          }),
+        )
     );
   }
 
@@ -105,7 +193,7 @@ class _ChatPageState extends State<ChatPage> {
         .collection('Messages')
         .where('Sent By', isEqualTo: customer)
         .where('Sent To', isEqualTo: courier)
-        //.orderBy('Time Sent', descending: false)
+    //.orderBy('Time Sent', descending: false)
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot3);
 
@@ -113,7 +201,7 @@ class _ChatPageState extends State<ChatPage> {
         .collection('Messages')
         .where('Sent By', isEqualTo: courier)
         .where('Sent To', isEqualTo: customer)
-        //.orderBy('Time Sent', descending: false)
+    //.orderBy('Time Sent', descending: false)
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot2);
 
@@ -210,21 +298,21 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * .25,
-              color: Colors.white70,
-              child: MultiProvider(
-                providers: [
-                  StreamProvider<CourToCustomer>.value(initialData: CourToCustomer(), value: messageListCourToCustomer),
-                  StreamProvider<CustomerToCour>.value(initialData: CustomerToCour(), value: messageListCustomerToCour),
-                ],
-                child: MessageListCombiner(isCustomer: isCustomer, scrollController: _scrollController),
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height * .25,
+                color: Colors.white70,
+                child: MultiProvider(
+                  providers: [
+                    StreamProvider<CourToCustomer>.value(initialData: CourToCustomer(), value: messageListCourToCustomer),
+                    StreamProvider<CustomerToCour>.value(initialData: CustomerToCour(), value: messageListCustomerToCour),
+                  ],
+                  child: MessageListCombiner(isCustomer: isCustomer, scrollController: _scrollController),
+                ),
               ),
-            ),
-            _buildMessageTextField(),
-          ]
+              _buildMessageTextField(),
+            ]
         ),
       ),
     );

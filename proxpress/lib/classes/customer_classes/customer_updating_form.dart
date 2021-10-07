@@ -136,6 +136,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 setState(() {
 
                                 });
+
+
                                 if (_updateKey.currentState.validate() && checkCurrentPassword) {
                                   if(_currentEmail != null)
                                     validCustomer.updateCurrentEmail(_currentEmail);

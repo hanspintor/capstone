@@ -257,6 +257,11 @@ class DatabaseService {
       'Feedback': feedback,
     });
   }
+  Future updateMessage(String newMessage) async {
+    return await messageCollection.doc(uid).update({
+      'Message Content': newMessage,
+    });
+  }
 
   // Create a Message Document
   Future createMessageData(String messageContent, Timestamp timeSent, DocumentReference sentBy, DocumentReference sentTo) async {
