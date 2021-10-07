@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/couriers.dart';
+import 'package:proxpress/delivery_prices.dart';
 
 class DatabaseService {
   final String uid;
   DatabaseService({this.uid});
   final CollectionReference courierCollection = FirebaseFirestore.instance.collection('Couriers');
+  final CollectionReference deliveryPriceCollection = FirebaseFirestore.instance.collection('Delivery Prices');
 
   List<Courier> _courierDataListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
@@ -59,6 +61,30 @@ class DatabaseService {
         .doc(uid)
         .update({
       'Admin Message': adminMessage,
+    });
+  }
+
+  List<DeliveryPrice> _deliveryPriceListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return DeliveryPrice(
+        uid: doc.id,
+        vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
+        baseFare: (doc.data() as dynamic) ['Base Fare'] ?? '',
+        farePerKM: (doc.data() as dynamic) ['Fare Per KM'] ?? '',
+      );
+    }).toList();
+  }
+
+  Stream<List<DeliveryPrice>> get deliveryPriceList {
+    return deliveryPriceCollection.snapshots().map(_deliveryPriceListFromSnapshot);
+  }
+
+  Future updateDeliveryPrice(int baseFare, int farePerKM) async {
+    await deliveryPriceCollection
+        .doc(uid)
+        .update({
+      'Base Fare': baseFare,
+      'Fare Per KM': farePerKM,
     });
   }
 }
