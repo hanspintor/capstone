@@ -45,6 +45,14 @@ void selectedItem(BuildContext context, int index){
         ), type: PageTransitionType.rightToLeft),
       );
       break;
+    case 4:
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp1(
+          currentPage: "Community Hub",
+        ), type: PageTransitionType.rightToLeft),
+      );
+      break;
   }
 }
 
@@ -115,6 +123,13 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                         title: Text('Transaction History', style: TextStyle(color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey)),
                         onTap: !approved || !user1.emailVerified ? null : () {
                           selectedItem(context, 3);
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.groups_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
+                        title: Text('Community Hub', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
+                        onTap: !user1.emailVerified ? null : () {
+                          selectedItem(context, 4);
                         },
                       ),
                     ],

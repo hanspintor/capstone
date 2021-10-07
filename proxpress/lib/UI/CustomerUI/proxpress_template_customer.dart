@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CustomerUI/courier_bookmarks.dart';
+import 'package:proxpress/UI/CustomerUI/customer_community_hub.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -38,6 +40,7 @@ class _AppBarTempState extends State<AppBarTemp>{
   final textFieldPickup = TextEditingController();
   final textFieldDropOff = TextEditingController();
   String currentPage = "Dashboard";
+  bool actionButton = false;
 
 
   void _openEndDrawer() {
@@ -72,8 +75,12 @@ class _AppBarTempState extends State<AppBarTemp>{
       else if(currentPage == "Requests"){
         return MyRequests();
       }
+      else if(currentPage == "Community Hub"){
+        actionButton = true;
+        return CustomerCommunityHub();
+      }
     } else{
-      if (currentPage == "Dashboard") {
+      if (currentPage == "Dashboard"){
         return DashboardLocation();
       }
     }
@@ -126,7 +133,15 @@ class _AppBarTempState extends State<AppBarTemp>{
             ),
             drawer: MainDrawerCustomer(),
             endDrawer: NotifDrawerCustomer(),
-            body: pagePicker()
+            body: pagePicker(),
+            floatingActionButton: Visibility(visible: actionButton,
+            child: FloatingActionButton(
+              child: Icon(Icons.add_rounded),
+              onPressed: (){
+                Navigator.pushNamed(context, '/customerCreatePost');
+              },
+            ),
+            ),
         ),
       );
     } else

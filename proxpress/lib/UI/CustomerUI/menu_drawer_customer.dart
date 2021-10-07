@@ -50,6 +50,14 @@ void selectedItem(BuildContext context, int index,) async {
         ), type: PageTransitionType.rightToLeft),
       );
       break;
+    case 4:
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp(
+          currentPage: "Community Hub",
+        ), type: PageTransitionType.rightToLeft),
+      );
+      break;
   }
 }
 
@@ -138,6 +146,13 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                   title: Text('Delivery Status', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
                   onTap: !user1.emailVerified ? null : () {
                     selectedItem(context, 3);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.groups_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Community Hub', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified ? null : () {
+                    selectedItem(context, 4);
                   },
                 ),
               ],

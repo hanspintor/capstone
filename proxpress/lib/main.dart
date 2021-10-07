@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:proxpress/UI/CourierUI/courier_create_post.dart';
 import 'package:proxpress/UI/CourierUI/courier_profile.dart';
 import 'package:proxpress/UI/CourierUI/pending_deliveries.dart';
 import 'package:proxpress/UI/CourierUI/transaction_history.dart';
+import 'package:proxpress/UI/CustomerUI/customer_create_post.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
@@ -127,6 +129,12 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/template1':
               return PageTransition(child: AppBarTemp1(), type: PageTransitionType.rightToLeftWithFade);
+              break;
+            case '/customerCreatePost':
+              return PageTransition(child: CustomerCreatePost(), type: PageTransitionType.bottomToTop);
+              break;
+            case '/courierCreatePost':
+              return PageTransition(child: CourierCreatePost(), type: PageTransitionType.bottomToTop);
               break;
             default:
               return null;

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/UI/CourierUI/courier_community_hub.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/UI/CourierUI/courier_profile.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
@@ -29,6 +30,7 @@ class AppBarTemp1 extends StatefulWidget {
 class _AppBarTemp1State extends State<AppBarTemp1> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String currentPage = "Dashboard";
+  bool actionButton = false;
   // void _openEndDrawer() {
   //   _scaffoldKey.currentState.openEndDrawer();
   // }
@@ -48,6 +50,10 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
       }
       else if(currentPage == "Transaction"){
        return TransactionHistory();
+      }
+      else if(currentPage == "Community Hub"){
+        actionButton = true;
+        return CourierCommunityHub();
       }
     } else{
       if (currentPage == "Dashboard") {
@@ -110,7 +116,15 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                       ),
                       drawer: MainDrawerCourier(),
                       endDrawer: NotifDrawerCourier(),
-                      body: pagePicker()
+                      body: pagePicker(),
+                    floatingActionButton: Visibility(visible: actionButton,
+                      child: FloatingActionButton(
+                        child: Icon(Icons.add_rounded),
+                        onPressed: (){
+                          Navigator.pushNamed(context, '/courierCreatePost');
+                        },
+                      ),
+                    ),
                   ),
               );
 
