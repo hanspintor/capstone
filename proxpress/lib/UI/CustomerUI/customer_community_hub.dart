@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proxpress/classes/customer_classes/community_list.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class _CustomerCommunityHubState extends State<CustomerCommunityHub> {
     return Center(
       child: Column(
         children: [
+          CommunityList(),
         ],
       ),
     );

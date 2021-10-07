@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/classes/chat_page.dart';
+import 'package:proxpress/models/community.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -28,6 +29,9 @@ class DatabaseService {
 
   // Notifications Collection Reference
   final CollectionReference notifCollection = FirebaseFirestore.instance.collection('Notifications');
+
+  //Community Collection Reference
+  final CollectionReference communityCollection = FirebaseFirestore.instance.collection('Community');
 
 
   // Create/Update a Customer Document
@@ -122,6 +126,16 @@ class DatabaseService {
       'Credential Response' : adminCredentialsResponse,
     });
   }
+
+  Future createCommunity(String title, String content, DocumentReference sentBy, Timestamp timeSent) async {
+    return await communityCollection.doc(uid).set({
+      'Title' : title,
+      'Content': content,
+      'Sent By': sentBy,
+      'Time Sent' : timeSent,
+    });
+  }
+
 
   Future createNotificationData(String notifMessage, DocumentReference sentBy,
       DocumentReference sentTo, Timestamp time, bool IsSeen, bool popsOnce
@@ -370,6 +384,18 @@ class DatabaseService {
     }).toList();
   }
 
+  List<Community> communityListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return Community(
+        uid: doc.id,
+        title: (doc.data() as dynamic) ['Title'] ?? '',
+        content: (doc.data() as dynamic) ['Content'] ?? '',
+        sentBy: (doc.data() as dynamic) ['Sent By'] ?? '',
+        timeSent: (doc.data() as dynamic) ['Time Sent'] ?? '',
+      );
+    }).toList();
+  }
+
   CourToCustomer messageDataListFromSnapshot2(QuerySnapshot snapshot){
     return CourToCustomer(value: messageDataListFromSnapshot(snapshot));
   }
@@ -518,6 +544,17 @@ class DatabaseService {
     );
   }
 
+  //Community Module List Builder
+  Community communityDataFromSnapshot(DocumentSnapshot snapshot){
+    return Community(
+        uid: uid,
+        title: snapshot['Title'],
+        content: snapshot['Content'],
+        sentBy: snapshot['Sent By'],
+        timeSent: snapshot['Time Sent'],
+      );
+  }
+
   // Get Customer Document Data
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
@@ -545,6 +582,10 @@ class DatabaseService {
 
   Stream<Notifications> get notificationData{
     return notifCollection.doc(uid).snapshots().map(notficationDataFromSnapshot);
+  }
+
+  Stream<Community> get communityData{
+    return communityCollection.doc(uid).snapshots().map(communityDataFromSnapshot);
   }
 }
 
