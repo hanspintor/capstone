@@ -437,6 +437,10 @@ class DatabaseService {
     return deliveryPriceCollection.snapshots().map(deliveryPriceDataListFromSnapshot);
   }
 
+  Stream<List<Community>> get communityDataList {
+    return communityCollection.snapshots().map(communityListFromSnapshot);
+  }
+
   // Get Customer Document Data using StreamBuilder
   Customer _customerDataFromSnapshot(DocumentSnapshot snapshot){
     return Customer(

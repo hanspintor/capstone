@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/classes/customer_classes/community_tile.dart';
+import 'package:proxpress/classes/community_tile.dart';
 import 'package:proxpress/models/community.dart';
 class CommunityList extends StatefulWidget {
 
@@ -16,6 +16,7 @@ class _CommunityListState extends State<CommunityList> {
     final community = Provider.of<List<Community>>(context);
 
     if(community.length != 0){
+      community.sort((a, b) => b.timeSent.compareTo(a.timeSent));
       return community == null ? UserLoading() : ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -32,7 +33,7 @@ class _CommunityListState extends State<CommunityList> {
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
-                'You currently have no pending requests.',
+                'No discussions here.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
