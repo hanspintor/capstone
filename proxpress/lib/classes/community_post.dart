@@ -37,40 +37,43 @@ class _CommunityPostState extends State<CommunityPost> {
       commentBy = FirebaseFirestore.instance.collection('Couriers').doc(uid);
     }
 
-    return Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.transparent,
-              width: 3
-          ),
-        ),
-        padding: EdgeInsets.all(4),
-        child: TextField(
-          controller: _controller,
-          textCapitalization: TextCapitalization.sentences,
-          autocorrect: true,
-          enableSuggestions: true,
-          decoration: InputDecoration(
-            filled: true,
-            hintText: 'Type your comment',
-            suffixIcon: IconButton(
-              icon: Icon(Icons.send, color: Colors.red),
-              onPressed: _controller.text == '' ? null : () async {
-                await DatabaseService(uid: widget.community.uid).createCommentData(comment, commentBy, Timestamp.now());
-                setState(() {
-                  _controller.clear();
-                });
-              },
-            ),
-            border: OutlineInputBorder(
-              //borderSide: BorderSide(width: 0),
-              gapPadding: 10,
-              borderRadius: BorderRadius.circular(30),
+    return SizedBox(
+      height: 60,
+      child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.transparent,
+                width: 3
             ),
           ),
-          onChanged: (value) => setState(() {
-            comment = value;
-          }),
-        )
+          padding: EdgeInsets.all(4),
+          child: TextField(
+            controller: _controller,
+            textCapitalization: TextCapitalization.sentences,
+            autocorrect: true,
+            enableSuggestions: true,
+            decoration: InputDecoration(
+              filled: true,
+              hintText: 'Type your comment',
+              hintStyle: TextStyle(fontSize: 13),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.send, color: Colors.red, size: 20,),
+                onPressed: _controller.text == '' ? null : () async {
+                  await DatabaseService(uid: widget.community.uid).createCommentData(comment, commentBy, Timestamp.now());
+                  setState(() {
+                    _controller.clear();
+                  });
+                },
+              ),
+              border: OutlineInputBorder(
+                //borderSide: BorderSide(width: 0),
+                gapPadding: 10,
+              ),
+            ),
+            onChanged: (value) => setState(() {
+              comment = value;
+            }),
+          )
+      ),
     );
   }
 
@@ -234,10 +237,15 @@ class _CommunityPostState extends State<CommunityPost> {
                                 if (snapshot.hasData) {
                                   Customer customer = snapshot.data;
 
-                                  return ListTile(
-                                    title: Text('${customer.fName} ${customer.lName}'),
-                                    subtitle: Text('${comments[index].comment}'),
-                                    trailing: Text('${time}'),
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Card(
+                                      child: ListTile(
+                                        title: Text('${customer.fName} ${customer.lName}'),
+                                        subtitle: Text('${comments[index].comment}'),
+                                        trailing: Text('${time}'),
+                                      ),
+                                    ),
                                   );
                                 } else {
                                   return Container();
@@ -251,10 +259,15 @@ class _CommunityPostState extends State<CommunityPost> {
                                 if (snapshot.hasData) {
                                   Courier courier = snapshot.data;
 
-                                  return ListTile(
-                                    title: Text('${courier.fName} ${courier.lName}'),
-                                    subtitle: Text('${comments[index].comment}'),
-                                    trailing: Text('${time}'),
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Card(
+                                      child: ListTile(
+                                        title: Text('${courier.fName} ${courier.lName}'),
+                                        subtitle: Text('${comments[index].comment}'),
+                                        trailing: Text('${time}'),
+                                      ),
+                                    ),
                                   );
                                 } else {
                                   return Container();
