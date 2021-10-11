@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:proxpress/services/database.dart';
 
 class CourierCreatePost extends StatefulWidget {
   @override
@@ -10,10 +13,14 @@ class CourierCreatePost extends StatefulWidget {
 class _CourierCreatePostState extends State<CourierCreatePost> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String title;
+  String content;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<TheUser>(context);
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
+    DocumentReference courierID = FirebaseFirestore.instance.collection("Couriers").doc(user.uid);
 
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +37,9 @@ class _CourierCreatePostState extends State<CourierCreatePost> {
         actions: [
           TextButton(
             child: Text('Post'),
-            onPressed: (){
+            onPressed: () async{
+              await DatabaseService().createCommunity(title, content, courierID, Timestamp.now());
+              Navigator.pop(context);
             },
           )
         ],
@@ -47,7 +56,9 @@ class _CourierCreatePostState extends State<CourierCreatePost> {
                       hintText: "Title here",
                       hintStyle: TextStyle(fontWeight: FontWeight.bold),
                       border: InputBorder.none,
-                    )),
+                    ),
+                  onChanged: (val) => setState(() => title = val),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -66,6 +77,7 @@ class _CourierCreatePostState extends State<CourierCreatePost> {
                     hintText: "Write something to post",
                     border: InputBorder.none,
                   ),
+                  onChanged: (val) => setState(() => content = val),
                 ),
               ),
             ],

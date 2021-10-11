@@ -149,10 +149,7 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                       User user = _auth.currentUser;
                       await DatabaseService(uid: user.uid).updateStatus(status);
                       await _auth.signOut();
-                      //Navigator.pushNamed(context, '/loginScreen');
-                      // if(result == null){
-                      //   return LoadScreen();
-                      // }
+                      Navigator.pushNamed(context, '/loginScreen');
                     },
                     style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
                   ),

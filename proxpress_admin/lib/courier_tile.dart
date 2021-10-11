@@ -142,7 +142,7 @@ class _CourierTileState extends State<CourierTile> {
                         ),
                       ),
                     ),
-                    Container(
+                    !widget.courier.approved ? Container(
                       margin: EdgeInsets.all(10),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -256,7 +256,7 @@ class _CourierTileState extends State<CourierTile> {
                             );
                           },
                         ),
-                    )
+                    ) : Container(),
                   ],
                 ),
               ),

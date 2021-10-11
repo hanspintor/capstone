@@ -35,9 +35,7 @@ class _RequestTileState extends State<RequestTile> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    reportColl.orderBy("Time Reported", descending: true).limit(1).get().then((value){
-      localVal = value.docs.first.id;
-    });
+
     final delivery = Provider.of<Delivery>(context);
 
     var color;
@@ -362,7 +360,7 @@ class _RequestTileState extends State<RequestTile> {
                                                   ElevatedButton.icon(
                                                       icon: Icon(Icons.outlined_flag, size: 20),
                                                       label: Text('Report', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                      onPressed:  () async {
+                                                      onPressed: delivery.isReported ==  true ? null : () async {
                                                         await showDialog(
                                                           context: context,
                                                           builder: (context) => StatefulBuilder(
@@ -430,44 +428,32 @@ class _RequestTileState extends State<RequestTile> {
                                                                   ),
                                                                 ),
                                                                 actions: <Widget> [
-                                                                  StreamBuilder<Reports>(
-                                                                    stream: DatabaseService(uid: localVal).ReportsData,
-                                                                    builder: (context, snapshot) {
-                                                                      if(!snapshot.hasData){
-                                                                        Reports reportData = snapshot.data;
-                                                                        print("HEEEEEEE ${reportData.uid}");
-                                                                        return Row(
-                                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                                          children: [
-                                                                            ElevatedButton(
-                                                                              child: Text("Cancel"),
-                                                                              style: ButtonStyle(
+                                                                  Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                    children: [
+                                                                      ElevatedButton(
+                                                                        child: Text("Cancel"),
+                                                                        style: ButtonStyle(
 
-                                                                              ),
-                                                                              onPressed:  () {
-                                                                                Navigator.pop(context);
-                                                                              },
-                                                                            ),
-                                                                            ElevatedButton(
-                                                                              child: Text("Report"),
-                                                                              onPressed: /*reportData.reportMessage.length == 0 ? null :*/ () async {
-                                                                                if(_key.currentState.validate()){
-                                                                                  // DatabaseService().createReportData(_description, delivery.customerRef,
-                                                                                  //     delivery.courierRef, Timestamp.now());
-                                                                                  // await reportColl.orderBy("Time Reported", descending: true).limit(1).get().then((value){
-                                                                                  //   localVal = value.docs.first.id;
-                                                                                  // });
-                                                                                  Navigator.of(context).pop();
-                                                                                }
+                                                                        ),
+                                                                        onPressed:  () {
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                      ),
+                                                                      ElevatedButton(
+                                                                        child: Text("Report"),
+                                                                        onPressed: () async {
+                                                                          print(delivery.isReported);
+                                                                          if(_key.currentState.validate()){
+                                                                            DatabaseService().createReportData(_description, delivery.customerRef,
+                                                                                delivery.courierRef, Timestamp.now());
+                                                                            DatabaseService(uid: delivery.uid).updateReport(true);
+                                                                            Navigator.of(context).pop();
+                                                                          }
 
-                                                                              },
-                                                                            ),
-                                                                          ],
-                                                                        );
-
-                                                                      }
-                                                                      return Text("waddup");
-                                                                    }
+                                                                        },
+                                                                      ),
+                                                                    ],
                                                                   )
                                                                 ],
                                                               );

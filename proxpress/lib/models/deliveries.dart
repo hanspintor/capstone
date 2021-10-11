@@ -22,6 +22,7 @@ class Delivery{
   final GeoPoint courierLocation;
   final int rating;
   final String feedback;
+  final bool isReported;
 
   Delivery({
     this.uid,
@@ -45,5 +46,6 @@ class Delivery{
     this.courierLocation,
     this.rating,
     this.feedback,
+    this.isReported,
   });
 }

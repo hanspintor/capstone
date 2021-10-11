@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/classes/community_list.dart';
+import 'package:proxpress/models/community.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:proxpress/services/database.dart';
 
 class CourierCommunityHub extends StatefulWidget {
   @override
@@ -8,13 +14,23 @@ class CourierCommunityHub extends StatefulWidget {
 }
 
 class _CourierCommunityHubState extends State<CourierCommunityHub> {
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    return Container();
+    return user == null ? LoginScreen() : StreamProvider<List<Community>>.value(
+      value: DatabaseService().communityDataList,
+      initialData: [],
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              CommunityList(isCustomer: false,),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

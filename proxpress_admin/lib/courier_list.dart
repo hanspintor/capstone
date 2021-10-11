@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/courier_tile.dart';
 import 'package:proxpress/couriers.dart';
-import 'package:proxpress/login_screen.dart';
 
 class CourierList extends StatefulWidget {
-  String savedPassword;
+  final String savedPassword;
   CourierList({this.savedPassword});
 
   @override
