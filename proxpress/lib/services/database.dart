@@ -639,9 +639,9 @@ class DatabaseService {
     return Reports(
       uid: uid,
       reportMessage: snapshot['Report Message'],
-      time: snapshot['Time Sent'],
-      reportBy: snapshot['Sent By'],
-      reportTo: snapshot['Sent To'],
+      time: snapshot['Time Reported'],
+      reportBy: snapshot['Report By'],
+      reportTo: snapshot['Report To'],
     );
   }
 
@@ -699,7 +699,7 @@ class DatabaseService {
   }
 
   Stream<Reports> get ReportsData {
-    return notifCollection.doc(uid).snapshots().map(reportsDataFromSnapshot);
+    return reportCollection.doc(uid).snapshots().map(reportsDataFromSnapshot);
   }
 
   Stream<Community> get communityData {

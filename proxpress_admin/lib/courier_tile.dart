@@ -51,6 +51,7 @@ class _CourierTileState extends State<CourierTile> {
               Align(child: Text(widget.courier.vehicleType)),
               Align(child: Text(widget.courier.vehicleColor)),
               Align(
+                // Credentials
                 child: Column(
                   children: [
                     InkWell(

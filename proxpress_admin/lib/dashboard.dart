@@ -8,6 +8,8 @@ import 'package:proxpress/database.dart';
 import 'package:proxpress/delivery_price_list.dart';
 import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
+import 'package:proxpress/report_list.dart';
+import 'package:proxpress/reports.dart';
 
 import 'auth.dart';
 
@@ -124,9 +126,32 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Text('Insert Reports Listview Here', textAlign: TextAlign.center,)
+                StreamProvider<List<Reports>>.value(
+                  value: DatabaseService().reportList,
+                  initialData: [],
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: Table(
+                          border: TableBorder.all(),
+                          children: [
+                            TableRow(
+                              children: [
+                                Align(alignment: Alignment.center,child: Text('Report No.', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                Align(alignment: Alignment.center,child: Text('Customer Name', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                Align(alignment: Alignment.center,child: Text('Courier Name', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                Align(alignment: Alignment.center,child: Text('Complaint', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                Align(alignment: Alignment.center,child: Text('Time Reported', style: TextStyle(fontWeight: FontWeight.bold),)),
+
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      ReportList(),
+                    ],
+                  ),
                 ),
               ],
             ),
