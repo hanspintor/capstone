@@ -6,6 +6,7 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
 import 'package:proxpress/models/messages.dart';
 import 'package:proxpress/models/notifications.dart';
+import 'package:proxpress/models/reports.dart';
 
 class DatabaseService {
   final String uid;
@@ -29,6 +30,9 @@ class DatabaseService {
   // Notifications Collection Reference
   final CollectionReference notifCollection = FirebaseFirestore.instance.collection('Notifications');
 
+  // Report Collection Reference
+  final CollectionReference reportCollection = FirebaseFirestore.instance.collection('Reports');
+
 
   // Create/Update a Customer Document
   Future updateCustomerData(String fname, String lname, String email, String contactNo,
@@ -46,6 +50,18 @@ class DatabaseService {
       'Notification Status' : notifStatus,
       'Current Notification' : currentNotif,
       'Bookmarks' : courier_ref,
+    });
+  }
+
+  // Create Reports Data
+  Future createReportData(String reportMessage, DocumentReference reportBy,
+      DocumentReference reportTo, Timestamp timeReported,) async {
+    return await reportCollection.doc(uid).set({
+      'Report Message' : reportMessage,
+      'Report By' : reportBy,
+      'Report To' : reportTo,
+      'Time Reported' : timeReported,
+
     });
   }
 
@@ -518,6 +534,17 @@ class DatabaseService {
     );
   }
 
+  Reports reportsDataFromSnapshot(DocumentSnapshot snapshot){
+    return Reports(
+        uid: uid,
+        reportMessage: snapshot['Report Message'],
+        time: snapshot['Time Sent'],
+        reportBy: snapshot['Sent By'],
+        reportTo: snapshot['Sent To'],
+
+    );
+  }
+
   // Get Customer Document Data
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
@@ -546,6 +573,10 @@ class DatabaseService {
   Stream<Notifications> get notificationData{
     return notifCollection.doc(uid).snapshots().map(notficationDataFromSnapshot);
   }
+  Stream<Reports> get ReportsData{
+    return notifCollection.doc(uid).snapshots().map(reportsDataFromSnapshot);
+  }
+
 }
 
 class CourToCustomer {

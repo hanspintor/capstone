@@ -13,6 +13,7 @@ import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
+import 'package:proxpress/models/reports.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:favorite_button/favorite_button.dart';
 
@@ -24,11 +25,19 @@ class RequestTile extends StatefulWidget {
 }
 
 class _RequestTileState extends State<RequestTile> {
+  GlobalKey<FormState> _key = GlobalKey<FormState>();
+  String _description = "";
+
+  CollectionReference reportColl = DatabaseService().reportCollection;
+  String localVal = "";
+
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-
+    reportColl.orderBy("Time Reported", descending: true).limit(1).get().then((value){
+      localVal = value.docs.first.id;
+    });
     final delivery = Provider.of<Delivery>(context);
 
     var color;
@@ -340,12 +349,136 @@ class _RequestTileState extends State<RequestTile> {
                                           height: 25,
                                           child: (() {
                                             if (delivery.deliveryStatus == "Delivered") {
-                                              return ElevatedButton.icon(
-                                                  icon: Icon(Icons.feedback, size: 20),
-                                                  label: Text('Send Feedback', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                  onPressed: !(delivery.rating == 0 && delivery.feedback == '') ? null : () {
-                                                    showFeedback(delivery);
-                                                  }
+                                              return Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  ElevatedButton.icon(
+                                                      icon: Icon(Icons.feedback, size: 20),
+                                                      label: Text('Send Feedback', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                      onPressed: !(delivery.rating == 0 && delivery.feedback == '') ? null : () {
+                                                        showFeedback(delivery);
+                                                      }
+                                                  ),
+                                                  ElevatedButton.icon(
+                                                      icon: Icon(Icons.outlined_flag, size: 20),
+                                                      label: Text('Report', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                      onPressed:  () async {
+                                                        await showDialog(
+                                                          context: context,
+                                                          builder: (context) => StatefulBuilder(
+                                                            builder: (context, setState){
+                                                              return AlertDialog(
+                                                                title: Row(
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    Container(
+                                                                      margin: EdgeInsets.only(right: 10),
+                                                                      child: Icon(
+                                                                        Icons.flag,
+                                                                        color: Colors.redAccent,
+                                                                      ),
+                                                                    ),
+
+                                                                    Text("Report a courier"),
+                                                                  ],
+                                                                ),
+                                                                content: Form(
+                                                                  key: _key,
+                                                                  child: SingleChildScrollView(
+                                                                    child: Column(
+                                                                      mainAxisSize: MainAxisSize.min,
+                                                                      children: [
+                                                                        TextFormField(
+                                                                          validator: (value){
+                                                                            _description = value;
+                                                                            return value.isNotEmpty ? null : "Please provide a reason";
+                                                                          },
+                                                                          minLines: 3,
+                                                                          maxLines: null,
+                                                                          maxLength: 100,
+                                                                          keyboardType: TextInputType.multiline,
+                                                                          onChanged: (value) {
+
+                                                                          },
+                                                                          decoration:  InputDecoration(
+                                                                            hintText: "Reason why",
+                                                                            hintStyle: TextStyle(
+                                                                                fontStyle: FontStyle.italic
+                                                                            ),
+                                                                            filled: true,
+                                                                            border: InputBorder.none,
+                                                                            fillColor: Colors.grey[300],
+
+                                                                            contentPadding: const EdgeInsets.all(30),
+                                                                            focusedBorder: OutlineInputBorder(
+                                                                              borderSide: BorderSide(
+                                                                                color: Colors.red,
+                                                                                width: 2,
+                                                                              ),
+                                                                              borderRadius: BorderRadius.circular(10.0),
+                                                                            ),
+                                                                            enabledBorder: UnderlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.white),
+                                                                              borderRadius: BorderRadius.circular(10.0),
+                                                                            ),
+
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                actions: <Widget> [
+                                                                  StreamBuilder<Reports>(
+                                                                    stream: DatabaseService(uid: localVal).ReportsData,
+                                                                    builder: (context, snapshot) {
+                                                                      if(!snapshot.hasData){
+                                                                        Reports reportData = snapshot.data;
+                                                                        print("HEEEEEEE ${reportData.uid}");
+                                                                        return Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                          children: [
+                                                                            ElevatedButton(
+                                                                              child: Text("Cancel"),
+                                                                              style: ButtonStyle(
+
+                                                                              ),
+                                                                              onPressed:  () {
+                                                                                Navigator.pop(context);
+                                                                              },
+                                                                            ),
+                                                                            ElevatedButton(
+                                                                              child: Text("Report"),
+                                                                              onPressed: /*reportData.reportMessage.length == 0 ? null :*/ () async {
+                                                                                if(_key.currentState.validate()){
+                                                                                  // DatabaseService().createReportData(_description, delivery.customerRef,
+                                                                                  //     delivery.courierRef, Timestamp.now());
+                                                                                  // await reportColl.orderBy("Time Reported", descending: true).limit(1).get().then((value){
+                                                                                  //   localVal = value.docs.first.id;
+                                                                                  // });
+                                                                                  Navigator.of(context).pop();
+                                                                                }
+
+                                                                              },
+                                                                            ),
+                                                                          ],
+                                                                        );
+
+                                                                      }
+                                                                      return Text("waddup");
+                                                                    }
+                                                                  )
+                                                                ],
+                                                              );
+                                                            },
+                                                          )
+                                                        );
+                                                        // report a courier
+                                                      }
+                                                  ),
+                                                ],
+
                                               );
                                             }
                                           }())
@@ -770,6 +903,14 @@ class _RequestTileState extends State<RequestTile> {
         ),
       ),
     );
+  }
+
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    // set up the AlertDialog
+    // show the dialog
+
   }
 //   showDialog(
 //   context : context,

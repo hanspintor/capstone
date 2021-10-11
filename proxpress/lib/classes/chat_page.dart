@@ -112,7 +112,8 @@ class _ChatPageState extends State<ChatPage> {
                           await DatabaseService().createMessageData("Sent a photo", Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
                         }
                         _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-                         await messageCollection.orderBy("Time Sent", descending: true).limit(1).get().then((value){
+
+                        await messageCollection.orderBy("Time Sent", descending: true).limit(1).get().then((value){
                            MessageUid = value.docs.first.id;
                          });
 

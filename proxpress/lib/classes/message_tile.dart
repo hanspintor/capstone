@@ -45,7 +45,7 @@ class _MessageTileState extends State<MessageTile> {
             String time = DateFormat.jm().format(message.timeSent.toDate());
             //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
             bool _validURL = Uri.parse(message.messageContent).isAbsolute;
-            print("Content ${message.messageContent} valid ? ${_validURL}");
+            //print("Content ${message.messageContent} valid ? ${_validURL}");
           if (widget.isCustomer) {
             if (message.sentBy.toString().contains('Customers')) {
 
