@@ -166,10 +166,7 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
               label: Text('Logout'),
               onPressed: () async{
                 await auth.signOut();
-                //Navigator.pushNamed(context, '/loginScreen');
-                // if(result == null){
-                //   return LoadScreen();
-                // }
+                Navigator.pushNamed(context, '/loginScreen');
               },
               style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
             ),

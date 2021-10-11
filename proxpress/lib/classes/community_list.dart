@@ -3,7 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/community_tile.dart';
 import 'package:proxpress/models/community.dart';
+
 class CommunityList extends StatefulWidget {
+  final bool isCustomer;
+
+  const CommunityList({Key key, this.isCustomer}) : super(key: key);
 
   @override
   _CommunityListState createState() => _CommunityListState();
@@ -22,7 +26,7 @@ class _CommunityListState extends State<CommunityList> {
         shrinkWrap: true,
         itemCount: community.length,
         itemBuilder: (context, index) {
-          return CommunityTile(community: community[index],);
+          return CommunityTile(community: community[index], isCustomer: widget.isCustomer,);
         },
       );
     }

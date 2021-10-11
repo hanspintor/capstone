@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/classes/chat_page.dart';
+import 'package:proxpress/models/comments.dart';
 import 'package:proxpress/models/community.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -10,7 +11,8 @@ import 'package:proxpress/models/notifications.dart';
 
 class DatabaseService {
   final String uid;
-  DatabaseService( {this.uid});
+  final String sub_uid;
+  DatabaseService({this.uid, this.sub_uid});
 
   // Customers Collection Reference
   final CollectionReference customerCollection = FirebaseFirestore.instance.collection('Customers');
@@ -30,9 +32,8 @@ class DatabaseService {
   // Notifications Collection Reference
   final CollectionReference notifCollection = FirebaseFirestore.instance.collection('Notifications');
 
-  //Community Collection Reference
+  // Community Collection Reference
   final CollectionReference communityCollection = FirebaseFirestore.instance.collection('Community');
-
 
   // Create/Update a Customer Document
   Future updateCustomerData(String fname, String lname, String email, String contactNo,
@@ -136,6 +137,13 @@ class DatabaseService {
     });
   }
 
+  Future createCommentData(String comment, DocumentReference commentBy, Timestamp timeSent) async {
+    return await communityCollection.doc(uid).collection('Comments').add({
+      'Comment': comment,
+      'Comment By': commentBy,
+      'Time Sent': timeSent,
+    });
+  }
 
   Future createNotificationData(String notifMessage, DocumentReference sentBy,
       DocumentReference sentTo, Timestamp time, bool IsSeen, bool popsOnce
@@ -147,7 +155,6 @@ class DatabaseService {
       'Time Sent' : time,
       'Seen' : IsSeen,
       'Notch' : popsOnce,
-
     });
   }
 
@@ -396,6 +403,17 @@ class DatabaseService {
     }).toList();
   }
 
+  List<Comment> commentListFromSnapshot(QuerySnapshot snapshot){
+    return snapshot.docs.map((doc){
+      return Comment(
+        uid: doc.id,
+        comment: (doc.data() as dynamic) ['Comment'] ?? '',
+        commentBy: (doc.data() as dynamic) ['Comment By'] ?? '',
+        timeSent: (doc.data() as dynamic) ['Time Sent'] ?? '',
+      );
+    }).toList();
+  }
+
   CourToCustomer messageDataListFromSnapshot2(QuerySnapshot snapshot){
     return CourToCustomer(value: messageDataListFromSnapshot(snapshot));
   }
@@ -439,6 +457,10 @@ class DatabaseService {
 
   Stream<List<Community>> get communityDataList {
     return communityCollection.snapshots().map(communityListFromSnapshot);
+  }
+
+  Stream<List<Comment>> get commentDataList {
+    return communityCollection.doc(uid).collection('Comments').snapshots().map(commentListFromSnapshot);
   }
 
   // Get Customer Document Data using StreamBuilder
@@ -559,6 +581,15 @@ class DatabaseService {
       );
   }
 
+  Comment commentDataFromSnapshot(DocumentSnapshot snapshot){
+    return Comment(
+      uid: uid,
+      comment: snapshot['Comment'],
+      commentBy: snapshot['Comment By'],
+      timeSent: snapshot['Time Sent'],
+    );
+  }
+
   // Get Customer Document Data
   Stream<Customer> get customerData{
     return customerCollection.doc(uid).snapshots().map(_customerDataFromSnapshot);
@@ -590,6 +621,10 @@ class DatabaseService {
 
   Stream<Community> get communityData{
     return communityCollection.doc(uid).snapshots().map(communityDataFromSnapshot);
+  }
+
+  Stream<Comment> get commentData{
+    return communityCollection.doc(uid).collection('Comments').doc(sub_uid).snapshots().map(commentDataFromSnapshot);
   }
 }
 

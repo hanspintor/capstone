@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:proxpress/classes/community_post.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/community.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -10,10 +12,12 @@ import 'package:intl/intl.dart';
 
 class CommunityTile extends StatefulWidget {
   final Community community;
+  final bool isCustomer;
 
   CommunityTile({
     Key key,
     @required this.community,
+    @required this.isCustomer,
   }) : super(key: key);
 
   @override
@@ -35,7 +39,7 @@ class _CommunityTileState extends State<CommunityTile> {
         if (snapshot.hasData) {
           String time = DateFormat.yMMMMd('en_US').format(widget.community.timeSent.toDate());
 
-          if(widget.community.sentBy.toString().contains('Customers')){
+          if (widget.community.sentBy.toString().contains('Customers')) {
             return StreamBuilder<Customer>(
               stream: DatabaseService(uid: widget.community.sentBy.id).customerData,
               builder: (context, snapshot) {
@@ -75,6 +79,12 @@ class _CommunityTileState extends State<CommunityTile> {
                             ),
                           ),
                           ListTile(
+                            onTap: () {
+                              Navigator.push(context, PageTransition(
+                                  child: CommunityPost(community: widget.community, isCustomer: widget.isCustomer),
+                                  type: PageTransitionType.bottomToTop
+                              ));
+                            },
                             title: ListTile(
                               title: Text("${widget.community.title}", style: TextStyle(fontWeight: FontWeight.bold),),
                               subtitle: Padding(
@@ -90,8 +100,7 @@ class _CommunityTileState extends State<CommunityTile> {
                 else return Container();
               }
             );
-          }
-          else if(widget.community.sentBy.toString().contains('Couriers')){
+          } else if (widget.community.sentBy.toString().contains('Couriers')) {
             return StreamBuilder<Courier>(
               stream: DatabaseService(uid: widget.community.sentBy.id).courierData,
               builder: (context, snapshot) {
@@ -131,6 +140,12 @@ class _CommunityTileState extends State<CommunityTile> {
                             ),
                           ),
                           ListTile(
+                            onTap: () {
+                              Navigator.push(context, PageTransition(
+                                  child: CommunityPost(community: widget.community, isCustomer: widget.isCustomer,),
+                                  type: PageTransitionType.bottomToTop
+                              ));
+                            },
                             title: ListTile(
                               title: Text("${widget.community.title}", style: TextStyle(fontWeight: FontWeight.bold),),
                               subtitle: Padding(
