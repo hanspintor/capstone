@@ -273,6 +273,8 @@ class _ReviewRequestState extends State<ReviewRequest> {
                               }),
                         ),
                       ).then((value) => paymentSuccess = value);
+                    } else {
+                      paymentSuccess = true;
                     }
 
                     if (paymentSuccess) {
