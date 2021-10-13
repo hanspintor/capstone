@@ -594,6 +594,8 @@ class DatabaseService {
       specificInstructions: snapshot['Specific Instructions'],
       paymentOption: snapshot['Payment Option'],
       deliveryFee: snapshot['Delivery Fee'],
+      rating: snapshot['Rating'],
+      feedback: snapshot['Feedback'],
       courierApproval: snapshot['Courier Approval'],
       deliveryStatus: snapshot['Delivery Status'],
       courierLocation: snapshot['Courier Location'],

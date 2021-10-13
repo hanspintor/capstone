@@ -14,15 +14,27 @@ class _TransactionListState extends State<TransactionList> {
   @override
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
+    int earnings = 0;
 
     if(delivery.length != 0){
-      return delivery == null ? UserLoading() : ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: delivery.length,
-        itemBuilder: (context, index) {
-          return TransactionTile(delivery: delivery[index]);
-        },
+      delivery.forEach((element) {earnings += element.deliveryFee;});
+
+      return delivery == null ? UserLoading() : Column(
+        children: [
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: delivery.length,
+            itemBuilder: (context, index) {
+              return TransactionTile(delivery: delivery[index]);
+            },
+          ),
+          ListTile(
+            title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+            trailing: Text("\₱${earnings}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
+            ),
+          ),
+        ],
       );
     }
     else{

@@ -799,7 +799,7 @@ class _RequestTileState extends State<RequestTile> {
                       if(snapshot.hasData){
                         Customer customerData = snapshot.data;
 
-                        if (customerData.courier_ref != null) {
+                        if (customerData.courier_ref != null && customerData.courier_ref != {}) {
                           localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
                         } else {
                           localAddMap = {};
@@ -890,112 +890,6 @@ class _RequestTileState extends State<RequestTile> {
       ),
     );
   }
-
-
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    // set up the AlertDialog
-    // show the dialog
-
-  }
-//   showDialog(
-//   context : context,
-//   builder: (context) => SingleChildScrollView(
-//   child: AlertDialog(
-//   title: Row(
-//   children: [
-//   Text('How\'s My Service?'),
-//   StreamBuilder<Customer>(
-//   stream: DatabaseService(uid: delivery.customerRef.id).customerData,
-//   builder: (context, snapshot) {
-//   print(snapshot.hasData );
-//   if(snapshot.hasData){
-//   Customer customerData = snapshot.data;
-//
-//   bool isFavorited = false;
-//
-//   Map<String, DocumentReference> localMap = {};
-//   Map<String, DocumentReference> localAddMap;
-//
-//   if (customerData.courier_ref != null) {
-//   localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
-//   } else {
-//   localAddMap = {};
-//   }
-//
-//   localAddMap = {'Courier_Ref${localMap.length}' : delivery.courierRef};
-//
-//   localMap.forEach((key, value){
-//   print(value);
-//   if (value == delivery.courierRef) {
-//   isFavorited = true;
-//   }
-//   });
-//
-//   return Container(
-//   margin: EdgeInsets.symmetric(horizontal: 20),
-//   child:  FavoriteButton(
-//   isFavorite: isFavorited,
-//   iconSize: 50,
-//   valueChanged: (_isFavorite) {
-//   print('Is Favorite $_isFavorite)');
-//
-//   if (!isFavorited) {
-//   localMap.addAll(localAddMap);
-//   print(localMap);
-//   DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
-//   }
-//   },
-//   ),
-//   );
-//   }else {
-//   return Container();
-//   }
-//   }
-//   )
-//   ],
-//   ),
-//   content: Column(
-//   crossAxisAlignment: CrossAxisAlignment.center,
-//   mainAxisSize: MainAxisSize.min,
-//   children: [
-//   RatingBar.builder(
-//   minRating: 1,
-//   itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
-//   updateOnDrag: true,
-//   onRatingUpdate: (rating) => setState((){
-//   this.rating = rating;
-//   }),
-//   ),
-//   Text('Rate Me',
-//   style: TextStyle(fontSize: 20),
-//   ),
-//   SizedBox(height: 10),
-//   TextFormField(
-//   maxLines: 2,
-//   maxLength: 200,
-//   decoration: InputDecoration(
-//   hintText: 'Leave a Feedback',
-//   border: OutlineInputBorder(),
-//   ),
-//   keyboardType: TextInputType.multiline,
-//   onChanged: (val) => setState(() => feedback = val),
-//   ),
-//   ],
-//   ),
-//   actions: [
-//   TextButton(
-//   child: Text('OK'),
-//   onPressed: () async{
-//   await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
-//   Navigator.pop(context);
-//   showToast('Feedback Sent');
-// }
-// ),
-// ],
-// ),
-// ),
-// );
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
