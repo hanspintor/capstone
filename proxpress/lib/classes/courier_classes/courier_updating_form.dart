@@ -287,49 +287,52 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         builder: (context) => SingleChildScrollView(
                                           controller: ModalScrollController.of(context),
                                           child: Container(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                  child: Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8),
-                                                        child: TextFormField(
-                                                          decoration: InputDecoration(labelText:
-                                                          'First Name:',
-                                                            hintText: "${courierData.fName}",
-                                                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                            labelStyle: TextStyle(
-                                                                fontStyle: FontStyle.italic,
-                                                                color: Colors.black
+                                            child: Padding(
+                                              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8),
+                                                          child: TextFormField(
+                                                            decoration: InputDecoration(labelText:
+                                                            'First Name:',
+                                                              hintText: "${courierData.fName}",
+                                                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                              labelStyle: TextStyle(
+                                                                  fontStyle: FontStyle.italic,
+                                                                  color: Colors.black
+                                                              ),
                                                             ),
+                                                            onChanged: (val) => setState(() => _currentFName = val),
                                                           ),
-                                                          onChanged: (val) => setState(() => _currentFName = val),
                                                         ),
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.all(8),
-                                                        child: TextFormField(
-                                                          decoration: InputDecoration(labelText:
-                                                          'Last Name:',
-                                                            hintText: "${courierData.lName}",
-                                                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                            labelStyle: TextStyle(
-                                                                fontStyle: FontStyle.italic,
-                                                                color: Colors.black
+                                                        Padding(
+                                                          padding: EdgeInsets.all(8),
+                                                          child: TextFormField(
+                                                            decoration: InputDecoration(labelText:
+                                                            'Last Name:',
+                                                              hintText: "${courierData.lName}",
+                                                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                              labelStyle: TextStyle(
+                                                                  fontStyle: FontStyle.italic,
+                                                                  color: Colors.black
+                                                              ),
                                                             ),
+                                                            onChanged: (val) => setState(() => _currentLName = val),
                                                           ),
-                                                          onChanged: (val) => setState(() => _currentLName = val),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                saveChanges('Full Name'),
-                                              ],
+                                                  saveChanges('Full Name'),
+                                                ],
 
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -348,26 +351,29 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         builder: (context) => SingleChildScrollView(
                                           controller: ModalScrollController.of(context),
                                           child: Container(
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(
-                                                      hintText: "${courierData.address}",
-                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                      labelStyle: TextStyle(
-                                                          fontStyle: FontStyle.italic,
-                                                          color: Colors.black
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                        hintText: "${courierData.address}",
+                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                        labelStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic,
+                                                            color: Colors.black
+                                                        ),
                                                       ),
+                                                      keyboardType: TextInputType.streetAddress,
+                                                      onChanged: (val) => setState(() => _currentAddress = val),
                                                     ),
-                                                    keyboardType: TextInputType.streetAddress,
-                                                    onChanged: (val) => setState(() => _currentAddress = val),
                                                   ),
-                                                ),
-                                                saveChanges('Address'),
-                                              ],
+                                                  saveChanges('Address'),
+                                                ],
 
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -386,35 +392,38 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                           builder: (context) => SingleChildScrollView(
                                             controller: ModalScrollController.of(context),
                                             child: Container(
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
-                                                    child: TextFormField(
-                                                      decoration: InputDecoration(
-                                                        hintText: "${courierData.email}",
-                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                        labelStyle: TextStyle(
-                                                            fontStyle: FontStyle.italic,
-                                                            color: Colors.black
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: TextFormField(
+                                                        decoration: InputDecoration(
+                                                          hintText: "${courierData.email}",
+                                                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                          labelStyle: TextStyle(
+                                                              fontStyle: FontStyle.italic,
+                                                              color: Colors.black
+                                                          ),
                                                         ),
+                                                        validator: (String val){
+                                                          if(val.isEmpty){
+                                                            return null;
+                                                          }
+                                                          else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
+                                                            return 'Please Enter a Valid Email Address';
+                                                          }
+                                                          else
+                                                            return null;
+                                                        },
+                                                        onChanged: (val) => setState(() => _currentEmail = val),
                                                       ),
-                                                      validator: (String val){
-                                                        if(val.isEmpty){
-                                                          return null;
-                                                        }
-                                                        else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
-                                                          return 'Please Enter a Valid Email Address';
-                                                        }
-                                                        else
-                                                          return null;
-                                                      },
-                                                      onChanged: (val) => setState(() => _currentEmail = val),
                                                     ),
-                                                  ),
-                                                  saveChanges('Email'),
-                                                ],
+                                                    saveChanges('Email'),
+                                                  ],
 
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -433,33 +442,36 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         builder: (context) => SingleChildScrollView(
                                           controller: ModalScrollController.of(context),
                                           child: Container(
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(
-                                                      hintText: "${courierData.contactNo}",
-                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                      labelStyle: TextStyle(
-                                                          fontStyle: FontStyle.italic,
-                                                          color: Colors.black
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                        hintText: "${courierData.contactNo}",
+                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                        labelStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic,
+                                                            color: Colors.black
+                                                        ),
                                                       ),
+                                                      maxLength: 11,
+                                                      keyboardType: TextInputType.number,
+                                                      validator: (String val){
+                                                        if(val.length < 11 && val.length > 0){
+                                                          return 'Your contact number should be 11 digits';
+                                                        }
+                                                        else
+                                                          return null;
+                                                      },
+                                                      onChanged: (val) => setState(() => _currentContactNo = val),
                                                     ),
-                                                    maxLength: 11,
-                                                    keyboardType: TextInputType.number,
-                                                    validator: (String val){
-                                                      if(val.length < 11 && val.length > 0){
-                                                        return 'Your contact number should be 11 digits';
-                                                      }
-                                                      else
-                                                        return null;
-                                                    },
-                                                    onChanged: (val) => setState(() => _currentContactNo = val),
                                                   ),
-                                                ),
-                                                saveChanges('Contact No'),
-                                              ],
+                                                  saveChanges('Contact No'),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -568,10 +580,10 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                           onChanged: (val) => setState(() => _confirmPassword = val),
                                                         ),
                                                       ),
+                                                      saveChanges('Password'),
                                                     ],
                                                   ),
                                                 ),
-                                                saveChanges('Password'),
                                               ],
                                             ),
                                           ),
