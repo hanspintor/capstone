@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/CustomerUI/proxpress_template_customer.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
@@ -328,6 +330,8 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                     error = 'Email already taken';
                                     loading = false;
                                   });
+                                } else {
+                                  Navigator.push(context, PageTransition(child: AppBarTemp(currentPage: "Dashboard",), type: PageTransitionType.rightToLeftWithFade));
                                 }
                               }
                             }

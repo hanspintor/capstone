@@ -3,8 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:path/path.dart' as Path;
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/CourierUI/proxpress_template_courier.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/auth.dart';
@@ -675,6 +677,8 @@ class _SignupCourierState extends State<SignupCourier> {
                                       loading = false;
                                     });
                                   } else {
+                                    Navigator.push(context, PageTransition(child: AppBarTemp1(currentPage: "Dashboard",), type: PageTransitionType.rightToLeftWithFade));
+
                                     final FirebaseAuth auth = FirebaseAuth.instance;
 
                                     final User user = auth.currentUser;
