@@ -334,6 +334,69 @@ class DatabaseService {
     });
   }
 
+  Future updateCustomerFullName(String fName, String lName) async {
+    return await customerCollection.doc(uid).update({
+      'First Name' : fName,
+      'Last Name': lName,
+    });
+  }
+
+  Future updateCustomerAddress(String address) async {
+    return await customerCollection.doc(uid).update({
+      'Address' : address,
+    });
+  }
+
+  Future updateCustomerEmail(String email) async {
+    return await customerCollection.doc(uid).update({
+      'Email' : email,
+    });
+  }
+
+  Future updateCustomerContactNo(String contactNo) async {
+    return await customerCollection.doc(uid).update({
+      'Contact No' : contactNo,
+    });
+  }
+
+  Future updateCustomerPassword(String password) async {
+    return await customerCollection.doc(uid).update({
+      'Password' : password,
+    });
+  }
+
+  Future updateCourierFullName(String fName, String lName) async {
+    return await courierCollection.doc(uid).update({
+      'First Name' : fName,
+      'Last Name': lName,
+    });
+  }
+
+  Future updateCourierAddress(String address) async {
+    return await courierCollection.doc(uid).update({
+      'Address' : address,
+    });
+  }
+
+  Future updateCourierEmail(String email) async {
+    return await courierCollection.doc(uid).update({
+      'Email' : email,
+    });
+  }
+
+  Future updateCourierContactNo(String contactNo) async {
+    return await courierCollection.doc(uid).update({
+      'Contact No' : contactNo,
+    });
+  }
+
+  Future updateCourierPassword(String password) async {
+    return await courierCollection.doc(uid).update({
+      'Password' : password,
+    });
+  }
+
+
   // Create a Message Document
   Future createMessageData(String messageContent, Timestamp timeSent,
       DocumentReference sentBy, DocumentReference sentTo) async {

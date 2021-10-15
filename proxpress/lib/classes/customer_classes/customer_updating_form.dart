@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -117,14 +118,14 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                       Customer customerData = snapshot.data;
                       fetchedUrl = customerData.avatarUrl;
 
-                      Widget saveChanges() {
+                      Widget saveChanges(String field) {
                         return Container(
                           margin: EdgeInsets.only(right: 20),
                           child: Align(
                             alignment: Alignment.topRight,
                             child: ElevatedButton.icon(
                               icon: Icon(Icons.save),
-                              label: Text('Save Changes', style: TextStyle(color: Colors.white, fontSize:15),),
+                              label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
                               style: ElevatedButton.styleFrom(
                                 primary: Color(0xfffb0d0d),
                               ),
@@ -143,36 +144,51 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                     validCustomer.updateCurrentEmail(_currentEmail);
                                   if(_newPassword != null)
                                     validCustomer.updateCurrentPassword(_newPassword);
-                                  await DatabaseService(uid: user.uid)
-                                      .updateCustomerData(
-                                    _currentFName ?? customerData.fName,
-                                    _currentLName ?? customerData.lName,
-                                    _currentEmail ?? customerData.email,
-                                    _currentContactNo ?? customerData.contactNo,
-                                    _confirmPassword ?? customerData.password,
-                                    _currentAddress ?? customerData.address,
-                                    customerData.avatarUrl,
-                                    customerData.notifStatus,
-                                    customerData.currentNotif,
-                                    customerData.courier_ref,
-                                  );
-
-
-                                  if (profilePicture != null) {
-                                    await UploadFile.uploadFile(saveDestination, profilePicture);
-
-                                    savedUrl = await firebase_storage.FirebaseStorage.instance
-                                        .ref(saveDestination)
-                                        .getDownloadURL();
-
-                                    if (savedUrl != null || savedUrl == 'null') {
-                                      await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
-                                    }
-
-                                    setState(() {
-                                      fetchedUrl = savedUrl;
-                                    });
+                                  if(field == 'Full Name'){
+                                    await DatabaseService(uid:user.uid).updateCustomerFullName(_currentFName ?? customerData.fName, _currentLName ?? customerData.lName);
                                   }
+                                  else if(field == "Address"){
+                                    await DatabaseService(uid:user.uid).updateCustomerAddress(_currentAddress);
+                                  }
+                                  else if(field == 'Email'){
+                                    await DatabaseService(uid:user.uid).updateCustomerEmail(_currentEmail);
+                                  }
+                                  else if(field == 'Contact No'){
+                                    await DatabaseService(uid:user.uid).updateCustomerContactNo(_currentContactNo);
+                                  }
+                                  else if(field == 'Password'){
+                                    await DatabaseService(uid:user.uid).updateCustomerPassword(_currentPassword);
+                                  }
+                                  // await DatabaseService(uid: user.uid)
+                                  //     .updateCustomerData(
+                                  //   _currentFName ?? customerData.fName,
+                                  //   _currentLName ?? customerData.lName,
+                                  //   _currentEmail ?? customerData.email,
+                                  //   _currentContactNo ?? customerData.contactNo,
+                                  //   _confirmPassword ?? customerData.password,
+                                  //   _currentAddress ?? customerData.address,
+                                  //   customerData.avatarUrl,
+                                  //   customerData.notifStatus,
+                                  //   customerData.currentNotif,
+                                  //   customerData.courier_ref,
+                                  // );
+
+
+                                  // if (profilePicture != null) {
+                                  //   await UploadFile.uploadFile(saveDestination, profilePicture);
+                                  //
+                                  //   savedUrl = await firebase_storage.FirebaseStorage.instance
+                                  //       .ref(saveDestination)
+                                  //       .getDownloadURL();
+                                  //
+                                  //   if (savedUrl != null || savedUrl == 'null') {
+                                  //     await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
+                                  //   }
+                                  //
+                                  //   setState(() {
+                                  //     fetchedUrl = savedUrl;
+                                  //   });
+                                  // }
 
 
                                   print("${user1.email}");
@@ -180,7 +196,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   print(_currentEmail);
 
 
-
+                                  showToast('Changes has been saved.');
                                   Navigator.pop(context, false);
 
                                 }
@@ -234,10 +250,10 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
 
                                               final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-                                              final pathProfiePicUploaded = result.files.single.path;
+                                              final pathProfilePicUploaded = result.files.single.path;
                                               setState(() {
                                                 uploadedNewPic = true;
-                                                profilePicture = File(pathProfiePicUploaded);
+                                                profilePicture = File(pathProfilePicUploaded);
                                               });
 
                                               final profilePictureDestination = 'Customers/${user.uid}/profilepic_${user.uid}_$datetime';
@@ -313,7 +329,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                     ],
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Full Name'),
                                               ],
 
                                             ),
@@ -351,7 +367,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                     onChanged: (val) => setState(() => _currentAddress = val),
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Address'),
                                               ],
 
                                             ),
@@ -398,7 +414,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                       onChanged: (val) => setState(() => _currentEmail = val),
                                                     ),
                                                   ),
-                                                  saveChanges(),
+                                                  saveChanges('Email'),
                                                 ],
 
                                               ),
@@ -444,7 +460,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                     onChanged: (val) => setState(() => _currentContactNo = val),
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Contact No'),
                                               ],
                                             ),
                                           ),
@@ -557,7 +573,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                     ],
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Password'),
                                               ],
                                             ),
                                           ),
@@ -580,5 +596,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
             )
         ),
       );
+  }
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.grey, textColor: Colors.black);
   }
 }

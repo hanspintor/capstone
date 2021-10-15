@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/Load/user_load.dart';
@@ -152,7 +153,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                       Courier courierData = snapshot.data;
                       fetchedUrl = courierData.avatarUrl;
 
-                      Widget saveChanges(){
+                      Widget saveChanges(String field){
                         return Container(
                           margin: EdgeInsets.only(right: 20),
                           child: Align(
@@ -178,51 +179,23 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                       validCourier.updateCurrentEmail(_currentEmail);
                                     if(_newPassword != null)
                                       validCourier.updateCurrentPassword(_newPassword);
-
-                                    await DatabaseService(uid: user.uid)
-                                        .updateCourierData(
-                                      _currentFName ?? courierData.fName,
-                                      _currentLName ?? courierData.lName,
-                                      _currentEmail ?? courierData.email,
-                                      _currentContactNo ?? courierData.contactNo,
-                                      _confirmPassword ?? courierData.password,
-                                      _currentAddress ?? courierData.address,
-                                      _status ?? courierData.status,
-                                      courierData.avatarUrl,
-                                      courierData.approved,
-                                      _vehicleType ?? courierData.vehicleType,
-                                      _vehicleColor ?? courierData.vehicleColor,
-                                      courierData.driversLicenseFront_,
-                                      courierData.driversLicenseBack_,
-                                      courierData.nbiClearancePhoto_,
-                                      courierData.vehicleRegistrationOR_,
-                                      courierData.vehicleRegistrationCR_,
-                                      courierData.vehiclePhoto_,
-                                      courierData.deliveryPriceRef,
-                                      courierData.notifStatus,
-                                      courierData.currentNotif,
-                                      courierData.NotifPopStatus,
-                                      courierData.NotifPopCounter,
-                                      courierData.adminMessage,
-                                      courierData.adminCredentialsResponse,
-                                    );
-
-                                    if (profilePicture != null) {
-                                      await UploadFile.uploadFile(saveDestination, profilePicture);
-
-                                      savedUrl = await firebase_storage.FirebaseStorage.instance
-                                          .ref(saveDestination)
-                                          .getDownloadURL();
-
-                                      if (savedUrl != null || savedUrl == 'null') {
-                                        await DatabaseService(uid: user.uid).updateCourierProfilePic(savedUrl);
-                                      }
-
-                                      setState(() {
-                                        fetchedUrl = savedUrl;
-                                      });
+                                    if(field == 'Full Name'){
+                                      await DatabaseService(uid:user.uid).updateCourierFullName(_currentFName ?? courierData.fName, _currentLName ?? courierData.lName);
+                                    }
+                                    else if(field == 'Address'){
+                                      await DatabaseService(uid:user.uid).updateCourierAddress(_currentAddress);
+                                    }
+                                    else if(field == 'Email'){
+                                      await DatabaseService(uid:user.uid).updateCourierEmail(_currentEmail);
+                                    }
+                                    else if(field == 'Contact No'){
+                                      await DatabaseService(uid:user.uid).updateCourierContactNo(_currentContactNo);
+                                    }
+                                    else if(field == 'Password'){
+                                      await DatabaseService(uid:user.uid).updateCourierPassword(_currentPassword);
                                     }
 
+                                    showToast('Changes has been saved.');
                                     Navigator.pop(context, false);
                                   }
                                 }
@@ -275,10 +248,10 @@ class _CourierUpdateState extends State<CourierUpdate> {
 
                                                 final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-                                                final pathProfiePicUploaded = result.files.single.path;
+                                                final pathProfilePicUploaded = result.files.single.path;
                                                 setState(() {
                                                   uploadedNewPic = true;
-                                                  profilePicture = File(pathProfiePicUploaded);
+                                                  profilePicture = File(pathProfilePicUploaded);
                                                 });
 
                                                 final profilePictureDestination = 'Couriers/${user.uid}/profilepic_${user.uid}_$datetime';
@@ -354,7 +327,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                     ],
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Full Name'),
                                               ],
 
                                             ),
@@ -392,7 +365,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                     onChanged: (val) => setState(() => _currentAddress = val),
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Address'),
                                               ],
 
                                             ),
@@ -439,7 +412,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                       onChanged: (val) => setState(() => _currentEmail = val),
                                                     ),
                                                   ),
-                                                  saveChanges(),
+                                                  saveChanges('Email'),
                                                 ],
 
                                               ),
@@ -485,7 +458,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                     onChanged: (val) => setState(() => _currentContactNo = val),
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Contact No'),
                                               ],
                                             ),
                                           ),
@@ -598,7 +571,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                     ],
                                                   ),
                                                 ),
-                                                saveChanges(),
+                                                saveChanges('Password'),
                                               ],
                                             ),
                                           ),
@@ -621,5 +594,9 @@ class _CourierUpdateState extends State<CourierUpdate> {
             )
         ),
       );
+  }
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.grey, textColor: Colors.black);
   }
 }
