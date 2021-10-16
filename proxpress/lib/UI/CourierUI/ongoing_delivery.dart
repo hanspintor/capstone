@@ -1,25 +1,17 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_animarker/flutter_map_marker_animation.dart';
-import 'package:flutter_animarker/widgets/animarker.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/proxpress_template_courier.dart';
-import 'package:proxpress/UI/CourierUI/transaction_history.dart';
 import 'package:proxpress/classes/chat_page.dart';
-import 'package:proxpress/classes/courier_classes/delivery_list.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
@@ -335,8 +327,6 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                             }
                                           }
                                       );
-
-                                      return Container();
                                     } else {
                                       return Container();
                                     }

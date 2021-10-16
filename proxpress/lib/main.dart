@@ -4,10 +4,8 @@ import 'package:proxpress/UI/CourierUI/courier_profile.dart';
 import 'package:proxpress/UI/CourierUI/pending_deliveries.dart';
 import 'package:proxpress/UI/CourierUI/transaction_history.dart';
 import 'package:proxpress/UI/CustomerUI/customer_create_post.dart';
-import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
-import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
@@ -24,7 +22,6 @@ import 'UI/CourierUI/ongoing_delivery.dart';
 import 'UI/CourierUI/proxpress_template_courier.dart';
 import 'UI/CustomerUI/courier_bookmarks.dart';
 import 'UI/CustomerUI/customer_profile.dart';
-import 'UI/CustomerUI/customer_remarks.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/wrapper.dart';
@@ -76,14 +73,8 @@ class PROXpressApp extends StatelessWidget{
             case '/dashboardLocation':
               return PageTransition(child: DashboardLocation(), type: PageTransitionType.rightToLeftWithFade);
               break;
-            case '/dashboardCustomer':
-              return PageTransition(child: DashboardCustomer(), type: PageTransitionType.rightToLeftWithFade);
-              break;
             case '/courierBookmarks':
               return PageTransition(child: CourierBookmarks(), type: PageTransitionType.rightToLeftWithFade);
-              break;
-            case '/customerRemarks':
-              return PageTransition(child: CustomerRemarks(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/customerProfile':
               return PageTransition(child: CustomerProfile(), type: PageTransitionType.rightToLeftWithFade);
@@ -111,9 +102,6 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/courierUpdate':
               return PageTransition(child: CourierUpdate(), type: PageTransitionType.bottomToTop);
-              break;
-            case '/deliveryStatus':
-              return PageTransition(child: DeliveryStatus(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/ongoingDelivery':
               return PageTransition(child: OngoingDelivery(), type: PageTransitionType.rightToLeftWithFade);

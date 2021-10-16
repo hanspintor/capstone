@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/community_list.dart';
 import 'package:proxpress/models/community.dart';

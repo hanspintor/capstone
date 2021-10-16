@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/models/user.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/services/database.dart';
 
 class CustomerCreatePost extends StatefulWidget {
@@ -11,8 +9,6 @@ class CustomerCreatePost extends StatefulWidget {
 }
 
 class _CustomerCreatePostState extends State<CustomerCreatePost> {
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String title;
   String content;
 
@@ -20,6 +16,7 @@ class _CustomerCreatePostState extends State<CustomerCreatePost> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+
     DocumentReference customerID = FirebaseFirestore.instance.collection("Customers").doc(user.uid);
 
     return Scaffold(

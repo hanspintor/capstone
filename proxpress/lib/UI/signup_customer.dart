@@ -1,16 +1,9 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/CustomerUI/proxpress_template_customer.dart';
-import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import 'package:slide_to_confirm/slide_to_confirm.dart';
 
 class SignupCustomer extends StatefulWidget{
   @override
@@ -32,7 +25,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
   bool loading = false;
   final AuthService _auth = AuthService();
   String error = '';
-  int _counter = 0;
 
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
 
@@ -186,11 +178,11 @@ class _SignupCustomerState extends State<SignupCustomer> {
     =>AlertDialog(
       title: Text("Are you sure you want to go back? All data you placed will be loss"),
       actions: <Widget> [
-        FlatButton(
+        TextButton(
           child: Text("No"),
           onPressed: ()=>Navigator.pop(context, false),
         ),
-        FlatButton(
+        TextButton(
           child: Text("Yes"),
           onPressed: ()=>Navigator.pop(context, true),
         )

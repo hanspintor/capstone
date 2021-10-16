@@ -1,17 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:async';
-import 'courier_bookmarks_tile.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
-import 'package:proxpress/models/user.dart';
-import 'package:provider/provider.dart';
 
 class PinLocation extends StatefulWidget {
   final GlobalKey<FormState> locKey;

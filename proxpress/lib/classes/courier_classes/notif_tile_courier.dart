@@ -1,10 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/models/customers.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/notifications.dart';
-import 'package:proxpress/services/database.dart';
 
 class NotifTileCourier extends StatefulWidget {
   final Notifications notif;

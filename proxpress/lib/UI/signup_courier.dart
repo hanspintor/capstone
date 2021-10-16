@@ -3,12 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:path/path.dart' as Path;
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/CourierUI/proxpress_template_courier.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
-import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
@@ -16,15 +13,11 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:slide_to_act/slide_to_act.dart';
 
 class SignupCourier extends StatefulWidget{
-  //final Function uploadfile;
-  //SignupCourier({this.uploadfile});
-
   @override
   _SignupCourierState createState() => _SignupCourierState();
 }
 
 class _SignupCourierState extends State<SignupCourier> {
-
   String fName;
   String lName;
   String email;
@@ -48,7 +41,6 @@ class _SignupCourierState extends State<SignupCourier> {
   List adminCredentialsResponse = [false,false,false,false,false,false];
 
   final AuthService _auth = AuthService();
-  final Courier _courier = Courier();
 
   String vehicleType;
   String vehicleColor;
@@ -60,19 +52,6 @@ class _SignupCourierState extends State<SignupCourier> {
   File vehicleRegistrationOR;
   File vehicleRegistrationCR;
   File vehiclePhoto;
-
-  void _validate(){
-    if(!regKey.currentState.validate()){
-      return;
-    }
-    regKey.currentState.save();
-
-    print (fName);
-    print (lName);
-    print (contactNo);
-    print (password);
-    print (address);
-  }
 
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
 
@@ -244,11 +223,11 @@ class _SignupCourierState extends State<SignupCourier> {
     =>AlertDialog(
       title: Text("Are you sure you want to go back? All data you placed will be loss."),
       actions: <Widget> [
-        FlatButton(
+        TextButton(
           child: Text("No"),
           onPressed: ()=>Navigator.pop(context, false),
         ),
-        FlatButton(
+        TextButton(
           child: Text("Yes"),
           onPressed: ()=>Navigator.pop(context, true),
         )

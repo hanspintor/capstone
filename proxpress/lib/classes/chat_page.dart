@@ -14,10 +14,8 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/messages.dart';
-import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ChatPage extends StatefulWidget {
   final Delivery delivery;

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/proxpress_template_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
@@ -62,18 +61,11 @@ void selectedItem(BuildContext context, int index,) async {
 }
 
 class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
-
-  final AuthService _auth = AuthService();
-
   @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
     User user1 = auth.currentUser;
     final user = Provider.of<TheUser>(context);
-
-
-
-
 
     return user == null ? LoginScreen() : Drawer(
       child: Column(

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CourierUI/courier_community_hub.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
@@ -7,17 +6,14 @@ import 'package:proxpress/UI/CourierUI/courier_profile.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/transaction_history.dart';
-import 'package:proxpress/classes/courier_classes/delivery_list.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/notifications.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/classes/verify.dart';
 
 class AppBarTemp1 extends StatefulWidget {
   final String currentPage;
@@ -66,9 +62,8 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-    final auth = FirebaseAuth.instance;
-    User user1 = auth.currentUser;
     bool approved = false;
+
     if(user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,

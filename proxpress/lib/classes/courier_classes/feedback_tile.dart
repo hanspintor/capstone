@@ -26,6 +26,7 @@ class _FeedbackTileState extends State<FeedbackTile> {
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+
     return user == null ? LoginScreen() : StreamBuilder<Delivery>(
       stream: DatabaseService(uid: widget.delivery.uid).deliveryData,
       builder: (context, snapshot) {

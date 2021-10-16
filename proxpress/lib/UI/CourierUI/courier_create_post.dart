@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/models/user.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/services/database.dart';
 
 class CourierCreatePost extends StatefulWidget {
@@ -11,8 +9,6 @@ class CourierCreatePost extends StatefulWidget {
 }
 
 class _CourierCreatePostState extends State<CourierCreatePost> {
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String title;
   String content;
 

@@ -6,7 +6,6 @@ import 'package:proxpress/models/comments.dart';
 import 'package:proxpress/models/community.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:intl/intl.dart';
 

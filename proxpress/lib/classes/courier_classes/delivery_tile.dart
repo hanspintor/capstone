@@ -6,11 +6,8 @@ import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:proxpress/services/notification.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'dart:math';
 
 class DeliveryTile extends StatefulWidget {
   final Delivery delivery;
@@ -46,7 +43,6 @@ class _DeliveryTileState extends State<DeliveryTile> {
   @override
   Widget build(BuildContext context) {
     uid = widget.delivery.customerRef.id;
-    int flag = 0;
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
@@ -63,9 +59,10 @@ class _DeliveryTileState extends State<DeliveryTile> {
       }
     });
 
-    return user == null ? LoginScreen() : Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: StreamBuilder<Customer>(
+    if (user != null) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: StreamBuilder<Customer>(
             stream: DatabaseService(uid: uid).customerData,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -78,24 +75,24 @@ class _DeliveryTileState extends State<DeliveryTile> {
                 // NotificationService().showNotification(1, name, notifDescrip, 1);
                 // NotificationService().showNotification(2, name, notifDescrip, 1);
                 //print(name);
-                 if(widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true){
-                    NotificationService().showNotification(widget.lengthDelivery, name, notifDescrip, 1);
-                   // NotificationService().showNotification(2, name, notifDescrip, 2);
-                   // if(flag<widget.lengthDelivery){
-                   //
-                   //   flag++;
-                   //   print("flag1 ${flag}");
-                   //   print("length ${widget.lengthDelivery}");
-                   //
-                   //
-                   // }
-                   // else if(flag == widget.lengthDelivery){
-                   //   print("hu ${widget.notifPopUpStatus}");
-                   //   DatabaseService(uid: user.uid).updateNotifPopUpCounterCourier(flag);
-                   //   DatabaseService(uid: user.uid).updateNotifPopUpStatusCourier(false);
-                   // }
+                if(widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true){
+                  NotificationService().showNotification(widget.lengthDelivery, name, notifDescrip, 1);
+                  // NotificationService().showNotification(2, name, notifDescrip, 2);
+                  // if(flag<widget.lengthDelivery){
+                  //
+                  //   flag++;
+                  //   print("flag1 ${flag}");
+                  //   print("length ${widget.lengthDelivery}");
+                  //
+                  //
+                  // }
+                  // else if(flag == widget.lengthDelivery){
+                  //   print("hu ${widget.notifPopUpStatus}");
+                  //   DatabaseService(uid: user.uid).updateNotifPopUpCounterCourier(flag);
+                  //   DatabaseService(uid: user.uid).updateNotifPopUpStatusCourier(false);
+                  // }
 
-                 }
+                }
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ExpansionTileCard(
@@ -180,44 +177,44 @@ class _DeliveryTileState extends State<DeliveryTile> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 FutureBuilder<bool>(
-                                  future: gotOngoingDelivery,
-                                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                                    print(gotOngoingDelivery);
-                                    if (snapshot.hasData) {
-                                      bool cantConfirm = snapshot.data;
+                                    future: gotOngoingDelivery,
+                                    builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                                      print(gotOngoingDelivery);
+                                      if (snapshot.hasData) {
+                                        bool cantConfirm = snapshot.data;
 
-                                      return Container(
-                                          height: 25,
-                                          child: ElevatedButton(
-                                              child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                              onPressed: cantConfirm ? null : () async{
-                                                bool isSeen = false;
+                                        return Container(
+                                            height: 25,
+                                            child: ElevatedButton(
+                                                child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
+                                                onPressed: cantConfirm ? null : () async{
+                                                  bool isSeen = false;
 
-                                                await FirebaseFirestore.instance
-                                                    .collection('Couriers')
-                                                    .doc(widget.delivery.courierRef.id)
-                                                    .get()
-                                                    .then((DocumentSnapshot documentSnapshot) {
-                                                  if (documentSnapshot.exists) {
-                                                    notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} accepted your request";
-                                                  }
-                                                });
-                                                await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
-                                                    widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
-                                                await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
-                                              }
-                                          )
-                                      );
-                                    } else {
-                                      return Container(
-                                          height: 25,
-                                          child: ElevatedButton(
+                                                  await FirebaseFirestore.instance
+                                                      .collection('Couriers')
+                                                      .doc(widget.delivery.courierRef.id)
+                                                      .get()
+                                                      .then((DocumentSnapshot documentSnapshot) {
+                                                    if (documentSnapshot.exists) {
+                                                      notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} accepted your request";
+                                                    }
+                                                  });
+                                                  await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
+                                                      widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
+                                                  await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
+                                                }
+                                            )
+                                        );
+                                      } else {
+                                        return Container(
+                                            height: 25,
+                                            child: ElevatedButton(
                                               child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 10),),
                                               onPressed: null,
-                                          )
-                                      );
+                                            )
+                                        );
+                                      }
                                     }
-                                  }
                                 ),
                                 Container(
                                     padding: EdgeInsets.only(left: 10),
@@ -236,7 +233,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                             }
                                           });
                                           await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
-                                            widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
+                                              widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
                                           await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Rejected', 'Cancelled');
                                         }
                                     )
@@ -252,8 +249,10 @@ class _DeliveryTileState extends State<DeliveryTile> {
               }
               else return Container();
             }
-          ),
-        );
-
+        ),
+      );
+    } else {
+      return LoginScreen();
     }
+  }
 }

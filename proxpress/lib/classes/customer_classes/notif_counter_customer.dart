@@ -2,12 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/models/couriers.dart';
-import 'package:proxpress/models/customers.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/notification.dart';
 
@@ -38,7 +34,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
   }
   @override
   Widget build(BuildContext context) {
-    bool runOnce = false;
     final notif = Provider.of<List<Notifications>>(context);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;

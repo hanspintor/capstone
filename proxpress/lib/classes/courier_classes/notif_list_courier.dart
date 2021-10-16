@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/notifications.dart';
 import 'notif_tile_courier.dart';
 

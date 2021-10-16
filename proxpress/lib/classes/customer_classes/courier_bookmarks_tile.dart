@@ -3,9 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
-import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
@@ -13,7 +11,6 @@ import 'package:proxpress/models/delivery_prices.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:proxpress/classes/customer_classes/pin_widget.dart';
 
 class CourierBookmarkTile extends StatefulWidget {
   final bool appear;

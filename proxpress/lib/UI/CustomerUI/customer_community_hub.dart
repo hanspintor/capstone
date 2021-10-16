@@ -12,9 +12,6 @@ class CustomerCommunityHub extends StatefulWidget {
 }
 
 class _CustomerCommunityHubState extends State<CustomerCommunityHub> {
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);

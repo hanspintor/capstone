@@ -1,20 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/customer_classes/notif_counter_customer.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
 import 'package:proxpress/classes/verify.dart';
-import 'package:proxpress/models/deliveries.dart';
-import 'package:proxpress/services/auth.dart';
-import 'menu_drawer_customer.dart';
-import 'notif_drawer_customer.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
-import 'dart:async';
-import 'dart:math' show cos, sqrt, asin;
 
 class DashboardLocation extends StatefulWidget{
   @override
@@ -22,16 +12,13 @@ class DashboardLocation extends StatefulWidget{
 }
 
 class _DashboardLocationState extends State<DashboardLocation>{
-
   final bool notBookmarks = false;
   int duration = 60;
   int flag = 0;
   final textFieldPickup = TextEditingController();
   final textFieldDropOff = TextEditingController();
 
-
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +30,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
       builder: (context, snapshot) {
         if(snapshot.hasData){
           Customer customerData = snapshot.data;
-          //print("Email: ${user.emailVerified}");
-          Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-              .collection('Deliveries')
-              .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
-              .snapshots()
-              .map(DatabaseService().deliveryDataListFromSnapshot);
 
           return SingleChildScrollView(
             child: Column(

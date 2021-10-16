@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/courier_classes/feedback_tile.dart';
-import 'package:proxpress/classes/courier_classes/transaction_tile.dart';
 import 'package:proxpress/models/deliveries.dart';
 
 class FeedbackList extends StatefulWidget {

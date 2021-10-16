@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/models/deliveries.dart';

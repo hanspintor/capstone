@@ -1,8 +1,5 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
-
-
 
 class FileStorage {
   FirebaseStorage storage = FirebaseStorage.instanceFor(bucket: "gs://proxpress-629e3.appspot.com");

@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as Path;
-import 'package:proxpress/UI/signup_courier.dart';
-import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/upload_file.dart';
 
 class CourierUpload extends StatefulWidget {
@@ -13,7 +11,6 @@ class CourierUpload extends StatefulWidget {
 
 class _CourierUploadState extends State<CourierUpload> {
   File file;
-  final Courier _courier = Courier();
 
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -24,7 +21,6 @@ class _CourierUploadState extends State<CourierUpload> {
     setState(() {
       file = File(path);
     });
-    //SignupCourier(uploadfile: uploadFile);
   }
 
   Future uploadFile() async {
@@ -59,22 +55,6 @@ class _CourierUploadState extends State<CourierUpload> {
           alignment: Alignment.bottomLeft,
           child: Text(fileName),
         ),
-        // Align(
-        //   alignment: Alignment.bottomLeft,
-        //   child: ElevatedButton.icon(
-        //     icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-        //     label: Text(
-        //       'Upload File',
-        //       style: TextStyle(color: Color(0xfffb0d0d)),
-        //     ),
-        //     onPressed: () {
-        //       uploadFile();
-        //     },
-        //     style: ElevatedButton.styleFrom(
-        //       primary: Colors.white,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

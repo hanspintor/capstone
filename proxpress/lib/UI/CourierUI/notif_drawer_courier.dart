@@ -6,7 +6,6 @@ import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/courier_classes/notif_list_courier.dart';
 import 'package:proxpress/models/couriers.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/notifications.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';

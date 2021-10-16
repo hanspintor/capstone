@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/models/comments.dart';
 import 'package:proxpress/models/community.dart';
 import 'package:proxpress/models/customers.dart';

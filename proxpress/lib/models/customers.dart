@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/services/auth.dart';
+
 class Customer{
   final String uid;
   final String fName;

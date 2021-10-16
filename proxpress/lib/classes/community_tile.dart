@@ -6,7 +6,6 @@ import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/community.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:intl/intl.dart';
 
@@ -33,6 +32,7 @@ class _CommunityTileState extends State<CommunityTile> {
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
+
     return user == null ? LoginScreen() : StreamBuilder<Community>(
       stream: DatabaseService(uid: uid).communityData,
       builder: (context, snapshot) {

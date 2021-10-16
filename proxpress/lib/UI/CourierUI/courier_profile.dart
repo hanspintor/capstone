@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
-import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
-import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/courier_classes/feedback_list.dart';
-import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -15,7 +11,6 @@ import 'package:provider/provider.dart';
 
 
 class CourierProfile extends StatelessWidget {
-  @override
   Widget _buildStars(int rate){
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -145,11 +140,9 @@ class CourierProfile extends StatelessWidget {
                                     double star3 = 0;
                                     double star4 = 0;
                                     double star5 = 0;
-                                    int fee = 0;
 
                                     for(int i = 0; i < deliveryData.length; i++){
                                       if(deliveryData[i].courierRef.id == courierData.uid && deliveryData[i].deliveryStatus == 'Delivered'){
-                                        fee += deliveryData[i].deliveryFee;
                                         if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
                                           rating += deliveryData[i].rating;
                                           total++;
@@ -343,7 +336,6 @@ class CourierProfile extends StatelessWidget {
                                       ],
                                     );
                                   } else {
-                                    double rating = 0.0;
                                     double total = 0.0;
                                     double stars = 0;
                                     double star1 = 0;
@@ -351,7 +343,6 @@ class CourierProfile extends StatelessWidget {
                                     double star3 = 0;
                                     double star4 = 0;
                                     double star5 = 0;
-                                    int fee = 0;
 
                                     return Column(
                                       children: [
@@ -536,7 +527,6 @@ class CourierProfile extends StatelessWidget {
                                   }
                                 }
                                 else {
-                                  double rating = 0.0;
                                   double total = 0.0;
                                   double stars = 0;
                                   double star1 = 0;
@@ -544,7 +534,6 @@ class CourierProfile extends StatelessWidget {
                                   double star3 = 0;
                                   double star4 = 0;
                                   double star5 = 0;
-                                  int fee = 0;
 
                                   return Column(
                                     children: [

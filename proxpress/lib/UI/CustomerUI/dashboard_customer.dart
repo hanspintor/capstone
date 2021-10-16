@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/customer_classes/courier_list.dart';
 import 'package:proxpress/models/couriers.dart';
-import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/user.dart';
-import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 
 class DashboardCustomer extends StatefulWidget{
@@ -33,11 +29,10 @@ class DashboardCustomer extends StatefulWidget{
 }
 
 class _DashboardCustomerState extends State<DashboardCustomer> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _searchController = TextEditingController();
   String searched = '';
-  final AuthService _auth = AuthService();
+
   @override
   void initState(){
     super.initState();
@@ -54,22 +49,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
   _onSearchChanged() {
     print(_searchController.text);
     searched = _searchController.text;
-  }
-
-  // void _openEndDrawer() {
-  //   _scaffoldKey.currentState.openEndDrawer();
-  // }
-
-  Widget _alertmessage(){
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            child: Text("Bitch"),
-          ),
-        ],
-      ),
-    );
   }
 
   @override

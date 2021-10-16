@@ -6,9 +6,7 @@ import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CourierUI/proxpress_template_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
-import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:proxpress/services/default_profile_pic.dart';
 
 class MainDrawerCourier extends StatefulWidget {
 
@@ -57,7 +55,6 @@ void selectedItem(BuildContext context, int index){
 }
 
 class _MainDrawerCourierState extends State<MainDrawerCourier> {
-  final AuthService _auth = AuthService();
   String status = "Active";
 
   @override

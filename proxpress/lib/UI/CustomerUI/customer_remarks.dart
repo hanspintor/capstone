@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/review_request.dart';
-import 'package:proxpress/services/database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomerRemarks extends StatefulWidget {
@@ -38,44 +37,9 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   String specificInstructions;
   String paymentOption = 'Choose Payment Option';
   String onlinePayment = '';
-  
-  void _validate(){
-    if(!locKey.currentState.validate()){
-      return;
-    }
-    locKey.currentState.save();
-    print (itemDescription);
-    print (pickupPointPerson);
-    print (pickupContactNum);
-    print (dropoffPointPerson);
-    print (dropoffContactNum);
-    print (whoWillPay);
-    print (specificInstructions);
-    print (paymentOption);
-  }
 
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // Function to create a text field but modular for other variables
-  Widget _buildTextField(String labelText, IconData icon, TextInputType textInputType, String error, dynamic textFieldInput){
-    return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
-      child: TextFormField(
-        decoration: InputDecoration(labelText: labelText, prefixIcon: Icon(icon)),
-        keyboardType: textInputType,
-        validator: (String value){
-          if(value.isEmpty){
-            return error;
-          }
-          else return null;
-        },
-        onSaved: (String value){
-          textFieldInput = value;
-        },
-      ),
-    );
-  }
 
   Widget _buildItemDescription() {
     return Container(

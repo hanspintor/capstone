@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/UI/forgot_password.dart';
 import 'package:proxpress/UI/reg_landing_page.dart';
 import 'package:flutter/material.dart';

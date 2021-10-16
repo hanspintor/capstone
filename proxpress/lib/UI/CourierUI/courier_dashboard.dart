@@ -3,13 +3,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
-import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/classes/courier_classes/delivery_list.dart';
-import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
@@ -26,9 +22,6 @@ class CourierDashboard extends StatefulWidget {
 }
 
 class _CourierDashboardState extends State<CourierDashboard> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-
   File driversLicenseFront;
   File driversLicenseBack;
   File nbiClearancePhoto;
