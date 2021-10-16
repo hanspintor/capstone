@@ -330,8 +330,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                     error = 'Email already taken';
                                     loading = false;
                                   });
-                                } else {
-                                  Navigator.push(context, PageTransition(child: AppBarTemp(currentPage: "Dashboard",), type: PageTransitionType.rightToLeftWithFade));
                                 }
                               }
                             }

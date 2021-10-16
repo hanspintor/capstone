@@ -677,10 +677,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                       loading = false;
                                     });
                                   } else {
-                                    Navigator.push(context, PageTransition(child: AppBarTemp1(currentPage: "Dashboard",), type: PageTransitionType.rightToLeftWithFade));
-
                                     final FirebaseAuth auth = FirebaseAuth.instance;
-
                                     final User user = auth.currentUser;
 
                                     if (user != null) {
