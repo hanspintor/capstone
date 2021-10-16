@@ -6,15 +6,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 
 class CourierUpdate extends StatefulWidget {
-
   @override
   _CourierUpdateState createState() => _CourierUpdateState();
 }
@@ -25,7 +26,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<FormState> _updateKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _contactNumKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _passKey = GlobalKey<FormState>();
+
+  final Courier validCourier = Courier();
 
   String _currentFName;
   String _currentLName;
@@ -35,52 +40,38 @@ class _CourierUpdateState extends State<CourierUpdate> {
   String _currentPassword;
   String _newPassword;
   String _confirmPassword;
-  String _status = "Active";
   bool checkCurrentPassword = true;
-  String _vehicleType;
-  String _vehicleColor;
-  static Timer _sessionTimer;
-  static Timer _sessionTimerPrint;
-  int count = 0;
-  int duration = 1;
-  final AuthService _auth = AuthService();
+  // String _vehicleType;
+  // String _vehicleColor;
 
   File profilePicture;
   bool uploadedNewPic = false;
   String savedUrl = '';
   String saveDestination = '';
 
-  //String avatarUrl;
+  // bool _isLoading = false;
   String fetchedUrl;
   String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
-  String dots(int Dotlength){
+  String dots(int dotLength){
     String dot = "•";
-    for(var i = 0; i<Dotlength; i++){
+    for(var i = 0; i < dotLength; i++){
       dot += "•";
     }
     return dot;
   }
-  // Future _getDefaultProfile(BuildContext context, String imageName) async {
-  //   Image image;
-  //   await FireStorageService.loadImage(context, imageName).then((value) {
-  //     image = Image.network(
-  //       value.toString(),
-  //       // fit: BoxFit.scaleDown,
-  //     );
-  //   });
-  //   return image;
-  // }
-  void handleTimeOut() async{
-    await _auth.signOut();
-  }
-
-  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User user = _auth.currentUser;
+    void processDone() {
+      showToast('Changes has been saved.');
+      Navigator.pop(context, false);
+    }
+
+    final user = Provider.of<TheUser>(context);
+
+    final auth = FirebaseAuth.instance;
+    User user1 = auth.currentUser;
 
     return user == null ? LoginScreen() : Scaffold(
         drawerEnableOpenDragGesture: false,
@@ -134,238 +125,211 @@ class _CourierUpdateState extends State<CourierUpdate> {
                       child: Align(
                         alignment: Alignment.topRight,
                         child: ElevatedButton.icon(
-                            icon: Icon(Icons.save),
-                            label: Text(
-                              'Save', style: TextStyle(color: Colors.white, fontSize:15),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xfffb0d0d),
-                            ),
-                            onPressed: () async {
-                              final Courier validCourier = Courier();
-
-                              if(_currentPassword != null)
-                                checkCurrentPassword = await validCourier.validateCurrentPassword(_currentPassword);
-                              setState(() {
-
-                              });
-                              if (_updateKey.currentState.validate() && checkCurrentPassword) {
-                                if(_currentEmail != null)
-                                  validCourier.updateCurrentEmail(_currentEmail);
-                                if(_newPassword != null)
-                                  validCourier.updateCurrentPassword(_newPassword);
-                                if(field == 'Full Name'){
-                                  await DatabaseService(uid:user.uid).updateCourierFullName(_currentFName ?? courierData.fName, _currentLName ?? courierData.lName);
-                                }
-                                else if(field == 'Address'){
-                                  await DatabaseService(uid:user.uid).updateCourierAddress(_currentAddress);
-                                }
-                                else if(field == 'Email'){
-                                  await DatabaseService(uid:user.uid).updateCourierEmail(_currentEmail);
-                                }
-                                else if(field == 'Contact No'){
-                                  await DatabaseService(uid:user.uid).updateCourierContactNo(_currentContactNo);
-                                }
-                                else if(field == 'Password'){
-                                  await DatabaseService(uid:user.uid).updateCourierPassword(_currentPassword);
-                                }
-
-                                showToast('Changes has been saved.');
-                                Navigator.pop(context, false);
-                              }
+                          icon: Icon(Icons.save),
+                          label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xfffb0d0d),
+                          ),
+                          onPressed: () async {
+                            if(field == 'Full Name'){
+                              await DatabaseService(uid:user.uid).updateCourierFullName(_currentFName ?? courierData.fName, _currentLName ?? courierData.lName);
+                              processDone();
                             }
+                            else if(field == "Address"){
+                              await DatabaseService(uid:user.uid).updateCourierAddress(_currentAddress ?? courierData.address);
+                              processDone();
+                            }
+                          },
                         ),
                       ),
                     );
                   }
 
-                  return Form(
-                    key: _updateKey,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Text(
-                            "Edit Profile",
-                            style: TextStyle(
-                              fontSize: 25,
-                            ),
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Text(
+                          "Edit Profile",
+                          style: TextStyle(
+                            fontSize: 25,
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Stack(
-                            children: [
-                              Container(
-                                child: CircleAvatar(
-                                  radius: 55,
-                                  backgroundImage: uploadedNewPic
-                                      ? FileImage(File(profilePicture.path))
-                                      : NetworkImage(fetchedUrl),
-                                  backgroundColor: Colors.white,
-                                ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Stack(
+                          children: [
+                            Container(
+                              child: CircleAvatar(
+                                radius: 55,
+                                backgroundImage: uploadedNewPic
+                                    ? FileImage(File(profilePicture.path))
+                                    : NetworkImage(fetchedUrl),
+                                backgroundColor: Colors.white,
                               ),
-                              Positioned(
-                                bottom: 0,
-                                //right : 10,
-                                left: 70,
-                                child: ClipOval(
-                                  child: SizedBox(
-                                    height: 30,
-                                    width: 30,
-                                    child: Container(
-                                      color: Color(0xfffb0d0d),
-                                      child: IconButton(
-                                          iconSize: 16,
-                                          icon: Icon(Icons.edit_rounded,color: Colors.white,),
-                                          onPressed: () async{
-                                            String datetime = DateTime.now().toString();
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              //right : 10,
+                              left: 70,
+                              child: ClipOval(
+                                child: SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: Container(
+                                    color: Color(0xfffb0d0d),
+                                    child: IconButton(
+                                        iconSize: 16,
+                                        icon: Icon(Icons.edit_rounded,color: Colors.white,),
+                                        onPressed: () async{
+                                          String datetime = DateTime.now().toString();
 
-                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                                          final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-                                            final pathProfilePicUploaded = result.files.single.path;
-                                            setState(() {
-                                              uploadedNewPic = true;
-                                              profilePicture = File(pathProfilePicUploaded);
-                                            });
+                                          final pathProfilePicUploaded = result.files.single.path;
+                                          setState(() {
+                                            uploadedNewPic = true;
+                                            profilePicture = File(pathProfilePicUploaded);
+                                          });
 
-                                            final profilePictureDestination = 'Couriers/${user.uid}/profilepic_${user.uid}_$datetime';
+                                          final profilePictureDestination = 'Couriers/${user.uid}/profilepic_${user.uid}_$datetime';
 
-                                            setState((){
-                                              saveDestination = profilePictureDestination.toString();
-                                              if (saveDestination != null && saveDestination.length > 0) {
-                                                saveDestination = saveDestination.substring(0, saveDestination.length - 1);
-                                              }
-                                            });
-                                          }
-                                      ),
+                                          setState((){
+                                            saveDestination = profilePictureDestination.toString();
+                                            if (saveDestination != null && saveDestination.length > 0) {
+                                              saveDestination = saveDestination.substring(0, saveDestination.length - 1);
+                                            }
+                                          });
+                                        }
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,20,0,0),
-                          child: Column(
-                            children: [
-                              OutlinedButton(
-                                child: ListTile(
-                                  title: Text('Full Name', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text("${courierData.fName} ${courierData.lName}"),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                ),
-                                onPressed: () {
-                                  showMaterialModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => SingleChildScrollView(
-                                      controller: ModalScrollController.of(context),
-                                      child: Container(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(8),
-                                                      child: TextFormField(
-                                                        decoration: InputDecoration(labelText:
-                                                        'First Name:',
-                                                          hintText: "${courierData.fName}",
-                                                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                          labelStyle: TextStyle(
-                                                              fontStyle: FontStyle.italic,
-                                                              color: Colors.black
-                                                          ),
-                                                        ),
-                                                        onChanged: (val) => setState(() => _currentFName = val),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.all(8),
-                                                      child: TextFormField(
-                                                        decoration: InputDecoration(labelText:
-                                                        'Last Name:',
-                                                          hintText: "${courierData.lName}",
-                                                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                          labelStyle: TextStyle(
-                                                              fontStyle: FontStyle.italic,
-                                                              color: Colors.black
-                                                          ),
-                                                        ),
-                                                        onChanged: (val) => setState(() => _currentLName = val),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              saveChanges('Full Name'),
-                                            ],
-
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,20,0,0),
+                        child: Column(
+                          children: [
+                            OutlinedButton(
+                              child: ListTile(
+                                title: Text('Full Name', style: TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text("${courierData.fName} ${courierData.lName}"),
+                                trailing: Icon(Icons.chevron_right_rounded),
                               ),
-                              OutlinedButton(
-                                child: ListTile(
-                                  title: Text('Address', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text("${courierData.address}"),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                ),
-                                onPressed: () {
-                                  showMaterialModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => SingleChildScrollView(
-                                      controller: ModalScrollController.of(context),
-                                      child: Container(
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: TextFormField(
-                                                  decoration: InputDecoration(
-                                                    hintText: "${courierData.address}",
-                                                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                    labelStyle: TextStyle(
-                                                        fontStyle: FontStyle.italic,
-                                                        color: Colors.black
+                              onPressed: () {
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => SingleChildScrollView(
+                                    controller: ModalScrollController.of(context),
+                                    child: Container(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(labelText:
+                                                      'First Name:',
+                                                        hintText: "${courierData.fName}",
+                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                        labelStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic,
+                                                            color: Colors.black
+                                                        ),
+                                                      ),
+                                                      onChanged: (val) => setState(() => _currentFName = val),
                                                     ),
                                                   ),
-                                                  keyboardType: TextInputType.streetAddress,
-                                                  onChanged: (val) => setState(() => _currentAddress = val),
-                                                ),
+                                                  Padding(
+                                                    padding: EdgeInsets.all(8),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(labelText:
+                                                      'Last Name:',
+                                                        hintText: "${courierData.lName}",
+                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                        labelStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic,
+                                                            color: Colors.black
+                                                        ),
+                                                      ),
+                                                      onChanged: (val) => setState(() => _currentLName = val),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              saveChanges('Address'),
-                                            ],
-
-                                          ),
+                                            ),
+                                            saveChanges('Full Name'),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
-                              OutlinedButton(
-                                  child: ListTile(
-                                    title: Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
-                                    subtitle: Text("${courierData.email}"),
-                                    trailing: Icon(Icons.chevron_right_rounded),
                                   ),
-                                  onPressed: () {
-                                    showMaterialModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => SingleChildScrollView(
-                                        controller: ModalScrollController.of(context),
+                                );
+                              },
+                            ),
+                            OutlinedButton(
+                              child: ListTile(
+                                title: Text('Address', style: TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text("${courierData.address}"),
+                                trailing: Icon(Icons.chevron_right_rounded),
+                              ),
+                              onPressed: () {
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => SingleChildScrollView(
+                                    controller: ModalScrollController.of(context),
+                                    child: Container(
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: TextFormField(
+                                                decoration: InputDecoration(
+                                                  hintText: "${courierData.address}",
+                                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                  labelStyle: TextStyle(
+                                                      fontStyle: FontStyle.italic,
+                                                      color: Colors.black
+                                                  ),
+                                                ),
+                                                keyboardType: TextInputType.streetAddress,
+                                                onChanged: (val) => setState(() => _currentAddress = val),
+                                              ),
+                                            ),
+                                            saveChanges('Address'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            OutlinedButton(
+                                child: ListTile(
+                                  title: Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  subtitle: Text("${courierData.email}"),
+                                  trailing: Icon(Icons.chevron_right_rounded),
+                                ),
+                                onPressed: () {
+                                  showMaterialModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => SingleChildScrollView(
+                                      controller: ModalScrollController.of(context),
+                                      child: Form(
+                                        key: _emailKey,
                                         child: Container(
                                           child: Padding(
                                             padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
@@ -395,27 +359,54 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                     onChanged: (val) => setState(() => _currentEmail = val),
                                                   ),
                                                 ),
-                                                saveChanges('Email'),
-                                              ],
+                                                Container(
+                                                  margin: EdgeInsets.only(right: 20),
+                                                  child: Align(
+                                                    alignment: Alignment.topRight,
+                                                    child: ElevatedButton.icon(
+                                                      icon: Icon(Icons.save),
+                                                      label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary: Color(0xfffb0d0d),
+                                                      ),
+                                                      onPressed: () async {
+                                                        if (_emailKey.currentState.validate()) {
+                                                          if (_currentEmail != null) {
+                                                            await DatabaseService(uid:user.uid).updateCourierEmail(_currentEmail);
+                                                            validCourier.updateCurrentEmail(_currentEmail);
+                                                            processDone();
+                                                          }
+                                                        }
 
+                                                        print("${user1.email}");
+                                                        print ("${user1.emailVerified}");
+                                                        print(_currentEmail);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
                                       ),
-                                    );
-                                  }
+                                    ),
+                                  );
+                                }
+                            ),
+                            OutlinedButton(
+                              child: ListTile(
+                                title: Text('Contact Number', style: TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text("${courierData.contactNo}"),
+                                trailing: Icon(Icons.chevron_right_rounded),
                               ),
-                              OutlinedButton(
-                                child: ListTile(
-                                  title: Text('Contact Number', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text("${courierData.contactNo}"),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                ),
-                                onPressed: (){
-                                  showMaterialModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => SingleChildScrollView(
-                                      controller: ModalScrollController.of(context),
+                              onPressed: (){
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => SingleChildScrollView(
+                                    controller: ModalScrollController.of(context),
+                                    child: Form(
+                                      key: _contactNumKey,
                                       child: Container(
                                         child: Padding(
                                           padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
@@ -444,26 +435,47 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                   onChanged: (val) => setState(() => _currentContactNo = val),
                                                 ),
                                               ),
-                                              saveChanges('Contact No'),
+                                              Container(
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: ElevatedButton.icon(
+                                                    icon: Icon(Icons.save),
+                                                    label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                    style: ElevatedButton.styleFrom(
+                                                      primary: Color(0xfffb0d0d),
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (_contactNumKey.currentState.validate()) {
+                                                        await DatabaseService(uid:user.uid).updateCustomerContactNo(_currentContactNo == '' ? courierData.contactNo : _currentContactNo ?? courierData.contactNo);
+                                                        processDone();
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
+                                  ),
+                                );
+                              },
+                            ),
+                            OutlinedButton(
+                              child: ListTile(
+                                title: Text('Change Password', style: TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text(dots(courierData.password.length)),
+                                trailing: Icon(Icons.chevron_right_rounded),
                               ),
-                              OutlinedButton(
-                                child: ListTile(
-                                  title: Text('Change Password', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(dots(courierData.password.length)),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                ),
-                                onPressed: () {
-                                  showMaterialModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => SingleChildScrollView(
-                                      controller: ModalScrollController.of(context),
+                              onPressed: () {
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => SingleChildScrollView(
+                                    controller: ModalScrollController.of(context),
+                                    child: Form(
+                                      key: _passKey,
                                       child: Container(
                                         child: Column(
                                           children: [
@@ -489,10 +501,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                         ),
                                                       ),
                                                       validator: (String val){
-                                                        if(val.length < 8 && val.length > 0){
+                                                        if (val.length < 8 && val.length > 0) {
                                                           return 'Password should be 8 characters long';
-                                                        }
-                                                        else
+                                                        } else if (val != courierData.password) {
+                                                          return 'Please double check your current password';
+                                                        } else
                                                           return null;
                                                       },
                                                       //initialValue: "${customerData.password}",
@@ -543,7 +556,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                         if(_currentPassword != null){
                                                           if(val.isEmpty){
                                                             return "Kindly provide repeat password for verification";
-                                                          } else if(_newPassword != val){
+                                                          } else if(_newPassword != _confirmPassword){
                                                             return "Password does not match";
                                                           } else {
                                                             return null;
@@ -555,7 +568,29 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                       onChanged: (val) => setState(() => _confirmPassword = val),
                                                     ),
                                                   ),
-                                                  saveChanges('Password'),
+                                                  Container(
+                                                    margin: EdgeInsets.only(right: 20),
+                                                    child: Align(
+                                                      alignment: Alignment.topRight,
+                                                      child: ElevatedButton.icon(
+                                                        icon: Icon(Icons.save),
+                                                        label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                        style: ElevatedButton.styleFrom(
+                                                          primary: Color(0xfffb0d0d),
+                                                        ),
+                                                        onPressed: () async {
+                                                          if (_passKey.currentState.validate()) {
+                                                            checkCurrentPassword = await validCourier.validateCurrentPassword(_currentPassword);
+                                                            if(_newPassword != null && checkCurrentPassword) {
+                                                              await DatabaseService(uid:user.uid).updateCourierPassword(_newPassword);
+                                                              validCourier.updateCurrentPassword(_newPassword);
+                                                              processDone();
+                                                            }
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -563,14 +598,14 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   );
                 }
                 else{

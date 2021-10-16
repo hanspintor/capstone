@@ -29,6 +29,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   final GlobalKey<FormState> _contactNumKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _passKey = GlobalKey<FormState>();
 
+  final Customer validCustomer = Customer();
+
   String _currentFName;
   String _currentLName;
   String _currentAddress;
@@ -39,22 +41,19 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String _confirmPassword;
   List bookmarks;
   bool checkCurrentPassword = true;
-  final auth = FirebaseAuth.instance;
 
   File profilePicture;
   bool uploadedNewPic = false;
   String savedUrl = '';
   String saveDestination = '';
 
+  // bool _isLoading = false;
   String fetchedUrl;
   String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
-  bool _isLoading = false;
-  bool wasWrong = false;
-
-  String dots(int Dotlength){
+  String dots(int dotLength){
     String dot = "•";
-    for(var i = 0; i<Dotlength; i++){
+    for(var i = 0; i < dotLength; i++){
       dot += "•";
     }
     return dot;
@@ -68,6 +67,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     }
 
     final user = Provider.of<TheUser>(context);
+
+    final auth = FirebaseAuth.instance;
     User user1 = auth.currentUser;
 
     return user == null ? LoginScreen() : Scaffold(
@@ -364,8 +365,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                         primary: Color(0xfffb0d0d),
                                                       ),
                                                       onPressed: () async {
-                                                        final Customer validCustomer = Customer();
-
                                                         if (_emailKey.currentState.validate()) {
                                                           if (_currentEmail != null) {
                                                             await DatabaseService(uid:user.uid).updateCustomerEmail(_currentEmail);
@@ -442,14 +441,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                       primary: Color(0xfffb0d0d),
                                                     ),
                                                     onPressed: () async {
-                                                      if (wasWrong) _currentContactNo = '';
-
                                                       if (_contactNumKey.currentState.validate()) {
                                                         await DatabaseService(uid:user.uid).updateCustomerContactNo(_currentContactNo == '' ? customerData.contactNo : _currentContactNo ?? customerData.contactNo);
-                                                        wasWrong = false;
                                                         processDone();
-                                                      } else {
-                                                        wasWrong = true;
                                                       }
                                                     },
                                                   ),
@@ -464,19 +458,19 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 );
                               },
                             ),
-                            Form(
-                              key: _passKey,
-                              child: OutlinedButton(
-                                child: ListTile(
-                                  title: Text('Change Password', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text(dots(customerData.password.length)),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                ),
-                                onPressed: () async {
-                                  await showMaterialModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => SingleChildScrollView(
-                                      controller: ModalScrollController.of(context),
+                            OutlinedButton(
+                              child: ListTile(
+                                title: Text('Change Password', style: TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text(dots(customerData.password.length)),
+                                trailing: Icon(Icons.chevron_right_rounded),
+                              ),
+                              onPressed: () async {
+                                await showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => SingleChildScrollView(
+                                    controller: ModalScrollController.of(context),
+                                    child: Form(
+                                      key: _passKey,
                                       child: Container(
                                         child: Padding(
                                           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -494,17 +488,17 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                         'Password:',
                                                           hintText: dots(customerData.password.length),
                                                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                          errorText: (checkCurrentPassword ? '' : "Please double check your current password"),
                                                           labelStyle: TextStyle(
                                                               fontStyle: FontStyle.italic,
                                                               color: Colors.black
                                                           ),
                                                         ),
                                                         validator: (String val){
-                                                          if(val.length < 8 && val.length > 0){
+                                                          if (val.length < 8 && val.length > 0) {
                                                             return 'Password should be 8 characters long';
-                                                          }
-                                                          else
+                                                          } else if (val != customerData.password) {
+                                                            return 'Please double check your current password';
+                                                          } else
                                                             return null;
                                                         },
                                                         //initialValue: "${customerData.password}",
@@ -552,10 +546,10 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                           ),
                                                         ),
                                                         validator: (String val){
-                                                          if(_currentPassword != null){
+                                                          if(_newPassword != null){
                                                             if(val.isEmpty){
                                                               return "Kindly provide repeat password for verification";
-                                                            } else if(_newPassword != val){
+                                                            } else if(_newPassword != _confirmPassword){
                                                               return "Password does not match";
                                                             } else {
                                                               return null;
@@ -581,16 +575,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                       primary: Color(0xfffb0d0d),
                                                     ),
                                                     onPressed: () async {
-                                                      final Customer validCustomer = Customer();
-
-                                                      if(_currentPassword != null)
+                                                      if (_passKey.currentState.validate()) {
                                                         checkCurrentPassword = await validCustomer.validateCurrentPassword(_currentPassword);
-
-                                                      if (_passKey.currentState.validate() && checkCurrentPassword) {
-                                                        print('currentPassword: $_currentPassword');
-                                                        print('newPassword: $_newPassword');
-                                                        print('confirmPassword: $_confirmPassword');
-                                                        if(_newPassword != null) {
+                                                        if(_newPassword != null && checkCurrentPassword) {
                                                           await DatabaseService(uid:user.uid).updateCustomerPassword(_newPassword);
                                                           validCustomer.updateCurrentPassword(_newPassword);
                                                           processDone();
@@ -605,9 +592,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
