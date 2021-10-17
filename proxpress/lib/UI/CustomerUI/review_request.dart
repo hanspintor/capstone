@@ -133,35 +133,35 @@ class _ReviewRequestState extends State<ReviewRequest> {
                   ),
                 ),
                 StreamBuilder<Courier>(
-                  stream: DatabaseService(uid: widget.courier.id).courierData,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      Courier chosenCourier = snapshot.data;
+                    stream: DatabaseService(uid: widget.courier.id).courierData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Courier chosenCourier = snapshot.data;
 
-                      String courierDetails =
-                          "Name: ${chosenCourier.fName} ${chosenCourier.lName} "
-                          "\nVehicle Type: ${chosenCourier.vehicleType} "
-                          "\nDelivery Fee: ₱${widget.deliveryFee}";
+                        String courierDetails =
+                            "Name: ${chosenCourier.fName} ${chosenCourier.lName} "
+                            "\nVehicle Type: ${chosenCourier.vehicleType} "
+                            "\nDelivery Fee: ₱${widget.deliveryFee}";
 
-                      return Card(
-                        child: ListTile(
-                          leading: Icon(Icons.perm_contact_cal_outlined),
-                          title: Text('Chosen Courier'),
-                          subtitle: Text(courierDetails),
-                          isThreeLine: true,
-                        ),
-                      );
-                    } else {
-                      return Card(
-                        child: ListTile(
-                          leading: Icon(Icons.perm_contact_cal_outlined),
-                          title: Text('Chosen Courier'),
-                          subtitle: Text(""),
-                          isThreeLine: true,
-                        ),
-                      );
+                        return Card(
+                          child: ListTile(
+                            leading: Icon(Icons.perm_contact_cal_outlined),
+                            title: Text('Chosen Courier'),
+                            subtitle: Text(courierDetails),
+                            isThreeLine: true,
+                          ),
+                        );
+                      } else {
+                        return Card(
+                          child: ListTile(
+                            leading: Icon(Icons.perm_contact_cal_outlined),
+                            title: Text('Chosen Courier'),
+                            subtitle: Text(""),
+                            isThreeLine: true,
+                          ),
+                        );
+                      }
                     }
-                  }
                 ),
                 Card(
                   child: Column(
@@ -247,17 +247,17 @@ class _ReviewRequestState extends State<ReviewRequest> {
                                       }
                                     ],
 
-                                    // shipping address is not required though
-                                    "shipping_address": {
-                                      "recipient_name": "",
-                                      "line1": "",
-                                      "line2": "",
-                                      "city": "",
-                                      "country_code": "PH",
-                                      "postal_code": "",
-                                      "phone": "",
-                                      "state": ""
-                                    },
+                                    // // shipping address is not required though
+                                    // "shipping_address": {
+                                    //   "recipient_name": "",
+                                    //   "line1": "",
+                                    //   "line2": "",
+                                    //   "city": "",
+                                    //   "country_code": "PH",
+                                    //   "postal_code": "",
+                                    //   "phone": "",
+                                    //   "state": ""
+                                    // },
                                   }
                                 }
                               ],
@@ -279,27 +279,27 @@ class _ReviewRequestState extends State<ReviewRequest> {
 
                     if (paymentSuccess) {
                       await DatabaseService().updateDelivery(
-                          widget.customer,
-                          widget.courier,
-                          widget.pickupAddress,
-                          widget.pickupGeoPoint,
-                          widget.dropOffAddress,
-                          widget.dropOffGeoPoint,
-                          widget.itemDescription,
-                          widget.pickupPointPerson,
-                          widget.pickupContactNum,
-                          widget.dropOffPointPerson,
-                          widget.dropOffContactNum,
-                          widget.whoWillPay,
-                          widget.specificInstructions,
-                          widget.paymentOption,
-                          widget.deliveryFee,
-                          'Pending',
-                          'Pending',
-                          GeoPoint(13.621980880497976, 123.19477396693487),
-                          0,
-                          '',
-                          false,
+                        widget.customer,
+                        widget.courier,
+                        widget.pickupAddress,
+                        widget.pickupGeoPoint,
+                        widget.dropOffAddress,
+                        widget.dropOffGeoPoint,
+                        widget.itemDescription,
+                        widget.pickupPointPerson,
+                        widget.pickupContactNum,
+                        widget.dropOffPointPerson,
+                        widget.dropOffContactNum,
+                        widget.whoWillPay,
+                        widget.specificInstructions,
+                        widget.paymentOption,
+                        widget.deliveryFee,
+                        'Pending',
+                        'Pending',
+                        GeoPoint(13.621980880497976, 123.19477396693487),
+                        0,
+                        '',
+                        false,
                       );
                       await FirebaseFirestore.instance
                           .collection('Customers')

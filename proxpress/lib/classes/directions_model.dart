@@ -17,12 +17,12 @@ class Directions {
     final data = Map<String, dynamic>.from(map['routes'][0]);
 
     // Distance & Duration
-    double distance = 0;
-    double duration = 0;
+    double distance = 0.0;
+    double duration = 0.0;
     if ((data['legs'] as List).isNotEmpty) {
       final leg = data['legs'][0];
-      distance = leg['distance'];
-      duration = leg['duration'];
+      distance = leg['distance'].toDouble();
+      duration = leg['duration'].toDouble();
     }
 
     return Directions(
