@@ -125,7 +125,7 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                       ListTile(
                         leading: Icon(Icons.groups_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
                         title: Text('Community Hub', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
-                        onTap: !user1.emailVerified ? null : () {
+                        onTap: !approved || !user1.emailVerified ? null : () {
                           selectedItem(context, 4);
                         },
                       ),
