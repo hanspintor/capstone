@@ -311,17 +311,20 @@ class _SignupCustomerState extends State<SignupCustomer> {
                               String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
                               if (regKey.currentState.validate()){
-                                ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-                                  ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
-                                setState(() => loading = true); // loading = true;
+                                setState(() => loading = true);
                                 dynamic result = await _auth.SignUpCustomer(email, password, fName, lName,
                                     contactNo, address, defaultProfilePic, false, 0, courier_ref);
 
                                 if(result == null){
                                   setState((){
                                     error = 'Email already taken';
+                                    slide = false;
                                     loading = false;
                                   });
+                                } else{
+                                  ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+                                    ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
+
                                 }
                               }
                             }

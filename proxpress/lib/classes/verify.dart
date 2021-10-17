@@ -55,7 +55,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
             Navigator.pushNamed(context, '/template');
-
         } else {
             Navigator.pushNamed(context, '/template1');
           }
