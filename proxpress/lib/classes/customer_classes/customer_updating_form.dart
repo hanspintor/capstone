@@ -29,6 +29,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _fullNameKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _addressKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _contactNumKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _passKey = GlobalKey<FormState>();
@@ -122,31 +124,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                   Customer customerData = snapshot.data;
                   fetchedUrl = customerData.avatarUrl;
 
-                  Widget saveChanges(String field) {
-                    return Container(
-                      margin: EdgeInsets.only(right: 20),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: ElevatedButton.icon(
-                          icon: Icon(Icons.save),
-                          label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xfffb0d0d),
-                          ),
-                          onPressed: () async {
-                            if(field == 'Full Name'){
-                              await DatabaseService(uid:user.uid).updateCustomerFullName(_currentFName ?? customerData.fName, _currentLName ?? customerData.lName);
-                              processDone();
-                            }
-                            else if(field == "Address"){
-                              await DatabaseService(uid:user.uid).updateCustomerAddress(_currentAddress ?? customerData.address);
-                              processDone();
-                            }
-                          },
-                        ),
-                      ),
-                    );
-                  }
                   return Column(
                     children: <Widget>[
                       Container(
@@ -282,7 +259,25 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                     onChanged: (val) => setState(() => _currentLName = val),
                                                   ),
                                                 ),
-                                                saveChanges('Full Name'),
+                                                Container(
+                                                  margin: EdgeInsets.only(right: 20),
+                                                  child: Align(
+                                                    alignment: Alignment.topRight,
+                                                    child: ElevatedButton.icon(
+                                                      icon: Icon(Icons.save),
+                                                      label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary: Color(0xfffb0d0d),
+                                                      ),
+                                                      onPressed: () async {
+                                                        if (_fullNameKey.currentState.validate()) {
+                                                          await DatabaseService(uid:user.uid).updateCustomerFullName(_currentFName == '' ? customerData.fName : _currentFName ?? customerData.fName, _currentLName == '' ? customerData.lName : _currentLName ?? customerData.lName);
+                                                          processDone();
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -325,7 +320,25 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                 onChanged: (val) => setState(() => _currentAddress = val),
                                               ),
                                             ),
-                                            saveChanges('Address'),
+                                            Container(
+                                              margin: EdgeInsets.only(right: 20),
+                                              child: Align(
+                                                alignment: Alignment.topRight,
+                                                child: ElevatedButton.icon(
+                                                  icon: Icon(Icons.save),
+                                                  label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                  style: ElevatedButton.styleFrom(
+                                                    primary: Color(0xfffb0d0d),
+                                                  ),
+                                                  onPressed: () async {
+                                                    if (_addressKey.currentState.validate()) {
+                                                      await DatabaseService(uid:user.uid).updateCustomerAddress(_currentAddress == '' ? customerData.address : _currentAddress ?? customerData.address);
+                                                      processDone();
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),

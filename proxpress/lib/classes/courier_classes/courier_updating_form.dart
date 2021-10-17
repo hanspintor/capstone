@@ -28,6 +28,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _fullNameKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _addressKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _contactNumKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _passKey = GlobalKey<FormState>();
@@ -120,32 +122,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                 if(snapshot.hasData){
                   Courier courierData = snapshot.data;
                   fetchedUrl = courierData.avatarUrl;
-
-                  Widget saveChanges(String field){
-                    return Container(
-                      margin: EdgeInsets.only(right: 20),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: ElevatedButton.icon(
-                          icon: Icon(Icons.save),
-                          label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xfffb0d0d),
-                          ),
-                          onPressed: () async {
-                            if(field == 'Full Name'){
-                              await DatabaseService(uid:user.uid).updateCourierFullName(_currentFName ?? courierData.fName, _currentLName ?? courierData.lName);
-                              processDone();
-                            }
-                            else if(field == "Address"){
-                              await DatabaseService(uid:user.uid).updateCourierAddress(_currentAddress ?? courierData.address);
-                              processDone();
-                            }
-                          },
-                        ),
-                      ),
-                    );
-                  }
 
                   return Column(
                     children: <Widget>[
@@ -242,53 +218,80 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               onPressed: () {
                                 showMaterialModalBottomSheet(
                                   context: context,
-                                  builder: (context) => SingleChildScrollView(
-                                    controller: ModalScrollController.of(context),
-                                    child: Container(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8),
-                                                    child: TextFormField(
-                                                      decoration: InputDecoration(labelText:
-                                                      'First Name:',
-                                                        hintText: "${courierData.fName}",
-                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                        labelStyle: TextStyle(
-                                                            fontStyle: FontStyle.italic,
-                                                            color: Colors.black
+                                  builder: (context) => Form(
+                                    key: _fullNameKey,
+                                    child: SingleChildScrollView(
+                                      controller: ModalScrollController.of(context),
+                                      child: Container(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8),
+                                                      child: TextFormField(
+                                                        decoration: InputDecoration(labelText:
+                                                        'First Name:',
+                                                          hintText: "${courierData.fName}",
+                                                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                          labelStyle: TextStyle(
+                                                              fontStyle: FontStyle.italic,
+                                                              color: Colors.black
+                                                          ),
                                                         ),
+                                                        onChanged: (val) => setState(() => _currentFName = val),
+                                                        validator: (String val){
+                                                          if(val.isEmpty){
+                                                            return null;
+                                                          }
+                                                          else return null;
+                                                        },
                                                       ),
-                                                      onChanged: (val) => setState(() => _currentFName = val),
                                                     ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.all(8),
-                                                    child: TextFormField(
-                                                      decoration: InputDecoration(labelText:
-                                                      'Last Name:',
-                                                        hintText: "${courierData.lName}",
-                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                        labelStyle: TextStyle(
-                                                            fontStyle: FontStyle.italic,
-                                                            color: Colors.black
+                                                    Padding(
+                                                      padding: EdgeInsets.all(8),
+                                                      child: TextFormField(
+                                                        decoration: InputDecoration(labelText:
+                                                        'Last Name:',
+                                                          hintText: "${courierData.lName}",
+                                                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                          labelStyle: TextStyle(
+                                                              fontStyle: FontStyle.italic,
+                                                              color: Colors.black
+                                                          ),
                                                         ),
+                                                        onChanged: (val) => setState(() => _currentLName = val),
                                                       ),
-                                                      onChanged: (val) => setState(() => _currentLName = val),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            saveChanges('Full Name'),
-                                          ],
+                                              Container(
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: ElevatedButton.icon(
+                                                    icon: Icon(Icons.save),
+                                                    label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                    style: ElevatedButton.styleFrom(
+                                                      primary: Color(0xfffb0d0d),
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (_fullNameKey.currentState.validate()) {
+                                                        await DatabaseService(uid:user.uid).updateCourierFullName(_currentFName == '' ? courierData.fName : _currentFName ?? courierData.fName, _currentLName == '' ? courierData.lName : _currentLName ?? courierData.lName);
+                                                        processDone();
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -305,30 +308,51 @@ class _CourierUpdateState extends State<CourierUpdate> {
                               onPressed: () {
                                 showMaterialModalBottomSheet(
                                   context: context,
-                                  builder: (context) => SingleChildScrollView(
-                                    controller: ModalScrollController.of(context),
-                                    child: Container(
-                                      child: Padding(
-                                        padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: TextFormField(
-                                                decoration: InputDecoration(
-                                                  hintText: "${courierData.address}",
-                                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                  labelStyle: TextStyle(
-                                                      fontStyle: FontStyle.italic,
-                                                      color: Colors.black
+                                  builder: (context) => Form(
+                                    key: _addressKey,
+                                    child: SingleChildScrollView(
+                                      controller: ModalScrollController.of(context),
+                                      child: Container(
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: TextFormField(
+                                                  decoration: InputDecoration(
+                                                    hintText: "${courierData.address}",
+                                                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                    labelStyle: TextStyle(
+                                                        fontStyle: FontStyle.italic,
+                                                        color: Colors.black
+                                                    ),
+                                                  ),
+                                                  keyboardType: TextInputType.streetAddress,
+                                                  onChanged: (val) => setState(() => _currentAddress = val),
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: ElevatedButton.icon(
+                                                    icon: Icon(Icons.save),
+                                                    label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                    style: ElevatedButton.styleFrom(
+                                                      primary: Color(0xfffb0d0d),
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (_addressKey.currentState.validate()) {
+                                                        await DatabaseService(uid:user.uid).updateCourierAddress(_currentAddress == '' ? courierData.address : _currentAddress ?? courierData.address);
+                                                        processDone();
+                                                      }
+                                                    },
                                                   ),
                                                 ),
-                                                keyboardType: TextInputType.streetAddress,
-                                                onChanged: (val) => setState(() => _currentAddress = val),
                                               ),
-                                            ),
-                                            saveChanges('Address'),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -472,7 +496,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                     ),
                                                     onPressed: () async {
                                                       if (_contactNumKey.currentState.validate()) {
-                                                        await DatabaseService(uid:user.uid).updateCustomerContactNo(_currentContactNo == '' ? courierData.contactNo : _currentContactNo ?? courierData.contactNo);
+                                                        await DatabaseService(uid:user.uid).updateCourierContactNo(_currentContactNo == '' ? courierData.contactNo : _currentContactNo ?? courierData.contactNo);
                                                         processDone();
                                                       }
                                                     },
