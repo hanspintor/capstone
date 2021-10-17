@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,20 @@ class _VerifyEmailState extends State<VerifyEmail> {
       print("verified");
       ScaffoldMessenger.of(context)..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text("Your email is now verified")));
+
+      FirebaseFirestore.instance
+          .collection('Customers')
+          .doc(user.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+            Navigator.pushNamed(context, '/template');
+
+        } else {
+            Navigator.pushNamed(context, '/template1');
+          }
+        }
+      );
       //Navigator.pushNamed(context, '/dashboardLocation');
     }
   }
