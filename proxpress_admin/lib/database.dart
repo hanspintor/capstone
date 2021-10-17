@@ -121,11 +121,11 @@ class DatabaseService {
   Stream<List<Reports>> get reportList {
     return reportCollection.snapshots().map(_reportsDataListFromSnapshot);
   }
-  Future approveCourier() async {
+  Future approveCourier(bool approve) async {
     await FirebaseFirestore.instance.collection('Couriers')
         .doc(uid)
         .update({
-      'Admin Approved': true,
+      'Admin Approved': approve,
     });
   }
   Future updateCredentials(List adminCredentialsResponse) async {

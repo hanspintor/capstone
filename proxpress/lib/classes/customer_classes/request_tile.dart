@@ -423,14 +423,12 @@ class _RequestTileState extends State<RequestTile> {
                                                                 ElevatedButton(
                                                                   child: Text("Report"),
                                                                   onPressed: () async {
-                                                                    print(delivery.isReported);
                                                                     if(_key.currentState.validate()){
                                                                       DatabaseService().createReportData(_description, delivery.customerRef,
                                                                           delivery.courierRef, Timestamp.now());
                                                                       DatabaseService(uid: delivery.uid).updateReport(true);
                                                                       Navigator.of(context).pop();
                                                                     }
-
                                                                   },
                                                                 ),
                                                               ],
@@ -738,7 +736,7 @@ class _RequestTileState extends State<RequestTile> {
   String feedback  = '';
   Map<String, DocumentReference> localMap = {};
   Map<String, DocumentReference> localAddMap;
-  bool isFavorited = false;
+  bool isFavorite = false;
 
   void showFeedback(Delivery delivery){
     showMaterialModalBottomSheet(
@@ -752,11 +750,10 @@ class _RequestTileState extends State<RequestTile> {
                 StreamBuilder<Customer>(
                     stream: DatabaseService(uid: delivery.customerRef.id).customerData,
                     builder: (context, snapshot) {
-                      print(snapshot.hasData );
                       if(snapshot.hasData){
                         Customer customerData = snapshot.data;
 
-                        if (customerData.courier_ref != null && customerData.courier_ref != {}) {
+                        if (customerData.courier_ref != null || customerData.courier_ref != {}) {
                           localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
                         } else {
                           localAddMap = {};
@@ -765,9 +762,8 @@ class _RequestTileState extends State<RequestTile> {
                         localAddMap = {'Courier_Ref${localMap.length}' : delivery.courierRef};
 
                         localMap.forEach((key, value){
-                          print(value);
                           if (value == delivery.courierRef) {
-                            isFavorited = true;
+                            isFavorite = true;
                           }
                         });
 
@@ -775,14 +771,13 @@ class _RequestTileState extends State<RequestTile> {
                           padding: const EdgeInsets.only(left: 170),
                           child: Container(
                             child:  FavoriteButton(
-                              isFavorite: isFavorited,
+                              isFavorite: isFavorite,
                               iconSize: 30,
                               valueChanged: (_isFavorite) {
-                                print('Is Favorite $_isFavorite)');
+                                isFavorite = _isFavorite;
 
-                                if (!isFavorited) {
+                                if (isFavorite) {
                                   localMap.addAll(localAddMap);
-                                  print(localMap);
                                 }
                               },
                             ),
@@ -829,9 +824,8 @@ class _RequestTileState extends State<RequestTile> {
                   child: TextButton(
                       child: Text('OK'),
                       onPressed: () async{
-                        print(localMap);
                         await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
-                        if (!isFavorited) {
+                        if (isFavorite) {
                           localMap.addAll(localAddMap);
                           DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
                         }

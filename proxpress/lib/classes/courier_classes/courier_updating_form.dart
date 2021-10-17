@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,6 +15,7 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:proxpress/services/upload_file.dart';
 
 class CourierUpdate extends StatefulWidget {
   @override
@@ -181,8 +183,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                     color: Color(0xfffb0d0d),
                                     child: IconButton(
                                         iconSize: 16,
-                                        icon: Icon(Icons.edit_rounded,color: Colors.white,),
-                                        onPressed: () async{
+                                        icon: Icon(!uploadedNewPic ? Icons.edit_rounded : Icons.save,color: Colors.white,),
+                                        onPressed: !uploadedNewPic ? () async {
                                           String datetime = DateTime.now().toString();
 
                                           final result = await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -201,6 +203,23 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                               saveDestination = saveDestination.substring(0, saveDestination.length - 1);
                                             }
                                           });
+                                        } : () async {
+                                          await UploadFile.uploadFile(saveDestination, profilePicture);
+
+                                          savedUrl = await FirebaseStorage.instance
+                                              .ref(saveDestination)
+                                              .getDownloadURL();
+
+                                          if (savedUrl != null || savedUrl == 'null') {
+                                            await DatabaseService(uid: user.uid).updateCourierProfilePic(savedUrl);
+                                          }
+
+                                          setState(() {
+                                            fetchedUrl = savedUrl;
+                                            uploadedNewPic = false;
+                                          });
+
+                                          showToast('Changes has been saved.');
                                         }
                                     ),
                                   ),

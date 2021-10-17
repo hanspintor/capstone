@@ -88,15 +88,17 @@ class _CourierTileState extends State<CourierTile> {
                     Container(
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
-                        onPressed: approved ? null : () async {
-                          await DatabaseService(uid: widget.courier.uid).approveCourier();
+                        onPressed: approved ? () async {
+                          await DatabaseService(uid: widget.courier.uid).approveCourier(false);
+                        } : () async {
+                          await DatabaseService(uid: widget.courier.uid).approveCourier(true);
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
+                          primary: approved ? Colors.red : Colors.green,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
                         ),
                         child: Text(
-                          "Approve",
+                          approved ? "Disable" : "Approve",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 18
