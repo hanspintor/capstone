@@ -106,6 +106,21 @@ class AuthService {
       return false;
     }
   }
+  Future<bool> validateCustomerEmail(String password) async {
+    var firebaseUser = await _auth.currentUser;
+
+    var authCredentials = EmailAuthProvider.credential(email: firebaseUser.email, password: password);
+    try {
+      var authResult = await firebaseUser
+          .reauthenticateWithCredential(authCredentials);
+      return authResult.user != null;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+
   //validates the password of the courier
   Future<bool> validateCourierPassword(String password) async {
     var firebaseUser = await _auth.currentUser;
@@ -133,13 +148,19 @@ class AuthService {
   }
   //updates the email of the customer
   Future<void> updateCustomerEmail(String email) async {
+    var message;
     var firebaseUser = await _auth.currentUser;
-    firebaseUser.updateEmail(email);
+    firebaseUser.updateEmail(email).then(
+          (value) => message = 'Success',
+    ).catchError((onError) => message = 'error');
   }
   //updates the email of the courier
   Future<void> updateCourierEmail(String email) async {
+    var message;
     var firebaseUser = await _auth.currentUser;
-    firebaseUser.updateEmail(email);
+    firebaseUser.updateEmail(email).then(
+          (value) => message = 'Success',
+    ).catchError((onError) => message = 'error');
   }
   // Future<void> uploadProfilePicture(File image) async{
   //   customer.avatarUrl = await customerStorage.uploadFile(image);

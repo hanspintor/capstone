@@ -7,7 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/UI/CustomerUI/proxpress_template_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
@@ -33,6 +35,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
 
   final Customer validCustomer = Customer();
 
+
   String _currentFName;
   String _currentLName;
   String _currentAddress;
@@ -43,6 +46,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String _confirmPassword;
   List bookmarks;
   bool checkCurrentPassword = true;
+  bool checkCurrentEmail = true;
 
   File profilePicture;
   bool uploadedNewPic = false;
@@ -330,18 +334,18 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 );
                               },
                             ),
-                            Form(
-                              key: _emailKey,
-                              child: OutlinedButton(
-                                  child: ListTile(
-                                    title: Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
-                                    subtitle: Text("${customerData.email}"),
-                                    trailing: Icon(Icons.chevron_right_rounded),
-                                  ),
-                                  onPressed: () {
-                                    showMaterialModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => SingleChildScrollView(
+                            OutlinedButton(
+                                child: ListTile(
+                                  title: Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  subtitle: Text("${customerData.email}"),
+                                  trailing: Icon(Icons.chevron_right_rounded),
+                                ),
+                                onPressed: () {
+                                  showMaterialModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => Form(
+                                      key: _emailKey,
+                                      child: SingleChildScrollView(
                                         controller: ModalScrollController.of(context),
                                         child: Container(
                                           child: Padding(
@@ -366,9 +370,8 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                       else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
                                                         return 'Please Enter a Valid Email Address';
                                                       }
-                                                      else
-                                                        return null;
-                                                    },
+                                                      else return null;
+                                                        },
                                                     onChanged: (val) => setState(() => _currentEmail = val),
                                                   ),
                                                 ),
@@ -384,16 +387,22 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                       ),
                                                       onPressed: () async {
                                                         if (_emailKey.currentState.validate()) {
-                                                          if (_currentEmail != null) {
+                                                          if (_currentEmail != null ) {
                                                             await DatabaseService(uid:user.uid).updateCustomerEmail(_currentEmail);
                                                             validCustomer.updateCurrentEmail(_currentEmail);
-                                                            processDone();
+                                                            showToast("Pleaser verify your ${_currentEmail}");
+                                                            Timer(Duration(seconds: 2), () {
+                                                              Navigator.popAndPushNamed(context, '/template');
+                                                            });
+
+                                                          } else {
+                                                            Navigator.pop(context);
                                                           }
                                                         }
 
-                                                        print("${user1.email}");
-                                                        print ("${user1.emailVerified}");
-                                                        print(_currentEmail);
+                                                        print("database ${user1.email}");
+                                                        print ("verify ? ${user1.emailVerified}");
+                                                        print("_currentEmail ${_currentEmail}");
                                                       },
                                                     ),
                                                   ),
@@ -403,9 +412,9 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                           ),
                                         ),
                                       ),
-                                    );
-                                  }
-                              ),
+                                    ),
+                                  );
+                                }
                             ),
                             OutlinedButton(
                               child: ListTile(

@@ -393,13 +393,19 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                           if (_currentEmail != null) {
                                                             await DatabaseService(uid:user.uid).updateCourierEmail(_currentEmail);
                                                             validCourier.updateCurrentEmail(_currentEmail);
-                                                            processDone();
+                                                            showToast("Pleaser verify your ${_currentEmail}");
+                                                            Timer(Duration(seconds: 2), () {
+                                                              Navigator.popAndPushNamed(context, '/template1');
+                                                            });
+                                                          }else{
+                                                            Navigator.pop(context);
                                                           }
                                                         }
 
-                                                        print("${user1.email}");
-                                                        print ("${user1.emailVerified}");
-                                                        print(_currentEmail);
+
+                                                        print("database ${user1.email}");
+                                                        print ("verify ? ${user1.emailVerified}");
+                                                        print("_currentEmail ${_currentEmail}");
                                                       },
                                                     ),
                                                   ),

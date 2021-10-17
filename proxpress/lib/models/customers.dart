@@ -24,6 +24,9 @@ class Customer{
   void updateCurrentPassword(String password){
     _auth.updateCustomerPassword(password);
   }
+  Future<bool> validateCurrentEmail(String email) async {
+    return await _auth.validateCustomerEmail(email);
+  }
   void updateCurrentEmail(String email){
     _auth.updateCustomerEmail(email);
   }

@@ -21,11 +21,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     User user1 = auth.currentUser;
 
     if(user != null) {
-      if(!user1.emailVerified){
-        ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-          ..showSnackBar(SnackBar(content:
-          Text("Relogin your account to get a new email to your new email address")));
-      }
+
 
       return user == null ? LoginScreen() : SingleChildScrollView(
         child: StreamBuilder<Customer>(
