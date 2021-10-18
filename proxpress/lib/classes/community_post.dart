@@ -37,7 +37,7 @@ class _CommunityPostState extends State<CommunityPost> {
     }
 
     return SizedBox(
-      height: 60,
+      height: 70,
       child: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.transparent,
