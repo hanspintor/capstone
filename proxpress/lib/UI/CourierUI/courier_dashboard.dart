@@ -450,22 +450,22 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                     .ref(vehiclePhotoDestination)
                                     .getDownloadURL();
                               }
-                              if(driversLicenseFront_ == null){
+                              if(driversLicenseFront_ == null || driversLicenseFront_ == ''){
                                 driversLicenseFront_ = courierData.driversLicenseFront_;
                               }
-                              if(driversLicenseBack_ == null){
+                              if(driversLicenseBack_ == null || driversLicenseBack_ == ''){
                                 driversLicenseBack_ = courierData.driversLicenseBack_;
                               }
-                              if(nbiClearancePhoto_ == null){
+                              if(nbiClearancePhoto_ == null || nbiClearancePhoto_ == ''){
                                 nbiClearancePhoto_ = courierData.nbiClearancePhoto_;
                               }
-                              if(vehicleRegistrationOR_ == null){
+                              if(vehicleRegistrationOR_ == null || vehicleRegistrationOR_ == ''){
                                 vehicleRegistrationOR_ = courierData.vehicleRegistrationOR_;
                               }
-                              if(vehicleRegistrationCR_ == null){
+                              if(vehicleRegistrationCR_ == null || vehicleRegistrationCR_ == ''){
                                 vehicleRegistrationCR_ = courierData.vehicleRegistrationCR_;
                               }
-                              if(vehiclePhoto_ == null){
+                              if(vehiclePhoto_ == null || vehiclePhoto_ == ''){
                                 vehiclePhoto_ = courierData.vehiclePhoto_;
                               }
 
