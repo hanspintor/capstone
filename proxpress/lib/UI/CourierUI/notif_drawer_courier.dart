@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
@@ -58,9 +59,7 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
                       height: MediaQuery.of(context).size.height / 2,
                       child: Text(
                         caption,
-                        style: TextStyle(
-
-                        ),
+                        style: TextStyle(),
                       ),
                     ) : Container(),
                     Container(
@@ -70,13 +69,12 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
                         icon: Icon(Icons.clear),
                         label: Text('Clear'),
                         onPressed: () async {
-
-                          // var collection = FirebaseFirestore.instance.collection('Notifications');
-                          // var snapshots = await collection.get();
-                          // for (var doc in snapshots.docs) {
-                          //   await doc.reference.delete();
-                          // }
-
+                          var collection = FirebaseFirestore.instance.collection('Notifications').where('Sent To', isEqualTo: courier);
+                          var snapshots = await collection.get();
+                          for (var doc in snapshots.docs) {
+                            await doc.reference.delete();
+                          }
+                          showToast('Notifications cleared');
                         },
                         style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
                       ),
@@ -90,5 +88,9 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
         }
        },
     );
+  }
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 }

@@ -85,37 +85,37 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                     return false;
                   },
                   child:  Scaffold(
-                      drawerEnableOpenDragGesture: false,
-                      endDrawerEnableOpenDragGesture: false,
-                      key: _scaffoldKey,
-                      appBar: AppBar(
-                        backgroundColor: Colors.white,
-                        iconTheme: IconThemeData(color: Color(0xfffb0d0d)
-                        ),
-                        actions: <Widget>[
-                          StreamProvider<List<Notifications>>.value(
-                            value: notifList,
-                            initialData: [],
-                            child:  NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,),
-                          )
+                    drawerEnableOpenDragGesture: false,
+                    endDrawerEnableOpenDragGesture: false,
+                    key: _scaffoldKey,
+                    appBar: AppBar(
+                      backgroundColor: Colors.white,
+                      iconTheme: IconThemeData(color: Color(0xfffb0d0d)
+                      ),
+                      actions: <Widget>[
+                        StreamProvider<List<Notifications>>.value(
+                          value: notifList,
+                          initialData: [],
+                          child:  NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,),
+                        )
 
-                        ],
-                        flexibleSpace: Container(
-                          margin: EdgeInsets.only(top: 10),
-                            child: Image.asset(
-                            "assets/PROExpress-logo.png",
-                            height: 120,
-                            width: 120,
-                          ),
+                      ],
+                      flexibleSpace: Container(
+                        margin: EdgeInsets.only(top: 10),
+                          child: Image.asset(
+                          "assets/PROExpress-logo.png",
+                          height: 120,
+                          width: 120,
                         ),
                       ),
-                      drawer: MainDrawerCourier(),
-                      endDrawer: NotifDrawerCourier(),
-                      body: pagePicker(),
-                    floatingActionButton: Visibility(visible: actionButton,
+                    ),
+                    drawer: MainDrawerCourier(),
+                    endDrawer: NotifDrawerCourier(),
+                    body: pagePicker(),
+                    floatingActionButton: !courierData.approved ? null : Visibility(visible: actionButton,
                       child: FloatingActionButton(
                         child: Icon(Icons.add_rounded),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.pushNamed(context, '/courierCreatePost');
                         },
                       ),
