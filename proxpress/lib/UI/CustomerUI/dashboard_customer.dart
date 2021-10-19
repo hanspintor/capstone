@@ -81,7 +81,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                       builder: (BuildContext context){
                         return AlertDialog(
                           title: Text("Help"),
-                          content: Text('nice'),
+                          content: Text('Sample Text Here'),
                           actions: [
                             TextButton(
                               child: Text("OK"),

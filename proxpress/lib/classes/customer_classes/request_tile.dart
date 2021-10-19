@@ -753,7 +753,7 @@ class _RequestTileState extends State<RequestTile> {
                       if(snapshot.hasData){
                         Customer customerData = snapshot.data;
 
-                        if (customerData.courier_ref != null || customerData.courier_ref != {}) {
+                        if (customerData.courier_ref != {}) {
                           localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
                         } else {
                           localAddMap = {};

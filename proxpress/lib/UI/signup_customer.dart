@@ -20,7 +20,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
   String address;
   bool agree = false;
   bool slide = false;
-  Map  courier_ref;
+  Map courier_ref = {};
 
   bool loading = false;
   final AuthService _auth = AuthService();

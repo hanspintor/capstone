@@ -74,7 +74,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                   builder: (BuildContext context){
                     return AlertDialog(
                       title: Text("Help"),
-                      content: Text('nice'),
+                      content: Text('Sample Text Here'),
                       actions: [
                         TextButton(
                           child: Text("OK"),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/classes/customer_classes/notif_list_customer.dart';
@@ -9,8 +10,6 @@ import 'package:proxpress/services/database.dart';
 import '../login_screen.dart';
 
 class NotifDrawerCustomer extends StatefulWidget {
-
-
   @override
   _NotifDrawerCustomerState createState() => _NotifDrawerCustomerState();
 }
@@ -54,9 +53,7 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
                   height: MediaQuery.of(context).size.height / 2,
                   child: Text(
                     caption,
-                    style: TextStyle(
-
-                    ),
+                    style: TextStyle(),
                   ),
                 ) : Container(),
                 Container(
@@ -65,10 +62,13 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
                   child: ElevatedButton.icon(
                     icon: Icon(Icons.clear),
                     label: Text('Clear'),
-                    onPressed: (){
-                      setState(() {
-                        flag = 0;
-                      });
+                    onPressed: () async {
+                      var collection = FirebaseFirestore.instance.collection('Notifications').where('Sent To', isEqualTo: customer);
+                      var snapshots = await collection.get();
+                      for (var doc in snapshots.docs) {
+                        await doc.reference.delete();
+                      }
+                      showToast('Notifications cleared');
                     },
                     style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
                   ),
@@ -80,5 +80,9 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
     } else {
       return LoginScreen();
     }
+  }
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 }
