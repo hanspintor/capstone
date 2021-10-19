@@ -221,68 +221,71 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   context: context,
                                   builder: (context) => SingleChildScrollView(
                                     controller: ModalScrollController.of(context),
-                                    child: Container(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(labelText:
-                                                    'First Name:',
-                                                      hintText: "${customerData.fName}",
-                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                      labelStyle: TextStyle(
-                                                          fontStyle: FontStyle.italic,
-                                                          color: Colors.black
+                                    child: Form(
+                                      key: _fullNameKey,
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(labelText:
+                                                      'First Name:',
+                                                        hintText: "${customerData.fName}",
+                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                        labelStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic,
+                                                            color: Colors.black
+                                                        ),
                                                       ),
-                                                    ),
-                                                    onChanged: (val) => setState(() => _currentFName = val),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(labelText:
-                                                    'Last Name:',
-                                                      hintText: "${customerData.lName}",
-                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                      labelStyle: TextStyle(
-                                                          fontStyle: FontStyle.italic,
-                                                          color: Colors.black
-                                                      ),
-                                                    ),
-                                                    onChanged: (val) => setState(() => _currentLName = val),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.only(right: 20),
-                                                  child: Align(
-                                                    alignment: Alignment.topRight,
-                                                    child: ElevatedButton.icon(
-                                                      icon: Icon(Icons.save),
-                                                      label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
-                                                      style: ElevatedButton.styleFrom(
-                                                        primary: Color(0xfffb0d0d),
-                                                      ),
-                                                      onPressed: () async {
-                                                        if (_fullNameKey.currentState.validate()) {
-                                                          await DatabaseService(uid:user.uid).updateCustomerFullName(_currentFName == '' ? customerData.fName : _currentFName ?? customerData.fName, _currentLName == '' ? customerData.lName : _currentLName ?? customerData.lName);
-                                                          processDone();
-                                                        }
-                                                      },
+                                                      onChanged: (val) => setState(() => _currentFName = val),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                  Padding(
+                                                    padding: EdgeInsets.all(8),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(labelText:
+                                                      'Last Name:',
+                                                        hintText: "${customerData.lName}",
+                                                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                        labelStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic,
+                                                            color: Colors.black
+                                                        ),
+                                                      ),
+                                                      onChanged: (val) => setState(() => _currentLName = val),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(right: 20),
+                                                    child: Align(
+                                                      alignment: Alignment.topRight,
+                                                      child: ElevatedButton.icon(
+                                                        icon: Icon(Icons.save),
+                                                        label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                        style: ElevatedButton.styleFrom(
+                                                          primary: Color(0xfffb0d0d),
+                                                        ),
+                                                        onPressed: () async {
+                                                          if (_fullNameKey.currentState.validate()) {
+                                                            await DatabaseService(uid:user.uid).updateCustomerFullName(_currentFName == '' ? customerData.fName : _currentFName ?? customerData.fName, _currentLName == '' ? customerData.lName : _currentLName ?? customerData.lName);
+                                                            processDone();
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
 
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -300,46 +303,49 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   context: context,
                                   builder: (context) => SingleChildScrollView(
                                     controller: ModalScrollController.of(context),
-                                    child: Container(
-                                      child: Padding(
-                                        padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: TextFormField(
-                                                decoration: InputDecoration(
-                                                  hintText: "${customerData.address}",
-                                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                  labelStyle: TextStyle(
-                                                      fontStyle: FontStyle.italic,
-                                                      color: Colors.black
+                                    child: Form(
+                                      key: _addressKey,
+                                      child: Container(
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(8),
+                                                child: TextFormField(
+                                                  decoration: InputDecoration(
+                                                    hintText: "${customerData.address}",
+                                                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                    labelStyle: TextStyle(
+                                                        fontStyle: FontStyle.italic,
+                                                        color: Colors.black
+                                                    ),
                                                   ),
-                                                ),
-                                                keyboardType: TextInputType.streetAddress,
-                                                onChanged: (val) => setState(() => _currentAddress = val),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(right: 20),
-                                              child: Align(
-                                                alignment: Alignment.topRight,
-                                                child: ElevatedButton.icon(
-                                                  icon: Icon(Icons.save),
-                                                  label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
-                                                  style: ElevatedButton.styleFrom(
-                                                    primary: Color(0xfffb0d0d),
-                                                  ),
-                                                  onPressed: () async {
-                                                    if (_addressKey.currentState.validate()) {
-                                                      await DatabaseService(uid:user.uid).updateCustomerAddress(_currentAddress == '' ? customerData.address : _currentAddress ?? customerData.address);
-                                                      processDone();
-                                                    }
-                                                  },
+                                                  keyboardType: TextInputType.streetAddress,
+                                                  onChanged: (val) => setState(() => _currentAddress = val),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Container(
+                                                margin: EdgeInsets.only(right: 20),
+                                                child: Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: ElevatedButton.icon(
+                                                    icon: Icon(Icons.save),
+                                                    label: Text('Save', style: TextStyle(color: Colors.white, fontSize:15),),
+                                                    style: ElevatedButton.styleFrom(
+                                                      primary: Color(0xfffb0d0d),
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (_addressKey.currentState.validate()) {
+                                                        await DatabaseService(uid:user.uid).updateCustomerAddress(_currentAddress == '' ? customerData.address : _currentAddress ?? customerData.address);
+                                                        processDone();
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
