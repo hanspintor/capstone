@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/services/auth.dart';
@@ -11,6 +13,8 @@ class SignupCustomer extends StatefulWidget{
 }
 
 class _SignupCustomerState extends State<SignupCustomer> {
+  int currentStep = 0;
+  int step = 0;
   String fName;
   String lName;
   String email;
@@ -27,6 +31,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
   String error = '';
 
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
+  List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(),];
 
   Widget _buildFName(){
     return TextFormField(
@@ -219,127 +224,197 @@ class _SignupCustomerState extends State<SignupCustomer> {
             flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
           ),
           body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(50),
-                    child: Form(
-                      key: regKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(height: 12,),
-                          Text(
-                            error,
-                            style: TextStyle(color: Colors.red, fontSize: 20.0),
-                          ),
-                          _buildFName(),
-                          _buildLName(),
-                          _buildEmail(),
-                          _buildContactNo(),
-                          _buildPassword(),
-                          _buildConfirmPassword(),
-                          _buildAddress(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                child: Checkbox(
-                                    value: agree,
-                                    onChanged: (value){
-                                      setState(() {
-                                        agree = value;
-                                      });
+            child: Column(
+              children: [
+                Form(
+                  key: regKey,
+                  child: Stepper(
+                    type: StepperType.vertical,
+                    steps: getSteps(),
+                    currentStep: currentStep,
+
+                    controlsBuilder: (context, ControlsDetails) {
+                      final isLastStep = currentStep == getSteps().length - 1;
+                      return Container(
+                        margin: EdgeInsets.only(top: 30),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if(formKeys[currentStep].currentState.validate()) {
+                                    if(isLastStep) {
+                                      print('Completed');
                                     }
-                                ),
+                                    else setState(() => currentStep += 1);
+                                  }
+                                },
+                                child: Text(isLastStep ? 'CONFIRM' : 'NEXT'),
                               ),
-                              Container(
-                                child: Text(
-                                    'I do accept the '
-                                ),
-                              ),
-                              Container(
-                                child: InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                        barrierDismissible: false,
-                                        context: context, builder: (BuildContext context) => AlertDialog(
-                                        title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
-                                        content: (AlertTermsConditions()),
-                                    )
-                                    );
-                                  },
-                                  child: Text(
-                                    "Terms and Conditions",
-                                    style: TextStyle(
-                                      color: Color(0xffFD3F40),
-                                      decoration: TextDecoration.underline,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 30),
-                          child: SlideAction(
-                            child: Container(
-                              margin: EdgeInsets.only(left: 40),
-                              child: Text('SLIDE IF YOU ARE NOT A BOT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),),
                             ),
-                            elevation: 4,
-                            height:60,
-                            sliderRotate: true,
-                            sliderButtonIconPadding: 13,
-                            onSubmit: (){
-                              confirm(true);
-                            },
-                          ),
-                        ),
-
-                          ElevatedButton(
-                            child: Text(
-                              'Signup', style: TextStyle(color: Colors.white, fontSize:18),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xfffb0d0d),
-                            ),
-                            onPressed: !agree || !slide ? null : () async {
-                              String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
-
-                              if (regKey.currentState.validate()){
-                                setState(() => loading = true);
-                                dynamic result = await _auth.SignUpCustomer(email, password, fName, lName,
-                                    contactNo, address, defaultProfilePic, false, 0, {});
-
-                                if(result == null){
-                                  setState((){
-                                    error = 'Email already taken';
-                                    slide = false;
-                                    loading = false;
+                            const SizedBox(width: 12,),
+                            if(currentStep != 0)
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: (){
+                                  setState(() {
+                                    if(currentStep == 0){
+                                      return null;
+                                    }
+                                    else currentStep -= 1;
                                   });
-                                } else{
-                                  ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-                                    ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
-
-                                }
-                              }
-                            }
-                          ),
-                        ],
-                      ),
-                    ),
+                                },
+                                child: Text('BACK'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           )
       ),
     );
   }
+  List<Step> getSteps() => [
+    Step(
+      state: currentStep > 0 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 0,
+      title: Text('Name'),
+      content: Form(
+        key: formKeys[0],
+        child: Padding(
+          padding: const EdgeInsets.only(right: 30),
+          child: Column(
+            children: [
+              _buildFName(),
+              _buildLName(),
+            ],
+          ),
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 1 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 1,
+      title: Text('Email'),
+      content: Form(
+        key: formKeys[1],
+        child: Padding(
+          padding: const EdgeInsets.only(right: 30),
+          child: Column(
+            children: [
+              _buildEmail(),
+            ],
+          ),
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 2 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 2,
+      title: Text('Address'),
+      content: Form(
+        key: formKeys[2],
+        child: Padding(
+          padding: const EdgeInsets.only(right: 30),
+          child: Column(
+            children: [
+              _buildAddress(),
+            ],
+          ),
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 3 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 3,
+      title: Text('Contact Number'),
+      content: Form(
+        key: formKeys[3],
+        child: Padding(
+          padding: const EdgeInsets.only(right: 30),
+          child: Column(
+            children: [
+              _buildContactNo(),
+            ],
+          ),
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 4 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 4,
+      title: Text('Password'),
+      content: Form(
+        key: formKeys[4],
+        child: Padding(
+          padding: const EdgeInsets.only(right: 30),
+          child: Column(
+            children: [
+              _buildPassword(),
+              _buildConfirmPassword(),
+            ],
+          ),
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 5 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 5,
+      title: Text('Complete'),
+      content: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 3),
+          child: Column(
+            children: [
+              Row(children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                ),
+                Text.rich(
+                  TextSpan(children: [
+                    TextSpan(text: fName ?? '', style: TextStyle(fontSize: 15),),
+                    TextSpan(text: ' '),
+                    TextSpan(text: lName ?? '', style: TextStyle(fontSize: 15),)
+                  ],)
+                ),
+              ],
+              ),
+              Row(children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                ),
+                Text(email ?? '', style: TextStyle(fontSize: 15),),
+              ],
+              ),
+              Row(children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text('Address', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                ),
+                Text(address ?? '', style: TextStyle(fontSize: 15),),
+              ],
+              ),
+              Row(children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text('Contact Number', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                ),
+                Text(contactNo ?? '', style: TextStyle(fontSize: 15),),
+              ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  ];
 }
 
 
