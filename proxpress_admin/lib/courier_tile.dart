@@ -148,45 +148,6 @@ class _CourierTileState extends State<CourierTile> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                      content: Text(
-                                          "Delete courier?"),
-                                      actions: [
-                                        TextButton(
-                                          child: Text("Yes"),
-                                          onPressed: () async {
-                                            await _auth.deleteUser(widget.courier.email, widget.courier.password, widget.savedPassword);
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                        TextButton(
-                                          child: Text("No"),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ])
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.red,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                        ),
-                        child: Text(
-                          "Delete",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18
-                          ),
-                        ),
-                      ),
-                    ),
                     !widget.courier.approved ? Container(
                       margin: EdgeInsets.all(10),
                         child: ElevatedButton(
