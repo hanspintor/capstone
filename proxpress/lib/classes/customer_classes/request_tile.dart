@@ -395,86 +395,116 @@ class _RequestTileState extends State<RequestTile> {
                                                                 ),
                                                               ),
                                                               SizedBox(height: 15,),
-                                                              SizedBox(
-                                                                height: 60,
+                                                              Form(
+                                                                key: _key,
+                                                                child: SingleChildScrollView(
+                                                                  child: Column(
+                                                                    mainAxisSize: MainAxisSize.min,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height: 60,
 
-                                                                child: DropdownButtonFormField<String>(
-                                                                  validator: (value) => value == null ? 'Please choose a reason' : null,
-                                                                  decoration: InputDecoration(
-                                                                    border: new OutlineInputBorder(
-                                                                        borderSide: new BorderSide(color: Colors.black)),
-                                                                    labelText: "Reason why",
+                                                                        child: DropdownButtonFormField<String>(
+                                                                          validator: (value) => value == null ? 'Please choose a reason' : null,
+                                                                          decoration: InputDecoration(
+                                                                            border: new OutlineInputBorder(
+                                                                                borderSide: new BorderSide(color: Colors.black)),
+                                                                            labelText: "Reason why",
+                                                                          ),
+
+
+                                                                          icon: const Icon(Icons.arrow_downward),
+                                                                          iconSize: 20,
+                                                                          elevation: 16,
+                                                                          onChanged: (String newValue) {
+                                                                            setState(() {
+                                                                              reason = newValue;
+                                                                            });
+                                                                            print(reason);
+                                                                          },
+                                                                          items: <String>['Parcel damaged or mishandled', 'Utterly long delivery time', 'Rudeness or harassment', 'Asking price beyond stated fee', 'Others',]
+                                                                              .map<DropdownMenuItem<String>>((String value) {
+                                                                            return DropdownMenuItem<String>(
+                                                                              value: value,
+                                                                              child: Text(value),
+                                                                            );
+                                                                          }).toList(),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(height: 10,),
+                                                                      Visibility(
+                                                                          visible: reason == "Others" ? true : false,
+                                                                          child: TextFormField(
+                                                                            validator: (value){
+                                                                              _description = value;
+                                                                              return value.isNotEmpty ? null : "Please provide a reason";
+                                                                            },
+                                                                            onChanged: (value) {
+
+                                                                            },
+                                                                            decoration:  InputDecoration(
+                                                                              hintText: "Reason",
+                                                                              hintStyle: TextStyle(
+                                                                                  fontStyle: FontStyle.italic
+                                                                              ),
+                                                                              filled: true,
+
+
+                                                                              focusedBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(
+                                                                                  color: Colors.red,
+                                                                                  width: 2,
+                                                                                ),
+                                                                                borderRadius: BorderRadius.circular(10.0),
+                                                                              ),
+
+
+                                                                            ),
+                                                                          ),
+                                                                      ),
+                                                                      SizedBox(height: 10,),
+                                                                      TextFormField(
+                                                                        validator: (value){
+                                                                          _description = value;
+                                                                          return value.isNotEmpty ? null : "Please provide a reason";
+                                                                        },
+                                                                        minLines: 3,
+                                                                        maxLines: null,
+                                                                        maxLength: 100,
+                                                                        keyboardType: TextInputType.multiline,
+                                                                        onChanged: (value) {
+
+                                                                        },
+                                                                        decoration:  InputDecoration(
+                                                                          hintText: "More details",
+                                                                          hintStyle: TextStyle(
+                                                                              fontStyle: FontStyle.italic
+                                                                          ),
+                                                                          filled: true,
+                                                                          border: InputBorder.none,
+                                                                          fillColor: Colors.grey[300],
+
+                                                                          contentPadding: const EdgeInsets.all(30),
+                                                                          focusedBorder: OutlineInputBorder(
+                                                                            borderSide: BorderSide(
+                                                                              color: Colors.red,
+                                                                              width: 2,
+                                                                            ),
+                                                                            borderRadius: BorderRadius.circular(10.0),
+                                                                          ),
+                                                                          enabledBorder: UnderlineInputBorder(
+                                                                            borderSide: BorderSide(color: Colors.white),
+                                                                            borderRadius: BorderRadius.circular(10.0),
+                                                                          ),
+
+                                                                        ),
+                                                                      ),
+
+                                                                    ],
                                                                   ),
-
-
-                                                                  icon: const Icon(Icons.arrow_downward),
-                                                                  iconSize: 20,
-                                                                  elevation: 16,
-                                                                  onChanged: (String newValue) {
-                                                                    setState(() {
-                                                                        reason = newValue;
-                                                                    });
-                                                                    print(reason);
-                                                                  },
-                                                                  items: <String>['Parcel damaged or mishandled', 'Utterly long delivery time', 'Rudeness or harassment', 'Asking price beyond stated fee', 'Others',]
-                                                                      .map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
                                                                 ),
                                                               ),
-                                                              SizedBox(height: 20,),
-                                                              Visibility(
-                                                                visible: reason == "Others" ? true : false,
-                                                                child: Form(
-                                                                  key: _key,
-                                                                  child: SingleChildScrollView(
-                                                                    child: Column(
-                                                                      mainAxisSize: MainAxisSize.min,
-                                                                      children: [
-                                                                        TextFormField(
-                                                                          validator: (value){
-                                                                            _description = value;
-                                                                            return value.isNotEmpty ? null : "Please provide a reason";
-                                                                          },
-                                                                          minLines: 3,
-                                                                          maxLines: null,
-                                                                          maxLength: 100,
-                                                                          keyboardType: TextInputType.multiline,
-                                                                          onChanged: (value) {
 
-                                                                          },
-                                                                          decoration:  InputDecoration(
-                                                                            hintText: "More details",
-                                                                            hintStyle: TextStyle(
-                                                                                fontStyle: FontStyle.italic
-                                                                            ),
-                                                                            filled: true,
-                                                                            border: InputBorder.none,
-                                                                            fillColor: Colors.grey[300],
-
-                                                                            contentPadding: const EdgeInsets.all(30),
-                                                                            focusedBorder: OutlineInputBorder(
-                                                                              borderSide: BorderSide(
-                                                                                color: Colors.red,
-                                                                                width: 2,
-                                                                              ),
-                                                                              borderRadius: BorderRadius.circular(10.0),
-                                                                            ),
-                                                                            enabledBorder: UnderlineInputBorder(
-                                                                              borderSide: BorderSide(color: Colors.white),
-                                                                              borderRadius: BorderRadius.circular(10.0),
-                                                                            ),
-
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              )
 
                                                             ],
                                                           ),
