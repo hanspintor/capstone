@@ -89,6 +89,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
           print("cont ${cont}");
           return Stack(
+
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
@@ -98,7 +99,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                     await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
                   });
                 },
-                iconSize: 25,
+
               ),
               Visibility(
                 maintainSize: true,
@@ -106,7 +107,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                 maintainState: true,
                 visible: viewable,
                 child: Container(
-                  margin: EdgeInsets.only(left: 25, top: 5),
+                  padding: EdgeInsets.only(left: 25, top: 0),
                   height: 20,
                   width: 30,
                   decoration: BoxDecoration(

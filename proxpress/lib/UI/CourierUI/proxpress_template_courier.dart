@@ -89,8 +89,18 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                     endDrawerEnableOpenDragGesture: false,
                     key: _scaffoldKey,
                     appBar: AppBar(
+                      leading: Stack(
+
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.menu, size: 25,), // change this size and style
+                            onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                          ),
+                        ],
+                      ),
                       backgroundColor: Colors.white,
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
+
                       ),
                       actions: <Widget>[
                         StreamProvider<List<Notifications>>.value(
