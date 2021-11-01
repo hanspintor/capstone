@@ -204,6 +204,9 @@ class _SignupCustomerState extends State<SignupCustomer> {
 
   @override
   Widget build(BuildContext context) {
+    final isLastStep = currentStep == getSteps().length - 1;
+    print(getSteps().length);
+
     return loading ? UserLoading() : WillPopScope(
       onWillPop: _backPressed,
       child: Scaffold(
@@ -234,7 +237,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     currentStep: currentStep,
 
                     controlsBuilder: (context, ControlsDetails) {
-                      final isLastStep = currentStep == getSteps().length - 1;
                       return Container(
                         margin: EdgeInsets.only(top: 30),
                         child: Row(
@@ -242,14 +244,17 @@ class _SignupCustomerState extends State<SignupCustomer> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  if(formKeys[currentStep].currentState.validate()) {
-                                    if(isLastStep) {
-                                      print('Completed');
+                                  if(isLastStep) {
+                                    print('Completed');
+                                  }
+                                  else
+                                  {
+                                    if(formKeys[currentStep].currentState.validate()) {
+                                      setState(() => currentStep += 1);
                                     }
-                                    else setState(() => currentStep += 1);
                                   }
                                 },
-                                child: Text(isLastStep ? 'CONFIRM' : 'NEXT'),
+                                child: Text(isLastStep ? 'SIGNUP' : 'NEXT'),
                               ),
                             ),
                             const SizedBox(width: 12,),
@@ -409,6 +414,66 @@ class _SignupCustomerState extends State<SignupCustomer> {
                 Text(contactNo ?? '', style: TextStyle(fontSize: 15),),
               ],
               ),
+
+              Row(
+                children: [
+                  Container(
+                    child: Checkbox(
+                        value: agree,
+                        onChanged: (value){
+                          setState(() {
+                            agree = value;
+                          });
+                        }
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                        'I do accept the '
+                    ),
+                  ),
+                  Container(
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context, builder: (BuildContext context) => AlertDialog(
+                          title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
+                          content: (AlertTermsConditions()),
+                        )
+                        );
+                      },
+                      child: Text(
+                        "Terms and Conditions",
+                        style: TextStyle(
+                          color: Color(0xffFD3F40),
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Container(
+                  child: SlideAction(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 30),
+                      child: Text('SLIDE IF YOU ARE NOT A BOT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),),
+                    ),
+                    elevation: 4,
+                    height:60,
+                    sliderRotate: true,
+                    sliderButtonIconPadding: 13,
+                    onSubmit: (){
+                      confirm(true);
+                    },
+                  ),
+                ),
+              ),
+
             ],
           ),
         ),
