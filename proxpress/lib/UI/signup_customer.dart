@@ -235,6 +235,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     type: StepperType.vertical,
                     steps: getSteps(),
                     currentStep: currentStep,
+                    physics: NeverScrollableScrollPhysics(),
 
                     controlsBuilder: (context, ControlsDetails) {
                       return Container(
@@ -243,9 +244,26 @@ class _SignupCustomerState extends State<SignupCustomer> {
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () async {
-                                  if(isLastStep) {
-                                    print('Completed');
+                                onPressed: isLastStep && (!agree || !slide) ? null : () async {
+                                  if(isLastStep){
+                                    String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
+
+                                    if (regKey.currentState.validate()){
+                                      setState(() => loading = true);
+                                      dynamic result = await _auth.SignUpCustomer(email, password, fName, lName,
+                                          contactNo, address, defaultProfilePic, false, 0, {});
+
+                                      if(result == null){
+                                        setState((){
+                                          error = 'Email already taken';
+                                          slide = false;
+                                          loading = false;
+                                        });
+                                      } else{
+                                        ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+                                          ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
+                                      }
+                                    }
                                   }
                                   else
                                   {
@@ -415,45 +433,48 @@ class _SignupCustomerState extends State<SignupCustomer> {
               ],
               ),
 
-              Row(
-                children: [
-                  Container(
-                    child: Checkbox(
-                        value: agree,
-                        onChanged: (value){
-                          setState(() {
-                            agree = value;
-                          });
-                        }
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Row(
+                  children: [
+                    Container(
+                      child: Checkbox(
+                          value: agree,
+                          onChanged: (value){
+                            setState(() {
+                              agree = value;
+                            });
+                          }
+                      ),
                     ),
-                  ),
-                  Container(
-                    child: Text(
-                        'I do accept the '
-                    ),
-                  ),
-                  Container(
-                    child: InkWell(
-                      onTap: () {
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context, builder: (BuildContext context) => AlertDialog(
-                          title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
-                          content: (AlertTermsConditions()),
-                        )
-                        );
-                      },
+                    Container(
                       child: Text(
-                        "Terms and Conditions",
-                        style: TextStyle(
-                          color: Color(0xffFD3F40),
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.bold,
+                          'I do accept the '
+                      ),
+                    ),
+                    Container(
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context, builder: (BuildContext context) => AlertDialog(
+                            title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
+                            content: (AlertTermsConditions()),
+                          )
+                          );
+                        },
+                        child: Text(
+                          "Terms and Conditions",
+                          style: TextStyle(
+                            color: Color(0xffFD3F40),
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -473,7 +494,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
