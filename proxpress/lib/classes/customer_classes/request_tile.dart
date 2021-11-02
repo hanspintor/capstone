@@ -26,7 +26,7 @@ class _RequestTileState extends State<RequestTile> {
   String _description = "";
   GlobalKey<FormState> _keyCancel = GlobalKey<FormState>();
   String cancellationMessage = "";
-
+  String reason = "";
   CollectionReference reportColl = DatabaseService().reportCollection;
   String localVal = "";
 
@@ -348,92 +348,180 @@ class _RequestTileState extends State<RequestTile> {
                                                     builder: (context) => StatefulBuilder(
                                                       builder: (context, setState){
                                                         return AlertDialog(
-                                                          title: Row(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                          title: Stack(
+                                                            alignment: AlignmentDirectional.topEnd,
                                                             children: [
                                                               Container(
-                                                                margin: EdgeInsets.only(right: 10),
-                                                                child: Icon(
-                                                                  Icons.flag,
+                                                                padding: EdgeInsets.only(bottom: 15),
+                                                                decoration: BoxDecoration(
+                                                                  border: Border(
+                                                                    bottom: BorderSide(color: Colors.grey[500])
+                                                                  )
+                                                                ),
+                                                                  child: Center(
+                                                                      child: Text("Report Courier")
+                                                                  ),
+                                                              ),
+                                                              Positioned(
+                                                                bottom: -85,
+                                                                top: -100,
+                                                                child: IconButton(
+                                                                  icon: const Icon(Icons.close_sharp),
                                                                   color: Colors.redAccent,
+                                                                  onPressed: () {
+                                                                    Navigator.pop(context);
+                                                                    reason = "";
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ],
+
+                                                          ),
+                                                          content: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Align(
+                                                                child: Text(
+                                                                  "Please select a reason",
+                                                                  style: TextStyle(
+                                                                    fontWeight: FontWeight.bold,
+                                                                  ),
+                                                                ),
+                                                                alignment: Alignment.topLeft,
+                                                              ),
+                                                              SizedBox(height: 5,),
+                                                              Text(
+                                                                "if this courier commited undesireable act, get help before reporting to PROXpress. Don't wait.",
+                                                                style: TextStyle(
+                                                                  fontSize: 12,
+                                                                ),
+                                                              ),
+                                                              SizedBox(height: 15,),
+                                                              Form(
+                                                                key: _key,
+                                                                child: SingleChildScrollView(
+                                                                  child: Column(
+                                                                    mainAxisSize: MainAxisSize.min,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height: 60,
+
+                                                                        child: DropdownButtonFormField<String>(
+                                                                          validator: (value) => value == null ? 'Please choose a reason' : null,
+                                                                          decoration: InputDecoration(
+                                                                            border: new OutlineInputBorder(
+                                                                                borderSide: new BorderSide(color: Colors.black)),
+                                                                            labelText: "Reason why",
+                                                                          ),
+
+
+                                                                          icon: const Icon(Icons.arrow_downward),
+                                                                          iconSize: 20,
+                                                                          elevation: 16,
+                                                                          onChanged: (String newValue) {
+                                                                            setState(() {
+                                                                              reason = newValue;
+                                                                            });
+                                                                            print(reason);
+                                                                          },
+                                                                          items: <String>['Parcel damaged or mishandled', 'Utterly long delivery time', 'Rudeness or harassment', 'Asking price beyond stated fee', 'Others',]
+                                                                              .map<DropdownMenuItem<String>>((String value) {
+                                                                            return DropdownMenuItem<String>(
+                                                                              value: value,
+                                                                              child: Text(value),
+                                                                            );
+                                                                          }).toList(),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(height: 10,),
+                                                                      Visibility(
+                                                                          visible: reason == "Others" ? true : false,
+                                                                          child: TextFormField(
+                                                                            validator: (value){
+                                                                              _description = value;
+                                                                              return value.isNotEmpty ? null : "Please provide a reason";
+                                                                            },
+                                                                            onChanged: (value) {
+
+                                                                            },
+                                                                            decoration:  InputDecoration(
+                                                                              hintText: "Reason",
+                                                                              hintStyle: TextStyle(
+                                                                                  fontStyle: FontStyle.italic
+                                                                              ),
+                                                                              filled: true,
+
+
+                                                                              focusedBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(
+                                                                                  color: Colors.red,
+                                                                                  width: 2,
+                                                                                ),
+                                                                                borderRadius: BorderRadius.circular(10.0),
+                                                                              ),
+
+
+                                                                            ),
+                                                                          ),
+                                                                      ),
+                                                                      SizedBox(height: 10,),
+                                                                      TextFormField(
+                                                                        validator: (value){
+                                                                          _description = value;
+                                                                          return value.isNotEmpty ? null : "Please provide a reason";
+                                                                        },
+                                                                        minLines: 3,
+                                                                        maxLines: null,
+                                                                        maxLength: 100,
+                                                                        keyboardType: TextInputType.multiline,
+                                                                        onChanged: (value) {
+
+                                                                        },
+                                                                        decoration:  InputDecoration(
+                                                                          hintText: "More details",
+                                                                          hintStyle: TextStyle(
+                                                                              fontStyle: FontStyle.italic
+                                                                          ),
+                                                                          filled: true,
+                                                                          border: InputBorder.none,
+                                                                          fillColor: Colors.grey[300],
+
+                                                                          contentPadding: const EdgeInsets.all(30),
+                                                                          focusedBorder: OutlineInputBorder(
+                                                                            borderSide: BorderSide(
+                                                                              color: Colors.red,
+                                                                              width: 2,
+                                                                            ),
+                                                                            borderRadius: BorderRadius.circular(10.0),
+                                                                          ),
+                                                                          enabledBorder: UnderlineInputBorder(
+                                                                            borderSide: BorderSide(color: Colors.white),
+                                                                            borderRadius: BorderRadius.circular(10.0),
+                                                                          ),
+
+                                                                        ),
+                                                                      ),
+
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                               ),
 
-                                                              Text("Report a courier"),
+
                                                             ],
                                                           ),
-                                                          content: Form(
-                                                            key: _key,
-                                                            child: SingleChildScrollView(
-                                                              child: Column(
-                                                                mainAxisSize: MainAxisSize.min,
-                                                                children: [
-                                                                  TextFormField(
-                                                                    validator: (value){
-                                                                      _description = value;
-                                                                      return value.isNotEmpty ? null : "Please provide a reason";
-                                                                    },
-                                                                    minLines: 3,
-                                                                    maxLines: null,
-                                                                    maxLength: 100,
-                                                                    keyboardType: TextInputType.multiline,
-                                                                    onChanged: (value) {
-
-                                                                    },
-                                                                    decoration:  InputDecoration(
-                                                                      hintText: "Reason why",
-                                                                      hintStyle: TextStyle(
-                                                                          fontStyle: FontStyle.italic
-                                                                      ),
-                                                                      filled: true,
-                                                                      border: InputBorder.none,
-                                                                      fillColor: Colors.grey[300],
-
-                                                                      contentPadding: const EdgeInsets.all(30),
-                                                                      focusedBorder: OutlineInputBorder(
-                                                                        borderSide: BorderSide(
-                                                                          color: Colors.red,
-                                                                          width: 2,
-                                                                        ),
-                                                                        borderRadius: BorderRadius.circular(10.0),
-                                                                      ),
-                                                                      enabledBorder: UnderlineInputBorder(
-                                                                        borderSide: BorderSide(color: Colors.white),
-                                                                        borderRadius: BorderRadius.circular(10.0),
-                                                                      ),
-
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
                                                           actions: <Widget> [
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                              children: [
-                                                                ElevatedButton(
-                                                                  child: Text("Cancel"),
-                                                                  style: ButtonStyle(
 
-                                                                  ),
-                                                                  onPressed:  () {
-                                                                    Navigator.pop(context);
-                                                                  },
-                                                                ),
-                                                                ElevatedButton(
-                                                                  child: Text("Report"),
-                                                                  onPressed: () async {
-                                                                    if(_key.currentState.validate()){
-                                                                      DatabaseService().createReportData(_description, delivery.customerRef,
-                                                                          delivery.courierRef, Timestamp.now());
-                                                                      DatabaseService(uid: delivery.uid).updateReport(true);
-                                                                      Navigator.of(context).pop();
-                                                                    }
-                                                                  },
-                                                                ),
-                                                              ],
+                                                            ElevatedButton(
+                                                              child: Text("Report"),
+                                                              onPressed: () async {
+                                                                if(_key.currentState.validate()){
+                                                                  DatabaseService().createReportData(_description, delivery.customerRef,
+                                                                      delivery.courierRef, Timestamp.now());
+                                                                  DatabaseService(uid: delivery.uid).updateReport(true);
+                                                                  Navigator.of(context).pop();
+                                                                }
+                                                              },
                                                             )
                                                           ],
                                                         );

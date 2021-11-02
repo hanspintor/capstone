@@ -18,6 +18,7 @@ class SignupCourier extends StatefulWidget{
 }
 
 class _SignupCourierState extends State<SignupCourier> {
+  int currentStep = 0;
   String fName;
   String lName;
   String email;
@@ -39,7 +40,6 @@ class _SignupCourierState extends State<SignupCourier> {
   DocumentReference deliveryPriceRef;
   String deliveryPriceUid;
   List adminCredentialsResponse = [false,false,false,false,false,false];
-
   final AuthService _auth = AuthService();
 
   String vehicleType;
@@ -56,38 +56,44 @@ class _SignupCourierState extends State<SignupCourier> {
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
 
   Widget _buildFName(){
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'First Name'),
-      validator: (String value){
-        if(value.isEmpty){
-          return 'First Name is Required';
-        }
-        else return null;
-      },
-      onSaved: (String value){
-        fName = value;
-      },
-      onChanged: (val){
-        setState(() => fName = val);
-      },
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .4,
+      child: TextFormField(
+        decoration: InputDecoration(labelText: 'First Name'),
+        validator: (String value){
+          if(value.isEmpty){
+            return 'First Name is Required';
+          }
+          else return null;
+        },
+        onSaved: (String value){
+          fName = value;
+        },
+        onChanged: (val){
+          setState(() => fName = val);
+        },
+      ),
     );
   }
 
   Widget _buildLName(){
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Last Name'),
-      validator: (String value){
-        if(value.isEmpty){
-          return 'Last Name is Required';
-        }
-        else return null;
-      },
-      onSaved: (String value){
-        lName = value;
-      },
-      onChanged: (val){
-        setState(() => lName = val);
-      },
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .4,
+      child: TextFormField(
+        decoration: InputDecoration(labelText: 'Last Name'),
+        validator: (String value){
+          if(value.isEmpty){
+            return 'Last Name is Required';
+          }
+          else return null;
+        },
+        onSaved: (String value){
+          lName = value;
+        },
+        onChanged: (val){
+          setState(() => lName = val);
+        },
+      ),
     );
   }
 
@@ -249,6 +255,14 @@ class _SignupCourierState extends State<SignupCourier> {
     final vehicleRegistrationCRFileName =  vehicleRegistrationCR != null ? Path.basename(vehicleRegistrationCR.path) : 'No File Selected';
     final vehiclePhotoFileName =  vehiclePhoto != null ? Path.basename(vehiclePhoto.path) : 'No File Selected';
 
+    final isLastStep = currentStep == getSteps(
+        driversLicenseFrontFileName,
+        driversLicenseBackFileName,
+        nbiClearancePhotoFileName,
+        vehicleRegistrationORFileName,
+        vehicleRegistrationCRFileName,
+        vehiclePhotoFileName).length - 1;
+
     return loading ? UserLoading(): WillPopScope(
       onWillPop: _backPressed,
       child: Scaffold(
@@ -268,456 +282,362 @@ class _SignupCourierState extends State<SignupCourier> {
             backgroundColor: Colors.white,
             flexibleSpace: Container(margin: EdgeInsets.only(top: 10),),
           ),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(50),
-                    child: Form(
-                      key: regKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            error,
-                            style: TextStyle(color: Colors.red, fontSize: 20.0),
-                          ),
-                          _buildFName(),
-                          _buildLName(),
-                          _buildEmail(),
-                          _buildContactNo(),
-                          _buildPassword(),
-                          _buildConfirmPassword(),
-                          _buildAddress(),
-                          Container(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text('Driver\'s License Front',
-                                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                                          label: Text(
-                                            'Add File',
-                                            style: TextStyle(color: Color(0xfffb0d0d)),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                                            final path = result.files.single.path;
-                                            setState(() {
-                                              driversLicenseFront = File(path);
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(driversLicenseFrontFileName),
-                                      ),
-                                      SizedBox(height: 20,),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text('Driver\'s License Back',
-                                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                                          label: Text(
-                                            'Add File',
-                                            style: TextStyle(color: Color(0xfffb0d0d)),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                                            final path = result.files.single.path;
-                                            setState(() {
-                                              driversLicenseBack = File(path);
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(driversLicenseBackFileName),
-                                      ),
-                                      SizedBox(height: 20,),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text('NBI Clearance',
-                                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                                          label: Text(
-                                            'Add File',
-                                            style: TextStyle(color: Color(0xfffb0d0d)),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                                            final path = result.files.single.path;
-                                            setState(() {
-                                              nbiClearancePhoto = File(path);
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(nbiClearancePhotoFileName),
-                                      ),
-                                      SizedBox(height: 20,),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text('Vehicle Official Receipt (OR)',
-                                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                                          label: Text(
-                                            'Add File',
-                                            style: TextStyle(color: Color(0xfffb0d0d)),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                                            final path = result.files.single.path;
-                                            setState(() {
-                                              vehicleRegistrationOR = File(path);
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(vehicleRegistrationORFileName),
-                                      ),
-                                      SizedBox(height: 20,),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text('Vehicle Certificate of Registration (CR)',
-                                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                                          label: Text(
-                                            'Add File',
-                                            style: TextStyle(color: Color(0xfffb0d0d)),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                                            final path = result.files.single.path;
-                                            setState(() {
-                                              vehicleRegistrationCR = File(path);
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(vehicleRegistrationCRFileName),
-                                      ),
-                                      SizedBox(height: 20,),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text('Vehicle Photo',
-                                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: ElevatedButton.icon(
-                                          icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                                          label: Text(
-                                            'Add File',
-                                            style: TextStyle(color: Color(0xfffb0d0d)),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                                            final path = result.files.single.path;
-                                            setState(() {
-                                              vehiclePhoto = File(path);
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(vehiclePhotoFileName),
-                                      ),
-                                      SizedBox(height: 20,),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          DropdownButtonFormField<String>(
-                            validator: (value) => value == null ? 'Vehicle type is required' : null,
-                            decoration: InputDecoration(
-                              labelText: 'Select Your Vehicle Type',
-                            ),
-                            isExpanded: true,
-                            icon: const Icon(Icons.arrow_downward),
-                            iconSize: 24,
-                            elevation: 16,
-                            onChanged: (String newValue) {
-                              setState(() {
-                                vehicleType = newValue;
-                              });
-                            },
-                            items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'MPV', 'FB-Type Van', 'Van']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                          _buildColor(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container (
-                                child: Checkbox(
-                                    value: agree,
-                                    onChanged: (value){
-                                      setState(() {
-                                        agree = value;
-                                      });
-                                    }
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                    'I do accept the '
-                                ),
-                              ),
-                              Container(
-                                child: InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                      barrierDismissible: false,
-                                        context: context, builder: (BuildContext context) => AlertDialog(
-                                      title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
-                                      content: (AlertTermsConditions()),
-                                    )
-                                    );
-                                  },
-                                  child: Text(
-                                    "Terms and Conditions",
-                                    style: TextStyle(
-                                      color: Color(0xffFD3F40),
-                                      decoration: TextDecoration.underline,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 30),
-                            child: SlideAction(
-                              child: Container(
-                                margin: EdgeInsets.only(left: 40),
-                                child: Text('SLIDE IF YOU ARE NOT A BOT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),),
-                              ),
-                              elevation: 4,
-                              height:60,
-                              sliderRotate: true,
-                              sliderButtonIconPadding: 13,
-                              onSubmit: (){
-                                confirm(true);
-                              },
-                            ),
-                          ),
-
-                          ElevatedButton(
-                              child: Text(
-                                'Signup', style: TextStyle(color: Colors.white, fontSize:18),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                primary: Color(0xfffb0d0d),
-                              ),
-                              onPressed: !agree || !slide ? null : () async {
-                                String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
-
-                                bool picsLoaded = driversLicenseFront != null &&
-                                                  driversLicenseBack != null &&
-                                                  nbiClearancePhoto != null &&
-                                                  vehicleRegistrationOR != null &&
-                                                  vehicleRegistrationCR != null &&
-                                                  vehiclePhoto != null ? true : false;
-
-                                if (regKey.currentState.validate() && picsLoaded){
-
-
-                                  await FirebaseFirestore.instance
-                                      .collection('Delivery Prices')
-                                      .where('Vehicle Type', isEqualTo: vehicleType)
-                                      .get()
-                                      .then((event) {
-                                        deliveryPriceUid = event.docs.first.id.toString(); //if it is a single document
-                                      });
-
-                                  deliveryPriceRef = FirebaseFirestore.instance.collection('Delivery Prices').doc(deliveryPriceUid);
-
-                                  //setState(() => loading = true); // loading = true;
-                                  String welcomeMessage = "Thank you for registering in PROXpress. "
-                                      "Please wait for up to 24 hours for the admin to check and verify your uploaded credentials. "
-                                      "This is to ensure that you are qualified to be a courier in our app.";
-
-                                  dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0, welcomeMessage, adminCredentialsResponse);
-                                  if(result == null){
-                                    setState((){
-                                      error = 'Email already taken';
-                                      loading = false;
-                                    });
-                                  } else {
-                                    final FirebaseAuth auth = FirebaseAuth.instance;
-                                    final User user = auth.currentUser;
-
-                                    if (user != null) {
-                                      final driversLicenseFrontDestination = 'Couriers/${user.uid}/$driversLicenseFrontFileName';
-                                      final driversLicenseBackDestination = 'Couriers/${user.uid}/$driversLicenseBackFileName';
-                                      final nbiClearancePhotoDestination = 'Couriers/${user.uid}/$nbiClearancePhotoFileName';
-                                      final vehicleRegistrationORDestination = 'Couriers/${user.uid}/$vehicleRegistrationORFileName';
-                                      final vehicleRegistrationCRDestination = 'Couriers/${user.uid}/$vehicleRegistrationCRFileName';
-                                      final vehiclePhotoDestination = 'Couriers/${user.uid}/$vehiclePhotoFileName';
-
-                                      try {
-                                        await UploadFile.uploadFile(driversLicenseFrontDestination, driversLicenseFront);
-                                        driversLicenseFront_ = await firebase_storage.FirebaseStorage.instance
-                                            .ref(driversLicenseFrontDestination)
-                                            .getDownloadURL();
-
-                                        await UploadFile.uploadFile(driversLicenseBackDestination, driversLicenseBack);
-                                        driversLicenseBack_ = await firebase_storage.FirebaseStorage.instance
-                                            .ref(driversLicenseBackDestination)
-                                            .getDownloadURL();
-
-                                        await UploadFile.uploadFile(nbiClearancePhotoDestination, nbiClearancePhoto);
-                                        nbiClearancePhoto_ = await firebase_storage.FirebaseStorage.instance
-                                            .ref(nbiClearancePhotoDestination)
-                                            .getDownloadURL();
-
-                                        await UploadFile.uploadFile(vehicleRegistrationORDestination, vehicleRegistrationOR);
-                                        vehicleRegistrationOR_ = await firebase_storage.FirebaseStorage.instance
-                                            .ref(vehicleRegistrationORDestination)
-                                            .getDownloadURL();
-
-                                        await UploadFile.uploadFile(vehicleRegistrationCRDestination, vehicleRegistrationCR);
-                                        vehicleRegistrationCR_ = await firebase_storage.FirebaseStorage.instance
-                                            .ref(vehicleRegistrationCRDestination)
-                                            .getDownloadURL();
-
-                                        await UploadFile.uploadFile(vehiclePhotoDestination, vehiclePhoto);
-                                        vehiclePhoto_ = await firebase_storage.FirebaseStorage.instance
-                                            .ref(vehiclePhotoDestination)
-                                            .getDownloadURL();
-
-                                        await DatabaseService(uid: user.uid).updateCourierCredentials(driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
-                                      } catch(e) {
-                                        print(e.toString());
-                                      }
-                                    }
-                                  }
-                                } else {
-                                  print('Photos not yet uploaded');
-                                }
-                              }
-                          ),
-                        ],
+          body: Stepper(
+            type: StepperType.horizontal,
+            steps: getSteps(
+                driversLicenseFrontFileName,
+                driversLicenseBackFileName,
+                nbiClearancePhotoFileName,
+                vehicleRegistrationORFileName,
+                vehicleRegistrationCRFileName,
+                vehiclePhotoFileName
+            ),
+            currentStep: currentStep,
+            controlsBuilder: (context, ControlsDetails) {
+              return Container(
+                margin: EdgeInsets.only(top: 30),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {///isLastStep && (!agree || !slide) ? null :
+                          if(isLastStep){
+                            print('Done');
+                          }
+                          else if(currentStep == 1){
+                            bool picsLoaded = driversLicenseFront != null &&
+                                driversLicenseBack != null &&
+                                nbiClearancePhoto != null &&
+                                vehicleRegistrationOR != null &&
+                                vehicleRegistrationCR != null &&
+                                vehiclePhoto != null ? true : false;
+                            if(picsLoaded){
+                              setState(() => currentStep += 1);
+                            }
+                            else {
+                              print('try again baby!!!!!!!!!');
+                            }
+                          }
+                          else
+                          {
+                            if(regKey.currentState.validate()) {
+                              setState(() => currentStep += 1);
+                            }
+                          }
+                        },
+                        child: Text(isLastStep ? 'SIGNUP' : 'NEXT'),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          )
+                    const SizedBox(width: 12,),
+                    if(currentStep != 0)
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: (){
+                            setState(() {
+                              if(currentStep == 0){
+                                return null;
+                              }
+                              else currentStep -= 1;
+                            });
+                          },
+                          child: Text('BACK'),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
       ),
     );
   }
+
+  List <Step> getSteps(
+      String driversLicenseFrontFileName,
+      String driversLicenseBackFileName,
+      String nbiClearancePhotoFileName,
+      String vehicleRegistrationORFileName,
+      String vehicleRegistrationCRFileName,
+      String vehiclePhotoFileName) => [
+    Step(
+        state: currentStep > 0 ? StepState.complete: StepState.indexed,
+        isActive: currentStep >= 0,
+        title: Text('Account'),
+        content: Center(
+          child: Form(
+            key: regKey,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    _buildFName(),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: _buildLName(),
+                    ),
+                  ],
+                ),
+                _buildEmail(),
+                _buildAddress(),
+                _buildContactNo(),
+                _buildPassword(),
+                _buildConfirmPassword(),
+              ],
+            ),
+          ),
+        ),
+    ),
+    Step(
+      state: currentStep > 1 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 1,
+      title: Text('Credentials'),
+      content: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Text('Driver\'s License Front',
+              style: TextStyle(fontSize: 15, color: Colors.black54),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                    label: Text(
+                      'Add File',
+                      style: TextStyle(color: Color(0xfffb0d0d)),
+                    ),
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                      final path = result.files.single.path;
+                      setState(() {
+                        driversLicenseFront = File(path);
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(driversLicenseFrontFileName),
+                ),
+                SizedBox(height: 20,),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Text('Driver\'s License Back',
+              style: TextStyle(fontSize: 15, color: Colors.black54),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                    label: Text(
+                      'Add File',
+                      style: TextStyle(color: Color(0xfffb0d0d)),
+                    ),
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                      final path = result.files.single.path;
+                      setState(() {
+                        driversLicenseBack = File(path);
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(driversLicenseBackFileName),
+                ),
+                SizedBox(height: 20,),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Text('NBI Clearance',
+              style: TextStyle(fontSize: 15, color: Colors.black54),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                    label: Text(
+                      'Add File',
+                      style: TextStyle(color: Color(0xfffb0d0d)),
+                    ),
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                      final path = result.files.single.path;
+                      setState(() {
+                        nbiClearancePhoto = File(path);
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(nbiClearancePhotoFileName),
+                ),
+                SizedBox(height: 20,),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Text('Vehicle Official Receipt (OR)',
+              style: TextStyle(fontSize: 15, color: Colors.black54),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                    label: Text(
+                      'Add File',
+                      style: TextStyle(color: Color(0xfffb0d0d)),
+                    ),
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                      final path = result.files.single.path;
+                      setState(() {
+                        vehicleRegistrationOR = File(path);
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(vehicleRegistrationORFileName),
+                ),
+                SizedBox(height: 20,),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Text('Vehicle Certificate of Registration (CR)',
+              style: TextStyle(fontSize: 15, color: Colors.black54),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                    label: Text(
+                      'Add File',
+                      style: TextStyle(color: Color(0xfffb0d0d)),
+                    ),
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                      final path = result.files.single.path;
+                      setState(() {
+                        vehicleRegistrationCR = File(path);
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(vehicleRegistrationCRFileName),
+                ),
+                SizedBox(height: 20,),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Text('Vehicle Photo',
+              style: TextStyle(fontSize: 15, color: Colors.black54),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
+                    label: Text(
+                      'Add File',
+                      style: TextStyle(color: Color(0xfffb0d0d)),
+                    ),
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+                      final path = result.files.single.path;
+                      setState(() {
+                        vehiclePhoto = File(path);
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(vehiclePhotoFileName),
+                ),
+                SizedBox(height: 20,),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+    Step(
+      state: currentStep > 2 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 2,
+      title: Text('Complete'),
+      content: Text('gg'),
+    ),
+  ];
 }
