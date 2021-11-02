@@ -23,6 +23,7 @@ class Delivery{
   final int rating;
   final String feedback;
   final bool isReported;
+  final String cancellationMessage;
 
   Delivery({
     this.uid,
@@ -47,5 +48,6 @@ class Delivery{
     this.rating,
     this.feedback,
     this.isReported,
+    this.cancellationMessage,
   });
 }

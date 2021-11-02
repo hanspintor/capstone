@@ -233,10 +233,11 @@ class DatabaseService {
     });
   }
 
-  Future customerCancelRequest() async {
+  Future customerCancelRequest(String message) async {
     return await deliveryCollection.doc(uid).update({
       'Delivery Status': 'Cancelled',
-      'Courier Approval': 'Cancelled',
+      'Courier Approval': 'Cancelled by Customer',
+      'Cancellation Message': message,
     });
   }
 
@@ -283,7 +284,7 @@ class DatabaseService {
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
       int deliveryFee, String courierApproval, String deliveryStatus,
-      GeoPoint courierLocation, int rating, String feedback, bool isReported) async {
+      GeoPoint courierLocation, int rating, String feedback, bool isReported, String message) async {
     await deliveryCollection
         .doc(uid)
         .set({
@@ -308,6 +309,7 @@ class DatabaseService {
       'Rating': rating,
       'Feedback': feedback,
       'Reported': isReported,
+      'Cancellation Message': message,
     });
   }
 
@@ -486,6 +488,7 @@ class DatabaseService {
         rating: (doc.data() as dynamic) ['Rating'] ?? '',
         feedback: (doc.data() as dynamic) ['Feedback'] ?? '',
         isReported: (doc.data() as dynamic) ['Reported'] ?? '',
+        cancellationMessage: (doc.data() as dynamic) ['Cancellation Message'] ?? ''
       );
     }).toList();
   }
@@ -665,6 +668,7 @@ class DatabaseService {
       deliveryStatus: snapshot['Delivery Status'],
       courierLocation: snapshot['Courier Location'],
       isReported: snapshot['Reported'],
+      cancellationMessage: snapshot['Cancellation Message'],
     );
   }
 

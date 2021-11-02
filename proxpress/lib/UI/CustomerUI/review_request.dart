@@ -300,6 +300,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         0,
                         '',
                         false,
+                        '',
                       );
                       await FirebaseFirestore.instance
                           .collection('Customers')

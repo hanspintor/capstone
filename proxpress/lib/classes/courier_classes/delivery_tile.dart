@@ -234,7 +234,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                           });
                                           await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
                                               widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
-                                          await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Rejected', 'Cancelled');
+                                          await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Declined by Courier', 'Cancelled');
                                         }
                                     )
                                 ),

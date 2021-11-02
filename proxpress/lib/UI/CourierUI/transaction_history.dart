@@ -36,9 +36,23 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
+    Stream<List<Delivery>> deliveryListEarnings = FirebaseFirestore.instance
         .collection('Deliveries')
         .where('Delivery Status', isEqualTo: 'Delivered')
+        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+        .snapshots()
+        .map(DatabaseService().deliveryDataListFromSnapshot);
+
+    Stream<List<Delivery>> deliveryListFinished = FirebaseFirestore.instance
+        .collection('Deliveries')
+        .where('Delivery Status', isEqualTo: 'Delivered')
+        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+        .snapshots()
+        .map(DatabaseService().deliveryDataListFromSnapshot);
+
+    Stream<List<Delivery>> deliveryListCancelled = FirebaseFirestore.instance
+        .collection('Deliveries')
+        .where('Delivery Status', isEqualTo: 'Cancelled')
         .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
         .snapshots()
         .map(DatabaseService().deliveryDataListFromSnapshot);
@@ -49,24 +63,60 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         if (snapshot.hasData) {
           Courier courier = snapshot.data;
 
-          return !courier.approved ? _welcomeMessage(courier.adminMessage) : StreamProvider<List<Delivery>>.value(
-            initialData: [],
-            value: deliveryList,
-            child: SingleChildScrollView(
-              child: Center(
-                child: Column(
+          return !courier.approved ? _welcomeMessage(courier.adminMessage) : DefaultTabController(
+            length: 2,
+            child: NestedScrollView(
+              headerSliverBuilder: (context, value) {
+                return [
+                  SliverToBoxAdapter(
+                    child: StreamBuilder<List<Delivery>>(
+                      stream: deliveryListEarnings,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List<Delivery> deliveries = snapshot.data;
+
+                          int earnings = 0;
+
+                          deliveries.forEach((element) {earnings += element.deliveryFee;});
+
+                          return ListTile(
+                            title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                            trailing: Text("\₱${earnings}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
+                            ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: TabBar(
+                      tabs: [
+                        Tab(child: Text("Finished", style: TextStyle(color: Colors.black),)),
+                        Tab(child: Text("Cancelled", style: TextStyle(color: Colors.black),)),
+                      ],
+                    ),
+                  ),
+                ];
+              },
+              body: Container(
+                child: TabBarView(
                   children: [
-                    SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Text("Transaction History",
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
+                    StreamProvider<List<Delivery>>.value(
+                        initialData: [],
+                        value: deliveryListFinished,
+                        child: Card(
+                          child: TransactionList(message: 'You currently have no finished transaction.', index: 0),
+                        )
+                    ),
+                    StreamProvider<List<Delivery>>.value(
+                      initialData: [],
+                      value: deliveryListCancelled,
+                      child: Card(
+                        child: TransactionList(message: 'You currently have no cancelled transaction.', index: 1),
                       ),
                     ),
-                    TransactionList(),
-
                   ],
                 ),
               ),
