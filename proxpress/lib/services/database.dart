@@ -233,7 +233,7 @@ class DatabaseService {
   Future customerCancelRequest(String message) async {
     return await deliveryCollection.doc(uid).update({
       'Delivery Status': 'Cancelled',
-      'Courier Approval': 'Cancelled',
+      'Courier Approval': 'Cancelled by Customer',
       'Cancellation Message': message,
     });
   }

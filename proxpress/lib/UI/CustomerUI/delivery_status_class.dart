@@ -42,7 +42,6 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
       Stream<List<Delivery>> deliveryListCancelled = FirebaseFirestore.instance
           .collection('Deliveries')
           .where('Delivery Status', isEqualTo: 'Cancelled')
-          .where('Courier Approval', isEqualTo: 'Cancelled')
           .where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection('Customers').doc(user.uid))
           .snapshots()
           .map(DatabaseService().deliveryDataListFromSnapshot);
