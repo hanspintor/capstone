@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path/path.dart' as Path;
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
@@ -44,6 +46,7 @@ class _SignupCourierState extends State<SignupCourier> {
 
   String vehicleType;
   String vehicleColor;
+  String reason;
 
   String error = '';
   File driversLicenseFront;
@@ -54,6 +57,7 @@ class _SignupCourierState extends State<SignupCourier> {
   File vehiclePhoto;
 
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> dropKey = GlobalKey<FormState>();
 
   Widget _buildFName(){
     return SizedBox(
@@ -393,241 +397,160 @@ class _SignupCourierState extends State<SignupCourier> {
       title: Text('Credentials'),
       content: Column(
         children: [
-          SizedBox(
-            height: 20,
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text('Driver\'s License Front',
-              style: TextStyle(fontSize: 15, color: Colors.black54),
+          OutlinedButton(
+            child: ListTile(
+              title: Text('Driver\'s License Front'),
+              subtitle: Text(driversLicenseFrontFileName),
+              trailing: IconButton(
+                icon: Icon(driversLicenseFrontFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                onPressed:  driversLicenseFrontFileName == 'No File Selected' || driversLicenseFront == null ? null :(){
+                  setState(() {
+                    driversLicenseFront = null;
+                  });
+                },
+              ),
             ),
+            onPressed: driversLicenseFrontFileName != 'No File Selected' || driversLicenseFront != null ? null : () async{
+              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+              final path = result.files.single.path;
+              setState(() {
+                driversLicenseFront = File(path);
+              });
+            },
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                    label: Text(
-                      'Add File',
-                      style: TextStyle(color: Color(0xfffb0d0d)),
-                    ),
-                    onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+          OutlinedButton(
+            child: ListTile(
+              title: Text('Driver\'s License Back'),
+              subtitle: Text(driversLicenseBackFileName),
+              trailing: IconButton(
+                icon: Icon(driversLicenseBackFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                onPressed:  driversLicenseBackFileName == 'No File Selected' || driversLicenseBack == null ? null :(){
+                  setState(() {
+                    driversLicenseBack = null;
+                  });
+                },
+              ),
+            ),
+            onPressed: driversLicenseBackFileName != 'No File Selected' || driversLicenseBack != null ? null : () async{
+              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+              final path = result.files.single.path;
+              setState(() {
+                driversLicenseBack = File(path);
+              });
+            },
+          ),
+          OutlinedButton(
+            child: ListTile(
+              title: Text('NBI Clearance'),
+              subtitle: Text(nbiClearancePhotoFileName),
+              trailing: IconButton(
+                icon: Icon(nbiClearancePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                onPressed:  nbiClearancePhotoFileName == 'No File Selected' || nbiClearancePhoto == null ? null :(){
+                  setState(() {
+                    nbiClearancePhoto = null;
+                  });
+                  print(nbiClearancePhoto);
+                },
+              ),
+            ),
+            onPressed: nbiClearancePhotoFileName != 'No File Selected' || nbiClearancePhoto != null ? null : () async{
+              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+              final path = result.files.single.path;
+              setState(() {
+                nbiClearancePhoto = File(path);
+              });
+            },
+          ),
+          OutlinedButton(
+            child: ListTile(
+              title: Text('Vehicle Official Receipt (OR)'),
+              subtitle: Text(vehicleRegistrationORFileName),
+              trailing: IconButton(
+                icon: Icon(vehicleRegistrationORFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                onPressed:  vehicleRegistrationORFileName == 'No File Selected' || vehicleRegistrationOR == null ? null :(){
+                  setState(() {
+                    vehicleRegistrationOR = null;
+                  });
+                  print(vehicleRegistrationOR);
+                },
+              ),
+            ),
+            onPressed: vehicleRegistrationORFileName != 'No File Selected' || vehicleRegistrationOR != null ? null : () async{
+              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+              final path = result.files.single.path;
+              setState(() {
+                vehicleRegistrationOR = File(path);
+              });
+            },
+          ),
 
-                      final path = result.files.single.path;
-                      setState(() {
-                        driversLicenseFront = File(path);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(driversLicenseFrontFileName),
-                ),
-                SizedBox(height: 20,),
-              ],
+          OutlinedButton(
+            child: ListTile(
+              title: Text('Vehicle Official Receipt (CR)'),
+              subtitle: Text(vehicleRegistrationCRFileName),
+              trailing: IconButton(
+                icon: Icon(vehicleRegistrationCRFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                onPressed:  vehicleRegistrationCRFileName == 'No File Selected' || vehicleRegistrationCR == null ? null :(){
+                  setState(() {
+                    vehicleRegistrationCR = null;
+                  });
+                  print(vehicleRegistrationCR);
+                },
+              ),
             ),
+            onPressed: vehicleRegistrationCRFileName != 'No File Selected' || vehicleRegistrationCR != null ? null : () async{
+              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+              final path = result.files.single.path;
+              setState(() {
+                vehicleRegistrationCR = File(path);
+              });
+            },
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text('Driver\'s License Back',
-              style: TextStyle(fontSize: 15, color: Colors.black54),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                    label: Text(
-                      'Add File',
-                      style: TextStyle(color: Color(0xfffb0d0d)),
-                    ),
-                    onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-                      final path = result.files.single.path;
-                      setState(() {
-                        driversLicenseBack = File(path);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(driversLicenseBackFileName),
-                ),
-                SizedBox(height: 20,),
-              ],
+          OutlinedButton(
+            child: ListTile(
+              title: Text('Vehicle Photo'),
+              subtitle: Text(vehiclePhotoFileName),
+              trailing: IconButton(
+                icon: Icon(vehiclePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null :(){
+                  setState(() {
+                    vehiclePhoto = null;
+                  });
+                  print(vehiclePhoto);
+                },
+              ),
             ),
+            onPressed: vehiclePhotoFileName != 'No File Selected' || vehiclePhoto != null ? null : () async{
+              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+              final path = result.files.single.path;
+              setState(() {
+                vehiclePhoto = File(path);
+              });
+            },
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text('NBI Clearance',
-              style: TextStyle(fontSize: 15, color: Colors.black54),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                    label: Text(
-                      'Add File',
-                      style: TextStyle(color: Color(0xfffb0d0d)),
+          OutlinedButton(onPressed: null,
+            child: ListTile(
+              title: Text('Vehicle Color'),
+              subtitle: Text('color'),
+              trailing: IconButton(
+                icon: Icon(Icons.palette, color: Color(0xfffb0d0d),),
+                onPressed:  () {
+                  showMaterialModalBottomSheet(
+                    context: context,
+                    builder: (context) => Container(
+                      width: 600,
+                      child: CircleColorPicker(
+                          onChanged: (color){
+                            Color _currentColor = Colors.black;
+                            setState(() => _currentColor = color);
+                          },
+                          controller: CircleColorPickerController(initialColor: Colors.black,)
+                      ),
                     ),
-                    onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                      final path = result.files.single.path;
-                      setState(() {
-                        nbiClearancePhoto = File(path);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(nbiClearancePhotoFileName),
-                ),
-                SizedBox(height: 20,),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text('Vehicle Official Receipt (OR)',
-              style: TextStyle(fontSize: 15, color: Colors.black54),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                    label: Text(
-                      'Add File',
-                      style: TextStyle(color: Color(0xfffb0d0d)),
-                    ),
-                    onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                      final path = result.files.single.path;
-                      setState(() {
-                        vehicleRegistrationOR = File(path);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(vehicleRegistrationORFileName),
-                ),
-                SizedBox(height: 20,),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text('Vehicle Certificate of Registration (CR)',
-              style: TextStyle(fontSize: 15, color: Colors.black54),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                    label: Text(
-                      'Add File',
-                      style: TextStyle(color: Color(0xfffb0d0d)),
-                    ),
-                    onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                      final path = result.files.single.path;
-                      setState(() {
-                        vehicleRegistrationCR = File(path);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(vehicleRegistrationCRFileName),
-                ),
-                SizedBox(height: 20,),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text('Vehicle Photo',
-              style: TextStyle(fontSize: 15, color: Colors.black54),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.upload_rounded, color: Color(0xfffb0d0d)),
-                    label: Text(
-                      'Add File',
-                      style: TextStyle(color: Color(0xfffb0d0d)),
-                    ),
-                    onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-                      final path = result.files.single.path;
-                      setState(() {
-                        vehiclePhoto = File(path);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(vehiclePhotoFileName),
-                ),
-                SizedBox(height: 20,),
-              ],
+                  );
+                }
+              ),
             ),
           ),
         ],
