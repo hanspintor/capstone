@@ -24,6 +24,8 @@ class RequestTile extends StatefulWidget {
 class _RequestTileState extends State<RequestTile> {
   GlobalKey<FormState> _key = GlobalKey<FormState>();
   String _description = "";
+  GlobalKey<FormState> _keyCancel = GlobalKey<FormState>();
+  String cancellationMessage = "";
 
   CollectionReference reportColl = DatabaseService().reportCollection;
   String localVal = "";
@@ -581,8 +583,98 @@ class _RequestTileState extends State<RequestTile> {
                               child: ElevatedButton.icon(
                                   icon: Icon(Icons.cancel),
                                   label: Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                  onPressed: () async{
-                                    await DatabaseService(uid: delivery.uid).customerCancelRequest();
+                                  onPressed: () async {
+                                    await showDialog(
+                                        context: context,
+                                        builder: (context) => StatefulBuilder(
+                                          builder: (context, setState){
+                                            return AlertDialog(
+                                              title: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(right: 10),
+                                                    child: Icon(
+                                                      Icons.cancel,
+                                                      color: Colors.redAccent,
+                                                    ),
+                                                  ),
+                                                  Text("Cancellation Reason"),
+                                                ],
+                                              ),
+                                              content: Form(
+                                                key: _keyCancel,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      TextFormField(
+                                                        validator: (value){
+                                                          cancellationMessage = value;
+                                                          return value.isNotEmpty ? null : "Please provide a reason";
+                                                        },
+                                                        minLines: 3,
+                                                        maxLines: null,
+                                                        maxLength: 100,
+                                                        keyboardType: TextInputType.multiline,
+                                                        onChanged: (val) => setState(() => cancellationMessage = val),
+                                                        decoration:  InputDecoration(
+                                                          hintText: "Reason why",
+                                                          hintStyle: TextStyle(
+                                                              fontStyle: FontStyle.italic
+                                                          ),
+                                                          filled: true,
+                                                          border: InputBorder.none,
+                                                          fillColor: Colors.grey[300],
+                                                          contentPadding: const EdgeInsets.all(30),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                              color: Colors.red,
+                                                              width: 2,
+                                                            ),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          enabledBorder: UnderlineInputBorder(
+                                                            borderSide: BorderSide(color: Colors.white),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              actions: <Widget> [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      child: Text("Discard"),
+                                                      style: ButtonStyle(
+                                                        backgroundColor: MaterialStateProperty.all(Colors.grey),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    ElevatedButton(
+                                                      child: Text("Send"),
+                                                      onPressed: () async {
+                                                        if(_keyCancel.currentState.validate()){
+                                                          await DatabaseService(uid: delivery.uid).customerCancelRequest(cancellationMessage);
+                                                          Navigator.of(context).pop();
+                                                          showToast("Request cancelled");
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        )
+                                    );
                                   }
                               )
                           ),
