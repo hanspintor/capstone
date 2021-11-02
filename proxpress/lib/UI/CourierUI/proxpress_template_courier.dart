@@ -64,6 +64,7 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
 
+
     if(user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,

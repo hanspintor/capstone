@@ -115,7 +115,7 @@ class _ChatPageState extends State<ChatPage> {
                            MessageUid = value.docs.first.id;
                          });
 
-                         final profilePictureDestination = 'Messages/${MessageUid}/profilepic_${MessageUid}_$datetime';
+                         final profilePictureDestination = 'Messages/${MessageUid}/chatpic_${MessageUid}_$datetime';
 
                          print(path.basename(profilePicture.path));
                         await UploadFile.uploadFile(profilePictureDestination, profilePicture);

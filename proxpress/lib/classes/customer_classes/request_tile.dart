@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as Path;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -13,6 +19,7 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:favorite_button/favorite_button.dart';
+import 'package:proxpress/services/upload_file.dart';
 
 class RequestTile extends StatefulWidget {
   RequestTile({Key key,}) : super(key: key);
@@ -24,13 +31,21 @@ class RequestTile extends StatefulWidget {
 class _RequestTileState extends State<RequestTile> {
   GlobalKey<FormState> _key = GlobalKey<FormState>();
   String _description = "";
-  String reason = "";
+
   CollectionReference reportColl = DatabaseService().reportCollection;
   String localVal = "";
+  File reportAttachment;
+  String saveDestination = "";
+  bool attachmentEmpty = false;
+  String savedUrl = '';
+  String reason = "";
 
   @override
   Widget build(BuildContext context) {
+
     final delivery = Provider.of<Delivery>(context);
+    final auth = FirebaseAuth.instance;
+    User user = auth.currentUser;
 
     var color;
     if(delivery.deliveryStatus == 'Ongoing'){
@@ -345,98 +360,101 @@ class _RequestTileState extends State<RequestTile> {
                                                     context: context,
                                                     builder: (context) => StatefulBuilder(
                                                       builder: (context, setState){
-                                                        return AlertDialog(
-                                                          title: Stack(
-                                                            alignment: AlignmentDirectional.topEnd,
-                                                            children: [
-                                                              Container(
-                                                                padding: EdgeInsets.only(bottom: 15),
-                                                                decoration: BoxDecoration(
-                                                                  border: Border(
-                                                                    bottom: BorderSide(color: Colors.grey[500])
-                                                                  )
-                                                                ),
-                                                                  child: Center(
-                                                                      child: Text("Report Courier")
+                                                        String fetchedUrl = "";
+                                                        final reportAttachmentFileName =  reportAttachment != null ? Path.basename(reportAttachment.path) : 'No File Selected';
+                                                        return SingleChildScrollView(
+                                                          child: AlertDialog(
+                                                            title: Stack(
+                                                              alignment: AlignmentDirectional.topEnd,
+                                                              children: [
+                                                                Container(
+                                                                  padding: EdgeInsets.only(bottom: 15),
+                                                                  decoration: BoxDecoration(
+                                                                    border: Border(
+                                                                      bottom: BorderSide(color: Colors.grey[500])
+                                                                    )
                                                                   ),
-                                                              ),
-                                                              Positioned(
-                                                                bottom: -85,
-                                                                top: -100,
-                                                                child: IconButton(
-                                                                  icon: const Icon(Icons.close_sharp),
-                                                                  color: Colors.redAccent,
-                                                                  onPressed: () {
-                                                                    Navigator.pop(context);
-                                                                    reason = "";
-                                                                  },
+                                                                    child: Center(
+                                                                        child: Text("Report Courier")
+                                                                    ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                                Positioned(
+                                                                  bottom: -85,
+                                                                  top: -100,
+                                                                  child: IconButton(
+                                                                    icon: const Icon(Icons.close_sharp),
+                                                                    color: Colors.redAccent,
+                                                                    onPressed: () {
+                                                                      Navigator.pop(context);
+                                                                      setState((){
+                                                                        reason = "";
+                                                                        reportAttachment = null;
+                                                                        attachmentEmpty = false;
+                                                                      });
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ],
 
-                                                          ),
-                                                          content: Column(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              Align(
-                                                                child: Text(
-                                                                  "Please select a reason",
+                                                            ),
+                                                            content: Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Align(
+                                                                  child: Text(
+                                                                    "Please select a reason",
+                                                                    style: TextStyle(
+                                                                      fontWeight: FontWeight.bold,
+                                                                    ),
+                                                                  ),
+                                                                  alignment: Alignment.topLeft,
+                                                                ),
+                                                                SizedBox(height: 5,),
+                                                                Text(
+                                                                  "if this courier commited undesireable act, get help before reporting to PROXpress. Don't wait.",
                                                                   style: TextStyle(
-                                                                    fontWeight: FontWeight.bold,
+                                                                    fontSize: 12,
                                                                   ),
                                                                 ),
-                                                                alignment: Alignment.topLeft,
-                                                              ),
-                                                              SizedBox(height: 5,),
-                                                              Text(
-                                                                "if this courier commited undesireable act, get help before reporting to PROXpress. Don't wait.",
-                                                                style: TextStyle(
-                                                                  fontSize: 12,
-                                                                ),
-                                                              ),
-                                                              SizedBox(height: 15,),
-                                                              Form(
-                                                                key: _key,
-                                                                child: SingleChildScrollView(
+                                                                SizedBox(height: 15,),
+                                                                Form(
+                                                                  key: _key,
                                                                   child: Column(
                                                                     mainAxisSize: MainAxisSize.min,
                                                                     children: [
-                                                                      SizedBox(
-                                                                        height: 60,
 
-                                                                        child: DropdownButtonFormField<String>(
-                                                                          validator: (value) => value == null ? 'Please choose a reason' : null,
-                                                                          decoration: InputDecoration(
-                                                                            border: new OutlineInputBorder(
-                                                                                borderSide: new BorderSide(color: Colors.black)),
-                                                                            labelText: "Reason why",
-                                                                          ),
-
-
-                                                                          icon: const Icon(Icons.arrow_downward),
-                                                                          iconSize: 20,
-                                                                          elevation: 16,
-                                                                          onChanged: (String newValue) {
-                                                                            setState(() {
-                                                                              reason = newValue;
-                                                                            });
-                                                                            print(reason);
-                                                                          },
-                                                                          items: <String>['Parcel damaged or mishandled', 'Utterly long delivery time', 'Rudeness or harassment', 'Asking price beyond stated fee', 'Others',]
-                                                                              .map<DropdownMenuItem<String>>((String value) {
-                                                                            return DropdownMenuItem<String>(
-                                                                              value: value,
-                                                                              child: Text(value),
-                                                                            );
-                                                                          }).toList(),
+                                                                      DropdownButtonFormField<String>(
+                                                                        validator: (value) => value == null ? 'Please choose a reason' : null,
+                                                                        decoration: InputDecoration(
+                                                                          border: new OutlineInputBorder(
+                                                                              borderSide: new BorderSide(color: Colors.black)),
+                                                                          labelText: "Reason why",
                                                                         ),
+                                                                        isExpanded: true,
+
+                                                                        icon: const Icon(Icons.arrow_downward),
+                                                                        iconSize: 20,
+                                                                        elevation: 16,
+                                                                        onChanged: (String newValue) {
+                                                                          setState(() {
+                                                                            reason = newValue;
+                                                                          });
+                                                                          print(reason);
+                                                                        },
+                                                                        items: <String>['Parcel damaged or mishandled', 'Utterly long delivery time', 'Rudeness or harassment', 'Asking price beyond stated fee', 'Others',]
+                                                                            .map<DropdownMenuItem<String>>((String value) {
+                                                                          return DropdownMenuItem<String>(
+                                                                            value: value,
+                                                                            child: Text(value),
+                                                                          );
+                                                                        }).toList(),
                                                                       ),
                                                                       SizedBox(height: 10,),
                                                                       Visibility(
                                                                           visible: reason == "Others" ? true : false,
                                                                           child: TextFormField(
                                                                             validator: (value){
-                                                                              _description = value;
+                                                                              reason = value;
                                                                               return value.isNotEmpty ? null : "Please provide a reason";
                                                                             },
                                                                             onChanged: (value) {
@@ -499,29 +517,112 @@ class _RequestTileState extends State<RequestTile> {
 
                                                                         ),
                                                                       ),
+                                                                      SizedBox(height: 10,),
+                                                                      OutlinedButton(
+                                                                        child: ListTile(
+                                                                          title: Text('Add attachment'),
+                                                                          subtitle: Text(reportAttachmentFileName),
+                                                                          trailing: IconButton(
+                                                                            icon: Icon(reportAttachmentFileName == 'No File Selected' ? Icons.attachment: Icons.cancel_outlined, color: Color(0xfffb0d0d),),
+                                                                            onPressed:  reportAttachmentFileName == 'No File Selected' || reportAttachment == null ? null :(){
+                                                                              setState(() {
+                                                                                reportAttachment = null;
+                                                                                attachmentEmpty = false;
+                                                                              });
+                                                                              print(reportAttachment);
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                        onPressed: reportAttachmentFileName != 'No File Selected' || reportAttachment != null ? null : () async{
+                                                                          String datetime = DateTime.now().toString();
+                                                                          final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                                                                          final path = result.files.single.path;
+                                                                          setState(() {
+                                                                            reportAttachment = File(path);
+                                                                          });
 
+                                                                          final attachmentDestination = 'Reports/${user.uid}/report_${user.uid}_$datetime';
+
+                                                                          setState((){
+                                                                            saveDestination = attachmentDestination.toString();
+                                                                            if (saveDestination != null && saveDestination.length > 0) {
+                                                                                  saveDestination = saveDestination.substring(0, saveDestination.length - 1);
+                                                                            }
+                                                                          });
+
+                                                                        },
+                                                                      ),
+                                                                      SizedBox(height: 5,),
+                                                                      Visibility(
+                                                                        visible: attachmentEmpty,
+                                                                        child: Container(
+                                                                          margin: EdgeInsets.only(left: 25),
+                                                                          child: Align(
+                                                                            alignment: Alignment.topLeft,
+                                                                            child: Text("Attachment is required",
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.red,
+                                                                                      fontSize: 12,
+                                                                                    ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
                                                                     ],
                                                                   ),
                                                                 ),
-                                                              ),
 
 
+                                                              ],
+                                                            ),
+                                                            actions: <Widget> [
+                                                              ElevatedButton(
+                                                                child: Text("Report"),
+                                                                onPressed: () async {
+                                                                  print("not in");
+                                                                  if(_key.currentState.validate() && reportAttachmentFileName != 'No File Selected'){
+                                                                    print("in");
+                                                                    setState((){
+                                                                      attachmentEmpty = false;
+
+                                                                    });
+
+                                                                    await UploadFile.uploadFile(saveDestination, reportAttachment);
+
+                                                                    savedUrl = await FirebaseStorage.instance
+                                                                        .ref(saveDestination)
+                                                                        .getDownloadURL();
+
+                                                                    if (savedUrl != null || savedUrl == 'null') {
+                                                                      await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
+                                                                    }
+
+                                                                    setState(() {
+                                                                      fetchedUrl = savedUrl;
+                                                                    });
+                                                                    print(fetchedUrl);
+                                                                    DatabaseService().createReportData(_description, delivery.customerRef,
+                                                                        delivery.courierRef, Timestamp.now(), reason , fetchedUrl);
+                                                                    DatabaseService(uid: delivery.uid).updateReport(true);
+                                                                    Navigator.of(context).pop();
+                                                                    showToast('Report sent.');
+                                                                    setState(() {
+                                                                      reportAttachment = null;
+                                                                    });
+
+                                                                  } else{
+                                                                    if(reportAttachmentFileName == 'No File Selected'){
+                                                                      print("Attachment is required");
+                                                                      setState((){
+                                                                        attachmentEmpty = true;
+                                                                      });
+                                                                    }
+
+                                                                  }
+                                                                },
+                                                              )
                                                             ],
                                                           ),
-                                                          actions: <Widget> [
-
-                                                            ElevatedButton(
-                                                              child: Text("Report"),
-                                                              onPressed: () async {
-                                                                if(_key.currentState.validate()){
-                                                                  DatabaseService().createReportData(_description, delivery.customerRef,
-                                                                      delivery.courierRef, Timestamp.now());
-                                                                  DatabaseService(uid: delivery.uid).updateReport(true);
-                                                                  Navigator.of(context).pop();
-                                                                }
-                                                              },
-                                                            )
-                                                          ],
                                                         );
                                                       },
                                                     )

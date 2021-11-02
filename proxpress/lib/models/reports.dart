@@ -6,8 +6,10 @@ class Reports{
   final String reportMessage;
   final DocumentReference reportBy;
   final DocumentReference reportTo;
+  final String ReportTitle;
+  final String ReportUrl;
   final Timestamp time;
 
   Reports({ this.uid, this.reportMessage, this.time,
-    this.reportBy, this.reportTo});
+    this.reportBy, this.reportTo, this.ReportTitle, this.ReportUrl});
 }

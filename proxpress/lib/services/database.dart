@@ -69,11 +69,14 @@ class DatabaseService {
 
   // Create Reports Data
   Future createReportData(String reportMessage, DocumentReference reportBy,
-      DocumentReference reportTo, Timestamp timeReported,) async {
+      DocumentReference reportTo, Timestamp timeReported, String reportTitle,
+      String reportUrl) async {
     return await reportCollection.doc(uid).set({
       'Report Message': reportMessage,
       'Report By': reportBy,
       'Report To': reportTo,
+      'Report Title': reportTitle,
+      'Report Url' : reportUrl,
       'Time Reported': timeReported,
 
     });
@@ -706,6 +709,8 @@ class DatabaseService {
       time: snapshot['Time Reported'],
       reportBy: snapshot['Report By'],
       reportTo: snapshot['Report To'],
+      ReportTitle: snapshot['Report Title'],
+      ReportUrl: snapshot['Report Url'],
     );
   }
 
