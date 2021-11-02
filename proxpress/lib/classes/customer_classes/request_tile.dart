@@ -594,10 +594,6 @@ class _RequestTileState extends State<RequestTile> {
                                                                         .ref(saveDestination)
                                                                         .getDownloadURL();
 
-                                                                    if (savedUrl != null || savedUrl == 'null') {
-                                                                      await DatabaseService(uid: user.uid).updateCustomerProfilePic(savedUrl);
-                                                                    }
-
                                                                     setState(() {
                                                                       fetchedUrl = savedUrl;
                                                                     });
