@@ -63,6 +63,7 @@ dependencies:
   geocoding: ^2.0.1
   flutter_paypal: ^0.0.8
   flutter_circle_color_picker: ^0.3.0
+  flutter_colorpicker: ^0.6.0
 
 dev_dependencies:
   flutter_test:

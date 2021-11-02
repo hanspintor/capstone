@@ -13,6 +13,7 @@ import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:slide_to_act/slide_to_act.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignupCourier extends StatefulWidget{
   @override
@@ -46,7 +47,6 @@ class _SignupCourierState extends State<SignupCourier> {
 
   String vehicleType;
   String vehicleColor;
-  String reason;
 
   String error = '';
   File driversLicenseFront;
@@ -55,6 +55,8 @@ class _SignupCourierState extends State<SignupCourier> {
   File vehicleRegistrationOR;
   File vehicleRegistrationCR;
   File vehiclePhoto;
+  Color color = Colors.grey;
+  bool notValid = true;
 
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
   final GlobalKey<FormState> dropKey = GlobalKey<FormState>();
@@ -209,25 +211,6 @@ class _SignupCourierState extends State<SignupCourier> {
     );
   }
 
-  Widget _buildColor(){
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Vehicle Color'),
-      keyboardType: TextInputType.text,
-      validator: (String value){
-        if(value.isEmpty){
-          return 'Vehicle color is required';
-        }
-        else return null;
-      },
-      onSaved: (String value){
-        vehicleColor = value;
-      },
-      onChanged: (val){
-        setState(() => vehicleColor = val);
-      },
-    );
-  }
-
   Future<bool> _backPressed(){
     return showDialog(context: context, builder: (context)
     =>AlertDialog(
@@ -298,6 +281,13 @@ class _SignupCourierState extends State<SignupCourier> {
             ),
             currentStep: currentStep,
             controlsBuilder: (context, ControlsDetails) {
+              bool picsLoaded = driversLicenseFront != null &&
+                  driversLicenseBack != null &&
+                  nbiClearancePhoto != null &&
+                  vehicleRegistrationOR != null &&
+                  vehicleRegistrationCR != null &&
+                  vehiclePhoto != null ? true : false;
+
               return Container(
                 margin: EdgeInsets.only(top: 30),
                 child: Row(
@@ -309,24 +299,19 @@ class _SignupCourierState extends State<SignupCourier> {
                             print('Done');
                           }
                           else if(currentStep == 1){
-                            bool picsLoaded = driversLicenseFront != null &&
-                                driversLicenseBack != null &&
-                                nbiClearancePhoto != null &&
-                                vehicleRegistrationOR != null &&
-                                vehicleRegistrationCR != null &&
-                                vehiclePhoto != null ? true : false;
-                            if(picsLoaded){
+                            if(!picsLoaded){
+                              //setState(() => notValid = picsLoaded);
                               setState(() => currentStep += 1);
                             }
                             else {
-                              print('try again baby!!!!!!!!!');
+                              setState(() => currentStep += 1);
                             }
                           }
                           else
                           {
-                            if(regKey.currentState.validate()) {
+                            ///if(regKey.currentState.validate()) {
                               setState(() => currentStep += 1);
-                            }
+                            ///}
                           }
                         },
                         child: Text(isLastStep ? 'SIGNUP' : 'NEXT'),
@@ -397,162 +382,182 @@ class _SignupCourierState extends State<SignupCourier> {
       title: Text('Credentials'),
       content: Column(
         children: [
-          OutlinedButton(
-            child: ListTile(
-              title: Text('Driver\'s License Front'),
-              subtitle: Text(driversLicenseFrontFileName),
-              trailing: IconButton(
-                icon: Icon(driversLicenseFrontFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                onPressed:  driversLicenseFrontFileName == 'No File Selected' || driversLicenseFront == null ? null :(){
-                  setState(() {
-                    driversLicenseFront = null;
-                  });
-                },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: OutlinedButton(
+              child: ListTile(
+                title: Text('Driver\'s License Front'),
+                subtitle: Text(driversLicenseFrontFileName),
+                trailing: IconButton(
+                  icon: Icon(driversLicenseFrontFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                  onPressed:  driversLicenseFrontFileName == 'No File Selected' || driversLicenseFront == null ? null :(){
+                    setState(() {
+                      driversLicenseFront = null;
+                    });
+                  },
+                ),
               ),
+              onPressed: driversLicenseFrontFileName != 'No File Selected' || driversLicenseFront != null ? null : () async{
+                final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                final path = result.files.single.path;
+                setState(() {
+                  driversLicenseFront = File(path);
+                });
+              },
             ),
-            onPressed: driversLicenseFrontFileName != 'No File Selected' || driversLicenseFront != null ? null : () async{
-              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-              final path = result.files.single.path;
-              setState(() {
-                driversLicenseFront = File(path);
-              });
-            },
           ),
-          OutlinedButton(
-            child: ListTile(
-              title: Text('Driver\'s License Back'),
-              subtitle: Text(driversLicenseBackFileName),
-              trailing: IconButton(
-                icon: Icon(driversLicenseBackFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                onPressed:  driversLicenseBackFileName == 'No File Selected' || driversLicenseBack == null ? null :(){
-                  setState(() {
-                    driversLicenseBack = null;
-                  });
-                },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: OutlinedButton(
+              child: ListTile(
+                title: Text('Driver\'s License Back'),
+                subtitle: Text(driversLicenseBackFileName),
+                trailing: IconButton(
+                  icon: Icon(driversLicenseBackFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                  onPressed:  driversLicenseBackFileName == 'No File Selected' || driversLicenseBack == null ? null :(){
+                    setState(() {
+                      driversLicenseBack = null;
+                    });
+                  },
+                ),
               ),
+              onPressed: driversLicenseBackFileName != 'No File Selected' || driversLicenseBack != null ? null : () async{
+                final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                final path = result.files.single.path;
+                setState(() {
+                  driversLicenseBack = File(path);
+                });
+              },
             ),
-            onPressed: driversLicenseBackFileName != 'No File Selected' || driversLicenseBack != null ? null : () async{
-              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-              final path = result.files.single.path;
-              setState(() {
-                driversLicenseBack = File(path);
-              });
-            },
           ),
-          OutlinedButton(
-            child: ListTile(
-              title: Text('NBI Clearance'),
-              subtitle: Text(nbiClearancePhotoFileName),
-              trailing: IconButton(
-                icon: Icon(nbiClearancePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                onPressed:  nbiClearancePhotoFileName == 'No File Selected' || nbiClearancePhoto == null ? null :(){
-                  setState(() {
-                    nbiClearancePhoto = null;
-                  });
-                  print(nbiClearancePhoto);
-                },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: OutlinedButton(
+              child: ListTile(
+                title: Text('NBI Clearance'),
+                subtitle: Text(nbiClearancePhotoFileName),
+                trailing: IconButton(
+                  icon: Icon(nbiClearancePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                  onPressed:  nbiClearancePhotoFileName == 'No File Selected' || nbiClearancePhoto == null ? null :(){
+                    setState(() {
+                      nbiClearancePhoto = null;
+                    });
+                    print(nbiClearancePhoto);
+                  },
+                ),
               ),
+              onPressed: nbiClearancePhotoFileName != 'No File Selected' || nbiClearancePhoto != null ? null : () async{
+                final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                final path = result.files.single.path;
+                setState(() {
+                  nbiClearancePhoto = File(path);
+                });
+              },
             ),
-            onPressed: nbiClearancePhotoFileName != 'No File Selected' || nbiClearancePhoto != null ? null : () async{
-              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-              final path = result.files.single.path;
-              setState(() {
-                nbiClearancePhoto = File(path);
-              });
-            },
           ),
-          OutlinedButton(
-            child: ListTile(
-              title: Text('Vehicle Official Receipt (OR)'),
-              subtitle: Text(vehicleRegistrationORFileName),
-              trailing: IconButton(
-                icon: Icon(vehicleRegistrationORFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                onPressed:  vehicleRegistrationORFileName == 'No File Selected' || vehicleRegistrationOR == null ? null :(){
-                  setState(() {
-                    vehicleRegistrationOR = null;
-                  });
-                  print(vehicleRegistrationOR);
-                },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: OutlinedButton(
+              child: ListTile(
+                title: Text('Vehicle Official Receipt (OR)'),
+                subtitle: Text(vehicleRegistrationORFileName),
+                trailing: IconButton(
+                  icon: Icon(vehicleRegistrationORFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                  onPressed:  vehicleRegistrationORFileName == 'No File Selected' || vehicleRegistrationOR == null ? null :(){
+                    setState(() {
+                      vehicleRegistrationOR = null;
+                    });
+                    print(vehicleRegistrationOR);
+                  },
+                ),
               ),
+              onPressed: vehicleRegistrationORFileName != 'No File Selected' || vehicleRegistrationOR != null ? null : () async{
+                final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                final path = result.files.single.path;
+                setState(() {
+                  vehicleRegistrationOR = File(path);
+                });
+              },
             ),
-            onPressed: vehicleRegistrationORFileName != 'No File Selected' || vehicleRegistrationOR != null ? null : () async{
-              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-              final path = result.files.single.path;
-              setState(() {
-                vehicleRegistrationOR = File(path);
-              });
-            },
-          ),
-
-          OutlinedButton(
-            child: ListTile(
-              title: Text('Vehicle Official Receipt (CR)'),
-              subtitle: Text(vehicleRegistrationCRFileName),
-              trailing: IconButton(
-                icon: Icon(vehicleRegistrationCRFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                onPressed:  vehicleRegistrationCRFileName == 'No File Selected' || vehicleRegistrationCR == null ? null :(){
-                  setState(() {
-                    vehicleRegistrationCR = null;
-                  });
-                  print(vehicleRegistrationCR);
-                },
-              ),
-            ),
-            onPressed: vehicleRegistrationCRFileName != 'No File Selected' || vehicleRegistrationCR != null ? null : () async{
-              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-              final path = result.files.single.path;
-              setState(() {
-                vehicleRegistrationCR = File(path);
-              });
-            },
           ),
 
-          OutlinedButton(
-            child: ListTile(
-              title: Text('Vehicle Photo'),
-              subtitle: Text(vehiclePhotoFileName),
-              trailing: IconButton(
-                icon: Icon(vehiclePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null :(){
-                  setState(() {
-                    vehiclePhoto = null;
-                  });
-                  print(vehiclePhoto);
-                },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: OutlinedButton(
+              child: ListTile(
+                title: Text('Vehicle Official Receipt (CR)'),
+                subtitle: Text(vehicleRegistrationCRFileName),
+                trailing: IconButton(
+                  icon: Icon(vehicleRegistrationCRFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                  onPressed:  vehicleRegistrationCRFileName == 'No File Selected' || vehicleRegistrationCR == null ? null :(){
+                    setState(() {
+                      vehicleRegistrationCR = null;
+                    });
+                    print(vehicleRegistrationCR);
+                  },
+                ),
               ),
+              onPressed: vehicleRegistrationCRFileName != 'No File Selected' || vehicleRegistrationCR != null ? null : () async{
+                final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                final path = result.files.single.path;
+                setState(() {
+                  vehicleRegistrationCR = File(path);
+                });
+              },
             ),
-            onPressed: vehiclePhotoFileName != 'No File Selected' || vehiclePhoto != null ? null : () async{
-              final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-              final path = result.files.single.path;
-              setState(() {
-                vehiclePhoto = File(path);
-              });
-            },
           ),
-          OutlinedButton(onPressed: null,
-            child: ListTile(
-              title: Text('Vehicle Color'),
-              subtitle: Text('color'),
-              trailing: IconButton(
-                icon: Icon(Icons.palette, color: Color(0xfffb0d0d),),
-                onPressed:  () {
-                  showMaterialModalBottomSheet(
-                    context: context,
-                    builder: (context) => Container(
-                      width: 600,
-                      child: CircleColorPicker(
-                          onChanged: (color){
-                            Color _currentColor = Colors.black;
-                            setState(() => _currentColor = color);
-                          },
-                          controller: CircleColorPickerController(initialColor: Colors.black,)
-                      ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: OutlinedButton(
+              child: ListTile(
+                title: Text('Vehicle Photo'),
+                subtitle: Text(vehiclePhotoFileName),
+                trailing: IconButton(
+                  icon: Icon(vehiclePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                  onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null :(){
+                    setState(() {
+                      vehiclePhoto = null;
+                    });
+                    print(vehiclePhoto);
+                  },
+                ),
+              ),
+              onPressed: vehiclePhotoFileName != 'No File Selected' || vehiclePhoto != null ? null : () async{
+                final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                final path = result.files.single.path;
+                setState(() {
+                  vehiclePhoto = File(path);
+                });
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: OutlinedButton(
+              child: ListTile(
+                title: Text('Vehicle Color'),
+                subtitle: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: color,
+                      border: Border.all(),
                     ),
-                  );
-                }
+                  ),
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.palette, color: Color(0xfffb0d0d),),
+                  onPressed: null,
+                ),
+
               ),
+              onPressed: () => pickColor(context),
             ),
           ),
+          Text(notValid ? '': 'Check if your credentials are complete', style: TextStyle(color: Color(0xfffb0d0d))),
         ],
       ),
     ),
@@ -560,7 +565,168 @@ class _SignupCourierState extends State<SignupCourier> {
       state: currentStep > 2 ? StepState.complete: StepState.indexed,
       isActive: currentStep >= 2,
       title: Text('Complete'),
-      content: Text('gg'),
+      content: Column(
+        children: [
+          ListTile(
+            leading: Icon(Icons.person_rounded),
+            title: Text('Account Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: 'Name: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                        TextSpan(text: '${fName ?? ''} ${lName ?? ''}', style: TextStyle(fontSize: 15),)
+                      ],)
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: 'Email: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                        TextSpan(text: '${email ?? ''}', style: TextStyle(fontSize: 15),)
+                      ],)
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: 'Contact Number: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                        TextSpan(text: '${contactNo ?? ''}', style: TextStyle(fontSize: 15),)
+                      ],)
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: 'Home Address: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                        TextSpan(text: '${address ?? ''}', style: TextStyle(fontSize: 15),)
+                      ],)
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: 'Home Address: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                        TextSpan(text: '${address ?? ''}', style: TextStyle(fontSize: 15),)
+                      ],)
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.file_present_rounded),
+            title: Text('Credentials', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Driver\'s License (Front)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                if(driversLicenseFront != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Image.file(driversLicenseFront),
+                  )
+                else Container(),
+
+                Text('Driver\'s License (Back)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                if(driversLicenseBack != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Image.file(driversLicenseBack),
+                  )
+                else Container(),
+
+                Text('NBI Clearance', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                if(nbiClearancePhoto != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Image.file(nbiClearancePhoto),
+                  )
+                else Container(),
+
+                Text('Vehicle Official Receipt (OR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                if(vehicleRegistrationOR != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Image.file(vehicleRegistrationOR),
+                  )
+                else Container(),
+
+                Text('Vehicle Official Receipt (CR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                if(vehicleRegistrationCR != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Image.file(vehicleRegistrationCR),
+                  )
+                else Container(),
+
+                Text('Vehicle Photo', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                if(vehiclePhoto != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Image.file(vehiclePhoto),
+                  )
+                else Container(),
+
+                Row(
+                  children: [
+                    Text('Vehicle Color', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: color,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     ),
   ];
+
+
+  void pickColor(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Choose a color'),
+        content: StatefulBuilder(
+            builder: (context, setState){
+              return CircleColorPicker(
+                  size: const Size(240, 240),
+                  strokeWidth: 4,
+                  thumbSize: 36,
+                  onChanged: (color){
+                    setState(() => this.color = color);
+                  },
+                  controller: CircleColorPickerController(initialColor: Colors.grey,)
+              );
+            }
+        ),
+        actions: [
+          TextButton(
+              child: Text('SELECT'),
+              onPressed: () {
+                setState(() => this.color = color);
+                Navigator.of(context).pop();
+              }
+          )
+        ],
+      ),
+  );
 }
