@@ -46,7 +46,7 @@ class _SignupCourierState extends State<SignupCourier> {
   final AuthService _auth = AuthService();
 
   String vehicleType;
-  String vehicleColor;
+  int vehicleColor;
 
   String error = '';
   File driversLicenseFront;
@@ -884,7 +884,8 @@ class _SignupCourierState extends State<SignupCourier> {
               onPressed: () {
                 setState(() => this.color = color);
                 Navigator.of(context).pop();
-                vehicleColor = color.toString();
+                vehicleColor = color.value;
+                print(vehicleColor);
               }
           )
         ],

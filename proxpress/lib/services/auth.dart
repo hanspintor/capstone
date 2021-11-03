@@ -63,7 +63,7 @@ class AuthService {
   Future SignUpCourier(String email, String password, String Fname,
       String Lname, String ContactNo, String Address, String Status,
       String avatarUrl, bool approved, String vehicleType,
-      String vehicleColor, String driversLicenseFront_,
+      int vehicleColor, String driversLicenseFront_,
       String driversLicenseBack_, String nbiClearancePhoto_,
       vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_,
       deliveryPriceRef, notifStatus, currentNotif, notifPopStatus, notifPopCounter, String adminMessage, List adminCredentialsResponse) async {

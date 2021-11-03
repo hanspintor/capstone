@@ -721,14 +721,34 @@ class _CourierTileState extends State<CourierTile> {
                             title: Text('Additional Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                             subtitle: Container(
                               padding: EdgeInsets.only(top: 5),
-                              child: Text.rich(
-                                TextSpan(children: [
-                                  TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                  TextSpan(text: "${widget.courier.contactNo}\n",style: Theme.of(context).textTheme.bodyText2),
-                                  TextSpan(text: "Vehicle Color: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                  TextSpan(text: "${widget.courier.vehicleColor}\n",style: Theme.of(context).textTheme.bodyText2),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text.rich(
+                                    TextSpan(children: [
+                                      TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                      TextSpan(text: "${widget.courier.contactNo}\n",style: Theme.of(context).textTheme.bodyText2),
+                                    ],
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('Vehicle Color:', style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 10),
+                                        child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(),
+                                            shape: BoxShape.circle,
+                                            color: Color(widget.courier.vehicleColor),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
-                                ),
                               ),
                             ),
                           ),
