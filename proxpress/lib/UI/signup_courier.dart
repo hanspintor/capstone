@@ -294,7 +294,7 @@ class _SignupCourierState extends State<SignupCourier> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () async {///isLastStep && (!agree || !slide) ? null :
+                        onPressed: isLastStep && (!agree || !slide) ? null :() async {
                           if(isLastStep){
                             String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
                             await FirebaseFirestore.instance
@@ -747,12 +747,74 @@ class _SignupCourierState extends State<SignupCourier> {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
+                    border: Border.all(),
                     shape: BoxShape.circle,
                     color: color,
                   ),
                 ),
               ),
             ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Row(
+              children: [
+                Container(
+                  child: Checkbox(
+                      value: agree,
+                      onChanged: (value){
+                        setState(() {
+                          agree = value;
+                        });
+                      }
+                  ),
+                ),
+                Container(
+                  child: Text(
+                      'I do accept the '
+                  ),
+                ),
+                Container(
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context, builder: (BuildContext context) => AlertDialog(
+                        title: Text('Terms and Conditions', style: TextStyle(fontWeight: FontWeight.bold)),
+                        content: (AlertTermsConditions()),
+                      )
+                      );
+                    },
+                    child: Text(
+                      "Terms and Conditions",
+                      style: TextStyle(
+                        color: Color(0xffFD3F40),
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Container(
+              child: SlideAction(
+                child: Container(
+                  padding: EdgeInsets.only(left: 30),
+                  child: Text('SLIDE IF YOU ARE NOT A BOT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),),
+                ),
+                elevation: 4,
+                height:60,
+                sliderRotate: true,
+                sliderButtonIconPadding: 13,
+                onSubmit: (){
+                  confirm(true);
+                },
+              ),
+            ),
           ),
         ],
       ),
