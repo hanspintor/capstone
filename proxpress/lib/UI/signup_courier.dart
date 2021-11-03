@@ -581,14 +581,17 @@ class _SignupCourierState extends State<SignupCourier> {
               child: ListTile(
                 title: Text('Vehicle Photo'),
                 subtitle: Text(vehiclePhotoFileName),
-                trailing: IconButton(
-                  icon: Icon(vehiclePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                  onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null :(){
-                    setState(() {
-                      vehiclePhoto = null;
-                    });
-                    print(vehiclePhoto);
-                  },
+                trailing: Padding(
+                  padding: const EdgeInsets.only(left: 38),
+                  child: IconButton(
+                    icon: Icon(vehiclePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
+                    onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null :(){
+                      setState(() {
+                        vehiclePhoto = null;
+                      });
+                      print(vehiclePhoto);
+                    },
+                  ),
                 ),
               ),
               onPressed: vehiclePhotoFileName != 'No File Selected' || vehiclePhoto != null ? null : () async{
@@ -621,10 +624,33 @@ class _SignupCourierState extends State<SignupCourier> {
                   icon: Icon(Icons.palette, color: Color(0xfffb0d0d),),
                   onPressed: null,
                 ),
-
               ),
               onPressed: () => pickColor(context),
             ),
+          ),
+          DropdownButtonFormField<String>(
+            validator: (value) => value == null ? 'Vehicle type is required' : null,
+            decoration: InputDecoration(
+              border: new OutlineInputBorder(
+                  borderSide: new BorderSide(color: Colors.black)),
+              labelText: 'Select Your Vehicle Type',
+            ),
+            isExpanded: true,
+            icon: const Icon(Icons.arrow_downward),
+            iconSize: 24,
+            elevation: 16,
+            onChanged: (String newValue) {
+              setState(() {
+                vehicleType = newValue;
+              });
+            },
+            items: <String>['Motorcycle', 'Sedan', 'Pickup Truck', 'MPV', 'FB-Type Van', 'Van']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
           Text(notValid ? '': 'Check if your credentials are complete', style: TextStyle(color: Color(0xfffb0d0d))),
         ],
@@ -638,7 +664,10 @@ class _SignupCourierState extends State<SignupCourier> {
         children: [
           ListTile(
             leading: Icon(Icons.person_rounded),
-            title: Text('Account Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text('Account Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -683,10 +712,39 @@ class _SignupCourierState extends State<SignupCourier> {
           ),
           ListTile(
             leading: Icon(Icons.file_present_rounded),
-            title: Text('Credentials', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text('Credentials', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(text: 'Vehicle Type: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                        TextSpan(text: '${vehicleType ?? ''}', style: TextStyle(fontSize: 15),)
+                      ],)
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text('Vehicle Color:', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          shape: BoxShape.circle,
+                          color: color,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -737,24 +795,6 @@ class _SignupCourierState extends State<SignupCourier> {
               child: Image.file(vehiclePhoto),
             )
           else Container(),
-
-          Row(
-            children: [
-              Text('Vehicle Color', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    shape: BoxShape.circle,
-                    color: color,
-                  ),
-                ),
-              ),
-            ],
-          ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: Row(
@@ -844,6 +884,7 @@ class _SignupCourierState extends State<SignupCourier> {
               onPressed: () {
                 setState(() => this.color = color);
                 Navigator.of(context).pop();
+                vehicleColor = color.toString();
               }
           )
         ],
