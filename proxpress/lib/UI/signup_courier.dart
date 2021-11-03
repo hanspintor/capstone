@@ -296,12 +296,81 @@ class _SignupCourierState extends State<SignupCourier> {
                       child: ElevatedButton(
                         onPressed: () async {///isLastStep && (!agree || !slide) ? null :
                           if(isLastStep){
-                            print('Done');
+                            String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
+                            await FirebaseFirestore.instance
+                                .collection('Delivery Prices')
+                                .where('Vehicle Type', isEqualTo: vehicleType)
+                                .get()
+                                .then((event) {
+                              deliveryPriceUid = event.docs.first.id.toString(); //if it is a single document
+                            });
+
+                            deliveryPriceRef = FirebaseFirestore.instance.collection('Delivery Prices').doc(deliveryPriceUid);
+
+                            //setState(() => loading = true); // loading = true;
+                            String welcomeMessage = "Thank you for registering in PROXpress. "
+                                "Please wait for up to 24 hours for the admin to check and verify your uploaded credentials. "
+                                "This is to ensure that you are qualified to be a courier in our app.";
+
+                            dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0, welcomeMessage, adminCredentialsResponse);
+                            if(result == null){
+                              setState((){
+                                error = 'Email already taken';
+                                loading = false;
+                              });
+                            } else {
+                              final FirebaseAuth auth = FirebaseAuth.instance;
+                              final User user = auth.currentUser;
+
+                              if (user != null) {
+                                final driversLicenseFrontDestination = 'Couriers/${user.uid}/$driversLicenseFrontFileName';
+                                final driversLicenseBackDestination = 'Couriers/${user.uid}/$driversLicenseBackFileName';
+                                final nbiClearancePhotoDestination = 'Couriers/${user.uid}/$nbiClearancePhotoFileName';
+                                final vehicleRegistrationORDestination = 'Couriers/${user.uid}/$vehicleRegistrationORFileName';
+                                final vehicleRegistrationCRDestination = 'Couriers/${user.uid}/$vehicleRegistrationCRFileName';
+                                final vehiclePhotoDestination = 'Couriers/${user.uid}/$vehiclePhotoFileName';
+
+                                try {
+                                  await UploadFile.uploadFile(driversLicenseFrontDestination, driversLicenseFront);
+                                  driversLicenseFront_ = await firebase_storage.FirebaseStorage.instance
+                                      .ref(driversLicenseFrontDestination)
+                                      .getDownloadURL();
+
+                                  await UploadFile.uploadFile(driversLicenseBackDestination, driversLicenseBack);
+                                  driversLicenseBack_ = await firebase_storage.FirebaseStorage.instance
+                                      .ref(driversLicenseBackDestination)
+                                      .getDownloadURL();
+
+                                  await UploadFile.uploadFile(nbiClearancePhotoDestination, nbiClearancePhoto);
+                                  nbiClearancePhoto_ = await firebase_storage.FirebaseStorage.instance
+                                      .ref(nbiClearancePhotoDestination)
+                                      .getDownloadURL();
+
+                                  await UploadFile.uploadFile(vehicleRegistrationORDestination, vehicleRegistrationOR);
+                                  vehicleRegistrationOR_ = await firebase_storage.FirebaseStorage.instance
+                                      .ref(vehicleRegistrationORDestination)
+                                      .getDownloadURL();
+
+                                  await UploadFile.uploadFile(vehicleRegistrationCRDestination, vehicleRegistrationCR);
+                                  vehicleRegistrationCR_ = await firebase_storage.FirebaseStorage.instance
+                                      .ref(vehicleRegistrationCRDestination)
+                                      .getDownloadURL();
+
+                                  await UploadFile.uploadFile(vehiclePhotoDestination, vehiclePhoto);
+                                  vehiclePhoto_ = await firebase_storage.FirebaseStorage.instance
+                                      .ref(vehiclePhotoDestination)
+                                      .getDownloadURL();
+
+                                  await DatabaseService(uid: user.uid).updateCourierCredentials(driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_);
+                                } catch(e) {
+                                  print(e.toString());
+                                }
+                              }
+                            }
                           }
                           else if(currentStep == 1){
                             if(!picsLoaded){
-                              //setState(() => notValid = picsLoaded);
-                              setState(() => currentStep += 1);
+                              setState(() => notValid = picsLoaded);
                             }
                             else {
                               setState(() => currentStep += 1);
@@ -309,9 +378,9 @@ class _SignupCourierState extends State<SignupCourier> {
                           }
                           else
                           {
-                            ///if(regKey.currentState.validate()) {
+                            if(regKey.currentState.validate()) {
                               setState(() => currentStep += 1);
-                            ///}
+                            }
                           }
                         },
                         child: Text(isLastStep ? 'SIGNUP' : 'NEXT'),
@@ -609,16 +678,6 @@ class _SignupCourierState extends State<SignupCourier> {
                       ],)
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 3),
-                  child: Text.rich(
-                      TextSpan(children: [
-                        TextSpan(text: 'Home Address: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                        TextSpan(text: '${address ?? ''}', style: TextStyle(fontSize: 15),)
-                      ],)
-                  ),
-                ),
-
               ],
             ),
           ),
@@ -628,78 +687,77 @@ class _SignupCourierState extends State<SignupCourier> {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Driver\'s License (Front)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                if(driversLicenseFront != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Image.file(driversLicenseFront),
-                  )
-                else Container(),
-
-                Text('Driver\'s License (Back)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                if(driversLicenseBack != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Image.file(driversLicenseBack),
-                  )
-                else Container(),
-
-                Text('NBI Clearance', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                if(nbiClearancePhoto != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Image.file(nbiClearancePhoto),
-                  )
-                else Container(),
-
-                Text('Vehicle Official Receipt (OR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                if(vehicleRegistrationOR != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Image.file(vehicleRegistrationOR),
-                  )
-                else Container(),
-
-                Text('Vehicle Official Receipt (CR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                if(vehicleRegistrationCR != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Image.file(vehicleRegistrationCR),
-                  )
-                else Container(),
-
-                Text('Vehicle Photo', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                if(vehiclePhoto != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Image.file(vehiclePhoto),
-                  )
-                else Container(),
-
-                Row(
-                  children: [
-                    Text('Vehicle Color', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: color,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
+          ),
+          Text('Driver\'s License (Front)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+          if(driversLicenseFront != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Image.file(driversLicenseFront),
+            )
+          else Container(),
+
+          Text('Driver\'s License (Back)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+          if(driversLicenseBack != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Image.file(driversLicenseBack),
+            )
+          else Container(),
+
+          Text('NBI Clearance', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+          if(nbiClearancePhoto != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Image.file(nbiClearancePhoto),
+            )
+          else Container(),
+
+          Text('Vehicle Official Receipt (OR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+          if(vehicleRegistrationOR != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Image.file(vehicleRegistrationOR),
+            )
+          else Container(),
+
+          Text('Vehicle Official Receipt (CR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+          if(vehicleRegistrationCR != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Image.file(vehicleRegistrationCR),
+            )
+          else Container(),
+
+          Text('Vehicle Photo', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+          if(vehiclePhoto != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Image.file(vehiclePhoto),
+            )
+          else Container(),
+
+          Row(
+            children: [
+              Text('Vehicle Color', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     ),
   ];
-
 
   void pickColor(BuildContext context) => showDialog(
       context: context,
