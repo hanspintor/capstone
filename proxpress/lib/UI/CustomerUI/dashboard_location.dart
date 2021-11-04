@@ -71,18 +71,13 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         VerifyEmail()
                       ],
                     ),
-                  )
-                      : SingleChildScrollView(
+                  ) : SingleChildScrollView(
                     child: Center(
-                      child: Column(
-                        children: [
-                          PinLocation(
-                            locKey: locKey,
-                            textFieldPickup: textFieldPickup,
-                            textFieldDropOff: textFieldDropOff,
-                            isBookmarks: false,
-                          )
-                        ],
+                      child: PinLocation(
+                        locKey: locKey,
+                        textFieldPickup: textFieldPickup,
+                        textFieldDropOff: textFieldDropOff,
+                        isBookmarks: false,
                       ),
                     ),
                   ),

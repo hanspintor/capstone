@@ -244,7 +244,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                             await showMaterialModalBottomSheet(
                                                               context: context,
                                                               builder: (context) => Container(
-                                                                  height: 300,
+                                                                height: MediaQuery.of(context).size.height * .8,
                                                                   child: Column(
                                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                                     children: [
