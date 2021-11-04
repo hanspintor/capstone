@@ -33,6 +33,8 @@ class AuthService {
       return null;
     }
   }
+
+
   // Creates user obj based on FirebaseUser
   TheUser _userFromFirebaseUser(User user){
     return user != null ? TheUser(uid: user.uid) : null;
@@ -57,6 +59,17 @@ class AuthService {
       print(e.toString());
       return null;
     }
+  }
+
+  Future<bool> VerifyPhoneNo(String ContactNo) async {
+    var result1 = await _auth.verifyPhoneNumber(phoneNumber: ContactNo,
+        verificationCompleted: (AuthCredential credential){
+          UserCredential result = _auth.signInWithCredential(credential) as UserCredential;
+          User user = result.user;
+
+          
+        }, verificationFailed: null, codeSent: null,
+        codeAutoRetrievalTimeout: null, timeout: Duration(seconds: 60));
   }
 
   // Sign Up email and password for Courier

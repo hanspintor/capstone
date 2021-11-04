@@ -24,7 +24,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
     User user = auth.currentUser;
-
+    print(user.phoneNumber);
     return  StreamBuilder<Customer>(
       stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot) {

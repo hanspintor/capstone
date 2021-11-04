@@ -69,6 +69,7 @@ class _AppBarTempState extends State<AppBarTemp>{
     User user = auth.currentUser;
     bool approved = true;
 
+
     if(user != null){
       DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
       Stream<List<Notifications>> notifList = FirebaseFirestore.instance
