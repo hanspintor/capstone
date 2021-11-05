@@ -189,7 +189,7 @@ class _PinLocationState extends State<PinLocation> {
                                     setState((){});
 
                                     if (dropOffDetails != null) {
-                                      setState(() => errorPickup = '');
+                                      setState(() => errorDropOff = '');
                                       dropOffCoordinates = LatLng(dropOffDetails.latitude, dropOffDetails.longitude);
                                     }
                                   },

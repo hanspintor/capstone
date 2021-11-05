@@ -34,17 +34,71 @@ class _DashboardLocationState extends State<DashboardLocation>{
           return SingleChildScrollView(
             child: Column(
                 children: [
-                  SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text("Welcome, ${customerData.fName}!",
-                      style: TextStyle(
-                        fontSize: 25,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Welcome, ${customerData.fName}!",
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
                       ),
-                    ),
+                      IconButton(
+                        color: Colors.red,
+                        icon: Icon(Icons.help_outline,),
+                        iconSize: 25,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return AlertDialog(
+                                titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                title: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Container(
+                                        margin: EdgeInsets.all(0),
+                                        alignment: Alignment.topRight,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.close_sharp),
+                                          color: Colors.redAccent,
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(bottom: 15),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(color: Colors.grey[500])
+                                          )
+                                      ),
+                                      child: Center(
+                                        child: Text('Pinning the Locations')
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: Container(
+                                  width: double.maxFinite,
+                                  child: Text(
+                                    'There are two locations that we require from you: pick-up and drop-off location.\n\n'
+                                    'In case you don\'t know the exact location, just try to pin the location as near as possible, since our pricing depends on your given details.\n\n'
+                                    'Also, just give additional instructions to the courier if you don\'t know specifically where your desired location is.',
+                                    textAlign: TextAlign.justify,
+                                  )
+                                ),
+                              );
+                            }
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   !user.emailVerified ? Container(
-                    margin: EdgeInsets.all(20),
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
                     child: Column(
                       children: [
                         Container(
@@ -71,15 +125,11 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         VerifyEmail()
                       ],
                     ),
-                  ) : SingleChildScrollView(
-                    child: Center(
-                      child: PinLocation(
-                        locKey: locKey,
-                        textFieldPickup: textFieldPickup,
-                        textFieldDropOff: textFieldDropOff,
-                        isBookmarks: false,
-                      ),
-                    ),
+                  ) : PinLocation(
+                    locKey: locKey,
+                    textFieldPickup: textFieldPickup,
+                    textFieldDropOff: textFieldDropOff,
+                    isBookmarks: false,
                   ),
                 ],
               ),
