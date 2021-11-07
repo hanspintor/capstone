@@ -34,38 +34,44 @@ class _SignupCustomerState extends State<SignupCustomer> {
   List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(),];
 
   Widget _buildFName(){
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'First Name'),
-      validator: (String value){
-        if(value.isEmpty){
-          return 'First Name is Required';
-        }
-        else return null;
-      },
-      onSaved: (String value){
-        fName = value;
-      },
-      onChanged: (val){
-        setState(() => fName = val);
-      },
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .35,
+      child: TextFormField(
+        decoration: InputDecoration(labelText: 'First Name'),
+        validator: (String value){
+          if(value.isEmpty){
+            return 'First Name is Required';
+          }
+          else return null;
+        },
+        onSaved: (String value){
+          fName = value;
+        },
+        onChanged: (val){
+          setState(() => fName = val);
+        },
+      ),
     );
   }
 
   Widget _buildLName(){
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Last Name'),
-      validator: (String value){
-        if(value.isEmpty){
-          return 'Last Name is Required';
-        }
-        else return null;
-      },
-      onSaved: (String value){
-        lName = value;
-      },
-      onChanged: (val){
-        setState(() => lName = val);
-      },
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .35,
+      child: TextFormField(
+        decoration: InputDecoration(labelText: 'Last Name'),
+        validator: (String value){
+          if(value.isEmpty){
+            return 'Last Name is Required';
+          }
+          else return null;
+        },
+        onSaved: (String value){
+          lName = value;
+        },
+        onChanged: (val){
+          setState(() => lName = val);
+        },
+      ),
     );
   }
 
@@ -309,14 +315,14 @@ class _SignupCustomerState extends State<SignupCustomer> {
       title: Text('Name'),
       content: Form(
         key: formKeys[0],
-        child: Padding(
-          padding: const EdgeInsets.only(right: 30),
-          child: Column(
-            children: [
-              _buildFName(),
-              _buildLName(),
-            ],
-          ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 19),
+              child: _buildFName(),
+            ),
+            _buildLName(),
+          ],
         ),
       ),
     ),

@@ -125,6 +125,7 @@ class _AppBarTempState extends State<AppBarTemp>{
             child: FloatingActionButton(
               child: Icon(Icons.add_rounded),
               onPressed: (){
+
                 Navigator.pushNamed(context, '/customerCreatePost');
               },
             ),

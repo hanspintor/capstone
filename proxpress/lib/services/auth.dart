@@ -11,15 +11,16 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
-    Future ResetPassword(String email) async{
-      return _auth.sendPasswordResetEmail(email: email);
-    }
+  Future ResetPassword(String email) async {
+    return _auth.sendPasswordResetEmail(email: email);
+  }
 
   // Sign in email and password
   Future SignInCustomer(String email, String password) async {
-    try{
+    try {
       // AuthResult before
-      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
       // FirebaseUser before
       User user = result.user;
       //await FileStorage(uid: user.uid);
@@ -27,8 +28,7 @@ class AuthService {
       await DatabaseService(uid: user.uid).AuthupdateCourierPassword(password);
       print(user.uid);
       return _userFromFirebaseUser(user);
-
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       return null;
     }
@@ -36,80 +36,140 @@ class AuthService {
 
 
   // Creates user obj based on FirebaseUser
-  TheUser _userFromFirebaseUser(User user){
+  TheUser _userFromFirebaseUser(User user) {
     return user != null ? TheUser(uid: user.uid) : null;
   }
+
   Stream<TheUser> get user {
     return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
   // Sign Up email and password for Customer
-  Future SignUpCustomer(String email, String password, String Fname, String Lname, String ContactNo, String Address,
-      String avatarUrl, bool notifStatus, int currentNotif, Map courier_ref) async {
-    try{
+  Future SignUpCustomer(String email, String password, String Fname,
+      String Lname, String ContactNo, String Address,
+      String avatarUrl, bool notifStatus, int currentNotif,
+      Map courier_ref) async {
+    try {
       // AuthResult before
-      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       // FirebaseUser before
       User user = result.user;
       //await FileStorage(uid: user.uid);
-      await DatabaseService(uid: user.uid).updateCustomerData(Fname, Lname, email, ContactNo, password,
-          Address, avatarUrl, notifStatus, currentNotif, courier_ref);
+      await DatabaseService(uid: user.uid).updateCustomerData(
+          Fname,
+          Lname,
+          email,
+          ContactNo,
+          password,
+          Address,
+          avatarUrl,
+          notifStatus,
+          currentNotif,
+          courier_ref);
       return _userFromFirebaseUser(user);
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future<bool> VerifyPhoneNo(String ContactNo) async {
-    var result1 = await _auth.verifyPhoneNumber(phoneNumber: ContactNo,
-        verificationCompleted: (AuthCredential credential){
-          UserCredential result = _auth.signInWithCredential(credential) as UserCredential;
-          User user = result.user;
-
-          
-        }, verificationFailed: null, codeSent: null,
-        codeAutoRetrievalTimeout: null, timeout: Duration(seconds: 60));
+  // Sign Up email and password for Customer
+  Future SignUpCustomerPhone(String email, String password, String Fname,
+      String Lname, String ContactNo, String Address,
+      String avatarUrl, bool notifStatus, int currentNotif,
+      Map courier_ref) async {
+    try {
+      // AuthResult before
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      // FirebaseUser before
+      User user = result.user;
+      //await FileStorage(uid: user.uid);
+      await DatabaseService(uid: user.uid).updateCustomerData(
+          Fname,
+          Lname,
+          email,
+          ContactNo,
+          password,
+          Address,
+          avatarUrl,
+          notifStatus,
+          currentNotif,
+          courier_ref);
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
+
 
   // Sign Up email and password for Courier
   Future SignUpCourier(String email, String password, String Fname,
       String Lname, String ContactNo, String Address, String Status,
       String avatarUrl, bool approved, String vehicleType,
-      String vehicleColor, String driversLicenseFront_,
+      int vehicleColor, String driversLicenseFront_,
       String driversLicenseBack_, String nbiClearancePhoto_,
       vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_,
-      deliveryPriceRef, notifStatus, currentNotif, notifPopStatus, notifPopCounter, String adminMessage, List adminCredentialsResponse) async {
-    try{
+      deliveryPriceRef, notifStatus, currentNotif, notifPopStatus,
+      notifPopCounter, String adminMessage,
+      List adminCredentialsResponse) async {
+    try {
       // AuthResult before
-      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       // FirebaseUser before
       User user = result.user;
       //await FileStorage(uid: user.uid);
       await DatabaseService(uid: user.uid).updateCourierData(
-          Fname, Lname, email, ContactNo, password, Address, Status, avatarUrl,
-          approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_,
-          deliveryPriceRef, notifStatus, currentNotif, notifPopStatus, notifPopCounter, adminMessage, adminCredentialsResponse);
+          Fname,
+          Lname,
+          email,
+          ContactNo,
+          password,
+          Address,
+          Status,
+          avatarUrl,
+          approved,
+          vehicleType,
+          vehicleColor,
+          driversLicenseFront_,
+          driversLicenseBack_,
+          nbiClearancePhoto_,
+          vehicleRegistrationOR_,
+          vehicleRegistrationCR_,
+          vehiclePhoto_,
+          deliveryPriceRef,
+          notifStatus,
+          currentNotif,
+          notifPopStatus,
+          notifPopCounter,
+          adminMessage,
+          adminCredentialsResponse);
       return _userFromFirebaseUser(user);
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       return null;
     }
   }
+
   // Sign Out
   Future signOut() async {
-    try{
+    try {
       return await _auth.signOut();
-    } catch (e){
+    } catch (e) {
       print(e.toString());
       return null;
     }
   }
+
   //validates the password of the customer
   Future<bool> validateCustomerPassword(String password) async {
     var firebaseUser = await _auth.currentUser;
 
-    var authCredentials = EmailAuthProvider.credential(email: firebaseUser.email, password: password);
+    var authCredentials = EmailAuthProvider.credential(
+        email: firebaseUser.email, password: password);
     try {
       var authResult = await firebaseUser
           .reauthenticateWithCredential(authCredentials);
@@ -119,10 +179,12 @@ class AuthService {
       return false;
     }
   }
+
   Future<bool> validateCustomerEmail(String password) async {
     var firebaseUser = await _auth.currentUser;
 
-    var authCredentials = EmailAuthProvider.credential(email: firebaseUser.email, password: password);
+    var authCredentials = EmailAuthProvider.credential(
+        email: firebaseUser.email, password: password);
     try {
       var authResult = await firebaseUser
           .reauthenticateWithCredential(authCredentials);
@@ -138,7 +200,8 @@ class AuthService {
   Future<bool> validateCourierPassword(String password) async {
     var firebaseUser = await _auth.currentUser;
 
-    var authCredentials = EmailAuthProvider.credential(email: firebaseUser.email, password: password);
+    var authCredentials = EmailAuthProvider.credential(
+        email: firebaseUser.email, password: password);
     try {
       var authResult = await firebaseUser
           .reauthenticateWithCredential(authCredentials);
@@ -154,11 +217,13 @@ class AuthService {
     var firebaseUser = await _auth.currentUser;
     firebaseUser.updatePassword(password);
   }
+
   //updates the password of the courier
   Future<void> updateCourierPassword(String password) async {
     var firebaseUser = await _auth.currentUser;
     firebaseUser.updatePassword(password);
   }
+
   //updates the email of the customer
   Future<void> updateCustomerEmail(String email) async {
     var message;
@@ -167,6 +232,7 @@ class AuthService {
           (value) => message = 'Success',
     ).catchError((onError) => message = 'error');
   }
+
   //updates the email of the courier
   Future<void> updateCourierEmail(String email) async {
     var message;
@@ -175,7 +241,8 @@ class AuthService {
           (value) => message = 'Success',
     ).catchError((onError) => message = 'error');
   }
-  // Future<void> uploadProfilePicture(File image) async{
-  //   customer.avatarUrl = await customerStorage.uploadFile(image);
-  // }
+// Future<void> uploadProfilePicture(File image) async{
+//   customer.avatarUrl = await customerStorage.uploadFile(image);
+// }
 }
+

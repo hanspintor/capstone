@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String email = '';
+  String contactNo = '';
   String password = '';
   String error = '';
   bool loading = false;
@@ -65,10 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           child: TextFormField(
                                 autofillHints: [AutofillHints.email],
-                                validator: (val) => val.isEmpty ? 'Email is Required': null,
+                                validator: (val) => val.isEmpty ? 'Phone number / Email is Required': null,
                                 decoration: InputDecoration(
-                                labelText: "Email",
-                                prefixIcon: Icon(Icons.email_rounded),
+                                labelText: "Phone number / Email",
+                                prefixIcon: Icon(Icons.person_rounded),
                               ),
                               onSaved: (String value){
                                 email = value;
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               decoration: InputDecoration(
                                 labelText: "Password",
-                                prefixIcon: Icon(Icons.lock),
+                                prefixIcon: Icon(Icons.password_rounded),
                               ),
                               onChanged: (val){
                                 setState(() => password = val);

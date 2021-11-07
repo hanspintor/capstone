@@ -123,7 +123,7 @@ class DatabaseService {
   Future updateCourierData(String fname, String lname, String email,
       String contactNo, String password, String address, String status,
       String avatarUrl, bool approved, String vehicleType,
-      String vehicleColor, String driversLicenseFront_,
+      int vehicleColor, String driversLicenseFront_,
       String driversLicenseBack_, String nbiClearancePhoto_,
       String vehicleRegistrationOR_, String vehicleRegistrationCR_,
       String vehiclePhoto_, DocumentReference deliveryPriceRef,
