@@ -75,11 +75,10 @@ class _CourierListState extends State<CourierList> {
                           pickupCoordinates: widget.pickupCoordinates,
                           dropOffAddress: widget.dropOffAddress,
                           dropOffCoordinates: widget.dropOffCoordinates,
-                          distance: widget.distance,);
-                      } else {
-                        return Container(
-                          //child: Text('Courier Disabled: ${dataList[index].fName} ${dataList[index].lName}'),
+                          distance: widget.distance,
                         );
+                      } else {
+                        return Container();
                       }
                     });
               }
