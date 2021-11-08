@@ -587,8 +587,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                           ),
                         ],
                       ),
-                    ) : Card(
-                      margin: EdgeInsets.all(20),
+                    ) : Container(
                       child: DeliveryList(notifPopUpStatus: notifPopUpStatus, notifPopUpCounter: notifCounter,),
                     ),
                   ],
