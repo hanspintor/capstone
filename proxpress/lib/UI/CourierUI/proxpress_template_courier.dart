@@ -125,7 +125,7 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                     body: pagePicker(),
                     floatingActionButton: !courierData.approved ? null : Visibility(visible: actionButton,
                       child: FloatingActionButton(
-                        child: Icon(Icons.add_rounded),
+                        child: Icon(Icons.post_add_rounded),
                         onPressed: () {
                           Navigator.pushNamed(context, '/courierCreatePost');
                         },
