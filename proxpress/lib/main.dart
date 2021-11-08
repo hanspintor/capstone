@@ -51,6 +51,7 @@ class PROXpressApp extends StatelessWidget{
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.red,
+          scaffoldBackgroundColor: Colors.blueGrey[50],
         ),
         home: LoadScreen(),
         onGenerateRoute: (settings) {
