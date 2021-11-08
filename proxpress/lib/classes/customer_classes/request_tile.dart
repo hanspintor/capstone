@@ -12,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/UI/CustomerUI/view_delivery_details.dart';
+import 'package:proxpress/classes/view_delivery_details.dart';
 import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/models/couriers.dart';
