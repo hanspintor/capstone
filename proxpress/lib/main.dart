@@ -62,8 +62,8 @@ class PROXpressApp extends StatelessWidget{
             case '/loginScreen':
               return PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeftWithFade);
               break;
-            case '/regLandingPage':
-              return PageTransition(child: LandingPage(), type: PageTransitionType.rightToLeftWithFade);
+            case '/landingPage':
+              return PageTransition(child: LandingPage(), type: PageTransitionType.fade);
               break;
             case '/signupCustomer':
               return PageTransition(child: SignupCustomer(), type: PageTransitionType.rightToLeftWithFade);
