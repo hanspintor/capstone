@@ -1,6 +1,6 @@
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/forgot_password.dart';
-import 'package:proxpress/UI/reg_landing_page.dart';
+import 'package:proxpress/UI/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/services/auth.dart';
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 60),
+                padding: const EdgeInsets.symmetric(vertical: 50),
                 child: Image.asset(
                   "assets/PROExpress-logo.png",
                   height: 250,

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:proxpress/Load/load_screen.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/UI/reg_landing_page.dart';
+import 'package:proxpress/UI/landing_page.dart';
 import 'package:proxpress/UI/signup_courier.dart';
 import 'package:proxpress/UI/signup_customer.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
@@ -63,7 +63,7 @@ class PROXpressApp extends StatelessWidget{
               return PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/regLandingPage':
-              return PageTransition(child: RegLandingPage(), type: PageTransitionType.rightToLeftWithFade);
+              return PageTransition(child: LandingPage(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/signupCustomer':
               return PageTransition(child: SignupCustomer(), type: PageTransitionType.rightToLeftWithFade);
