@@ -66,8 +66,8 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
     final auth = FirebaseAuth.instance;
     User user1 = auth.currentUser;
     final user = Provider.of<TheUser>(context);
-    print(user1.phoneNumber);
-    print(user1.emailVerified);
+    // print(user1.phoneNumber);
+    // print(user1.emailVerified);
     return user == null ? LoginScreen() : Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
