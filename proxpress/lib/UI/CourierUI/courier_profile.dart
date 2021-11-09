@@ -176,9 +176,11 @@ class CourierProfile extends StatelessWidget {
                                     children: [
                                       TabBar(
                                         tabs: [
-                                          Tab(child: Text("Rating", style: TextStyle(color: Colors.black),)),
-                                          Tab(child: Text("Feedbacks", style: TextStyle(color: Colors.black),)),
+                                          Tab(child: Text("Rating")),
+                                          Tab(child: Text("Feedbacks")),
                                         ],
+                                        labelColor: Colors.red,
+                                        unselectedLabelColor: Colors.grey[700],
                                       ),
                                       SizedBox(
                                         height: 320,
@@ -365,9 +367,11 @@ class CourierProfile extends StatelessWidget {
                                     children: [
                                       TabBar(
                                         tabs: [
-                                          Tab(child: Text("Rating", style: TextStyle(color: Colors.black),)),
-                                          Tab(child: Text("Feedbacks", style: TextStyle(color: Colors.black),)),
+                                          Tab(child: Text("Rating")),
+                                          Tab(child: Text("Feedbacks")),
                                         ],
+                                        labelColor: Colors.red,
+                                        unselectedLabelColor: Colors.grey[700],
                                       ),
                                       SizedBox(
                                         height: 320,
@@ -556,9 +560,11 @@ class CourierProfile extends StatelessWidget {
                                   children: [
                                     TabBar(
                                       tabs: [
-                                        Tab(child: Text("Rating", style: TextStyle(color: Colors.black),)),
-                                        Tab(child: Text("Feedbacks", style: TextStyle(color: Colors.black),)),
+                                        Tab(child: Text("Rating")),
+                                        Tab(child: Text("Feedbacks")),
                                       ],
+                                      labelColor: Colors.red,
+                                      unselectedLabelColor: Colors.grey[700],
                                     ),
                                     SizedBox(
                                       height: 320,

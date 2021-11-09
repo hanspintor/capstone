@@ -93,9 +93,11 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                   SliverToBoxAdapter(
                     child: TabBar(
                       tabs: [
-                        Tab(child: Text("Finished", style: TextStyle(color: Colors.black),)),
-                        Tab(child: Text("Cancelled", style: TextStyle(color: Colors.black),)),
+                        Tab(child: Text("Finished")),
+                        Tab(child: Text("Cancelled")),
                       ],
+                      labelColor: Colors.red,
+                      unselectedLabelColor: Colors.grey[700],
                     ),
                   ),
                 ];

@@ -123,7 +123,7 @@ class _AppBarTempState extends State<AppBarTemp>{
             body: pagePicker(),
             floatingActionButton: Visibility(visible: actionButton,
             child: FloatingActionButton(
-              child: Icon(Icons.add_rounded),
+              child: Icon(Icons.post_add_rounded),
               onPressed: (){
 
                 Navigator.pushNamed(context, '/customerCreatePost');

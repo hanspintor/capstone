@@ -53,13 +53,18 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
           headerSliverBuilder: (context, value) {
             return [
               SliverToBoxAdapter(
-                child: TabBar(
-                  tabs: [
-                    Tab(child: Text("Pending", style: TextStyle(color: Colors.black),)),
-                    Tab(child: Text("Ongoing", style: TextStyle(color: Colors.black),)),
-                    Tab(child: Text("Finished", style: TextStyle(color: Colors.black),)),
-                    Tab(child: Text("Cancelled", style: TextStyle(color: Colors.black),)),
-                  ],
+                child: Material(
+                  color: Colors.grey[100],
+                  child: TabBar(
+                    labelColor: Colors.red,
+                    unselectedLabelColor: Colors.grey[700],
+                    tabs: [
+                      Tab(child: Text("Pending")),
+                      Tab(child: Text("Ongoing")),
+                      Tab(child: Text("Finished")),
+                      Tab(child: Text("Cancelled")),
+                    ],
+                  ),
                 ),
               ),
             ];
@@ -71,6 +76,7 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
                     initialData: [],
                     value: deliveryRequestPending,
                     child: Card(
+                      color: Colors.blueGrey[50],
                       child: RequestList(message: 'You currently have no pending requests.',),
                     )
                 ),
@@ -78,6 +84,7 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
                   initialData: [],
                   value: deliveryListOngoing,
                   child: Card(
+                    color: Colors.blueGrey[50],
                     child: RequestList(message: 'You currently have no ongoing deliveries.'),
                   ),
                 ),
@@ -85,6 +92,7 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
                   initialData: [],
                   value: deliveryListDelivered,
                   child: Card(
+                    color: Colors.blueGrey[50],
                     child: RequestList(message: 'You have no finished transactions.'),
                   ),
                 ),
@@ -92,6 +100,7 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
                   initialData: [],
                   value: deliveryListCancelled,
                   child: Card(
+                    color: Colors.blueGrey[50],
                     child: RequestList(message: 'You have no cancelled transactions.'),
                   ),
                 ),
