@@ -74,13 +74,13 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 50),
               child: Image.asset(
                 "assets/PROExpress-logo.png",
-                height: 300,
+                height: 160,
                 width: 300,
               ),
             ),
