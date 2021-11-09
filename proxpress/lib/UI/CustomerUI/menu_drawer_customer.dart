@@ -66,7 +66,8 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
     final auth = FirebaseAuth.instance;
     User user1 = auth.currentUser;
     final user = Provider.of<TheUser>(context);
-
+    print(user1.phoneNumber);
+    print(user1.emailVerified);
     return user == null ? LoginScreen() : Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -113,37 +114,37 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.account_circle_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
-                  title: Text('Profile', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
-                  onTap: !user1.emailVerified ? null : () {
+                  leading: Icon(Icons.account_circle_rounded, color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Profile', style: TextStyle(color:  user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified && user1.phoneNumber == null ? null : () {
                     selectedItem(context, 0);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.place, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
-                  title: Text('Pin Location', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
-                  onTap: !user1.emailVerified ? null : () {
+                  leading: Icon(Icons.place, color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Pin Location', style: TextStyle(color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified && user1.phoneNumber == null ? null : () {
                     selectedItem(context, 1);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.bookmark, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey),
-                  title: Text('Courier Bookmarks', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
-                  onTap: !user1.emailVerified ? null : () {
+                  leading: Icon(Icons.bookmark, color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey),
+                  title: Text('Courier Bookmarks', style: TextStyle(color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified && user1.phoneNumber == null ? null : () {
                     selectedItem(context, 2);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.notification_important_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
-                  title: Text('Delivery Status', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
-                  onTap: !user1.emailVerified ? null : () {
+                  leading: Icon(Icons.notification_important_rounded, color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Delivery Status', style: TextStyle(color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified && user1.phoneNumber == null ? null : () {
                     selectedItem(context, 3);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.groups_rounded, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
-                  title: Text('Community Hub', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
-                  onTap: !user1.emailVerified ? null : () {
+                  leading: Icon(Icons.groups_rounded, color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Community Hub', style: TextStyle(color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified && user1.phoneNumber == null ? null : () {
                     selectedItem(context, 4);
                   },
                 ),
