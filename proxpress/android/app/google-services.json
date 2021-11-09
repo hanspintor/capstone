@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "744530570009-lj0vtnkqfvo2298e1e886e0l4bupkm96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.capstone.proxpress",
+            "certificate_hash": "e861ba12f4b96b85c471c7fb1de81d660c4c04fb"
+          }
+        },
+        {
           "client_id": "744530570009-hdv661fikf378vigfbhupm2e0t9t4tvv.apps.googleusercontent.com",
           "client_type": 3
         }
