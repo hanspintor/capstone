@@ -29,51 +29,58 @@ class _DashboardLocationState extends State<DashboardLocation>{
   final _pinPutFocusNode = FocusNode();
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final auth = FirebaseAuth.instance;
+  bool vPhone = false;
+  bool rButton = true;
 
 
   verifyPhone(String contact) async{
     contact = "+63" + contact.substring(1);
     print("sending ${contact}");
-    await auth.verifyPhoneNumber
-      (
-        phoneNumber: contact,
-        verificationCompleted: (PhoneAuthCredential credential) async{
-          await FirebaseAuth.instance.signInWithCredential(credential).
-          then((value) async {
-            if(value.user != null){
-              print('verified');
-            }
-          });
-        },
-        verificationFailed: (FirebaseAuthException e){
-          print(e.message);
-        },
-        codeSent: (String verificationID, int resendToken){
-          setState(() {
-            _verificationCode = verificationID;
-          });
-        },
-        codeAutoRetrievalTimeout: (String verificationID){
-          setState(() {
-            _verificationCode = verificationID;
-          });
-        },
-        timeout: Duration(seconds: 60)
-    );
+    try{
+      await auth.verifyPhoneNumber
+        (
+          phoneNumber: contact,
+          verificationCompleted: (PhoneAuthCredential credential) async{
+            await FirebaseAuth.instance.signInWithCredential(credential).
+            then((value) async {
+              if(value.user != null){
+                print('verified naaaaa');
+              }
+            });
+          },
+          verificationFailed: (FirebaseAuthException e){
+            print(e.message);
+          },
+          codeSent: (String verificationID, int resendToken){
+            setState(() {
+              _verificationCode = verificationID;
+            });
+          },
+          codeAutoRetrievalTimeout: (String verificationID){
+            setState(() {
+              _verificationCode = verificationID;
+            });
+          },
+          timeout: Duration(seconds: 120)
+      );
+    } catch (e){
+      print(e);
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
     User user = auth.currentUser;
-    print(user.phoneNumber);
+    print("Phone: ${user.phoneNumber}");
+    print("Phone: ${user.uid}");
     return  StreamBuilder<Customer>(
       stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot) {
         if(snapshot.hasData){
           Customer customerData = snapshot.data;
           contactNo = customerData.contactNo;
-          verifyPhone(contactNo);
+
           return SingleChildScrollView(
             child: Column(
                 children: [
@@ -140,81 +147,115 @@ class _DashboardLocationState extends State<DashboardLocation>{
                       ),
                     ],
                   ),
-                  !user.emailVerified ? Container(
+                  !user.emailVerified && user.phoneNumber == null ? Container(
                     margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
                     child: Column(
                       children: [
-                        Card(
-                          borderOnForeground: true,
-                          child: Container(
+                        Visibility(
+                          visible: rButton,
+                          child: ElevatedButton(
+                            onPressed: (){
+                              setState(() {
+                                vPhone = true;
+                                rButton = false;
+                              });
+                              showToast("OTP has been sent");
+                              verifyPhone(contactNo);
+                            },
+                            child: Text('Verify your contact number'),
+                          ),
+                        ),
+                        Visibility(
+                          visible: vPhone,
+                          child: Card(
+                            borderOnForeground: true,
+                            child: Container(
 
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Enter Verification code",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Enter Verification code",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                    SizedBox(height: 20,),
+                                    Text(
+                                      "Please check your mobile number for a "
+                                          "message with your code.",
+                                      style: TextStyle(
+                                          fontSize: 15,
+
+                                      ),
+                                    ),
+                                SizedBox(height: 15,),
+                                PinPut(
+                                  fieldsCount: 6,
+                                  eachFieldHeight: 40.0,
+                                  withCursor: true,
+                                  onSubmit: (pin) async{
+                                    print("pin ${pin}");
+                                    try{
+                                      await user.linkWithCredential(
+                                          PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin)
+                                      ).then((value) async {
+                                        if(value.user != null){
+                                          print("works?");
+                                          setState(() {
+                                            vPhone = false;
+                                          });
+                                          showToast("Your phone number is now verified");
+                                        }
+                                      });
+                                    } catch (e){
+                                        FocusScope.of(context).unfocus();
+                                        print("invalid otp");
+                                    }
+
+                                    // try{
+                                    //   await FirebaseAuth.instance.signInWithCredential
+                                    //     (PhoneAuthProvider.credential(
+                                    //       verificationId: _verificationCode, smsCode: pin)
+                                    //   ).then((value) async{
+                                    //     if(value.user != null){
+                                    //       print("wrong code");
+                                    //     }
+                                    //   });
+                                    // } catch (e){
+                                    //   FocusScope.of(context).unfocus();
+                                    //   print("invalid otp");
+                                    // }
+                                  },
+                                  focusNode: _pinPutFocusNode,
+                                  controller: _pinPutController,
+                                  submittedFieldDecoration: pinPutDecoration.copyWith(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  selectedFieldDecoration: pinPutDecoration,
+                                  followingFieldDecoration: pinPutDecoration.copyWith(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                      color: Colors.redAccent.withOpacity(.5),
                                     ),
                                   ),
-                                  SizedBox(height: 20,),
-                                  Text(
-                                    "Please check your mobile number for a "
-                                        "message with your code.",
-                                    style: TextStyle(
+                                ),
+                                    SizedBox(height: 10,),
+                                    Text(
+                                      "We have sent the code to ${customerData.contactNo}.",
+                                      style: TextStyle(
                                         fontSize: 15,
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold
 
+                                      ),
                                     ),
-                                  ),
-                              SizedBox(height: 15,),
-                              PinPut(
-                                fieldsCount: 6,
-                                eachFieldHeight: 40.0,
-                                withCursor: true,
-                                onSubmit: (pin) async{
-                                  print("pin ${pin}");
-                                  // try{
-                                  //   await FirebaseAuth.instance.signInWithCredential
-                                  //     (PhoneAuthProvider.credential(
-                                  //       verificationId: _verificationCode, smsCode: pin)
-                                  //   ).then((value) async{
-                                  //     if(value.user != null){
-                                  //       print("wrong code");
-                                  //     }
-                                  //   });
-                                  // } catch (e){
-                                  //   FocusScope.of(context).unfocus();
-                                  //   print("invalid otp");
-                                  // }
-                                },
-                                focusNode: _pinPutFocusNode,
-                                controller: _pinPutController,
-                                submittedFieldDecoration: pinPutDecoration.copyWith(
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  ],
                                 ),
-                                selectedFieldDecoration: pinPutDecoration,
-                                followingFieldDecoration: pinPutDecoration.copyWith(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border: Border.all(
-                                    color: Colors.redAccent.withOpacity(.5),
-                                  ),
-                                ),
-                              ),
-                                  SizedBox(height: 10,),
-                                  Text(
-                                    "We have sent the code to ${customerData.contactNo}.",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.bold
-
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
+                              )
+                            ),
                           ),
                         ),
                         Container(
@@ -261,7 +302,10 @@ class _DashboardLocationState extends State<DashboardLocation>{
 
 
 
-
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
+  }
 
 }
 
