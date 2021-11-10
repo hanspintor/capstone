@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
+import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
+import 'package:proxpress/services/database.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 class SignupCustomer extends StatefulWidget{
@@ -76,23 +79,43 @@ class _SignupCustomerState extends State<SignupCustomer> {
   }
 
   Widget _buildEmail(){
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Email'),
-      validator: (String value){
-        if(value.isEmpty){
-          return 'Email is Required';
+    return StreamBuilder<List<Customer>>(
+      stream: DatabaseService().customerList,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Customer> customers = snapshot.data;
+
+          return TextFormField(
+              decoration: InputDecoration(labelText: 'Email'),
+              validator: (String value){
+                if(value.isEmpty){
+                  return 'Email is Required';
+                }
+                if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
+                  return 'Please Enter a Valid Email Address';
+                }
+                bool emailTaken = false;
+                customers.forEach((element) {
+                  if (element.email == value){
+                    emailTaken = true;
+                  }
+                });
+                if (emailTaken){
+                  return 'Email already taken';
+                }
+                else return null;
+              },
+              onSaved: (String value){
+                email = value;
+              },
+              onChanged: (val){
+                setState(() => email = val);
+              },
+          );
+        } else {
+          return Container();
         }
-        if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
-          return 'Please Enter a Valid Email Address';
-        }
-        else return null;
-      },
-      onSaved: (String value){
-        email = value;
-      },
-        onChanged: (val){
-          setState(() => email = val);
-        }
+      }
     );
   }
   Widget _buildContactNo(){
