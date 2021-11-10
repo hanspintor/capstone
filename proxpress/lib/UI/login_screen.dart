@@ -26,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String contactNo = '';
   String password = '';
   String error = '';
+  bool visibleE = false;
   bool loading = false;
 
 
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         autofillHints: [AutofillHints.email],
         validator: (val) => val.isEmpty ? 'Phone number / Email is Required': null,
         decoration: InputDecoration(
-          labelText: "Phone number / Email",
+          labelText: "Email / Phone number",
         ),
         onSaved: (String value){
           email = value;
@@ -102,6 +103,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 20,),
+              Visibility(
+                  visible: visibleE,
+                  child: Text(
+                    error,
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+
+                  )
+              ),
+              SizedBox(height: 5,),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Container(
@@ -116,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState((){
                             error = 'Invalid email or password';
                             loading = false;
+                            visibleE = true;
                           });
                         }
                       }
