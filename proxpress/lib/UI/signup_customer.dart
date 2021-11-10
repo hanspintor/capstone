@@ -267,8 +267,8 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                           loading = false;
                                         });
                                       } else{
-                                        ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-                                          ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
+                                        // ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+                                        //   ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
                                       }
                                     }
                                   }
