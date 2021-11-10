@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
 import 'package:proxpress/classes/verify.dart';
 import 'package:proxpress/services/database.dart';
@@ -75,268 +74,265 @@ class _DashboardLocationState extends State<DashboardLocation>{
     User user = auth.currentUser;
     print("Phone: ${user.phoneNumber}");
     print("Phone: ${user.uid}");
+    return  StreamBuilder<Customer>(
+      stream: DatabaseService(uid: user.uid).customerData,
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          Customer customerData = snapshot.data;
+          contactNo = customerData.contactNo;
 
-    if(user.phoneNumber != null && user.uid != null){
-      return  StreamBuilder<Customer>(
-          stream: DatabaseService(uid: user.uid).customerData,
-          builder: (context, snapshot) {
-            if(snapshot.hasData){
-              Customer customerData = snapshot.data;
-              contactNo = customerData.contactNo;
-
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+          return SingleChildScrollView(
+            child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Welcome, ${customerData.fName}!",
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                      ),
+                      IconButton(
+                        color: Colors.red,
+                        icon: Icon(Icons.help_outline,),
+                        iconSize: 25,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return AlertDialog(
+                                titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                title: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Container(
+                                        margin: EdgeInsets.all(0),
+                                        alignment: Alignment.topRight,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.close_sharp),
+                                          color: Colors.redAccent,
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(bottom: 15),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(color: Colors.grey[500])
+                                          )
+                                      ),
+                                      child: Center(
+                                        child: Text('Pinning the Locations')
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: Container(
+                                  width: double.maxFinite,
+                                  child: Text(
+                                    'There are two locations that we require from you: pick-up and drop-off location.\n\n'
+                                    'In case you don\'t know the exact location, just try to pin the location as near as possible, since our pricing depends on your given details.\n\n'
+                                    'Also, just give additional instructions to the courier if you don\'t know specifically where your desired location is.',
+                                    textAlign: TextAlign.justify,
+                                  )
+                                ),
+                              );
+                            }
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  !user.emailVerified && user.phoneNumber == null ? Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    child: Column(
                       children: [
-                        Text("Welcome, ${customerData.fName}!",
-                          style: TextStyle(
-                            fontSize: 25,
+                        Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.info,
+                              color: Colors.red,
+                            ),
+                            title: Text(
+                              "Kindly verify your email ${user.email} to use the app.",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+
                           ),
                         ),
-                        IconButton(
-                          color: Colors.red,
-                          icon: Icon(Icons.help_outline,),
-                          iconSize: 25,
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    title: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(0),
-                                          child: Container(
-                                            margin: EdgeInsets.all(0),
-                                            alignment: Alignment.topRight,
-                                            child: IconButton(
-                                              icon: const Icon(Icons.close_sharp),
-                                              color: Colors.redAccent,
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(bottom: 15),
-                                          decoration: BoxDecoration(
-                                              border: Border(
-                                                  bottom: BorderSide(color: Colors.grey[500])
-                                              )
-                                          ),
-                                          child: Center(
-                                              child: Text('Pinning the Locations')
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    content: Container(
-                                        width: double.maxFinite,
-                                        child: Text(
-                                          'There are two locations that we require from you: pick-up and drop-off location.\n\n'
-                                              'In case you don\'t know the exact location, just try to pin the location as near as possible, since our pricing depends on your given details.\n\n'
-                                              'Also, just give additional instructions to the courier if you don\'t know specifically where your desired location is.',
-                                          textAlign: TextAlign.justify,
-                                        )
-                                    ),
-                                  );
-                                }
-                            );
-                          },
+                        Visibility(
+                          visible: rButton,
+                          child: ElevatedButton(
+                            onPressed: (){
+                              setState(() {
+                                vPhone = true;
+                                rButton = false;
+                              });
+                              showToast("OTP has been sent");
+                              verifyPhone(contactNo);
+                            },
+                            child: Text('Verify your contact number'),
+                          ),
                         ),
-                      ],
-                    ),
-                    !user.emailVerified && user.phoneNumber == null ? Container(
-                      margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                      child: Column(
-                        children: [
-                          Card(
+                        Visibility(
+                          visible: vPhone,
+                          child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.info,
-                                color: Colors.red,
-                              ),
-                              title: Text(
-                                "Kindly verify your email ${user.email} to use the app.",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
+                            borderOnForeground: true,
+                            child: Container(
 
-                            ),
-                          ),
-                          Visibility(
-                            visible: rButton,
-                            child: ElevatedButton(
-                              onPressed: (){
-                                setState(() {
-                                  vPhone = true;
-                                  rButton = false;
-                                });
-                                showToast("OTP has been sent");
-                                verifyPhone(contactNo);
-                              },
-                              child: Text('Verify your contact number'),
-                            ),
-                          ),
-                          Visibility(
-                            visible: vPhone,
-                            child: Card(
-                              elevation: 5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              borderOnForeground: true,
-                              child: Container(
-
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Enter Verification code",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                        SizedBox(height: 20,),
-                                        Text(
-                                          "Please check your mobile number for a "
-                                              "message with your code.",
-                                          style: TextStyle(
-                                            fontSize: 15,
-
-                                          ),
-                                        ),
-                                        SizedBox(height: 15,),
-                                        PinPut(
-                                          fieldsCount: 6,
-                                          eachFieldHeight: 40.0,
-                                          withCursor: true,
-                                          onSubmit: (pin) async{
-                                            print("pin ${pin}");
-                                            try{
-                                              await user.linkWithCredential(
-                                                  PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin)
-                                              ).then((value) async {
-                                                if(value.user != null){
-                                                  print("works?");
-                                                  setState(() {
-                                                    vPhone = false;
-                                                  });
-                                                  showToast("Your phone number is now verified");
-                                                }
-                                              });
-                                            } catch (e){
-                                              FocusScope.of(context).unfocus();
-                                              print("invalid otp");
-                                              Duration(seconds: 10
-                                              );
-                                              setState(() {
-                                                pin = "";
-                                              });
-
-                                            }
-
-                                            // try{
-                                            //   await FirebaseAuth.instance.signInWithCredential
-                                            //     (PhoneAuthProvider.credential(
-                                            //       verificationId: _verificationCode, smsCode: pin)
-                                            //   ).then((value) async{
-                                            //     if(value.user != null){
-                                            //       print("wrong code");
-                                            //     }
-                                            //   });
-                                            // } catch (e){
-                                            //   FocusScope.of(context).unfocus();
-                                            //   print("invalid otp");
-                                            // }
-                                          },
-                                          focusNode: _pinPutFocusNode,
-                                          controller: _pinPutController,
-                                          submittedFieldDecoration: pinPutDecoration.copyWith(
-                                            borderRadius: BorderRadius.circular(20.0),
-                                          ),
-                                          selectedFieldDecoration: pinPutDecoration,
-                                          followingFieldDecoration: pinPutDecoration.copyWith(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            border: Border.all(
-                                              color: Colors.redAccent.withOpacity(.5),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10,),
-                                        Text(
-                                          "We have sent the code to ${customerData.contactNo}.",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight.bold
-
-                                          ),
-                                        ),
-                                        SizedBox(height: 20,),
-                                        Text(
-                                          "Didn't received any code?",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10,),
-                                        InkWell(
-                                          child: new Text(
-                                            "RESEND NEW CODE",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.redAccent
-                                            ),
-                                          ),
-                                          onTap: (){
-                                            showToast("We have sent a new OTP");
-                                            verifyPhone(contactNo);
-                                            print("resending");
-                                          },
-                                        ),
-                                      ],
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Enter Verification code",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold
+                                      ),
                                     ),
-                                  )
-                              ),
+                                    SizedBox(height: 20,),
+                                    Text(
+                                      "Please check your mobile number for a "
+                                          "message with your code.",
+                                      style: TextStyle(
+                                          fontSize: 15,
+
+                                      ),
+                                    ),
+                                SizedBox(height: 15,),
+                                PinPut(
+                                  fieldsCount: 6,
+                                  eachFieldHeight: 40.0,
+                                  withCursor: true,
+                                  onSubmit: (pin) async{
+                                    print("pin ${pin}");
+                                    try{
+                                      await user.linkWithCredential(
+                                          PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin)
+                                      ).then((value) async {
+                                        if(value.user != null){
+                                          print("works?");
+                                          setState(() {
+                                            vPhone = false;
+                                          });
+                                          showToast("Your phone number is now verified");
+                                          Future.delayed(const Duration(seconds: 3), () {
+                                            setState(() {
+                                              Navigator.pushNamed(context, '/template');
+                                            });
+                                          });
+
+                                        }
+                                      });
+                                    } catch (e){
+                                        FocusScope.of(context).unfocus();
+                                        print("invalid otp");
+
+
+                                    }
+
+                                    // try{
+                                    //   await FirebaseAuth.instance.signInWithCredential
+                                    //     (PhoneAuthProvider.credential(
+                                    //       verificationId: _verificationCode, smsCode: pin)
+                                    //   ).then((value) async{
+                                    //     if(value.user != null){
+                                    //       print("wrong code");
+                                    //     }
+                                    //   });
+                                    // } catch (e){
+                                    //   FocusScope.of(context).unfocus();
+                                    //   print("invalid otp");
+                                    // }
+                                  },
+                                  focusNode: _pinPutFocusNode,
+                                  controller: _pinPutController,
+                                  submittedFieldDecoration: pinPutDecoration.copyWith(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  selectedFieldDecoration: pinPutDecoration,
+                                  followingFieldDecoration: pinPutDecoration.copyWith(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                      color: Colors.redAccent.withOpacity(.5),
+                                    ),
+                                  ),
+                                ),
+                                    SizedBox(height: 10,),
+                                    Text(
+                                      "We have sent the code to ${customerData.contactNo}.",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold
+
+                                      ),
+                                    ),
+                                    SizedBox(height: 20,),
+                                    Text(
+                                      "Didn't received any code?",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,),
+                                    InkWell(
+                                      child: new Text(
+                                        "RESEND NEW CODE",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.redAccent
+                                        ),
+                                      ),
+                                      onTap: (){
+                                        showToast("We have sent a new OTP");
+                                        verifyPhone(contactNo);
+                                        print("resending");
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              )
                             ),
                           ),
+                        ),
 
-                          //verifyCond(),
-                          //VerifyEmail()
-                        ],
-                      ),
-                    ) : PinLocation(
-                      locKey: locKey,
-                      textFieldPickup: textFieldPickup,
-                      textFieldDropOff: textFieldDropOff,
-                      isBookmarks: false,
+                        //verifyCond(),
+                        //VerifyEmail()
+                      ],
                     ),
-                  ],
-                ),
-              );
-            } else {
-              return UserLoading();
-            }
-          }
-      );
-    } else{
-      return LoginScreen();
-    }
+                  ) : PinLocation(
+                    locKey: locKey,
+                    textFieldPickup: textFieldPickup,
+                    textFieldDropOff: textFieldDropOff,
+                    isBookmarks: false,
+                  ),
+                ],
+              ),
+          );
+        } else {
+          return UserLoading();
+        }
+      }
+    );
 
 
   }
