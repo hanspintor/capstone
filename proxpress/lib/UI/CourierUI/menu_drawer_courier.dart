@@ -95,37 +95,37 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
                         ),
                       ),
                       ListTile(
-                        leading: Icon(Icons.account_circle_rounded, color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey,),
-                        title: Text('Profile', style: TextStyle(color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey)),
-                        onTap: !approved || !user1.emailVerified ? null : () {
+                        leading: Icon(Icons.account_circle_rounded, color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey,),
+                        title: Text('Profile', style: TextStyle(color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey)),
+                        onTap: !approved || !user1.emailVerified && user1.phoneNumber == null ? null : () {
                           selectedItem(context, 0);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.pending_actions_rounded, color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey,),
-                        title: Text('Pending Requests', style: TextStyle(color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey)),
-                        onTap: !approved || !user1.emailVerified ? null : () {
+                        leading: Icon(Icons.pending_actions_rounded, color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey,),
+                        title: Text('Pending Requests', style: TextStyle(color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey)),
+                        onTap: !approved || !user1.emailVerified && user1.phoneNumber == null ? null : () {
                           selectedItem(context, 1);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.published_with_changes_rounded, color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey,),
-                        title: Text('Ongoing Delivery', style: TextStyle(color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey)),
-                        onTap: !approved || !user1.emailVerified ?  null : () {
+                        leading: Icon(Icons.published_with_changes_rounded, color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey,),
+                        title: Text('Ongoing Delivery', style: TextStyle(color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey)),
+                        onTap: !approved || !user1.emailVerified && user1.phoneNumber == null ?  null : () {
                           selectedItem(context, 2);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.history, color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey,),
-                        title: Text('Transaction History', style: TextStyle(color: approved && user1.emailVerified ? Color(0xfffb0d0d) : Colors.grey)),
-                        onTap: !approved || !user1.emailVerified ? null : () {
+                        leading: Icon(Icons.history, color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey,),
+                        title: Text('Transaction History', style: TextStyle(color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d) : Colors.grey)),
+                        onTap: !approved || !user1.emailVerified && user1.phoneNumber == null ? null : () {
                           selectedItem(context, 3);
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.groups_rounded, color: approved && user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
-                        title: Text('Community Hub', style: TextStyle(color: approved && user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
-                        onTap: !approved || !user1.emailVerified ? null : () {
+                        leading: Icon(Icons.groups_rounded, color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey,),
+                        title: Text('Community Hub', style: TextStyle(color: approved && user1.emailVerified && user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
+                        onTap: !approved || !user1.emailVerified && user1.phoneNumber == null ? null : () {
                           selectedItem(context, 4);
                         },
                       ),

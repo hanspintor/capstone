@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 import 'package:proxpress/classes/courier_classes/delivery_list.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
@@ -35,7 +36,17 @@ class _CourierDashboardState extends State<CourierDashboard> {
   String vehicleRegistrationOR_ = '';
   String vehicleRegistrationCR_ = '';
   String vehiclePhoto_ = '';
+  bool vPhone = false;
+  bool rButton = true;
+  String contactNo;
+  String _verificationCode = "";
 
+  final BoxDecoration pinPutDecoration = BoxDecoration(
+    border: Border.all(color: Colors.redAccent),
+    borderRadius: BorderRadius.circular(15.0),
+  );
+  final _pinPutController = TextEditingController();
+  final _pinPutFocusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -51,6 +62,44 @@ class _CourierDashboardState extends State<CourierDashboard> {
     bool approved = false;
     bool notifPopUpStatus = false;
     int notifCounter = 0;
+
+
+
+
+    verifyPhone(String contact) async{
+      contact = "+63" + contact.substring(1);
+      print("sending ${contact}");
+      try{
+        await auth.verifyPhoneNumber
+          (
+            phoneNumber: contact,
+            verificationCompleted: (PhoneAuthCredential credential) async{
+              await FirebaseAuth.instance.signInWithCredential(credential).
+              then((value) async {
+                if(value.user != null){
+                  print('verified naaaaa');
+                }
+              });
+            },
+            verificationFailed: (FirebaseAuthException e){
+              print(e.message);
+            },
+            codeSent: (String verificationID, int resendToken){
+              setState(() {
+                _verificationCode = verificationID;
+              });
+            },
+            codeAutoRetrievalTimeout: (String verificationID){
+              setState(() {
+                _verificationCode = verificationID;
+              });
+            },
+            timeout: Duration(seconds: 120)
+        );
+      } catch (e){
+        print(e);
+      }
+    }
 
     return StreamBuilder<Courier>(
       stream: DatabaseService(uid: user.uid).courierData,
@@ -492,7 +541,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
           //     courierData.adminCredentialsResponse[3] == false &&
           //     courierData.adminCredentialsResponse[4] == false &&
           //     courierData.adminCredentialsResponse[5] == false ? true : false;
-
+          contactNo = courierData.contactNo;
           return StreamProvider<List<Delivery>>.value(
             initialData: [],
             value: deliveryList,
@@ -508,38 +557,36 @@ class _CourierDashboardState extends State<CourierDashboard> {
                         ),
                       ),
                     ),
-                    !approved || !user1.emailVerified ? Container(
+                    !approved || !user1.emailVerified && user1.phoneNumber == null ? Container(
                       child: Column(
                         children: [
                           !approved ? Column(
                             children: [
                               _welcomeMessage(),
-                              Padding(
-                                padding: const EdgeInsets.all(30),
-                                child: Column(
-                                  children: [
-                                    courierData.adminCredentialsResponse[0] ? _updateCredential1() : Container(),
-                                    courierData.adminCredentialsResponse[1] ? _updateCredential2() : Container(),
-                                    courierData.adminCredentialsResponse[2] ? _updateCredential3() : Container(),
-                                    courierData.adminCredentialsResponse[3] ? _updateCredential4() : Container(),
-                                    courierData.adminCredentialsResponse[4] ? _updateCredential5() : Container(),
-                                    courierData.adminCredentialsResponse[5] ? _updateCredential6() : Container(),
-                                    !allCredentialsValid ? _updateCredentialButton(): Container(),
-                                  ],
-                                ),
+                              Column(
+                                children: [
+                                  courierData.adminCredentialsResponse[0] ? _updateCredential1() : Container(),
+                                  courierData.adminCredentialsResponse[1] ? _updateCredential2() : Container(),
+                                  courierData.adminCredentialsResponse[2] ? _updateCredential3() : Container(),
+                                  courierData.adminCredentialsResponse[3] ? _updateCredential4() : Container(),
+                                  courierData.adminCredentialsResponse[4] ? _updateCredential5() : Container(),
+                                  courierData.adminCredentialsResponse[5] ? _updateCredential6() : Container(),
+                                  !allCredentialsValid ? _updateCredentialButton(): Container(),
+                                ],
                               ),
                             ],
                           ) : Visibility(
                             visible: false,
                             child: Container(),
                           ),
-                          !user1.emailVerified ? Container(
+                          !user1.emailVerified || user1.phoneNumber == null ? Container(
                             margin: EdgeInsets.all(20),
                             child: Column(
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black)
+                                Card(
+                                  elevation: 5,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: ListTile(
                                     leading: Icon(
@@ -557,28 +604,135 @@ class _CourierDashboardState extends State<CourierDashboard> {
 
                                   ),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black)
+                                Visibility(
+                                  visible: rButton,
+                                  child: ElevatedButton(
+                                    onPressed: (){
+                                      setState(() {
+                                        vPhone = true;
+                                        rButton = false;
+                                      });
+                                      showToast1("OTP has been sent");
+                                      verifyPhone(contactNo);
+                                    },
+                                    child: Text('Verify your contact number'),
                                   ),
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.quiz,
-                                      color: Colors.red,
+                                ),
+                                Visibility(
+                                  visible: vPhone,
+                                  child: Card(
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    title: Text(
-                                      "After verifying please relogin to access our features",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
+                                    borderOnForeground: true,
+                                    child: Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                "Enter Verification code",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold
+                                                ),
+                                              ),
+                                              SizedBox(height: 20,),
+                                              Text(
+                                                "Please check your mobile number for a "
+                                                    "message with your code.",
+                                                style: TextStyle(
+                                                  fontSize: 15,
 
+                                                ),
+                                              ),
+                                              SizedBox(height: 15,),
+                                              PinPut(
+                                                fieldsCount: 6,
+                                                eachFieldHeight: 40.0,
+                                                withCursor: true,
+                                                onSubmit: (pin) async{
+                                                  print("pin ${pin}");
+                                                  try{
+                                                    await user1.linkWithCredential(
+                                                        PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin)
+                                                    ).then((value) async {
+                                                      if(value.user != null){
+                                                        print("works?");
+                                                        setState(() {
+                                                          vPhone = false;
+                                                        });
+                                                        showToast1("Your phone number is now verified");
+                                                        Future.delayed(const Duration(seconds: 3), () {
+                                                          setState(() {
+                                                            Navigator.pushNamed(context, '/template1');
+                                                          });
+                                                        });
+
+                                                      }
+                                                    });
+                                                  } catch (e){
+                                                    FocusScope.of(context).unfocus();
+                                                    print("invalid otp");
+
+                                                  }
+
+                                                },
+                                                focusNode: _pinPutFocusNode,
+                                                controller: _pinPutController,
+                                                submittedFieldDecoration: pinPutDecoration.copyWith(
+                                                  borderRadius: BorderRadius.circular(20.0),
+                                                ),
+                                                selectedFieldDecoration: pinPutDecoration,
+                                                followingFieldDecoration: pinPutDecoration.copyWith(
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                  border: Border.all(
+                                                    color: Colors.redAccent.withOpacity(.5),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 10,),
+                                              Text(
+                                                "We have sent the code to ${courierData.contactNo}.",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontStyle: FontStyle.italic,
+                                                    fontWeight: FontWeight.bold
+
+                                                ),
+                                              ),
+                                              SizedBox(height: 20,),
+                                              Text(
+                                                "Didn't received any code?",
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              SizedBox(height: 10,),
+                                              InkWell(
+                                                child: new Text(
+                                                  "RESEND NEW CODE",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.redAccent
+                                                  ),
+                                                ),
+                                                onTap: (){
+                                                  showToast1("We have sent a new OTP");
+                                                  verifyPhone(contactNo);
+                                                  print("resending");
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                    ),
                                   ),
                                 ),
                                 //verifyCond(),
-                                VerifyEmail()
+                                //VerifyEmail()
                               ],
                             ),
                           ) : Visibility(
@@ -603,5 +757,9 @@ class _CourierDashboardState extends State<CourierDashboard> {
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.red, textColor: Colors.white);
+  }
+  Future showToast1(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 }
