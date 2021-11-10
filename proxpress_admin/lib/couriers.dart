@@ -9,7 +9,7 @@ class Courier{
   final String status;
   final bool approved;
   final String vehicleType;
-  final String vehicleColor;
+  final int vehicleColor;
   final String driversLicenseFront_;
   final String driversLicenseBack_;
   final String nbiClearancePhoto_;
