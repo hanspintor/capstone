@@ -57,6 +57,14 @@ void selectedItem(BuildContext context, int index,) async {
         ), type: PageTransitionType.rightToLeft),
       );
       break;
+    case 5:
+      Navigator.push(
+        context,
+        PageTransition(child: AppBarTemp(
+          currentPage: "Wallet",
+        ), type: PageTransitionType.rightToLeft),
+      );
+      break;
   }
 }
 
@@ -146,6 +154,13 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                   title: Text('Community Hub', style: TextStyle(color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
                   onTap: !user1.emailVerified && user1.phoneNumber == null ? null : () {
                     selectedItem(context, 4);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.account_balance_wallet, color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey,),
+                  title: Text('Wallet', style: TextStyle(color: user1.emailVerified ? Color(0xfffb0d0d): Colors.grey)),
+                  onTap: !user1.emailVerified ? null : () {
+                    selectedItem(context, 5);
                   },
                 ),
               ],

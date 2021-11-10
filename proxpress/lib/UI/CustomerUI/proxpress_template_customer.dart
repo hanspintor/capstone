@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CustomerUI/courier_bookmarks.dart';
 import 'package:proxpress/UI/CustomerUI/customer_community_hub.dart';
+import 'package:proxpress/UI/CustomerUI/customer_wallet.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -55,6 +56,9 @@ class _AppBarTempState extends State<AppBarTemp>{
       else if(currentPage == "Community Hub"){
         actionButton = true;
         return CustomerCommunityHub();
+      }
+      else if(currentPage == "Wallet"){
+        return CustomerWallet();
       }
     } else{
       if (currentPage == "Dashboard"){

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
 
 class ReviewRequest extends StatefulWidget {
   final DocumentReference customer;
@@ -212,67 +211,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                       _isLoading = true;
                     });
                     if (widget.paymentOption == 'Online Payment') {
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => UsePaypal(
-                              sandboxMode: true,
-                              clientId: "AWkipu6yPY27RjsDwrzbLeNJUHWUT03QaLP0jN844XGAX5okIhXtYfe2C_vL0gl1IOb-UqsVvow4VP0r",
-                              secretKey: "EJvqqFJFsJ4IsSNYp279b2TeQKYgpa-riHjrlxazhoKV4if33xWrR3nwzDn0Y7tIYlslNjlXMyK683-E",
-                              returnURL: "https://samplesite.com/return",
-                              cancelURL: "https://samplesite.com/cancel",
-                              transactions: [
-                                {
-                                  "amount": {
-                                    "total": '${widget.deliveryFee}',
-                                    "currency": "PHP",
-                                    "details": {
-                                      "subtotal": '${widget.deliveryFee}',
-                                      "shipping": '0',
-                                      "shipping_discount": 0
-                                    }
-                                  },
-                                  "description":
-                                  "The payment transaction description.",
-                                  // "payment_options": {
-                                  //   "allowed_payment_method":
-                                  //       "INSTANT_FUNDING_SOURCE"
-                                  // },
-                                  "item_list": {
-                                    "items": [
-                                      {
-                                        "name": "Delivery",
-                                        "quantity": 1,
-                                        "price": '${widget.deliveryFee}',
-                                        "currency": "PHP"
-                                      }
-                                    ],
-
-                                    // // shipping address is not required though
-                                    // "shipping_address": {
-                                    //   "recipient_name": "",
-                                    //   "line1": "",
-                                    //   "line2": "",
-                                    //   "city": "",
-                                    //   "country_code": "PH",
-                                    //   "postal_code": "",
-                                    //   "phone": "",
-                                    //   "state": ""
-                                    // },
-                                  }
-                                }
-                              ],
-                              note: "Contact us for any questions on your order.",
-                              onSuccess: (Map params) async {
-                                print("onSuccess: $params");
-                              },
-                              onError: (error) {
-                                print("onError: $error");
-                              },
-                              onCancel: (params) {
-                                print('cancelled: $params');
-                              }),
-                        ),
-                      ).then((value) => paymentSuccess = value);
+                      // deduct topped up money from customer
                     } else {
                       paymentSuccess = true;
                     }
