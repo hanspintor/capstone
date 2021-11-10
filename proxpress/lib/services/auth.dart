@@ -53,6 +53,8 @@ class AuthService {
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+
       // FirebaseUser before
       User user = result.user;
       //await FileStorage(uid: user.uid);

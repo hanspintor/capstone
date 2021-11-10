@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/UI/landing_page.dart';
 
 
 
@@ -15,7 +16,7 @@ class _AuthenticateState extends State<Authenticate> {
   Widget build(BuildContext context) {
 
     return Container(
-      child: LoginScreen(),
+      child: LandingPage(),
     );
   }
 }

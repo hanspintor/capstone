@@ -1,6 +1,7 @@
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/forgot_password.dart';
-import 'package:proxpress/UI/reg_landing_page.dart';
+import 'package:proxpress/UI/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/services/auth.dart';
@@ -27,182 +28,208 @@ class _LoginScreenState extends State<LoginScreen> {
   String error = '';
   bool loading = false;
 
+
+  Widget _buildUsername(){
+    return TextFormField(
+        autofillHints: [AutofillHints.email],
+        validator: (val) => val.isEmpty ? 'Phone number / Email is Required': null,
+        decoration: InputDecoration(
+          labelText: "Phone number / Email",
+        ),
+        onSaved: (String value){
+          email = value;
+        },
+        onChanged: (val){
+          setState(() => email = val);
+        }
+    );
+  }
+
+  Widget _buildPassword(){
+    return TextFormField(
+        obscureText: true,
+        validator: (String value){
+          if(value.isEmpty){
+            return 'Password is Required';
+          }
+          else return null;
+        },
+        onSaved: (String value){
+          password = value;
+        },
+        decoration: InputDecoration(
+          labelText: "Password",
+        ),
+        onChanged: (val){
+          setState(() => password = val);
+        }
+
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return loading ? UserLoading() : WillPopScope(
-      onWillPop: () async {
-        print("Back Button pressed");
-        return false;
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            flexibleSpace: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Image.asset(
+    return loading ? UserLoading() : Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50),
+                child: Image.asset(
                   "assets/PROExpress-logo.png",
-                height: 120,
-                width: 120,
+                  height: 160,
+                  width: 300,
+                ),
               ),
-            ),
-            //title: Text("PROExpress"),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 100),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 50),
-                          child: TextFormField(
-                                autofillHints: [AutofillHints.email],
-                                validator: (val) => val.isEmpty ? 'Phone number / Email is Required': null,
-                                decoration: InputDecoration(
-                                labelText: "Phone number / Email",
-                                prefixIcon: Icon(Icons.person_rounded),
-                              ),
-                              onSaved: (String value){
-                                email = value;
-                              },
-                              onChanged: (val){
-                                setState(() => email = val);
-                              }
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 50,),
-                          child: TextFormField(
-                              obscureText: true,
-                              validator: (String value){
-                                if(value.isEmpty){
-                                  return 'Password is Required';
-                                }
-                                else return null;
-                              },
-                              onSaved: (String value){
-                                password = value;
-                              },
-                              decoration: InputDecoration(
-                                labelText: "Password",
-                                prefixIcon: Icon(Icons.password_rounded),
-                              ),
-                              onChanged: (val){
-                                setState(() => password = val);
-                              }
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: _buildUsername(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: _buildPassword(),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 15,
+                  width: MediaQuery.of(context).size.width / 1.35,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()){
+                        setState(() => loading = true); // loading = true;
+                        dynamic result = await _auth.SignInCustomer(email, password);
+                        if(result == null){
+                          setState((){
+                            error = 'Invalid email or password';
+                            loading = false;
+                          });
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xfffb0d0d),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
 
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 15),
-                          //margin: EdgeInsets.only(top: 190),
-                          height: MediaQuery.of(context).size.height / 15,
-                          width: MediaQuery.of(context).size.width / 1.3,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              //Navigator.pushNamed(context, '/dashboardLocation');
-                              if (_formKey.currentState.validate()){
-                                setState(() => loading = true); // loading = true;
-                                dynamic result = await _auth.SignInCustomer(email, password);
-                                if(result == null){
-                                  setState((){
-                                      error = 'Invalid email or password';
-                                      loading = false;
-                                  });
-                                }
-
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xfffb0d0d),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                            ),
-
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 12,),
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 14.0),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 8),
-                          child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context, builder: (BuildContext context) => AlertDialog(
-                                content: (_alertmessage()),
-                              )
-                              );
-                            },
-                            child: Text(
-                              "Forgot Password?",
-                                style: TextStyle(
-                                color: Color(0xffFD3F40),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10, top: 90),
-                          child: Divider(
-                            thickness: 5,
-                            color: Colors.black,
-                            indent: 52,
-                            endIndent: 52,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 15),
-                          height: MediaQuery.of(context).size.height / 15,
-                          width: MediaQuery.of(context).size.width / 1.8,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(child: RegLandingPage(), type: PageTransitionType.rightToLeftWithFade),
-                              );
-                            },
-
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.black,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                            ),
-
-                            child: Text(
-                              "Create a New Account",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      "LOGIN",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context, builder: (BuildContext context) => AlertDialog(
+                      content: (_alertmessage()),
+                    )
+                    );
+                  },
+                  child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      color: Color(0xffFD3F40),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: InkWell(
+                  onTap: () {
+                    showMaterialModalBottomSheet(
+                      backgroundColor: Colors.red[700],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                      context: context,
+                      builder: (context) => Container(height: 130, child: _userChoice()),
+                    );
+                  },
+                  child: Text(
+                    "Don't have an account?",
+                    style: TextStyle(
+                      color: Color(0xffFD3F40),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        )
+        ),
+      ),
+    );
+  }
+  _userChoice(){
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20, top: 10),
+            child: Text('Create a new account',style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20)),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white, // background
+                  onPrimary: Colors.red, // foreground
+                ),
+                child: Text('CUSTOMER', style: TextStyle(fontSize: 18)),
+                onPressed: (){
+                  Navigator.pushNamed(context, '/signupCustomer');
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text('OR',style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white, // background
+                  onPrimary: Colors.red, // foreground
+                ),
+                child: Text('COURIER', style: TextStyle(fontSize: 18)),
+                onPressed: (){
+                  Navigator.pushNamed(context, '/signupCourier');
+                },
+              ),
+            ],
+          ),
+
+        ],
       ),
     );
   }

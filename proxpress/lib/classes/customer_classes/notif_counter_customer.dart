@@ -93,7 +93,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
-                onPressed: !widget.approved || !user.emailVerified ? null : () async{
+                onPressed: !widget.approved ||  !user.emailVerified && user.phoneNumber == null ? null : () async{
                   _openEndDrawer();
                   n.forEach((element) async {
                     await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);

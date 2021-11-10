@@ -282,6 +282,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                       dynamic result = await _auth.SignUpCustomer(email, password, fName, lName,
                                           contactNo, address, defaultProfilePic, false, 0, {});
 
+
                                       if(result == null){
                                         setState((){
                                           error = 'Email already taken';
