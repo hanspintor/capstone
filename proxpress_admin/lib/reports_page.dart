@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
@@ -123,19 +124,39 @@ class _ReportsPageState extends State<ReportsPage> {
                 ),
               ];
 
+              int i = 0;
               return StreamBuilder<Courier>(
-                  stream: DatabaseService(uid: reports[0].reportTo.id).courierData,
+                  stream: DatabaseService(uid: reports[i].reportTo.id).courierData,
                   builder: (context, snapshot) {
                     if(snapshot.hasData){
                       Courier courierData = snapshot.data;
 
                       List<PlutoRow> rows = List.generate(reports.length, (index) {
+                        String reportTo = '';
+
+                        FirebaseFirestore.instance
+                            .collection('Couriers')
+                            .doc(reports[index].reportTo.id)
+                            .get()
+                            .then((DocumentSnapshot documentSnapshot) {
+                          if (documentSnapshot.exists) {
+                            // print(documentSnapshot.data());
+                            //print(documentSnapshot['First Name']);
+                            reportTo = documentSnapshot['First Name'];
+                          }
+                        });
+
+                        // i++;
+                        // print(i);
+                        print(reportTo);
                         return PlutoRow(
                           cells: {
+
                             'report_no': PlutoCell(value: index + 1),
-                            'courier_name': PlutoCell(value: "${courierData.fName} ${courierData.lName}"),
+                            'courier_name': PlutoCell(value: reportTo),
                             'complaint': PlutoCell(value: reports[index].reportMessage),
                             'time_reported': PlutoCell(value: DateFormat.yMMMMd('en_US').format(reports[index].time.toDate())),
+
                           },
                         );
                       });

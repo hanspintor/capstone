@@ -102,6 +102,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
       body: StreamBuilder<List<Courier>>(
           stream: DatabaseService().courierList,
         builder: (context, snapshot) {
+
           if(snapshot.hasData){
             List<Courier> couriers = snapshot.data;
             print('something random');
@@ -131,14 +132,30 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 title: 'Vehicle Color',
                 field: 'vehicle_color',
                 type: PlutoColumnType.text(),
+                renderer: (rendererContext){
+                  //print(rendererContext.cell.value);
+                  return Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      shape: BoxShape.circle,
+                      color: Color(rendererContext.cell.value),
+                    ),
+                  );
+                }
               ),
+
               PlutoColumn(
                 title: 'Credentials',
                 field: 'credentials',
                 type: PlutoColumnType.text(),
                 renderer: (rendererContext) {
-                  return Image.network('credentials');
-          },
+                  return InkWell(
+                    child: new Text('View Credentials', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,),),
+                    onTap: () => launch(rendererContext.cell.value),
+                  );
+                  },
               ),
             ];
 
@@ -154,8 +171,6 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 },
               );
             });
-
-            print(rows.toString());
 
             return Padding(
               padding: EdgeInsets.all(100),
