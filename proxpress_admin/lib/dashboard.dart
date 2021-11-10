@@ -102,10 +102,8 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
       body: StreamBuilder<List<Courier>>(
           stream: DatabaseService().courierList,
         builder: (context, snapshot) {
-
           if(snapshot.hasData){
             List<Courier> couriers = snapshot.data;
-            print('something random');
 
             List<PlutoColumn> columns = [
               PlutoColumn(

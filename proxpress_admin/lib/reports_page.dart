@@ -24,9 +24,27 @@ class ReportsPage extends StatefulWidget {
 
 class _ReportsPageState extends State<ReportsPage> {
   final AuthService _auth = AuthService();
+
+  Future<List<String>> getCouriers(List<DocumentReference> couriers, int size) async {
+    final List<String> generatedCouriers = [];
+    for (int i = 0; i < size; i++) {
+      String reportTo = '';
+      await FirebaseFirestore.instance
+          .collection('Couriers')
+          .doc(couriers[i].id)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          reportTo = '${documentSnapshot['First Name']} ${documentSnapshot['Last Name']}';
+        }
+      });
+      generatedCouriers.add(reportTo);
+    }
+    return generatedCouriers;
+  }
+
   @override
   Widget build(BuildContext context) {
-
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
 
@@ -95,91 +113,82 @@ class _ReportsPageState extends State<ReportsPage> {
         ),
       ),
       body: StreamBuilder<List<Reports>>(
-          stream: DatabaseService().reportList,
-          builder: (context, snapshot) {
-            if(snapshot.hasData){
-              List<Reports> reports = snapshot.data;
-              print('something random');
+        stream: DatabaseService().reportList,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            List<Reports> reports = snapshot.data;
 
-              List<PlutoColumn> columns = [
-                PlutoColumn(
-                  title: 'Report Number',
-                  field: 'report_no',
-                  type: PlutoColumnType.number(),
-                ),
-                PlutoColumn(
-                  title: 'Courier Name',
-                  field: 'courier_name',
-                  type: PlutoColumnType.text(),
-                ),
-                PlutoColumn(
-                  title: 'Complaint',
-                  field: 'complaint',
-                  type: PlutoColumnType.text(),
-                ),
-                PlutoColumn(
-                  title: 'Time Reported',
-                  field: 'time_reported',
-                  type: PlutoColumnType.time(),
-                ),
-              ];
+            List<PlutoColumn> columns = [
+              PlutoColumn(
+                title: 'Report Number',
+                field: 'report_no',
+                type: PlutoColumnType.number(),
+              ),
+              PlutoColumn(
+                title: 'Courier Name',
+                field: 'courier_name',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
+                title: 'Complaint',
+                field: 'complaint',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
+                title: 'Time Reported',
+                field: 'time_reported',
+                type: PlutoColumnType.time(),
+              ),
+            ];
 
-              int i = 0;
-              return StreamBuilder<Courier>(
-                  stream: DatabaseService(uid: reports[i].reportTo.id).courierData,
-                  builder: (context, snapshot) {
-                    if(snapshot.hasData){
-                      Courier courierData = snapshot.data;
+            List<DocumentReference> couriers = [];
 
-                      List<PlutoRow> rows = List.generate(reports.length, (index) {
-                        String reportTo = '';
+            reports.forEach((element) {
+              couriers.add(element.reportTo);
+            });
 
-                        FirebaseFirestore.instance
-                            .collection('Couriers')
-                            .doc(reports[index].reportTo.id)
-                            .get()
-                            .then((DocumentSnapshot documentSnapshot) {
-                          if (documentSnapshot.exists) {
-                            // print(documentSnapshot.data());
-                            //print(documentSnapshot['First Name']);
-                            reportTo = documentSnapshot['First Name'];
-                          }
-                        });
+            return FutureBuilder<List<String>>(
+              future: getCouriers(couriers, couriers.length),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<String> couriersReported = snapshot.data;
 
-                        // i++;
-                        // print(i);
-                        print(reportTo);
-                        return PlutoRow(
-                          cells: {
+                  List<PlutoRow> rows = List.generate(reports.length, (index) {
+                    String temp = '';
 
-                            'report_no': PlutoCell(value: index + 1),
-                            'courier_name': PlutoCell(value: reportTo),
-                            'complaint': PlutoCell(value: reports[index].reportMessage),
-                            'time_reported': PlutoCell(value: DateFormat.yMMMMd('en_US').format(reports[index].time.toDate())),
+                    print(temp);
+                    return PlutoRow(
+                      cells: {
+                        'report_no': PlutoCell(value: index + 1),
+                        'courier_name': PlutoCell(value: couriersReported[index]),
+                        'complaint': PlutoCell(value: reports[index].reportMessage),
+                        'time_reported': PlutoCell(value: DateFormat.yMMMMd('en_US').format(reports[index].time.toDate())),
+                      },
+                    );
+                  });
 
-                          },
-                        );
-                      });
-                      return Padding(
-                        padding: EdgeInsets.all(100),
-                        child: PlutoGrid(
-                            columns: columns,
-                            rows: rows,
-                            onChanged: (PlutoGridOnChangedEvent event) {
-                              print(event);
-                            },
-                            onLoaded: (PlutoGridOnLoadedEvent event) {
-                              print(event);
-                            }
-                        ),
-                      );
-                    }
-                    return Text("");
-                  }
-              );
-            }
-            else return Container();
+                  return Padding(
+                    padding: EdgeInsets.all(100),
+                    child: PlutoGrid(
+                        columns: columns,
+                        rows: rows,
+                        onChanged: (PlutoGridOnChangedEvent event) {
+                          //print(event);
+                        },
+                        onLoaded: (PlutoGridOnLoadedEvent event) {
+                          //print(event);
+                        }
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }
+            );
+          } else {
+            return Container();
           }
+        }
       ),
     );
   }
