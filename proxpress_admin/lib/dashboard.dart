@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/courier_list.dart';
 import 'package:proxpress/couriers.dart';
@@ -29,131 +30,102 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.black,
-        title: Text("PROExpress Admin"),
-        actions: [
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.black,
-            ),
-            onPressed: () async {
-              print(user.uid);
-              if (user != null) {
-                await _auth.signOut();
-              }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-            },
-            icon: Icon(Icons.logout_rounded),
-            label: Text('Logout')),
+    return AdminScaffold(
+      backgroundColor: Colors.white,
+      sideBar: SideBar(
+        iconColor: Colors.red,
+        activeIconColor: Colors.white,
+        activeTextStyle: TextStyle(color: Colors.white,),
+        textStyle: TextStyle(color: Colors.red),
+        activeBackgroundColor: Colors.red,
+        items: const [
+          MenuItem(
+            title: 'Courier',
+            route: '/dashboard',
+            icon: Icons.local_shipping_rounded,
+          ),
+          MenuItem(
+            title: 'Delivery Prices',
+            route: '/prices',
+            icon: Icons.price_change,
+          ),
+          MenuItem(
+            title: 'Reports',
+            route: '/reports',
+            icon: Icons.report_problem,
+          ),
         ],
-      ),
-      body: DefaultTabController(
-        length: 3,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverToBoxAdapter(
-                child: TabBar(
-                  indicator: BoxDecoration(color: Colors.black),
-                  onTap: (index) => setState(() => activeTab = index),
-                  tabs: [
-                    Tab(child: Text("Couriers", style: TextStyle(color: activeTab == 0 ? Colors.white : Colors.black),)),
-                    Tab(child: Text("Delivery Prices", style: TextStyle(color: activeTab == 1 ? Colors.white : Colors.black),)),
-                    Tab(child: Text("Reports", style: TextStyle(color: activeTab == 2 ? Colors.white : Colors.black),)),
-                  ],
-                ),
+        selectedRoute: '/dashboard',
+        onSelected: (item) {
+          if (item.route != null) {
+            Navigator.of(context).pushNamed(item.route);
+          }
+        },
+        header: Container(
+          height: 100,
+          width: double.infinity,
+          color: Color(0xFFEEEEEE),
+          child: Center(
+            child: Container(
+              child: Image.asset('assets/PROXpressLogo.png'),
+            )
+          ),
+        ),
+        footer: Container(
+          height: 50,
+          width: double.infinity,
+          child: Center(
+            child: Container(
+              height: MediaQuery.of(context).size.height / 20,
+              width: MediaQuery.of(context).size.width / 1,
+              child: ElevatedButton.icon(
+                label: Text('Logout'),
+                icon: Icon(Icons.logout_rounded),
+                style: ElevatedButton.styleFrom(primary: Colors.red, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),),
+                onPressed: () async{
+                  print(user.uid);
+                  if (user != null) {
+                    await _auth.signOut();
+                  }
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                },
               ),
-            ];
-          },
-          body: Container(
-            child: TabBarView(
-              children: [
-                StreamProvider<List<Courier>>.value(
-                  value: DatabaseService().courierList,
-                  initialData: [],
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: Table(
-                          border: TableBorder.all(),
-                          children: [
-                            TableRow(
-                              children: [
-                                Align(alignment: Alignment.center,child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Address', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Contact Number', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Vehicle Type', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Vehicle Color', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Credentials', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Commands', style: TextStyle(fontWeight: FontWeight.bold),)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      CourierList(savedPassword: widget.savedPassword,),
-                    ],
-                  ),
-                ),
-                StreamProvider<List<DeliveryPrice>>.value(
-                  value: DatabaseService().deliveryPriceList,
-                  initialData: [],
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: Table(
-                          border: TableBorder.all(),
-                          children: [
-                            TableRow(
-                              children: [
-                                Align(alignment: Alignment.center,child: Text('Vehicle Type', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Base Fare', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Fare Per KM', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Commands', style: TextStyle(fontWeight: FontWeight.bold),)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      DeliveryPriceList(),
-                    ],
-                  ),
-                ),
-                StreamProvider<List<Reports>>.value(
-                  value: DatabaseService().reportList,
-                  initialData: [],
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: Table(
-                          border: TableBorder.all(),
-                          children: [
-                            TableRow(
-                              children: [
-                                Align(alignment: Alignment.center,child: Text('Report No.', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Customer Name', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Courier Name', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Complaint', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                Align(alignment: Alignment.center,child: Text('Time Reported', style: TextStyle(fontWeight: FontWeight.bold),)),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      ReportList(),
-                    ],
-                  ),
-                ),
-              ],
             ),
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.all(10),
+          child: StreamProvider<List<Courier>>.value(
+                      value: DatabaseService().courierList,
+                      initialData: [],
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            child: Table(
+                              border: TableBorder.all(),
+                              children: [
+                                TableRow(
+                                  children: [
+                                    Align(alignment: Alignment.center,child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                    Align(alignment: Alignment.center,child: Text('Address', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                    Align(alignment: Alignment.center,child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                    Align(alignment: Alignment.center,child: Text('Contact Number', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                    Align(alignment: Alignment.center,child: Text('Vehicle Type', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                    Align(alignment: Alignment.center,child: Text('Vehicle Color', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                    Align(alignment: Alignment.center,child: Text('Credentials', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                    Align(alignment: Alignment.center,child: Text('Commands', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          CourierList(savedPassword: widget.savedPassword,),
+                        ],
+                      ),
           ),
         ),
       ),
