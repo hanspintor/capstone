@@ -1,14 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/auth.dart';
+import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
 import 'package:proxpress/delivery_price_list.dart';
 import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
 import 'package:proxpress/report_list.dart';
 import 'package:proxpress/reports.dart';
+import 'package:intl/intl.dart';
 
 class ReportsPage extends StatefulWidget {
   final String savedPassword;
@@ -90,38 +93,72 @@ class _ReportsPageState extends State<ReportsPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.all(10),
-          child: StreamProvider<List<Reports>>.value(
-            value: DatabaseService().reportList,
-            initialData: [],
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Table(
-                    border: TableBorder.all(),
-                    children: [
-                      TableRow(
-                        children: [
-                          Align(alignment: Alignment.center,child: Text('Report No.', style: TextStyle(fontWeight: FontWeight.bold),)),
-                          Align(alignment: Alignment.center,child: Text('Customer Name', style: TextStyle(fontWeight: FontWeight.bold),)),
-                          Align(alignment: Alignment.center,child: Text('Courier Name', style: TextStyle(fontWeight: FontWeight.bold),)),
-                          Align(alignment: Alignment.center,child: Text('Complaint', style: TextStyle(fontWeight: FontWeight.bold),)),
-                          Align(alignment: Alignment.center,child: Text('Time Reported', style: TextStyle(fontWeight: FontWeight.bold),)),
+      body: StreamBuilder<List<Reports>>(
+          stream: DatabaseService().reportList,
+          builder: (context, snapshot) {
+            if(snapshot.hasData){
+              List<Reports> reports = snapshot.data;
+              print('something random');
 
-                        ],
-                      ),
-                    ],
-                  ),
+              List<PlutoColumn> columns = [
+                PlutoColumn(
+                  title: 'Report Number',
+                  field: 'report_no',
+                  type: PlutoColumnType.number(),
                 ),
-                ReportList(),
-              ],
-            ),
-          ),
-        ),
+                PlutoColumn(
+                  title: 'Courier Name',
+                  field: 'courier_name',
+                  type: PlutoColumnType.text(),
+                ),
+                PlutoColumn(
+                  title: 'Complaint',
+                  field: 'complaint',
+                  type: PlutoColumnType.text(),
+                ),
+                PlutoColumn(
+                  title: 'Time Reported',
+                  field: 'time_reported',
+                  type: PlutoColumnType.time(),
+                ),
+              ];
+
+              return StreamBuilder<Courier>(
+                  stream: DatabaseService(uid: reports[0].reportTo.id).courierData,
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData){
+                      Courier courierData = snapshot.data;
+
+                      List<PlutoRow> rows = List.generate(reports.length, (index) {
+                        return PlutoRow(
+                          cells: {
+                            'report_no': PlutoCell(value: index + 1),
+                            'courier_name': PlutoCell(value: "${courierData.fName} ${courierData.lName}"),
+                            'complaint': PlutoCell(value: reports[index].reportMessage),
+                            'time_reported': PlutoCell(value: DateFormat.yMMMMd('en_US').format(reports[index].time.toDate())),
+                          },
+                        );
+                      });
+                      return Padding(
+                        padding: EdgeInsets.all(100),
+                        child: PlutoGrid(
+                            columns: columns,
+                            rows: rows,
+                            onChanged: (PlutoGridOnChangedEvent event) {
+                              print(event);
+                            },
+                            onLoaded: (PlutoGridOnLoadedEvent event) {
+                              print(event);
+                            }
+                        ),
+                      );
+                    }
+                    return Text("");
+                  }
+              );
+            }
+            else return Container();
+          }
       ),
     );
   }

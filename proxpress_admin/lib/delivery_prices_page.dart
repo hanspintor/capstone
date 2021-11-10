@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/auth.dart';
 import 'package:proxpress/courier_list.dart';
@@ -88,36 +89,58 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.all(10),
-          child: StreamProvider<List<DeliveryPrice>>.value(
-            value: DatabaseService().deliveryPriceList,
-            initialData: [],
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Table(
-                    border: TableBorder.all(),
-                    children: [
-                      TableRow(
-                        children: [
-                          Align(alignment: Alignment.center,child: Text('Vehicle Type', style: TextStyle(fontWeight: FontWeight.bold),)),
-                          Align(alignment: Alignment.center,child: Text('Base Fare', style: TextStyle(fontWeight: FontWeight.bold),)),
-                          Align(alignment: Alignment.center,child: Text('Fare Per KM', style: TextStyle(fontWeight: FontWeight.bold),)),
-                          Align(alignment: Alignment.center,child: Text('Commands', style: TextStyle(fontWeight: FontWeight.bold),)),
-                        ],
-                      ),
-                    ],
-                  ),
+      body: StreamBuilder<List<DeliveryPrice>>(
+          stream: DatabaseService().deliveryPriceList,
+          builder: (context, snapshot) {
+            if(snapshot.hasData){
+              List<DeliveryPrice> price = snapshot.data;
+
+              List<PlutoColumn> columns = [
+                PlutoColumn(
+                  title: 'Vehicle Type',
+                  field: 'vehicle_type',
+                  type: PlutoColumnType.text(),
                 ),
-                DeliveryPriceList(),
-              ],
-            ),
-          ),
-        ),
+                PlutoColumn(
+                  title: 'Base Fare',
+                  field: 'base_fare',
+                  type: PlutoColumnType.number(),
+                ),
+                PlutoColumn(
+                  title: 'Fare Per KM',
+                  field: 'fare_per_km',
+                  type: PlutoColumnType.text(),
+                ),
+              ];
+
+              List<PlutoRow> rows = List.generate(price.length, (index) {
+                return PlutoRow(
+                  cells: {
+                    'vehicle_type': PlutoCell(value: price[index].vehicleType),
+                    'base_fare': PlutoCell(value: price[index].baseFare),
+                    'fare_per_km': PlutoCell(value: price[index].farePerKM),
+                  },
+                );
+              });
+
+              print(rows.toString());
+
+              return Padding(
+                padding: EdgeInsets.all(100),
+                child: PlutoGrid(
+                    columns: columns,
+                    rows: rows,
+                    onChanged: (PlutoGridOnChangedEvent event) {
+                      print(event);
+                    },
+                    onLoaded: (PlutoGridOnLoadedEvent event) {
+                      print(event);
+                    }
+                ),
+              );
+            }
+            else return Container();
+          }
       ),
     );
   }

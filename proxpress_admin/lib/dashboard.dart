@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/courier_list.dart';
 import 'package:proxpress/couriers.dart';
@@ -11,6 +12,7 @@ import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
 import 'package:proxpress/report_list.dart';
 import 'package:proxpress/reports.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'auth.dart';
 
 class Dashboard extends StatefulWidget {
@@ -27,6 +29,9 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+
+
+
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
 
@@ -94,40 +99,80 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.all(10),
-          child: StreamProvider<List<Courier>>.value(
-                      value: DatabaseService().courierList,
-                      initialData: [],
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                            child: Table(
-                              border: TableBorder.all(),
-                              children: [
-                                TableRow(
-                                  children: [
-                                    Align(alignment: Alignment.center,child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                    Align(alignment: Alignment.center,child: Text('Address', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                    Align(alignment: Alignment.center,child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                    Align(alignment: Alignment.center,child: Text('Contact Number', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                    Align(alignment: Alignment.center,child: Text('Vehicle Type', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                    Align(alignment: Alignment.center,child: Text('Vehicle Color', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                    Align(alignment: Alignment.center,child: Text('Credentials', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                    Align(alignment: Alignment.center,child: Text('Commands', style: TextStyle(fontWeight: FontWeight.bold),)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          CourierList(savedPassword: widget.savedPassword,),
-                        ],
-                      ),
-          ),
-        ),
+      body: StreamBuilder<List<Courier>>(
+          stream: DatabaseService().courierList,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            List<Courier> couriers = snapshot.data;
+            print('something random');
+
+            List<PlutoColumn> columns = [
+              PlutoColumn(
+                title: 'Name',
+                field: 'name',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
+                title: 'Address',
+                field: 'address',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
+                title: 'Email',
+                field: 'email',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
+                title: 'Vehicle Type',
+                field: 'vehicle_type',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
+                title: 'Vehicle Color',
+                field: 'vehicle_color',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
+                title: 'Credentials',
+                field: 'credentials',
+                type: PlutoColumnType.text(),
+                renderer: (rendererContext) {
+                  return Image.network('credentials');
+          },
+              ),
+            ];
+
+            List<PlutoRow> rows = List.generate(couriers.length, (index) {
+              return PlutoRow(
+                cells: {
+                  'name': PlutoCell(value: "${couriers[index].fName} ${couriers[index].lName}"),
+                  'address': PlutoCell(value: couriers[index].address),
+                  'email': PlutoCell(value: couriers[index].email),
+                  'vehicle_type': PlutoCell(value: couriers[index].vehicleType),
+                  'vehicle_color': PlutoCell(value: couriers[index].vehicleColor),
+                  'credentials': PlutoCell(value: couriers[index].driversLicenseFront_,),
+                },
+              );
+            });
+
+            print(rows.toString());
+
+            return Padding(
+              padding: EdgeInsets.all(100),
+              child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onChanged: (PlutoGridOnChangedEvent event) {
+                    print(event);
+                  },
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
+                    print(event);
+                  }
+              ),
+            );
+          }
+          else return Container();
+        }
       ),
     );
   }
