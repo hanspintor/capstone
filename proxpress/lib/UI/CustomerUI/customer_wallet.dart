@@ -82,21 +82,25 @@ class _PaymentOptionListState extends State<PaymentOptionList>
       child: Column(
         children: [
           ListTile(
+            leading: Container(
+                width: 20,
+                height: 20,
+                child: Icon(Icons.credit_card, color: Colors.red,)
+            ),
             title: Text("Credit/Debit Payment"),
             onTap: () async {
               await cardPayment(widget.amount);
             },
           ),
           ListTile(
+            leading: Container(
+              width: 25,
+                height: 25,
+                child: Image.asset("assets/gcash.png")
+            ),
             title: Text("GCash Payment"),
             onTap: () async {
               await gcashPayment(widget.amount);
-            },
-          ),
-          ListTile(
-            title: Text("PayMaya Payment"),
-            onTap: () async {
-              await paymayaPayment(widget.amount);
             },
           ),
         ],
