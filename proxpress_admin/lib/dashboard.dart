@@ -233,30 +233,191 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   },
               ),
               PlutoColumn(
-                title: 'Verdict',
+                enableEditingMode: false,
+                title: 'Commands',
                 field: 'commands',
-                type: PlutoColumnType.select(<bool>[true, false]),
-                formatter: (dynamic value){
-                  switch (value) {
-                    case true:
-                      return 'Approved';
-                    case false:
-                      return 'Disapproved';
-                  }
-                  return null;
+                type: PlutoColumnType.text(),
+                renderer: (renderContext){
+                  bool approved = couriers[renderContext.rowIdx].approved;
+
+                  return Row(
+                    children: [
+                      IconButton(
+                          icon: approved ? Icon(Icons.block_rounded, color: Colors.red): Icon(Icons.check_circle_rounded, color: Colors.green),
+                          onPressed: approved ? () async {
+                            String _adminMessage = " ";
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => StatefulBuilder(
+                                  builder: (context, setState){
+                                    return AlertDialog(
+                                        content: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              title: Text("Notify the Courier", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                                            ),
+                                            SizedBox(height: 20),
+                                            SizedBox(
+                                              width: 500,
+                                              child: TextFormField(
+                                                maxLines: 2,
+                                                maxLength: 200,
+                                                decoration: InputDecoration(
+                                                  hintText: 'Type something',
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                                keyboardType: TextInputType.multiline,
+                                                onChanged: (val) => setState(() => _adminMessage = val),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            child: Text("Send"),
+                                            onPressed: () async {
+                                              await DatabaseService(uid: couriers[renderContext.rowIdx].uid).approveCourier(false);
+                                              await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateCourierMessage(_adminMessage);
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ]
+                                    );
+                                  },
+                                )
+                            );
+                            setState(() {
+
+                            });
+                          }: () async {
+                            await DatabaseService(uid: couriers[renderContext.rowIdx].uid).approveCourier(true);
+                            },
+                      ),
+                      !approved ? IconButton(
+                          icon: Icon(Icons.announcement_rounded, color: Colors.red,),
+                          onPressed: () async{
+                            bool licenseFront = false;
+                            bool licenseBack = false;
+                            bool nbiClearance = false;
+                            bool vehicleRegOR = false;
+                            bool vehicleRegCR = false;
+                            bool vehiclePhoto = false;
+
+                            List credentials = [licenseFront,licenseBack,nbiClearance,vehicleRegOR,vehicleRegCR,vehiclePhoto];
+                            String _adminMessage = " ";
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => StatefulBuilder(
+                                  builder: (context, setState){
+                                    return AlertDialog(
+                                        content: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              title: Text("Notify the Courier", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                                            ),
+                                            SizedBox(height: 20),
+                                            SizedBox(
+                                              width: 500,
+                                              child: TextFormField(
+                                                maxLines: 2,
+                                                maxLength: 200,
+                                                decoration: InputDecoration(
+                                                  hintText: 'Type something',
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                                keyboardType: TextInputType.multiline,
+                                                onChanged: (val) => setState(() => _adminMessage = val),
+                                              ),
+                                            ),
+                                            Column(
+                                              children: [
+                                                SizedBox(height: 30),
+                                                Text("Select the credential that is invalid.", style: TextStyle(fontWeight: FontWeight.bold),),
+                                                CheckboxListTile(
+                                                  title: Text('Driver\'s License Front'),
+                                                  value: credentials[0],
+                                                  onChanged: (bool value) {
+                                                    setState(() {
+                                                      credentials[0] = value;
+                                                    });
+                                                  },
+                                                ),
+                                                CheckboxListTile(
+                                                  title: const Text('Driver\'s License Back'),
+                                                  value: credentials[1],
+                                                  onChanged: (bool value) {
+                                                    setState(() {
+                                                      credentials[1] = value;
+                                                    });
+                                                  },
+                                                ),
+                                                CheckboxListTile(
+                                                  title: const Text('NBI Clearance'),
+                                                  value: credentials[2],
+                                                  onChanged: (bool value) {
+                                                    setState(() {
+                                                      credentials[2] = value;
+                                                    });
+                                                  },
+                                                ),
+                                                CheckboxListTile(
+                                                  title: const Text('Vehicle Registration OR'),
+                                                  value: credentials[3],
+                                                  onChanged: (bool value) {
+                                                    setState(() {
+                                                      credentials[3] = value;
+                                                    });
+                                                  },
+                                                ),
+                                                CheckboxListTile(
+                                                  title: const Text('Vehicle Registration CR'),
+                                                  value: credentials[4],
+                                                  onChanged: (bool value) {
+                                                    setState(() {
+                                                      credentials[4] = value;
+                                                    });
+                                                  },
+                                                ),
+                                                CheckboxListTile(
+                                                  title: const Text('Vehicle Photo'),
+                                                  value: credentials[5],
+                                                  onChanged: (bool value) {
+                                                    setState(() {
+                                                      credentials[5] = value;
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+
+                                        actions: [
+                                          TextButton(
+                                            child: Text("Send"),
+                                            onPressed: () async {
+                                              await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateCourierMessage(_adminMessage);
+                                              await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateCredentials(credentials);
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ]);
+                                  },
+                                )
+                            );
+                          }
+                      ): Container(),
+                    ],
+                  );
                 }
               ),
             ];
 
             List<PlutoRow> rows = List.generate(couriers.length, (index) {
-              // List credentials = [
-              //   couriers[index].driversLicenseFront_,
-              //   couriers[index].driversLicenseBack_,
-              //   couriers[index].nbiClearancePhoto_,
-              //   couriers[index].vehicleRegistrationOR_,
-              //   couriers[index].vehicleRegistrationCR_,
-              //   couriers[index].vehiclePhoto_
-              // ];
 
               String credentials = couriers[index].driversLicenseFront_+ ' ' +
                   couriers[index].driversLicenseBack_+ ' ' +
@@ -282,154 +443,9 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
               child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  // onChanged: (PlutoGridOnChangedEvent event) {
-                  //   //print(event);
-                  //   print(event.rowIdx);
-                  // },
-                  // onLoaded: (PlutoGridOnLoadedEvent event) {
-                  //   print(event.stateManager.currentSelectingPosition);
-                  // },
-                // onRowChecked: (PlutoGridOnRowCheckedEvent event){
-                //     if(event.row.checked == true){
-                //
-                //       print(event.row.sortIdx);
-                //     }
-                //     else print('something here to');
-                //     //print(event.row.checked);
-                //     },
-                onSelected: (PlutoGridOnSelectedEvent event){
-                    print(event.row.sortIdx);
-                },
-                // onLoaded: (PlutoGridOnLoadedEvent event){
-                //   event.stateManager!
-                //       .setSelectingMode(PlutoGridSelectingMode.cell);
-                //
-                //   stateManager = event.stateManager;
-                // },
                 createHeader: (PlutoGridStateManager){
                     return Text('Couriers', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
                 },
-                  createFooter: (PlutoGridStateManager){
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                            child: Text('Approve'),
-                            onPressed: (){
-
-                            }
-                        ),
-                        ElevatedButton(
-                            child: Text('Notify Reason'),
-                            onPressed: (){
-                              String _adminMessage = " ";
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => StatefulBuilder(
-                                    builder: (context, setState){
-                                      return AlertDialog(
-                                          content: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              ListTile(
-                                                title: Text("Notify the Courier", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                                              ),
-                                              SizedBox(height: 20),
-                                              SizedBox(
-                                                width: 500,
-                                                child: TextFormField(
-                                                  maxLines: 2,
-                                                  maxLength: 200,
-                                                  decoration: InputDecoration(
-                                                    hintText: 'Type something',
-                                                    border: OutlineInputBorder(),
-                                                  ),
-                                                  keyboardType: TextInputType.multiline,
-                                                  onChanged: (val) => setState(() => _adminMessage = val),
-                                                ),
-                                              ),
-                                              Column(
-                                                children: [
-                                                  SizedBox(height: 30),
-                                                  Text("Select the credential that is invalid.", style: TextStyle(fontWeight: FontWeight.bold),),
-                                                  CheckboxListTile(
-                                                    title: Text('Driver\'s License Front'),
-                                                    value: false,
-                                                    onChanged: (bool value) {
-                                                      setState(() {
-                                                        // credentials[0] = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  CheckboxListTile(
-                                                    title: const Text('Driver\'s License Back'),
-                                                    value: false,
-                                                    onChanged: (bool value) {
-                                                      setState(() {
-                                                        // credentials[1] = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  CheckboxListTile(
-                                                    title: const Text('NBI Clearance'),
-                                                    value: false,
-                                                    onChanged: (bool value) {
-                                                      setState(() {
-                                                        // credentials[2] = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  CheckboxListTile(
-                                                    title: const Text('Vehicle Registration OR'),
-                                                    value: false,
-                                                    onChanged: (bool value) {
-                                                      setState(() {
-                                                        // credentials[3] = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  CheckboxListTile(
-                                                    title: const Text('Vehicle Registration CR'),
-                                                    value: false,
-                                                    onChanged: (bool value) {
-                                                      setState(() {
-                                                        // credentials[4] = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                  CheckboxListTile(
-                                                    title: const Text('Vehicle Photo'),
-                                                    value: false,
-                                                    onChanged: (bool value) {
-                                                      setState(() {
-                                                        // credentials[5] = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-
-                                          actions: [
-                                            TextButton(
-                                              child: Text("Send"),
-                                              onPressed: () async {
-                                                // await DatabaseService(uid: widget.courier.uid).updateCourierMessage(_adminMessage);
-                                                // await DatabaseService(uid: widget.courier.uid).updateCredentials(credentials);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ]);
-                                    },
-                                  )
-                              );
-                            }
-                        ),
-                      ],
-                    );
-                  },
               ),
             );
           }
