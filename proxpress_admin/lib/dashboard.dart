@@ -177,14 +177,39 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                 builder: (context, setState){
                                   return AlertDialog(
                                       content: Container(
-                                        height: MediaQuery.of(context).size.height/1,
-                                        width: MediaQuery.of(context).size.width/1,
+                                        height: MediaQuery.of(context).size.height/.1,
+                                        width: MediaQuery.of(context).size.width/.1,
                                         child: GridView.builder(
                                           itemCount: 6,
                                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                                             itemBuilder: (context, index){
-                                              return Container(
-                                                child: Image.network(images[index]),
+                                              return Column(
+                                                children: [
+                                                  Container(
+                                                    height: 550,
+                                                    width: 600,
+                                                    child: Image.network(images[index]),
+                                                  ),
+                                                  if(images[index] == images[0])...[
+                                                    Text('Driver\'s License Front', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                  ]
+                                                  else if (images[index] == images[1])...[
+                                                    Text('Driver\'s License Back', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                  ]
+                                                  else if (images[index] == images[2])...[
+                                                      Text('NBI Clearance', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                    ]
+                                                    else if (images[index] == images[3])...[
+                                                        Text('Vehicle Certificate OR', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                      ]
+                                                      else if (images[index] == images[4])...[
+                                                          Text('Vehicle Certificate CR', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        ]
+                                                        else if (images[index] == images[5])...[
+                                                            Text('Vehicle Photo', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                          ]
+                                                  else Container(),
+                                                ],
                                               );
                                             }
                                         ),
