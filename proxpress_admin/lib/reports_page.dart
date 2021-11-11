@@ -43,6 +43,24 @@ class _ReportsPageState extends State<ReportsPage> {
     return generatedCouriers;
   }
 
+  // Future<List<String>> getCustomers (List<DocumentReference> customers, int size) async {
+  //   final List<String> generatedCustomers = [];
+  //   for (int i = 0; i < size; i++) {
+  //     String reportBy = '';
+  //     await FirebaseFirestore.instance
+  //         .collection('Customers')
+  //         .doc(customers[i].id)
+  //         .get()
+  //         .then((DocumentSnapshot documentSnapshot) {
+  //       if (documentSnapshot.exists) {
+  //         reportBy = '${documentSnapshot['First Name']} ${documentSnapshot['Last Name']}';
+  //       }
+  //     });
+  //     generatedCustomers.add(reportBy);
+  //   }
+  //   return generatedCustomers;
+  // }
+
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -125,6 +143,11 @@ class _ReportsPageState extends State<ReportsPage> {
                 type: PlutoColumnType.number(),
               ),
               PlutoColumn(
+                title: 'Customer Name',
+                field: 'customer_name',
+                type: PlutoColumnType.text(),
+              ),
+              PlutoColumn(
                 title: 'Courier Name',
                 field: 'courier_name',
                 type: PlutoColumnType.text(),
@@ -160,6 +183,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     return PlutoRow(
                       cells: {
                         'report_no': PlutoCell(value: index + 1),
+                        'customer_name': PlutoCell(value: couriersReported[index]),
                         'courier_name': PlutoCell(value: couriersReported[index]),
                         'complaint': PlutoCell(value: reports[index].reportMessage),
                         'time_reported': PlutoCell(value: DateFormat.yMMMMd('en_US').format(reports[index].time.toDate())),
@@ -172,12 +196,19 @@ class _ReportsPageState extends State<ReportsPage> {
                     child: PlutoGrid(
                         columns: columns,
                         rows: rows,
-                        onChanged: (PlutoGridOnChangedEvent event) {
-                          //print(event);
-                        },
+                        // onChanged: (PlutoGridOnChangedEvent event) {
+                        //   //print(event);
+                        //   // setState(() {
+                        //   //   event.value
+                        //   // });
+                        // },
                         onLoaded: (PlutoGridOnLoadedEvent event) {
                           //print(event);
-                        }
+                        },
+                      createHeader: (PlutoGridStateManager){
+                        return Text('Reports', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+                      },
+
                     ),
                   );
                 } else {

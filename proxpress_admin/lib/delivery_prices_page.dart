@@ -97,6 +97,7 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
 
               List<PlutoColumn> columns = [
                 PlutoColumn(
+                  enableEditingMode: false,
                   title: 'Vehicle Type',
                   field: 'vehicle_type',
                   type: PlutoColumnType.text(),
@@ -123,19 +124,20 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
                 );
               });
 
-              print(rows.toString());
-
+              //print(rows.toString());
               return Padding(
                 padding: EdgeInsets.all(100),
                 child: PlutoGrid(
                     columns: columns,
                     rows: rows,
                     onChanged: (PlutoGridOnChangedEvent event) {
-                      print(event);
+                      print(event.value);
+                      // int val;
+                      //   price[event.rowIdx].baseFare = event.value;
                     },
-                    onLoaded: (PlutoGridOnLoadedEvent event) {
-                      print(event);
-                    }
+                  createHeader: (PlutoGridStateManager){
+                    return Text('Delivery Prices', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+                  },
                 ),
               );
             }
