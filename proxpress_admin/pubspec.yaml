@@ -43,6 +43,7 @@ dependencies:
   url_launcher: ^6.0.10
   flutter_admin_scaffold: ^1.0.0
   pluto_grid: ^2.5.0
+  gallery_view: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:

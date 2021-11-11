@@ -107,7 +107,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
 
             List<PlutoColumn> columns = [
               PlutoColumn(
-                enableRowChecked: true,
+                //enableRowChecked: true,
                 enableEditingMode: false,
                 title: 'Name',
                 field: 'name',
@@ -138,14 +138,20 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 type: PlutoColumnType.text(),
                 renderer: (rendererContext){
                   //print(rendererContext.cell.value);
-                  return Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      shape: BoxShape.circle,
-                      color: Color(rendererContext.cell.value),
-                    ),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          shape: BoxShape.circle,
+                          color: Color(rendererContext.cell.value),
+                        ),
+                      ),
+                    ],
                   );
                 }
               ),
@@ -156,35 +162,48 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 field: 'credentials',
                 type: PlutoColumnType.text(),
                 renderer: (rendererContext) {
-                  return InkWell(
-                    child: new Text('View Credentials', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,),),
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => StatefulBuilder(
-                            builder: (context, setState){
-                              return AlertDialog(
-                                  content: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                          child: Image.network(rendererContext.cell.value)
+                  List<String> images = rendererContext.cell.value.split(' ');
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      InkWell(
+                        child: new Text('View Credentials', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,),),
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => StatefulBuilder(
+                                builder: (context, setState){
+                                  return AlertDialog(
+                                      content: Container(
+                                        height: MediaQuery.of(context).size.height/1,
+                                        width: MediaQuery.of(context).size.width/1,
+                                        child: GridView.builder(
+                                          itemCount: 6,
+                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                                            itemBuilder: (context, index){
+                                              return Container(
+                                                child: Image.network(images[index]),
+                                              );
+                                            }
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: Text("OK"),
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ]);
-                            },
-                          )
-                      );
-                    }
+                                      actions: [
+                                        TextButton(
+                                          child: Text("OK"),
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ]
+                                  );
+                                },
+                              )
+                          );
+                        }
+                      ),
+                    ],
                   );
                   },
               ),
@@ -213,6 +232,13 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
               //   couriers[index].vehicleRegistrationCR_,
               //   couriers[index].vehiclePhoto_
               // ];
+
+              String credentials = couriers[index].driversLicenseFront_+ ' ' +
+                  couriers[index].driversLicenseBack_+ ' ' +
+                  couriers[index].nbiClearancePhoto_+ ' ' +
+                  couriers[index].vehicleRegistrationOR_+ ' ' +
+                  couriers[index].vehicleRegistrationCR_+ ' ' +
+                  couriers[index].vehiclePhoto_;
               return PlutoRow(
                 cells: {
                   'name': PlutoCell(value: "${couriers[index].fName} ${couriers[index].lName}"),
@@ -220,7 +246,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   'email': PlutoCell(value: couriers[index].email),
                   'vehicle_type': PlutoCell(value: couriers[index].vehicleType),
                   'vehicle_color': PlutoCell(value: couriers[index].vehicleColor),
-                  'credentials': PlutoCell(value: couriers[index].driversLicenseFront_),
+                  'credentials': PlutoCell(value: credentials,),
                   'commands' : PlutoCell(value: couriers[index].approved)
                 },
               );
@@ -238,13 +264,17 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   // onLoaded: (PlutoGridOnLoadedEvent event) {
                   //   print(event.stateManager.currentSelectingPosition);
                   // },
-                onRowChecked: (PlutoGridOnRowCheckedEvent event){
-                    if(event.row.checked == true){
-                      print('something');
-                    }
-                    else print('something here to');
-                    //print(event.row.checked);
-                    },
+                // onRowChecked: (PlutoGridOnRowCheckedEvent event){
+                //     if(event.row.checked == true){
+                //
+                //       print(event.row.sortIdx);
+                //     }
+                //     else print('something here to');
+                //     //print(event.row.checked);
+                //     },
+                onSelected: (PlutoGridOnSelectedEvent event){
+                    print(event.row.sortIdx);
+                },
                 // onLoaded: (PlutoGridOnLoadedEvent event){
                 //   event.stateManager!
                 //       .setSelectingMode(PlutoGridSelectingMode.cell);
@@ -254,127 +284,127 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 createHeader: (PlutoGridStateManager){
                     return Text('Couriers', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
                 },
-                  // createFooter: (PlutoGridStateManager){
-                  //   return Row(
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children: [
-                  //       ElevatedButton(
-                  //           child: Text('Approve'),
-                  //           onPressed: (){
-                  //
-                  //           }
-                  //       ),
-                  //       ElevatedButton(
-                  //           child: Text('Notify Reason'),
-                  //           onPressed: (){
-                  //             String _adminMessage = " ";
-                  //             showDialog(
-                  //                 context: context,
-                  //                 builder: (BuildContext context) => StatefulBuilder(
-                  //                   builder: (context, setState){
-                  //                     return AlertDialog(
-                  //                         content: Column(
-                  //                           crossAxisAlignment: CrossAxisAlignment.center,
-                  //                           mainAxisSize: MainAxisSize.min,
-                  //                           children: [
-                  //                             ListTile(
-                  //                               title: Text("Notify the Courier", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                  //                             ),
-                  //                             SizedBox(height: 20),
-                  //                             SizedBox(
-                  //                               width: 500,
-                  //                               child: TextFormField(
-                  //                                 maxLines: 2,
-                  //                                 maxLength: 200,
-                  //                                 decoration: InputDecoration(
-                  //                                   hintText: 'Type something',
-                  //                                   border: OutlineInputBorder(),
-                  //                                 ),
-                  //                                 keyboardType: TextInputType.multiline,
-                  //                                 onChanged: (val) => setState(() => _adminMessage = val),
-                  //                               ),
-                  //                             ),
-                  //                             Column(
-                  //                               children: [
-                  //                                 SizedBox(height: 30),
-                  //                                 Text("Select the credential that is invalid.", style: TextStyle(fontWeight: FontWeight.bold),),
-                  //                                 CheckboxListTile(
-                  //                                   title: Text('Driver\'s License Front'),
-                  //                                   value: false,
-                  //                                   onChanged: (bool value) {
-                  //                                     setState(() {
-                  //                                       // credentials[0] = value;
-                  //                                     });
-                  //                                   },
-                  //                                 ),
-                  //                                 CheckboxListTile(
-                  //                                   title: const Text('Driver\'s License Back'),
-                  //                                   value: false,
-                  //                                   onChanged: (bool value) {
-                  //                                     setState(() {
-                  //                                       // credentials[1] = value;
-                  //                                     });
-                  //                                   },
-                  //                                 ),
-                  //                                 CheckboxListTile(
-                  //                                   title: const Text('NBI Clearance'),
-                  //                                   value: false,
-                  //                                   onChanged: (bool value) {
-                  //                                     setState(() {
-                  //                                       // credentials[2] = value;
-                  //                                     });
-                  //                                   },
-                  //                                 ),
-                  //                                 CheckboxListTile(
-                  //                                   title: const Text('Vehicle Registration OR'),
-                  //                                   value: false,
-                  //                                   onChanged: (bool value) {
-                  //                                     setState(() {
-                  //                                       // credentials[3] = value;
-                  //                                     });
-                  //                                   },
-                  //                                 ),
-                  //                                 CheckboxListTile(
-                  //                                   title: const Text('Vehicle Registration CR'),
-                  //                                   value: false,
-                  //                                   onChanged: (bool value) {
-                  //                                     setState(() {
-                  //                                       // credentials[4] = value;
-                  //                                     });
-                  //                                   },
-                  //                                 ),
-                  //                                 CheckboxListTile(
-                  //                                   title: const Text('Vehicle Photo'),
-                  //                                   value: false,
-                  //                                   onChanged: (bool value) {
-                  //                                     setState(() {
-                  //                                       // credentials[5] = value;
-                  //                                     });
-                  //                                   },
-                  //                                 ),
-                  //                               ],
-                  //                             ),
-                  //                           ],
-                  //                         ),
-                  //
-                  //                         actions: [
-                  //                           TextButton(
-                  //                             child: Text("Send"),
-                  //                             onPressed: () async {
-                  //                               // await DatabaseService(uid: widget.courier.uid).updateCourierMessage(_adminMessage);
-                  //                               // await DatabaseService(uid: widget.courier.uid).updateCredentials(credentials);
-                  //                               Navigator.pop(context);
-                  //                             },
-                  //                           ),
-                  //                         ]);
-                  //                   },
-                  //                 )
-                  //             );
-                  //           }
-                  //       ),
-                  //     ],
-                  //   );
-                  // },
+                  createFooter: (PlutoGridStateManager){
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                            child: Text('Approve'),
+                            onPressed: (){
+
+                            }
+                        ),
+                        ElevatedButton(
+                            child: Text('Notify Reason'),
+                            onPressed: (){
+                              String _adminMessage = " ";
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => StatefulBuilder(
+                                    builder: (context, setState){
+                                      return AlertDialog(
+                                          content: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ListTile(
+                                                title: Text("Notify the Courier", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                                              ),
+                                              SizedBox(height: 20),
+                                              SizedBox(
+                                                width: 500,
+                                                child: TextFormField(
+                                                  maxLines: 2,
+                                                  maxLength: 200,
+                                                  decoration: InputDecoration(
+                                                    hintText: 'Type something',
+                                                    border: OutlineInputBorder(),
+                                                  ),
+                                                  keyboardType: TextInputType.multiline,
+                                                  onChanged: (val) => setState(() => _adminMessage = val),
+                                                ),
+                                              ),
+                                              Column(
+                                                children: [
+                                                  SizedBox(height: 30),
+                                                  Text("Select the credential that is invalid.", style: TextStyle(fontWeight: FontWeight.bold),),
+                                                  CheckboxListTile(
+                                                    title: Text('Driver\'s License Front'),
+                                                    value: false,
+                                                    onChanged: (bool value) {
+                                                      setState(() {
+                                                        // credentials[0] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  CheckboxListTile(
+                                                    title: const Text('Driver\'s License Back'),
+                                                    value: false,
+                                                    onChanged: (bool value) {
+                                                      setState(() {
+                                                        // credentials[1] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  CheckboxListTile(
+                                                    title: const Text('NBI Clearance'),
+                                                    value: false,
+                                                    onChanged: (bool value) {
+                                                      setState(() {
+                                                        // credentials[2] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  CheckboxListTile(
+                                                    title: const Text('Vehicle Registration OR'),
+                                                    value: false,
+                                                    onChanged: (bool value) {
+                                                      setState(() {
+                                                        // credentials[3] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  CheckboxListTile(
+                                                    title: const Text('Vehicle Registration CR'),
+                                                    value: false,
+                                                    onChanged: (bool value) {
+                                                      setState(() {
+                                                        // credentials[4] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                  CheckboxListTile(
+                                                    title: const Text('Vehicle Photo'),
+                                                    value: false,
+                                                    onChanged: (bool value) {
+                                                      setState(() {
+                                                        // credentials[5] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+
+                                          actions: [
+                                            TextButton(
+                                              child: Text("Send"),
+                                              onPressed: () async {
+                                                // await DatabaseService(uid: widget.courier.uid).updateCourierMessage(_adminMessage);
+                                                // await DatabaseService(uid: widget.courier.uid).updateCredentials(credentials);
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ]);
+                                    },
+                                  )
+                              );
+                            }
+                        ),
+                      ],
+                    );
+                  },
               ),
             );
           }

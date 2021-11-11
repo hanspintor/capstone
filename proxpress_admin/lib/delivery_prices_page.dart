@@ -95,6 +95,11 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
             if(snapshot.hasData){
               List<DeliveryPrice> price = snapshot.data;
 
+              List<String> priceUIDs = [];
+              price.forEach((element) {
+                priceUIDs.add(element.uid);
+              });
+
               List<PlutoColumn> columns = [
                 PlutoColumn(
                   enableEditingMode: false,
@@ -110,7 +115,7 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
                 PlutoColumn(
                   title: 'Fare Per KM',
                   field: 'fare_per_km',
-                  type: PlutoColumnType.text(),
+                  type: PlutoColumnType.number(),
                 ),
               ];
 
@@ -130,8 +135,12 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
                 child: PlutoGrid(
                     columns: columns,
                     rows: rows,
-                    onChanged: (PlutoGridOnChangedEvent event) {
-                      print(event.value);
+                    onChanged: (PlutoGridOnChangedEvent event) async{
+
+                      if(event.columnIdx == 1){
+                        await DatabaseService(uid: priceUIDs[event.rowIdx]).updateBaseFare(event.value);
+                      }
+                      else await DatabaseService(uid: priceUIDs[event.rowIdx]).updateFarePerKM(event.value);
                       // int val;
                       //   price[event.rowIdx].baseFare = event.value;
                     },

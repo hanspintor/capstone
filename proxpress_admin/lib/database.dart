@@ -184,11 +184,17 @@ class DatabaseService {
     return customerCollection.snapshots().map(_customerDataListFromSnapshot);
   }
 
-  Future updateDeliveryPrice(int baseFare, int farePerKM) async {
+  Future updateBaseFare(int baseFare) async {
     await deliveryPriceCollection
         .doc(uid)
         .update({
       'Base Fare': baseFare,
+    });
+  }
+  Future updateFarePerKM(int farePerKM) async {
+    await deliveryPriceCollection
+        .doc(uid)
+        .update({
       'Fare Per KM': farePerKM,
     });
   }

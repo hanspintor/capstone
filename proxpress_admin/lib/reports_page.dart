@@ -25,8 +25,9 @@ class ReportsPage extends StatefulWidget {
 class _ReportsPageState extends State<ReportsPage> {
   final AuthService _auth = AuthService();
 
-  Future<List<String>> getCouriers(List<DocumentReference> couriers, int size) async {
+  Future<List<List<String>>> getNames(List<DocumentReference> couriers, List<DocumentReference> customers,int size) async {
     final List<String> generatedCouriers = [];
+    final List<String> generatedCustomers = [];
     for (int i = 0; i < size; i++) {
       String reportTo = '';
       await FirebaseFirestore.instance
@@ -40,7 +41,24 @@ class _ReportsPageState extends State<ReportsPage> {
       });
       generatedCouriers.add(reportTo);
     }
-    return generatedCouriers;
+    for (int i = 0; i < size; i++) {
+      String reportBy = '';
+      await FirebaseFirestore.instance
+          .collection('Customers')
+          .doc(customers[i].id)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          reportBy = '${documentSnapshot['First Name']} ${documentSnapshot['Last Name']}';
+        }
+      });
+      generatedCustomers.add(reportBy);
+    }
+    List<List<String>> combinedNames = [];
+    combinedNames.add(generatedCustomers);
+    combinedNames.add(generatedCouriers);
+    print(combinedNames);
+    return combinedNames;
   }
 
   // Future<List<String>> getCustomers (List<DocumentReference> customers, int size) async {
@@ -138,26 +156,31 @@ class _ReportsPageState extends State<ReportsPage> {
 
             List<PlutoColumn> columns = [
               PlutoColumn(
+                enableEditingMode: false,
                 title: 'Report Number',
                 field: 'report_no',
                 type: PlutoColumnType.number(),
               ),
               PlutoColumn(
+                enableEditingMode: false,
                 title: 'Customer Name',
                 field: 'customer_name',
                 type: PlutoColumnType.text(),
               ),
               PlutoColumn(
+                enableEditingMode: false,
                 title: 'Courier Name',
                 field: 'courier_name',
                 type: PlutoColumnType.text(),
               ),
               PlutoColumn(
+                enableEditingMode: false,
                 title: 'Complaint',
                 field: 'complaint',
                 type: PlutoColumnType.text(),
               ),
               PlutoColumn(
+                enableEditingMode: false,
                 title: 'Time Reported',
                 field: 'time_reported',
                 type: PlutoColumnType.time(),
@@ -165,16 +188,18 @@ class _ReportsPageState extends State<ReportsPage> {
             ];
 
             List<DocumentReference> couriers = [];
+            List<DocumentReference> customers = [];
 
             reports.forEach((element) {
               couriers.add(element.reportTo);
+              customers.add(element.reportBy);
             });
 
-            return FutureBuilder<List<String>>(
-              future: getCouriers(couriers, couriers.length),
+            return FutureBuilder<List<List<String>>>(
+              future: getNames(couriers, customers, couriers.length),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  List<String> couriersReported = snapshot.data;
+                  List<List<String>> combinedNames = snapshot.data;
 
                   List<PlutoRow> rows = List.generate(reports.length, (index) {
                     String temp = '';
@@ -183,8 +208,8 @@ class _ReportsPageState extends State<ReportsPage> {
                     return PlutoRow(
                       cells: {
                         'report_no': PlutoCell(value: index + 1),
-                        'customer_name': PlutoCell(value: couriersReported[index]),
-                        'courier_name': PlutoCell(value: couriersReported[index]),
+                        'customer_name': PlutoCell(value: combinedNames[0][index]),
+                        'courier_name': PlutoCell(value: combinedNames[1][index]),
                         'complaint': PlutoCell(value: reports[index].reportMessage),
                         'time_reported': PlutoCell(value: DateFormat.yMMMMd('en_US').format(reports[index].time.toDate())),
                       },
@@ -212,6 +237,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     ),
                   );
                 } else {
+                  print ('something');
                   return Container();
                 }
               }

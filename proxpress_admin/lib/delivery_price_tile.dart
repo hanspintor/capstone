@@ -101,7 +101,7 @@ class _DeliveryPriceTileState extends State<DeliveryPriceTile> {
                           onPressed: editPressed ? () async {
                             if (priceKey.currentState.validate()) {
                               priceKey.currentState.save();
-                              await DatabaseService(uid: widget.deliveryPrice.uid).updateDeliveryPrice(baseFare, farePerKM);
+                              //await DatabaseService(uid: widget.deliveryPrice.uid).updateDeliveryPrice(baseFare, farePerKM);
                               setState((){
                                 editPressed = false;
                               });
