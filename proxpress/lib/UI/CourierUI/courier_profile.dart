@@ -123,6 +123,20 @@ class CourierProfile extends StatelessWidget {
                                     Text(courierData.vehicleType, style: TextStyle(fontSize: 15)),
                                   ],
                                 ),
+                                Row(
+                                  children: [
+                                    Container(padding:  EdgeInsets.only(right: 5), child: Icon(Icons.color_lens_rounded, size: 20,)),
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(),
+                                        shape: BoxShape.circle,
+                                        color: Color(courierData.vehicleColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),

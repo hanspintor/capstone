@@ -85,11 +85,14 @@ class _DashboardLocationState extends State<DashboardLocation>{
             child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Welcome, ${customerData.fName}!",
-                        style: TextStyle(
-                          fontSize: 25,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 50),
+                        child: Text("Welcome, ${customerData.fName}!",
+                          style: TextStyle(
+                            fontSize: 25,
+                          ),
                         ),
                       ),
                       IconButton(
