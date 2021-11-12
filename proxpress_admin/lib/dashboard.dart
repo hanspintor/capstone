@@ -444,7 +444,23 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   columns: columns,
                   rows: rows,
                 createHeader: (PlutoGridStateManager){
-                    return Text('Couriers', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+                    return Container(
+                        color: Color(0xFFEEEEEE),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text('Couriers',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)
+                          ),
+                        )
+                    );
+                },
+                createFooter: (PlutoGridStateManager){
+                  return Container(
+                      color: Color(0xFFEEEEEE),
+                      child: Align(
+                        alignment: Alignment.center,
+                      )
+                  );
                 },
               ),
             );

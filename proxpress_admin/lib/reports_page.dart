@@ -231,7 +231,23 @@ class _ReportsPageState extends State<ReportsPage> {
                           //print(event);
                         },
                       createHeader: (PlutoGridStateManager){
-                        return Text('Reports', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+                        return Container(
+                            color: Color(0xFFEEEEEE),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text('Reports',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)
+                              ),
+                            )
+                        );
+                      },
+                      createFooter: (PlutoGridStateManager){
+                        return Container(
+                            color: Color(0xFFEEEEEE),
+                            child: Align(
+                              alignment: Alignment.center,
+                            )
+                        );
                       },
 
                     ),
