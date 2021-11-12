@@ -145,7 +145,23 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
                       //   price[event.rowIdx].baseFare = event.value;
                     },
                   createHeader: (PlutoGridStateManager){
-                    return Text('Delivery Prices', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+                    return Container(
+                        color: Color(0xFFEEEEEE),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text('Delivery Prices',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)
+                          ),
+                        )
+                    );
+                  },
+                  createFooter: (PlutoGridStateManager){
+                    return Container(
+                        color: Color(0xFFEEEEEE),
+                        child: Align(
+                          alignment: Alignment.center,
+                        )
+                    );
                   },
                 ),
               );
