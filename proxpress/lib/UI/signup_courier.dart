@@ -8,6 +8,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path/path.dart' as Path;
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
+import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
@@ -104,48 +106,117 @@ class _SignupCourierState extends State<SignupCourier> {
   }
 
   Widget _buildEmail(){
-    return TextFormField(
-        decoration: InputDecoration(labelText: 'Email'),
-        validator: (String value){
-          if(value.isEmpty){
-            return 'Email is Required';
-          }
-          if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
-            return 'Please Enter a Valid Email Address';
-          }
-          else return null;
-        },
-        onSaved: (String value){
-          email = value;
-        },
-        onChanged: (val){
-          setState(() => email = val);
-        }
-    );
-  }
-  Widget _buildContactNo(){
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Contact Number'),
-      maxLength: 11,
-      keyboardType: TextInputType.number,
-      validator: (String value){
-        if(value.length < 11 && value.length > 0){
-          return 'Your contact number should be 11 digits';
-        }
-        else if(value.isEmpty){
-          return 'Contact Number is Required';
-        }
-        else return null;
-      },
-      onSaved: (String value){
-        contactNo = value;
-      },
-      onChanged: (val){
-        setState(() => contactNo = val);
-      },
-    );
-  }
+    return StreamBuilder<List<Customer>>(
+        stream: DatabaseService().customerList,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Customer> customers = snapshot.data;
 
+            return StreamBuilder<List<Courier>>(
+                stream: DatabaseService().courierList,
+                builder: (context, snapshot) {
+                  List<Courier> couriers = snapshot.data;
+                  return TextFormField(
+                    decoration: InputDecoration(labelText: 'Email'),
+                    validator: (String value){
+                      if(value.isEmpty){
+                        return 'Email is Required';
+                      }
+                      if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
+                        return 'Please Enter a Valid Email Address';
+                      }
+                      bool emailTaken = false;
+                      bool emailTakenCus = false;
+
+                      customers.forEach((element) {
+                        if (element.email == value){
+                          emailTaken = true;
+                        }
+                      });
+                      couriers.forEach((element) {
+                        if (element.email == value){
+                          emailTakenCus = true;
+                        }
+                      });
+                      print(emailTaken);
+                      print(emailTakenCus);
+
+                      if (emailTaken || emailTakenCus){
+                        return 'Email already taken';
+                      }
+                      else return null;
+                    },
+                    onSaved: (String value){
+                      email = value;
+                    },
+                    onChanged: (val){
+                      setState(() => email = val);
+                    },
+                  );
+                }
+            );
+          } else {
+            return Container();
+          }
+        }
+    );
+  }
+  Widget _buildContactNo() {
+    return StreamBuilder<List<Courier>>(
+        stream: DatabaseService().courierList,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Courier> couriers = snapshot.data;
+            return StreamBuilder<List<Customer>>(
+              stream: DatabaseService().customerList,
+              builder: (context, snapshot) {
+                List<Customer> customers = snapshot.data;
+                return TextFormField(
+                  decoration: InputDecoration(labelText: 'Contact Number'),
+                  maxLength: 11,
+                  keyboardType: TextInputType.number,
+                  validator: (String value) {
+                    if (value.length < 11 && value.length > 0) {
+                      return 'Your contact number should be 11 digits';
+                    }
+                    else if (value.isEmpty) {
+                      return 'Contact Number is Required';
+                    }
+                    bool contactNoTaken = false;
+                    bool contactNoTakeCus = false;
+                    couriers.forEach((element) {
+                      if (element.contactNo == value) {
+                        contactNoTaken = true;
+                      }
+                    });
+                    customers.forEach((element) {
+                      if (element.contactNo == value) {
+                        contactNoTakeCus = true;
+                      }
+                    });
+                    print(contactNoTaken);
+                    print(contactNoTakeCus);
+                    if (contactNoTaken || contactNoTakeCus) {
+                      return "Contact number already taken";
+                    }
+                    else
+                      return null;
+                  },
+                  onSaved: (String value) {
+                    contactNo = value;
+                  },
+                  onChanged: (val) {
+                    setState(() => contactNo = val);
+                  },
+                );
+              }
+            );
+          } else {
+            return Container();
+          }
+        }
+    );
+  }
   Widget _buildPassword(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Password'),
