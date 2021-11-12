@@ -280,7 +280,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                     if (regKey.currentState.validate()){
                                       setState(() => loading = true);
                                       dynamic result = await _auth.SignUpCustomer(email, password, fName, lName,
-                                          contactNo, address, defaultProfilePic, false, 0, {});
+                                          contactNo, address, defaultProfilePic, false, 0, {}, 0);
 
 
                                       if(result == null){

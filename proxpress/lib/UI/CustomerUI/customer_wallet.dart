@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:paymongo_sdk/paymongo_sdk.dart';
 import 'package:proxpress/UI/CustomerUI/top_up_page.dart';
+import 'package:proxpress/models/customers.dart';
+import 'package:proxpress/services/database.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CustomerWallet extends StatefulWidget {
@@ -16,8 +18,6 @@ class CustomerWallet extends StatefulWidget {
 }
 
 class _CustomerWalletState extends State<CustomerWallet> {
-  int sampleCustomerWallet = 0;
-
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -34,24 +34,40 @@ class _CustomerWalletState extends State<CustomerWallet> {
               elevation: 5,
               child: Padding(
                 padding: const EdgeInsets.all(40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Balance', style: TextStyle(color: Colors.grey),),
-                    Text('\₱$sampleCustomerWallet', style: TextStyle(fontSize: 40),), // ${customer.wallet}
-                    ElevatedButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            child: TopUpPage(),
-                            type: PageTransitionType.bottomToTop
-                          )
-                        );
-                      },
-                      child: Text('+ Top-up'),
-                    ),
-                  ],
+                child: StreamBuilder<Customer>(
+                  stream: DatabaseService(uid: user.uid).customerData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Customer customer = snapshot.data;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Balance', style: TextStyle(color: Colors.grey),),
+                          Text('\₱${customer.wallet}', style: TextStyle(fontSize: 40),), // ${customer.wallet}
+                          ElevatedButton(
+                            onPressed: () async {
+                              dynamic result = await Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      child: TopUpPage(),
+                                      type: PageTransitionType.bottomToTop
+                                  )
+                              );
+
+                              if (result != null) {
+                                // add value to customer wallet
+                                DatabaseService(uid: user.uid).updateCustomerWallet(customer.wallet + result);
+                              }
+                            },
+                            child: Text('+ Top-up'),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }
                 ),
               ),
             ),
@@ -81,28 +97,25 @@ class _PaymentOptionListState extends State<PaymentOptionList>
     return SingleChildScrollView(
       child: Column(
         children: [
-          ListTile(
-            leading: Container(
-                width: 20,
-                height: 20,
-                child: Icon(Icons.credit_card, color: Colors.red,)
-            ),
-            title: Text("Credit/Debit Payment"),
-            onTap: () async {
-              await cardPayment(widget.amount);
-            },
-          ),
+          SizedBox(height: 20,),
           ListTile(
             leading: Container(
               width: 25,
                 height: 25,
                 child: Image.asset("assets/gcash.png")
             ),
-            title: Text("GCash Payment"),
+            title: Text("GCash Payment (+2.565%)"),
             onTap: () async {
-              await gcashPayment(widget.amount);
+              double amountWithCharge = widget.amount + (widget.amount * 0.02565);
+
+              dynamic result = await gcashPayment(amountWithCharge);
+
+              if (result) {
+                Navigator.pop(context, widget.amount);
+              }
             },
           ),
+          SizedBox(height: 20,),
         ],
       ),
     );
@@ -130,92 +143,8 @@ mixin PaymongoEventHandler<T extends StatefulWidget> on State<T> {
       country: "PH",
     ),
   );
-  Future<void> cardPayment(int amount) async {
-    try {
-      final _amount = amount;
-      final payment = await publicClient.instance.paymentMethod
-          .create(PaymentMethodAttributes(
-        billing: billing,
-        details: PaymentMethodDetails(
-          cardNumber: '4120000000000007',
-          expMonth: 2,
-          expYear: 27,
-          cvc: "123",
-        ),
-      ));
-      final intent = PaymentIntentAttributes(
-          amount: _amount.toDouble(),
-          description: "Test payment",
-          statementDescriptor: "Test payment descriptor",
-          metadata: {
-            "environment": kReleaseMode ? "LIVE" : "DEV",
-          });
-      final result =
-      await secretClient.instance.paymentIntent.onPaymentListener(
-          attributes: intent,
-          paymentMethod: payment.id,
-          onRedirect: (url) async {
-            debugPrint("${url}");
-            final res = await Navigator.push<bool>(context,
-                CupertinoPageRoute(builder: (context) {
-                  return CheckoutPage(
-                    url: url,
-                    iFrameMode: true,
-                  );
-                }));
-            return res ?? false;
-          });
-      debugPrint("${result?.status}");
-    } catch (e) {
-      debugPrint('$e');
-    }
-  }
 
-  Future<void> paymayaPayment(int amount) async {
-    try {
-      final _amount = amount;
-      final payment = await publicClient.instance.paymentMethod
-          .create(PaymentMethodAttributes(
-        billing: billing,
-        type: PaymentType.paymaya,
-        details: PaymentMethodDetails(
-          cardNumber: '4120000000000007',
-          expMonth: 2,
-          expYear: 27,
-          cvc: "123",
-        ),
-      ));
-      final intent = PaymentIntentAttributes(
-          amount: _amount.toDouble(),
-          description: "Test payment",
-          statementDescriptor: "Test payment descriptor",
-          metadata: {
-            "environment": kReleaseMode ? "LIVE" : "DEV",
-          });
-      const successUrl = 'https://google.com/success';
-      final result =
-      await secretClient.instance.paymentIntent.onPaymentListener(
-          attributes: intent,
-          paymentMethod: payment.id,
-          returnUrl: successUrl,
-          onRedirect: (url) async {
-            debugPrint("${url}");
-            final res = await Navigator.push<bool>(context,
-                CupertinoPageRoute(builder: (context) {
-                  return CheckoutPage(
-                    url: url,
-                    returnUrl: successUrl,
-                  );
-                }));
-            return res ?? false;
-          });
-      debugPrint("${result?.status}");
-    } catch (e) {
-      debugPrint('$e');
-    }
-  }
-
-  Future<void> gcashPayment(int amount) async {
+  Future<bool> gcashPayment(double amount) async {
     final _amount = amount;
     final url = 'google.com';
     final _source = SourceAttributes(
@@ -242,6 +171,7 @@ mixin PaymongoEventHandler<T extends StatefulWidget> on State<T> {
         ),
       );
       if (response) {
+        print('response boi $response');
         final paymentSource =
         PaymentSource(id: result.id ?? '', type: "source");
         final paymentAttr = CreatePaymentAttributes(
@@ -251,11 +181,14 @@ mixin PaymongoEventHandler<T extends StatefulWidget> on State<T> {
           source: paymentSource,
         );
         final createPayment = await secret.createPayment(paymentAttr);
-        debugPrint("==============================");
-        debugPrint("||${createPayment}||");
-        debugPrint("==============================");
+        print('Gcash Result');
+        print("==============================");
+        print("||${createPayment}||");
+        print("==============================");
+        return true;
       }
     }
+    return false;
   }
 }
 

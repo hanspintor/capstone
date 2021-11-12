@@ -52,7 +52,7 @@ class DatabaseService {
       String contactNo,
       String password, String address, String avatarUrl, bool notifStatus,
       int currentNotif,
-      Map courier_ref) async {
+      Map courier_ref, int wallet) async {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
       'Last Name': lname,
@@ -64,6 +64,7 @@ class DatabaseService {
       'Notification Status': notifStatus,
       'Current Notification': currentNotif,
       'Bookmarks': courier_ref,
+      'Wallet': wallet,
     });
   }
 
@@ -111,6 +112,16 @@ class DatabaseService {
     });
   }
 
+  Future updateCustomerWallet(int wallet) async {
+    await customerCollection
+        .doc(uid)
+        .update({
+      'Wallet': wallet
+    }).then((_) {
+      print("success!");
+    });
+  }
+
   Future updateCourierProfilePic(String avatarUrl) async {
     await courierCollection
         .doc(uid)
@@ -129,7 +140,7 @@ class DatabaseService {
       String vehiclePhoto_, DocumentReference deliveryPriceRef,
       bool notifStatus, int currentNotif, bool notifPopStatus,
       int notifPopCounter, String adminMessage,
-      List adminCredentialsResponse) async {
+      List adminCredentialsResponse, int wallet, bool requestedCashout) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
       'Last Name': lname,
@@ -155,6 +166,8 @@ class DatabaseService {
       'Current Notification Pop Up': notifPopCounter,
       'Admin Message': adminMessage,
       'Credential Response': adminCredentialsResponse,
+      'Wallet': wallet,
+      'Requested Cash-out': requestedCashout,
     });
   }
 
@@ -207,6 +220,12 @@ class DatabaseService {
     });
   }
 
+  // Update Courier if requested cash-out
+  Future courierRequestCashout(bool requestedCashout) async {
+    await courierCollection.doc(uid).update({
+      'Requested Cash-out': requestedCashout,
+    });
+  }
 
   // Update Courier Password in Auth
   Future<void> AuthupdateCourierPassword(String password) {
@@ -221,6 +240,12 @@ class DatabaseService {
   Future updateStatus(String status) async {
     return await courierCollection.doc(uid).update({
       'Active Status': status,
+    });
+  }
+
+  Future updateCourierWallet(int wallet) async {
+    return await courierCollection.doc(uid).update({
+      'Wallet': wallet,
     });
   }
 
@@ -425,7 +450,8 @@ class DatabaseService {
           avatarUrl: (doc.data() as dynamic) ['Avatar URL'] ?? '',
           notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
           currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
-          courier_ref: (doc.data() as dynamic) ['Bookmarks'] ?? ''
+          courier_ref: (doc.data() as dynamic) ['Bookmarks'] ?? '',
+          wallet: (doc.data() as dynamic) ['Wallet'] ?? ''
       );
     }).toList();
   }
@@ -454,6 +480,8 @@ class DatabaseService {
             .data() as dynamic) ['Notification Pop Up Status'] ?? '',
         NotifPopCounter: (doc
             .data() as dynamic) ['Current Notification Pop Up'] ?? '',
+        wallet: (doc.data() as dynamic) ['Wallet'] ?? '',
+        requestedCashout: (doc.data() as dynamic) ['Requested Cash-out'] ?? '',
       );
     }).toList();
   }
@@ -607,8 +635,8 @@ class DatabaseService {
         avatarUrl: snapshot['Avatar URL'],
         notifStatus: snapshot['Notification Status'],
         currentNotif: snapshot['Current Notification'],
-        courier_ref: snapshot['Bookmarks']
-
+        courier_ref: snapshot['Bookmarks'],
+        wallet: snapshot['Wallet']
     );
   }
 
@@ -640,6 +668,8 @@ class DatabaseService {
       NotifPopCounter: snapshot['Current Notification Pop Up'],
       adminMessage: snapshot['Admin Message'],
       adminCredentialsResponse: snapshot['Credential Response'],
+      wallet: snapshot['Wallet'],
+      requestedCashout: snapshot['Requested Cash-out'],
     );
   }
 

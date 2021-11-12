@@ -48,7 +48,7 @@ class AuthService {
   Future SignUpCustomer(String email, String password, String Fname,
       String Lname, String ContactNo, String Address,
       String avatarUrl, bool notifStatus, int currentNotif,
-      Map courier_ref) async {
+      Map courier_ref, int wallet) async {
     try {
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -68,7 +68,8 @@ class AuthService {
           avatarUrl,
           notifStatus,
           currentNotif,
-          courier_ref);
+          courier_ref,
+          wallet);
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -80,7 +81,7 @@ class AuthService {
   Future SignUpCustomerPhone(String email, String password, String Fname,
       String Lname, String ContactNo, String Address,
       String avatarUrl, bool notifStatus, int currentNotif,
-      Map courier_ref) async {
+      Map courier_ref, int wallet) async {
     try {
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -98,7 +99,8 @@ class AuthService {
           avatarUrl,
           notifStatus,
           currentNotif,
-          courier_ref);
+          courier_ref,
+          wallet);
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -116,7 +118,7 @@ class AuthService {
       vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_,
       deliveryPriceRef, notifStatus, currentNotif, notifPopStatus,
       notifPopCounter, String adminMessage,
-      List adminCredentialsResponse) async {
+      List adminCredentialsResponse, int wallet, bool requestedCashout) async {
     try {
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -148,7 +150,10 @@ class AuthService {
           notifPopStatus,
           notifPopCounter,
           adminMessage,
-          adminCredentialsResponse);
+          adminCredentialsResponse,
+          wallet,
+          requestedCashout
+      );
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
