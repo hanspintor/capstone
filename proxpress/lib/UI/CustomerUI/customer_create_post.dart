@@ -33,7 +33,7 @@ class _CustomerCreatePostState extends State<CustomerCreatePost> {
         iconTheme: IconThemeData(color: Colors.red),
         actions: [
           TextButton(
-            child: Text('Post'),
+            child: Text('POST'),
             onPressed: () async{
               await DatabaseService().createCommunity(title, content, customerID, Timestamp.now());
               Navigator.pop(context);
