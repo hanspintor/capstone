@@ -30,12 +30,16 @@ class _TopUpPageState extends State<TopUpPage> {
               child: ListTile(
                 title: Text('\₱$amount', style: TextStyle(fontSize: 30),),
                 onTap: () async {
-                  await showModalBottomSheet(
+                  dynamic result = await showModalBottomSheet(
                     context: context,
                     builder: (context) {
                       return PaymentOptionList(amount: amount); // PaymentOptionList(cart: _cart);
                     }
                   );
+
+                  if (result != null) {
+                    Navigator.pop(context, result);
+                  }
                 },
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CourierUI/courier_community_hub.dart';
 import 'package:proxpress/UI/CourierUI/courier_dashboard.dart';
 import 'package:proxpress/UI/CourierUI/courier_profile.dart';
+import 'package:proxpress/UI/CourierUI/courier_wallet.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/CourierUI/transaction_history.dart';
@@ -50,6 +51,9 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
       else if(currentPage == "Community Hub"){
         actionButton = true;
         return CourierCommunityHub();
+      }
+      else if(currentPage == "Wallet"){
+        return CourierWallet();
       }
     } else{
       if (currentPage == "Dashboard") {

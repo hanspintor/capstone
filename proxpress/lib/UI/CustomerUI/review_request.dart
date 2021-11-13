@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -53,6 +54,9 @@ class _ReviewRequestState extends State<ReviewRequest> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
+
     print(widget.paymentOption);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -211,7 +215,24 @@ class _ReviewRequestState extends State<ReviewRequest> {
                       _isLoading = true;
                     });
                     if (widget.paymentOption == 'Online Payment') {
-                      // deduct topped up money from customer
+                      int currentBalance = 0;
+
+                      await FirebaseFirestore.instance
+                          .collection('Customers')
+                          .doc(user.uid)
+                          .get()
+                          .then((DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists) {
+                          currentBalance = documentSnapshot['Wallet'];
+                        }
+                      });
+
+                      if (currentBalance >= widget.deliveryFee) {
+                        DatabaseService(uid: user.uid).updateCustomerWallet(currentBalance - widget.deliveryFee);
+                        paymentSuccess = true;
+                      } else {
+                        paymentSuccess = false;
+                      }
                     } else {
                       paymentSuccess = true;
                     }
@@ -260,7 +281,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                       setState(() {
                         _isLoading = false;
                       });
-                      showToast('Payment failed!');
+                      showToast('Insufficient wallet balance!');
                     }
                   },
                 ),

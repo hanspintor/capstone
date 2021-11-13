@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -33,6 +34,9 @@ class DeliveryTile extends StatefulWidget {
 }
 
 class _DeliveryTileState extends State<DeliveryTile> {
+  GlobalKey<FormState> _keyCancel = GlobalKey<FormState>();
+  String cancellationMessage = "";
+
   String uid;
   bool isSeen = false;
   bool popsOnce = true;
@@ -196,19 +200,133 @@ class _DeliveryTileState extends State<DeliveryTile> {
                           TextButton(
                               child: Text('DECLINE'),
                               onPressed: () async{
+                                await showDialog(
+                                    context: context,
+                                    builder: (context) => StatefulBuilder(
+                                      builder: (context, setState){
+                                        return AlertDialog(
+                                          title: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.only(right: 10),
+                                                child: Icon(
+                                                  Icons.cancel,
+                                                  color: Colors.redAccent,
+                                                ),
+                                              ),
+                                              Text("Cancellation Reason"),
+                                            ],
+                                          ),
+                                          content: Form(
+                                            key: _keyCancel,
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  TextFormField(
+                                                    validator: (value){
+                                                      cancellationMessage = value;
+                                                      return value.isNotEmpty ? null : "Please provide a reason";
+                                                    },
+                                                    minLines: 3,
+                                                    maxLines: null,
+                                                    maxLength: 100,
+                                                    keyboardType: TextInputType.multiline,
+                                                    onChanged: (val) => setState(() => cancellationMessage = val),
+                                                    decoration:  InputDecoration(
+                                                      hintText: "Reason why",
+                                                      hintStyle: TextStyle(
+                                                          fontStyle: FontStyle.italic
+                                                      ),
+                                                      filled: true,
+                                                      border: InputBorder.none,
+                                                      fillColor: Colors.grey[300],
+                                                      contentPadding: const EdgeInsets.all(30),
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                          width: 2,
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(color: Colors.white),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          actions: <Widget> [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ElevatedButton(
+                                                  child: Text("Discard"),
+                                                  style: ButtonStyle(
+                                                    backgroundColor: MaterialStateProperty.all(Colors.grey),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                ElevatedButton(
+                                                  child: Text("Send"),
+                                                  onPressed: () async {
+                                                    if(_keyCancel.currentState.validate()){
+                                                      await FirebaseFirestore.instance
+                                                          .collection('Couriers')
+                                                          .doc(widget.delivery.courierRef.id)
+                                                          .get()
+                                                          .then((DocumentSnapshot documentSnapshot) {
+                                                        if (documentSnapshot.exists) {
+                                                          notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} declined your request";
+                                                        }
+                                                      });
 
-                                await FirebaseFirestore.instance
-                                    .collection('Couriers')
-                                    .doc(widget.delivery.courierRef.id)
-                                    .get()
-                                    .then((DocumentSnapshot documentSnapshot) {
-                                  if (documentSnapshot.exists) {
-                                    notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} declined your request";
-                                  }
-                                });
-                                await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
-                                    widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
-                                await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Declined by Courier', 'Cancelled');
+                                                      await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Declined by Courier', 'Cancelled');
+                                                      await DatabaseService(uid: widget.delivery.uid).customerCancelRequest(cancellationMessage);
+                                                      await DatabaseService().createNotificationData(
+                                                          notifM,
+                                                          widget.delivery.courierRef,
+                                                          widget.delivery.customerRef,
+                                                          Timestamp.now(),
+                                                          isSeen,
+                                                          popsOnce
+                                                      );
+
+                                                      if (widget.delivery.paymentOption == 'Online Payment') {
+                                                        int currentBalance = 0;
+
+                                                        await FirebaseFirestore.instance
+                                                            .collection('Customers')
+                                                            .doc(widget.delivery.customerRef.id)
+                                                            .get()
+                                                            .then((DocumentSnapshot documentSnapshot) {
+                                                          if (documentSnapshot.exists) {
+                                                            currentBalance = documentSnapshot['Wallet'];
+                                                          }
+                                                        });
+
+                                                        await DatabaseService(uid: widget.delivery.customerRef.id).updateCustomerWallet(currentBalance + widget.delivery.deliveryFee);
+                                                      }
+
+                                                      Navigator.of(context).pop();
+                                                      showToast("Request cancelled");
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    )
+                                );
                               }
                           ),
                         ],
@@ -224,5 +342,10 @@ class _DeliveryTileState extends State<DeliveryTile> {
     } else {
       return LoginScreen();
     }
+  }
+
+  Future showToast(String message) async {
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 }

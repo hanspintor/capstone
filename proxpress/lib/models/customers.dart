@@ -12,11 +12,12 @@ class Customer{
   final bool notifStatus;
   final int currentNotif;
   final Map courier_ref;
+  final int wallet;
   final AuthService _auth = AuthService();
 
   Customer({this.uid, this.fName, this.lName, this.email,
     this.contactNo, this.password, this.address, this.avatarUrl,
-    this.notifStatus, this.currentNotif, this.courier_ref});
+    this.notifStatus, this.currentNotif, this.courier_ref, this.wallet});
 
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCustomerPassword(password);

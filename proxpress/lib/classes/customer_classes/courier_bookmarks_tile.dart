@@ -3,10 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
+import 'package:proxpress/classes/customer_classes/view_courier_profile.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
+import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
@@ -114,201 +117,178 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
 
                                 if(snapshot.hasData){
                                   return Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: ExpansionTileCard(
-                                      //expandedColor: Colors.grey,
-                                      title: Text(
-                                        "${courier.fName} ${courier.lName}",
-                                        style: TextStyle(
-                                            fontSize: 20, fontWeight: FontWeight.bold),
-                                      ),
-                                      leading: ClipOval(
-                                        child: SizedBox(
-                                          width: 48,
-                                          height: 48,
-                                          child: Container(
-                                            child: CircleAvatar(
-                                              radius: 20,
-                                              backgroundImage:
-                                              NetworkImage(courier.avatarUrl),
-                                              backgroundColor: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      subtitle: Container(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              TextSpan(text: "Vehicle Type: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                              TextSpan(text: "${courier.vehicleType}\n", style: Theme.of(context).textTheme.bodyText2),
-                                              if(temp)
-                                                TextSpan(text: "Delivery Fee: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                              if(temp)
-                                                TextSpan(text: "₱${deliveryFee.toInt()}\n", style: Theme.of(context).textTheme.bodyText2),
-                                              TextSpan(text: "Status: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                              TextSpan(text: "${courier.status}", style: TextStyle(color: color, fontWeight: FontWeight.bold,)),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16.0,
-                                            vertical: 8.0,
-                                          ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              ListTile(
-                                                leading: Icon(Icons.info_rounded,
-                                                    color: Colors.red),
-                                                title: Text('Additional Information',
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight: FontWeight.bold)),
-                                                subtitle: Container(
-                                                  padding: EdgeInsets.only(top: 5),
-                                                  child: Text.rich(
-                                                    TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                            text: "Contact Number: ",
-                                                            style: Theme.of(context)
-                                                                .textTheme
-                                                                .bodyText2
-                                                                .copyWith(
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                        TextSpan(
-                                                            text:
-                                                            "${courier.contactNo}\n",
-                                                            style: Theme.of(context)
-                                                                .textTheme
-                                                                .bodyText2),
-                                                        TextSpan(
-                                                            text: "Vehicle Color: ",
-                                                            style: Theme.of(context)
-                                                                .textTheme
-                                                                .bodyText2
-                                                                .copyWith(
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                        TextSpan(
-                                                            text:
-                                                            "${courier.vehicleColor}\n",
-                                                            style: Theme.of(context)
-                                                                .textTheme
-                                                                .bodyText2),
-                                                      ],
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:Card(
+                                      child: InkWell(
+                                        onTap : (){
+                                          Navigator.push(context, PageTransition(
+                                              child: ViewCourierProfile(
+                                                courierUID: courier.uid,
+                                              ),
+                                              type: PageTransitionType.fade
+                                          ));
+                                        },
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              isThreeLine: true,
+                                              leading: ClipOval(
+                                                child: SizedBox(
+                                                  width: 48,
+                                                  height: 48,
+                                                  child: Container(
+                                                    child: CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundImage: NetworkImage(courier.avatarUrl),
+                                                      backgroundColor: Colors.white,
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              Stack(
+                                              title: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Container(
-                                                    child: const Center(
-                                                      child:
-                                                      CircularProgressIndicator(),
-                                                    ),
-                                                    height: 150,
-                                                    width: 326,
-                                                  ),
-                                                  Container(
-                                                      padding:
-                                                      EdgeInsets.only(right: 40),
-                                                      child: Image.network(
-                                                        courier.vehiclePhoto_,
-                                                        height: 140,
-                                                        width: 326,
-                                                      )),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  Container(
-                                                      height: 25,
-                                                      child: ElevatedButton(
-                                                          child: Text('Pin Location', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                          onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
-                                                            print("check ${widget.appear}");
-                                                            await showMaterialModalBottomSheet(
-                                                              context: context,
-                                                              builder: (context) => Container(
-                                                                height: MediaQuery.of(context).size.height * .8,
-                                                                  child: Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                    children: [
-                                                                      PinLocation(
-                                                                        locKey: locKey,
-                                                                        textFieldPickup: textFieldPickup,
-                                                                        textFieldDropOff: textFieldDropOff,
-                                                                        isBookmarks: true,
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                              ),
-                                                            ).then((value) {
-                                                              LocalDataBookmark localDataBookmark = value;
-                                                              if(value != null){
-                                                                show = localDataBookmark.appear;
-                                                                print("Outside then: ${show}");
-                                                                tempD = localDataBookmark.distance;
-                                                                print("Outside then: ${tempD}");
-                                                                tempPA = localDataBookmark.pickupAddress;
-                                                                print("Outside then: ${tempPA}");
-                                                                tempPC = localDataBookmark.pickupCoordinates;
-                                                                print("Outside then: ${tempPC}");
-                                                                tempDA = localDataBookmark.dropOffAddress;
-                                                                print("Outside then: ${tempDA}");
-                                                                tempDC = localDataBookmark.dropOffCoordinates;
-                                                                print("Outside then: ${tempDC}");
-                                                              }
-                                                            });
+                                                  Text("${courier.fName} ${courier.lName}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                                  StreamBuilder <List<Delivery>>(
+                                                      stream: DatabaseService().deliveryList,
+                                                      builder: (context, snapshot) {
+                                                        if(snapshot.hasData){
+                                                          List<Delivery> deliveryData = snapshot.data;
+                                                          double rating = 0.0;
+                                                          double total = 0.0;
+                                                          double stars = 0;
 
-                                                            setState(() {
-                                                              temp = show;
-                                                              distance = tempD;
-                                                              pickupAddress = tempPA;
-                                                              pickupCoordinates = tempPC;
-                                                              dropOffAddress = tempDA;
-                                                              dropOffCoordinates = tempDC;
-                                                            });
-                                                          }
-                                                      )
-                                                  ),
-                                                  Container(
-                                                      height: 25,
-                                                      child: ElevatedButton(
-                                                          child: Text('Request', style: TextStyle(color: Colors.white, fontSize: 10),),
-                                                          onPressed: !temp ? null : () {
-                                                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                                                CustomerRemarks(
-                                                                  courierUID: courierRefs[index].id,
-                                                                  pickupAddress: pickupAddress,
-                                                                  pickupCoordinates: pickupCoordinates,
-                                                                  dropOffAddress: dropOffAddress,
-                                                                  dropOffCoordinates: dropOffCoordinates,
-                                                                  deliveryFee: deliveryFee.toInt(),),
-                                                            ));
-                                                          }
-                                                      )
+
+                                                          for(int i = 0; i < deliveryData.length; i++){
+                                                            if(deliveryData[i].courierRef.id == courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
+                                                              if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
+                                                                rating += deliveryData[i].rating;
+                                                                total++;
+                                                              }
+                                                            }
+                                                          };
+                                                          stars = (rating/total);
+                                                          return Column(
+                                                            children: [
+                                                              Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                children: List.generate(5, (index) {
+                                                                  return Icon(
+                                                                    index < stars ? Icons.star : Icons.star_border, color: Colors.amber,
+                                                                  );
+                                                                }),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                        else return Container();
+                                                      }
                                                   ),
                                                 ],
-                                              )
-                                            ],
-                                          ),
+                                              ),
+                                              subtitle: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text('Vehicle Type: ', style: TextStyle(color: Colors.black),),
+                                                      Text('${courier.vehicleType}'),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text('Delivery Fee: ', style: TextStyle(color: Colors.black),),
+                                                      Text('₱${deliveryFee.toInt()}.00', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              trailing: Column(
+                                                children: [
+                                                  Text('${courier.status}', style: TextStyle(color: color, fontWeight: FontWeight.bold,)),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(vertical: 8),
+                                                    child: Icon(Icons.info_outline_rounded, color: Colors.red),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Divider(
+                                              color: Colors.grey,
+                                              thickness: .5,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                TextButton(
+                                                  child: const Text('PIN LOCATION'),
+                                                  onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
+                                                    print("check ${widget.appear}");
+                                                    await showMaterialModalBottomSheet(
+                                                      context: context,
+                                                      builder: (context) => Container(
+                                                          height: MediaQuery.of(context).size.height * .8,
+                                                          child: Column(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              PinLocation(
+                                                                locKey: locKey,
+                                                                textFieldPickup: textFieldPickup,
+                                                                textFieldDropOff: textFieldDropOff,
+                                                                isBookmarks: true,
+                                                              ),
+                                                            ],
+                                                          )
+                                                      ),
+                                                    ).then((value) {
+                                                      LocalDataBookmark localDataBookmark = value;
+                                                      if(value != null){
+                                                        show = localDataBookmark.appear;
+                                                        print("Outside then: ${show}");
+                                                        tempD = localDataBookmark.distance;
+                                                        print("Outside then: ${tempD}");
+                                                        tempPA = localDataBookmark.pickupAddress;
+                                                        print("Outside then: ${tempPA}");
+                                                        tempPC = localDataBookmark.pickupCoordinates;
+                                                        print("Outside then: ${tempPC}");
+                                                        tempDA = localDataBookmark.dropOffAddress;
+                                                        print("Outside then: ${tempDA}");
+                                                        tempDC = localDataBookmark.dropOffCoordinates;
+                                                        print("Outside then: ${tempDC}");
+                                                      }
+                                                    });
+
+                                                    setState(() {
+                                                      temp = show;
+                                                      distance = tempD;
+                                                      pickupAddress = tempPA;
+                                                      pickupCoordinates = tempPC;
+                                                      dropOffAddress = tempDA;
+                                                      dropOffCoordinates = tempDC;
+                                                    });
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: const Text('REQUEST'),
+                                                  onPressed: !temp ? null :() {
+                                                    Navigator.push(context, PageTransition(
+                                                        child: CustomerRemarks(
+                                                          courierUID: courierRefs[index].id,
+                                                          pickupAddress: pickupAddress,
+                                                          pickupCoordinates: pickupCoordinates,
+                                                          dropOffAddress: dropOffAddress,
+                                                          dropOffCoordinates: dropOffCoordinates,
+                                                          deliveryFee: deliveryFee.toInt(),),
+                                                        type: PageTransitionType.bottomToTop
+                                                    ));
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   );
                                 } else {

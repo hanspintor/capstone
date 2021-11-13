@@ -49,50 +49,54 @@ class _CommunityTileState extends State<CommunityTile> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 5),
                     child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListTile(
-                            title: Row(
-                              children: [
-                                Container(
-                                  child: CircleAvatar(
-                                    radius: 15,
-                                    backgroundImage: NetworkImage(customer.avatarUrl),
-                                    backgroundColor: Colors.white,
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(context, PageTransition(
+                              child: CommunityPost(community: widget.community, isCustomer: widget.isCustomer),
+                              type: PageTransitionType.bottomToTop
+                          ));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              title: Row(
+                                children: [
+                                  Container(
+                                    child: CircleAvatar(
+                                      radius: 15,
+                                      backgroundImage: NetworkImage(customer.avatarUrl),
+                                      backgroundColor: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text("${customer.fName} ${customer.lName}",style: TextStyle(fontWeight: FontWeight.bold),),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text("${time}", style: TextStyle(color: Colors.grey, fontSize: 12),),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text("${customer.fName} ${customer.lName}",style: TextStyle(fontWeight: FontWeight.bold),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text("${time}", style: TextStyle(color: Colors.grey, fontSize: 12),),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.push(context, PageTransition(
-                                  child: CommunityPost(community: widget.community, isCustomer: widget.isCustomer),
-                                  type: PageTransitionType.bottomToTop
-                              ));
-                            },
-                            title: ListTile(
-                              title: Text("${widget.community.title}", style: TextStyle(fontWeight: FontWeight.bold),),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("${widget.community.content}"),
-                              ),),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                title: Text("${widget.community.title}", style: TextStyle(fontWeight: FontWeight.bold),),
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("${widget.community.content}"),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -110,50 +114,54 @@ class _CommunityTileState extends State<CommunityTile> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 5),
                     child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListTile(
-                            title: Row(
-                              children: [
-                                Container(
-                                  child: CircleAvatar(
-                                    radius: 15,
-                                    backgroundImage: NetworkImage(courier.avatarUrl),
-                                    backgroundColor: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(context, PageTransition(
+                              child: CommunityPost(community: widget.community, isCustomer: widget.isCustomer,),
+                              type: PageTransitionType.bottomToTop
+                          ));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              title: Row(
+                                children: [
+                                  Container(
+                                    child: CircleAvatar(
+                                      radius: 15,
+                                      backgroundImage: NetworkImage(courier.avatarUrl),
+                                      backgroundColor: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text("${courier.fName} ${courier.lName}",style: TextStyle(fontWeight: FontWeight.bold),),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text("${time}", style: TextStyle(color: Colors.grey, fontSize: 12),),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text("${courier.fName} ${courier.lName}",style: TextStyle(fontWeight: FontWeight.bold),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text("${time}", style: TextStyle(color: Colors.grey, fontSize: 12),),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.push(context, PageTransition(
-                                  child: CommunityPost(community: widget.community, isCustomer: widget.isCustomer,),
-                                  type: PageTransitionType.bottomToTop
-                              ));
-                            },
-                            title: ListTile(
-                              title: Text("${widget.community.title}", style: TextStyle(fontWeight: FontWeight.bold),),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("${widget.community.content}"),
-                              ),),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                title: Text("${widget.community.title}", style: TextStyle(fontWeight: FontWeight.bold),),
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("${widget.community.content}"),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

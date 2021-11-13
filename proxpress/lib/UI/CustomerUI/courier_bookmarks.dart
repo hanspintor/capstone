@@ -42,11 +42,7 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
                   ),
                 ),
               ),
-              Card(
-                margin: EdgeInsets.all(20),
-                shadowColor: Colors.black,
-                child: CourierBookmarkTile(appear: false,),
-              ),
+              CourierBookmarkTile(appear: false,),
             ],
           ),
         ),

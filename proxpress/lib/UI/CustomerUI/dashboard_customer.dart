@@ -134,11 +134,11 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
                                 List<String> vehicleImages = [
                                   'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                  'https://cdn-icons.flaticon.com/png/512/2736/premium/2736918.png?token=exp=1636098208~hmac=2bc8a9652e0c069ddbb4aab5d2d01669',
+                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
                                   'https://cdn-icons-png.flaticon.com/512/1819/1819494.png',
                                   'https://cdn-icons-png.flaticon.com/512/2554/2554969.png',
-                                  'https://cdn-icons.flaticon.com/png/512/1433/premium/1433678.png?token=exp=1636098318~hmac=36c8b352231ccc354f21960d0dfeae17',
-                                  'https://cdn-icons.flaticon.com/png/512/1823/premium/1823184.png?token=exp=1636098318~hmac=51f4cd33b8c389adcc182851bfdba362',
+                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
+                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
                                 ];
 
                                 return ListView.builder(

@@ -464,6 +464,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                       });
                                                       bool isSeen = false;
                                                       bool popsOnce = true;
+                                                      await DatabaseService(uid: user.uid).updateCourierWallet(courierData.wallet + delivery.deliveryFee);
                                                       await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
                                                       await DatabaseService().createNotificationData(notifM, delivery.courierRef,
                                                           delivery.customerRef, cloud.Timestamp.now(), isSeen, popsOnce);
