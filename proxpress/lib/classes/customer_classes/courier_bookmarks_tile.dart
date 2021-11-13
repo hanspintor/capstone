@@ -225,9 +225,53 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                 Padding(
                                                   padding: const EdgeInsets.only(right: 100),
                                                   child: TextButton(
-                                                      child: Text('REMOVE'),
-                                                    onPressed: (){
-                                                        print('courier removed as bookmark');
+                                                    child: Text('REMOVE'),
+                                                    onPressed: () {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context){
+                                                            return AlertDialog(
+                                                              content: Text('Are you sure you want to remove this courier from your bookmarks?'),
+                                                              actions: [
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    TextButton(
+                                                                      style: TextButton.styleFrom(
+                                                                        side: BorderSide(color: Colors.red),
+                                                                      ),
+                                                                      child: Text("YES"),
+                                                                      onPressed: () async {
+                                                                        Map<String, DocumentReference> localBookmarks = Map<String, DocumentReference>.from(customer.courier_ref);
+                                                                        Map<String, DocumentReference> newBookmarks = {};
+
+                                                                        DocumentReference courierToRemove = FirebaseFirestore.instance.collection('Couriers').doc(courier.uid);
+
+                                                                        localBookmarks.removeWhere((key, value) => value == courierToRemove);
+
+                                                                        int i = 0;
+                                                                        localBookmarks.forEach((key, value) {
+                                                                          newBookmarks.addAll({"Courier$i": value});
+                                                                          i++;
+                                                                        });
+
+                                                                        await DatabaseService(uid: customer.uid).updateCustomerCourierRef(newBookmarks);
+
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                    ),
+                                                                    TextButton(
+                                                                      child: Text("NO"),
+                                                                      onPressed: () {
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            );
+                                                          }
+                                                      );
                                                     },
                                                   ),
                                                 ),
