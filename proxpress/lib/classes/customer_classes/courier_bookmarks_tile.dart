@@ -119,173 +119,175 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child:Card(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ListTile(
-                                            isThreeLine: true,
-                                            leading: ClipOval(
-                                              child: SizedBox(
-                                                width: 48,
-                                                height: 48,
-                                                child: Container(
-                                                  child: CircleAvatar(
-                                                    radius: 20,
-                                                    backgroundImage: NetworkImage(courier.avatarUrl),
-                                                    backgroundColor: Colors.white,
-                                                  ),
-                                                ),
+                                      child: InkWell(
+                                        onTap : (){
+                                          Navigator.push(context, PageTransition(
+                                              child: ViewCourierProfile(
+                                                courierUID: courier.uid,
                                               ),
-                                            ),
-                                            title: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("${courier.fName} ${courier.lName}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                                StreamBuilder <List<Delivery>>(
-                                                    stream: DatabaseService().deliveryList,
-                                                    builder: (context, snapshot) {
-                                                      if(snapshot.hasData){
-                                                        List<Delivery> deliveryData = snapshot.data;
-                                                        double rating = 0.0;
-                                                        double total = 0.0;
-                                                        double stars = 0;
-
-
-                                                        for(int i = 0; i < deliveryData.length; i++){
-                                                          if(deliveryData[i].courierRef.id == courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
-                                                            if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
-                                                              rating += deliveryData[i].rating;
-                                                              total++;
-                                                            }
-                                                          }
-                                                        };
-                                                        stars = (rating/total);
-                                                        return Column(
-                                                          children: [
-                                                            Row(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: List.generate(5, (index) {
-                                                                return Icon(
-                                                                  index < stars ? Icons.star : Icons.star_border, color: Colors.amber,
-                                                                );
-                                                              }),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      }
-                                                      else return Container();
-                                                    }
-                                                ),
-                                              ],
-                                            ),
-                                            onTap : (){
-                                              Navigator.push(context, PageTransition(
-                                                  child: ViewCourierProfile(
-                                                    courierUID: courier.uid,
-                                                  ),
-                                                  type: PageTransitionType.fade
-                                              ));
-                                            },
-                                            subtitle: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text('Vehicle Type: ', style: TextStyle(color: Colors.black),),
-                                                    Text('${courier.vehicleType}'),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text('Delivery Fee: ', style: TextStyle(color: Colors.black),),
-                                                    Text('₱${deliveryFee.toInt()}.00', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            trailing: Column(
-                                              children: [
-                                                Text('${courier.status}', style: TextStyle(color: color, fontWeight: FontWeight.bold,)),
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 8),
-                                                  child: Icon(Icons.info_outline_rounded, color: Colors.red),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Divider(
-                                            color: Colors.grey,
-                                            thickness: .5,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              TextButton(
-                                                child: const Text('PIN LOCATION'),
-                                                onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
-                                                  print("check ${widget.appear}");
-                                                  await showMaterialModalBottomSheet(
-                                                    context: context,
-                                                    builder: (context) => Container(
-                                                        height: MediaQuery.of(context).size.height * .8,
-                                                        child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            PinLocation(
-                                                              locKey: locKey,
-                                                              textFieldPickup: textFieldPickup,
-                                                              textFieldDropOff: textFieldDropOff,
-                                                              isBookmarks: true,
-                                                            ),
-                                                          ],
-                                                        )
+                                              type: PageTransitionType.fade
+                                          ));
+                                        },
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              isThreeLine: true,
+                                              leading: ClipOval(
+                                                child: SizedBox(
+                                                  width: 48,
+                                                  height: 48,
+                                                  child: Container(
+                                                    child: CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundImage: NetworkImage(courier.avatarUrl),
+                                                      backgroundColor: Colors.white,
                                                     ),
-                                                  ).then((value) {
-                                                    LocalDataBookmark localDataBookmark = value;
-                                                    if(value != null){
-                                                      show = localDataBookmark.appear;
-                                                      print("Outside then: ${show}");
-                                                      tempD = localDataBookmark.distance;
-                                                      print("Outside then: ${tempD}");
-                                                      tempPA = localDataBookmark.pickupAddress;
-                                                      print("Outside then: ${tempPA}");
-                                                      tempPC = localDataBookmark.pickupCoordinates;
-                                                      print("Outside then: ${tempPC}");
-                                                      tempDA = localDataBookmark.dropOffAddress;
-                                                      print("Outside then: ${tempDA}");
-                                                      tempDC = localDataBookmark.dropOffCoordinates;
-                                                      print("Outside then: ${tempDC}");
-                                                    }
-                                                  });
+                                                  ),
+                                                ),
+                                              ),
+                                              title: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text("${courier.fName} ${courier.lName}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                                  StreamBuilder <List<Delivery>>(
+                                                      stream: DatabaseService().deliveryList,
+                                                      builder: (context, snapshot) {
+                                                        if(snapshot.hasData){
+                                                          List<Delivery> deliveryData = snapshot.data;
+                                                          double rating = 0.0;
+                                                          double total = 0.0;
+                                                          double stars = 0;
 
-                                                  setState(() {
-                                                    temp = show;
-                                                    distance = tempD;
-                                                    pickupAddress = tempPA;
-                                                    pickupCoordinates = tempPC;
-                                                    dropOffAddress = tempDA;
-                                                    dropOffCoordinates = tempDC;
-                                                  });
-                                                },
+
+                                                          for(int i = 0; i < deliveryData.length; i++){
+                                                            if(deliveryData[i].courierRef.id == courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
+                                                              if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
+                                                                rating += deliveryData[i].rating;
+                                                                total++;
+                                                              }
+                                                            }
+                                                          };
+                                                          stars = (rating/total);
+                                                          return Column(
+                                                            children: [
+                                                              Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                children: List.generate(5, (index) {
+                                                                  return Icon(
+                                                                    index < stars ? Icons.star : Icons.star_border, color: Colors.amber,
+                                                                  );
+                                                                }),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        }
+                                                        else return Container();
+                                                      }
+                                                  ),
+                                                ],
                                               ),
-                                              TextButton(
-                                                child: const Text('REQUEST'),
-                                                onPressed: !temp ? null :() {
-                                                  Navigator.push(context, PageTransition(
-                                                      child: CustomerRemarks(
-                                                        courierUID: courierRefs[index].id,
-                                                        pickupAddress: pickupAddress,
-                                                        pickupCoordinates: pickupCoordinates,
-                                                        dropOffAddress: dropOffAddress,
-                                                        dropOffCoordinates: dropOffCoordinates,
-                                                        deliveryFee: deliveryFee.toInt(),),
-                                                      type: PageTransitionType.bottomToTop
-                                                  ));
-                                                },
+                                              subtitle: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text('Vehicle Type: ', style: TextStyle(color: Colors.black),),
+                                                      Text('${courier.vehicleType}'),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text('Delivery Fee: ', style: TextStyle(color: Colors.black),),
+                                                      Text('₱${deliveryFee.toInt()}.00', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ],
+                                              trailing: Column(
+                                                children: [
+                                                  Text('${courier.status}', style: TextStyle(color: color, fontWeight: FontWeight.bold,)),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(vertical: 8),
+                                                    child: Icon(Icons.info_outline_rounded, color: Colors.red),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Divider(
+                                              color: Colors.grey,
+                                              thickness: .5,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                TextButton(
+                                                  child: const Text('PIN LOCATION'),
+                                                  onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
+                                                    print("check ${widget.appear}");
+                                                    await showMaterialModalBottomSheet(
+                                                      context: context,
+                                                      builder: (context) => Container(
+                                                          height: MediaQuery.of(context).size.height * .8,
+                                                          child: Column(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              PinLocation(
+                                                                locKey: locKey,
+                                                                textFieldPickup: textFieldPickup,
+                                                                textFieldDropOff: textFieldDropOff,
+                                                                isBookmarks: true,
+                                                              ),
+                                                            ],
+                                                          )
+                                                      ),
+                                                    ).then((value) {
+                                                      LocalDataBookmark localDataBookmark = value;
+                                                      if(value != null){
+                                                        show = localDataBookmark.appear;
+                                                        print("Outside then: ${show}");
+                                                        tempD = localDataBookmark.distance;
+                                                        print("Outside then: ${tempD}");
+                                                        tempPA = localDataBookmark.pickupAddress;
+                                                        print("Outside then: ${tempPA}");
+                                                        tempPC = localDataBookmark.pickupCoordinates;
+                                                        print("Outside then: ${tempPC}");
+                                                        tempDA = localDataBookmark.dropOffAddress;
+                                                        print("Outside then: ${tempDA}");
+                                                        tempDC = localDataBookmark.dropOffCoordinates;
+                                                        print("Outside then: ${tempDC}");
+                                                      }
+                                                    });
+
+                                                    setState(() {
+                                                      temp = show;
+                                                      distance = tempD;
+                                                      pickupAddress = tempPA;
+                                                      pickupCoordinates = tempPC;
+                                                      dropOffAddress = tempDA;
+                                                      dropOffCoordinates = tempDC;
+                                                    });
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: const Text('REQUEST'),
+                                                  onPressed: !temp ? null :() {
+                                                    Navigator.push(context, PageTransition(
+                                                        child: CustomerRemarks(
+                                                          courierUID: courierRefs[index].id,
+                                                          pickupAddress: pickupAddress,
+                                                          pickupCoordinates: pickupCoordinates,
+                                                          dropOffAddress: dropOffAddress,
+                                                          dropOffCoordinates: dropOffCoordinates,
+                                                          deliveryFee: deliveryFee.toInt(),),
+                                                        type: PageTransitionType.bottomToTop
+                                                    ));
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
