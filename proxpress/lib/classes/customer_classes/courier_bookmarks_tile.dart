@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -221,6 +222,15 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 100),
+                                                  child: TextButton(
+                                                      child: Text('REMOVE'),
+                                                    onPressed: (){
+                                                        print('courier removed as bookmark');
+                                                    },
+                                                  ),
+                                                ),
                                                 TextButton(
                                                   child: const Text('PIN LOCATION'),
                                                   onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
