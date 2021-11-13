@@ -16,6 +16,8 @@ import 'package:path/path.dart' as Path;
 import 'package:file_picker/file_picker.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class CourierDashboard extends StatefulWidget {
   @override
@@ -29,6 +31,10 @@ class _CourierDashboardState extends State<CourierDashboard> {
   File vehicleRegistrationOR;
   File vehicleRegistrationCR;
   File vehiclePhoto;
+
+  int remainingTime = 120;
+  final CountdownController _controller =
+  new CountdownController(autoStart: true);
 
   String driversLicenseFront_ = '';
   String driversLicenseBack_ = '';
@@ -94,7 +100,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                 _verificationCode = verificationID;
               });
             },
-            timeout: Duration(seconds: 120)
+            timeout: Duration(seconds: remainingTime)
         );
       } catch (e){
         print(e);
@@ -583,26 +589,11 @@ class _CourierDashboardState extends State<CourierDashboard> {
                             margin: EdgeInsets.all(20),
                             child: Column(
                               children: [
-                                Card(
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.info,
-                                      color: Colors.red,
-                                    ),
-                                    title: Text(
-                                      "Kindly verify your email ${user1.email} to use the app.",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-
-                                  ),
+                                Visibility(
+                                    visible: rButton,
+                                    child: SizedBox(
+                                      height: MediaQuery.of(context).size.height / 3,
+                                    )
                                 ),
                                 Visibility(
                                   visible: rButton,
@@ -614,6 +605,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                       });
                                       showToast1("OTP has been sent");
                                       verifyPhone(contactNo);
+                                      _controller.start();
                                     },
                                     child: Text('Verify your contact number'),
                                   ),
@@ -702,7 +694,55 @@ class _CourierDashboardState extends State<CourierDashboard> {
 
                                                 ),
                                               ),
-                                              SizedBox(height: 20,),
+                                              SizedBox(height: 10,),
+                                              Container(
+                                                width: MediaQuery.of(context).size.width - 30,
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        height: 1,
+                                                        color: Colors.grey,
+                                                        margin: EdgeInsets.symmetric(horizontal: 12),
+                                                      ),
+                                                    ),
+                                                    Countdown(
+                                                      controller: _controller,
+                                                      seconds: remainingTime,
+                                                      build: (_, double time){
+                                                        Color color1 = Colors.green;
+                                                        if(time.toInt() <= 60){
+                                                          color1 = Colors.red;
+                                                        }
+                                                        return Text(
+                                                          time.toInt().toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: color1,
+                                                          ),
+                                                        );
+                                                      },
+                                                      interval: Duration(seconds: 1),
+                                                      onFinished: () {
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text('Tap resend new code to received new text'),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                    Expanded(
+                                                      child: Container(
+                                                        height: 1,
+                                                        color: Colors.grey,
+                                                        margin: EdgeInsets.symmetric(horizontal: 12),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(height: 10,),
                                               Text(
                                                 "Didn't received any code?",
                                                 style: TextStyle(

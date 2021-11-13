@@ -18,12 +18,27 @@ class AuthService {
   // Sign in email and password
   Future SignInCustomer(String email, String password) async {
     try {
-      // AuthResult before
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      // FirebaseUser before
+      String temp = "";
+      temp = email[0] + email[1];
+
+      UserCredential result ;
+      if(temp == "09"){
+        String contactNo = "+63" + email.substring(1);
+        print(contactNo);
+        ConfirmationResult confirmationResult = await _auth.signInWithPhoneNumber(contactNo, RecaptchaVerifier(
+          container: 'recaptcha',
+          size: RecaptchaVerifierSize.compact,
+          theme: RecaptchaVerifierTheme.dark,
+        ));
+
+
+      } else{
+        result = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+      }
+
+
       User user = result.user;
-      //await FileStorage(uid: user.uid);
       await DatabaseService(uid: user.uid).AuthupdateCustomerPassword(password);
       await DatabaseService(uid: user.uid).AuthupdateCourierPassword(password);
       print(user.uid);

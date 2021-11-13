@@ -33,9 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildUsername(){
     return TextFormField(
         autofillHints: [AutofillHints.email],
-        validator: (val) => val.isEmpty ? 'Phone number / Email is Required': null,
+        validator: (val) => val.isEmpty ? 'Email is Required': null,
         decoration: InputDecoration(
-          labelText: "Email / Phone number",
+          labelText: "Email",
         ),
         onSaved: (String value){
           email = value;
