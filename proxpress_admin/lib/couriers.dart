@@ -18,6 +18,8 @@ class Courier{
   final String vehiclePhoto_;
   final String adminMessage;
   final List adminCredentialsResponse;
+  final int wallet;
+  final bool requestedCashOut;
 
   Courier({
   this.uid,
@@ -39,5 +41,7 @@ class Courier{
   this.vehiclePhoto_,
   this.adminMessage,
   this.adminCredentialsResponse,
+  this.wallet,
+  this.requestedCashOut,
   });
 }

@@ -3,11 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/couriers.dart';
-import 'package:proxpress/dashboard.dart';
+import 'package:proxpress/pages/cashouts_page.dart';
+import 'package:proxpress/pages/dashboard.dart';
 import 'package:proxpress/database.dart';
-import 'package:proxpress/delivery_prices_page.dart';
+import 'package:proxpress/pages/delivery_prices_page.dart';
 import 'package:proxpress/login_screen.dart';
-import 'package:proxpress/reports_page.dart';
+import 'package:proxpress/pages/reports_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,9 @@ class PROXpressApp extends StatelessWidget{
               break;
             case '/reports':
               return PageTransition(child: ReportsPage(), type: PageTransitionType.fade);
+              break;
+            case '/cashouts':
+              return PageTransition(child: CashOuts(), type: PageTransitionType.fade);
               break;
             default:
               return null;

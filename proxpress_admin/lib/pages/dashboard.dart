@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/courier_list.dart';
 import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
-import 'package:proxpress/delivery_price_list.dart';
 import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
-import 'package:proxpress/report_list.dart';
 import 'package:proxpress/reports.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'auth.dart';
+import '../auth.dart';
 
 class Dashboard extends StatefulWidget {
   final String savedPassword;
@@ -58,6 +55,11 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
             title: 'Reports',
             route: '/reports',
             icon: Icons.report_problem,
+          ),
+          MenuItem(
+            title: 'Cash-outs',
+            route: '/cashouts',
+            icon: Icons.account_balance_wallet_rounded,
           ),
         ],
         selectedRoute: '/dashboard',
@@ -280,7 +282,8 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                             onPressed: () async {
                                               await DatabaseService(uid: couriers[renderContext.rowIdx].uid).approveCourier(false);
                                               await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateCourierMessage(_adminMessage);
-                                              Navigator.pop(context);
+                                              //Navigator.pop(context);
+                                              Navigator.pushNamed(context, '/dashboard');
                                             },
                                           ),
                                         ]
@@ -293,6 +296,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                             });
                           }: () async {
                             await DatabaseService(uid: couriers[renderContext.rowIdx].uid).approveCourier(true);
+                            Navigator.pushNamed(context, '/dashboard');
                             },
                       ),
                       !approved ? IconButton(
@@ -402,7 +406,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                             onPressed: () async {
                                               await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateCourierMessage(_adminMessage);
                                               await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateCredentials(credentials);
-                                              Navigator.pop(context);
+                                              Navigator.pushNamed(context, '/dashboard');
                                             },
                                           ),
                                         ]);

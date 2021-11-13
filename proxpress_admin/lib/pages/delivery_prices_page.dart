@@ -4,10 +4,8 @@ import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/auth.dart';
-import 'package:proxpress/courier_list.dart';
 import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
-import 'package:proxpress/delivery_price_list.dart';
 import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
 
@@ -48,6 +46,11 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
             title: 'Reports',
             route: '/reports',
             icon: Icons.report_problem,
+          ),
+          MenuItem(
+            title: 'Cash-outs',
+            route: '/cashouts',
+            icon: Icons.account_balance_wallet_rounded,
           ),
         ],
         selectedRoute: '/prices',
@@ -94,6 +97,7 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
           builder: (context, snapshot) {
             if(snapshot.hasData){
               List<DeliveryPrice> price = snapshot.data;
+              print(price[0].baseFare);
 
               List<String> priceUIDs = [];
               price.forEach((element) {

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/auth.dart';
-import 'package:proxpress/dashboard.dart';
+import 'package:proxpress/pages/dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

@@ -7,10 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/auth.dart';
 import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
-import 'package:proxpress/delivery_price_list.dart';
 import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
-import 'package:proxpress/report_list.dart';
 import 'package:proxpress/reports.dart';
 import 'package:intl/intl.dart';
 
@@ -61,24 +59,6 @@ class _ReportsPageState extends State<ReportsPage> {
     return combinedNames;
   }
 
-  // Future<List<String>> getCustomers (List<DocumentReference> customers, int size) async {
-  //   final List<String> generatedCustomers = [];
-  //   for (int i = 0; i < size; i++) {
-  //     String reportBy = '';
-  //     await FirebaseFirestore.instance
-  //         .collection('Customers')
-  //         .doc(customers[i].id)
-  //         .get()
-  //         .then((DocumentSnapshot documentSnapshot) {
-  //       if (documentSnapshot.exists) {
-  //         reportBy = '${documentSnapshot['First Name']} ${documentSnapshot['Last Name']}';
-  //       }
-  //     });
-  //     generatedCustomers.add(reportBy);
-  //   }
-  //   return generatedCustomers;
-  // }
-
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -107,6 +87,11 @@ class _ReportsPageState extends State<ReportsPage> {
             title: 'Reports',
             route: '/reports',
             icon: Icons.report_problem,
+          ),
+          MenuItem(
+            title: 'Cash-outs',
+            route: '/cashouts',
+            icon: Icons.account_balance_wallet_rounded,
           ),
         ],
         selectedRoute: '/reports',

@@ -18,7 +18,7 @@ class DatabaseService {
   final CollectionReference reportCollection = FirebaseFirestore.instance
       .collection('Reports');
 
-  List<Courier> _courierDataListFromSnapshot(QuerySnapshot snapshot){
+  List<Courier> courierDataListFromSnapshot(QuerySnapshot snapshot){
     return snapshot.docs.map((doc){
       return Courier(
         uid: doc.id,
@@ -39,6 +39,8 @@ class DatabaseService {
         vehiclePhoto_: (doc.data() as dynamic) ['Vehicle Photo URL'] ?? '',
         adminMessage: (doc.data() as dynamic) ['Admin Message'] ?? '',
         adminCredentialsResponse : (doc.data() as dynamic) ['Credential Response'] ?? '',
+        wallet : (doc.data() as dynamic) ['Wallet'] ?? '',
+        requestedCashOut : (doc.data() as dynamic) ['Requested Cash-out'] ?? '',
       );
     }).toList();
   }
@@ -116,7 +118,7 @@ class DatabaseService {
     return courierCollection.doc(uid).snapshots().map(_courierDataFromSnapshot);
   }
   Stream<List<Courier>> get courierList {
-    return courierCollection.snapshots().map(_courierDataListFromSnapshot);
+    return courierCollection.snapshots().map(courierDataListFromSnapshot);
   }
   Stream<List<Reports>> get reportList {
     return reportCollection.snapshots().map(_reportsDataListFromSnapshot);
@@ -133,6 +135,14 @@ class DatabaseService {
         .doc(uid)
         .update({
       'Credential Response': adminCredentialsResponse,
+    });
+  }
+  Future updateRequestCashOut(int wallet, bool requestedCashOut) async {
+    await FirebaseFirestore.instance.collection('Couriers')
+        .doc(uid)
+        .update({
+      'Wallet': wallet,
+      'Requested Cash-out': requestedCashOut,
     });
   }
 
