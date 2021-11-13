@@ -102,236 +102,238 @@ class _DeliveryTileState extends State<DeliveryTile> {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        isThreeLine: true,
-                        leading: Container(
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(customerData.avatarUrl),
-                            backgroundColor: Colors.white,
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.push(context, PageTransition(child: DeliveryDetails(
+                        customer: widget.delivery.customerRef,
+                        courier: widget.delivery.courierRef,
+                        pickupAddress: widget.delivery.pickupAddress,
+                        pickupGeoPoint: widget.delivery.pickupCoordinates,
+                        dropOffAddress: widget.delivery.dropOffAddress,
+                        dropOffGeoPoint: widget.delivery.dropOffCoordinates,
+                        itemDescription: widget.delivery.itemDescription,
+                        pickupPointPerson: widget.delivery.pickupPointPerson ,
+                        pickupContactNum: widget.delivery.pickupContactNum ,
+                        dropOffPointPerson: widget.delivery.dropoffPointPerson ,
+                        dropOffContactNum: widget.delivery.dropoffContactNum ,
+                        whoWillPay: widget.delivery.whoWillPay ,
+                        specificInstructions: widget.delivery.specificInstructions ,
+                        paymentOption: widget.delivery.paymentOption ,
+                        deliveryFee: widget.delivery.deliveryFee ,
+                      ),
+                          type: PageTransitionType.rightToLeftWithFade));
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          isThreeLine: true,
+                          leading: Container(
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundImage: NetworkImage(customerData.avatarUrl),
+                              backgroundColor: Colors.white,
+                            ),
                           ),
-                        ),
-                        title: Text("${customerData.fName} ${customerData.lName}",
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
+                          title: Text("${customerData.fName} ${customerData.lName}",
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
 
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text('Contact Number: ', style: TextStyle(color: Colors.black),),
+                                  Text(customerData.contactNo),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text('Delivery Fee: ',style: TextStyle(color: Colors.black),),
+                                  Text('\₱${widget.delivery.deliveryFee}.00',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          trailing: Icon(Icons.info_outline_rounded, color: Colors.red,),
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                          thickness: .5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Row(
-                              children: [
-                                Text('Contact Number: ', style: TextStyle(color: Colors.black),),
-                                Text(customerData.contactNo),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('Delivery Fee: ',style: TextStyle(color: Colors.black),),
-                                Text('\₱${widget.delivery.deliveryFee}.00',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-                              ],
-                            ),
-                          ],
-                        ),
-                        trailing: Icon(Icons.info_outline_rounded, color: Colors.red,),
-                        onTap: (){
-                          Navigator.push(context, PageTransition(child: DeliveryDetails(
-                            customer: widget.delivery.customerRef,
-                            courier: widget.delivery.courierRef,
-                            pickupAddress: widget.delivery.pickupAddress,
-                            pickupGeoPoint: widget.delivery.pickupCoordinates,
-                            dropOffAddress: widget.delivery.dropOffAddress,
-                            dropOffGeoPoint: widget.delivery.dropOffCoordinates,
-                            itemDescription: widget.delivery.itemDescription,
-                            pickupPointPerson: widget.delivery.pickupPointPerson ,
-                            pickupContactNum: widget.delivery.pickupContactNum ,
-                            dropOffPointPerson: widget.delivery.dropoffPointPerson ,
-                            dropOffContactNum: widget.delivery.dropoffContactNum ,
-                            whoWillPay: widget.delivery.whoWillPay ,
-                            specificInstructions: widget.delivery.specificInstructions ,
-                            paymentOption: widget.delivery.paymentOption ,
-                            deliveryFee: widget.delivery.deliveryFee ,
-                          ),
-                              type: PageTransitionType.rightToLeftWithFade));
-                        },
-                      ),
-                      Divider(
-                        color: Colors.grey,
-                        thickness: .5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          FutureBuilder<bool>(
-                              future: gotOngoingDelivery,
-                              builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                                print(gotOngoingDelivery);
-                                if (snapshot.hasData) {
-                                  bool cantConfirm = snapshot.data;
+                            FutureBuilder<bool>(
+                                future: gotOngoingDelivery,
+                                builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                                  print(gotOngoingDelivery);
+                                  if (snapshot.hasData) {
+                                    bool cantConfirm = snapshot.data;
 
-                                  return TextButton(
+                                    return TextButton(
+                                        child: Text('CONFIRM'),
+                                        onPressed: cantConfirm ? null : () async{
+                                          bool isSeen = false;
+
+                                          await FirebaseFirestore.instance
+                                              .collection('Couriers')
+                                              .doc(widget.delivery.courierRef.id)
+                                              .get()
+                                              .then((DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists) {
+                                              notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} accepted your request";
+                                            }
+                                          });
+                                          await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
+                                              widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
+                                          await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
+                                        }
+                                    );
+                                  } else {
+                                    return TextButton(
                                       child: Text('CONFIRM'),
-                                      onPressed: cantConfirm ? null : () async{
-                                        bool isSeen = false;
-
-                                        await FirebaseFirestore.instance
-                                            .collection('Couriers')
-                                            .doc(widget.delivery.courierRef.id)
-                                            .get()
-                                            .then((DocumentSnapshot documentSnapshot) {
-                                          if (documentSnapshot.exists) {
-                                            notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} accepted your request";
-                                          }
-                                        });
-                                        await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
-                                            widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
-                                        await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
-                                      }
-                                  );
-                                } else {
-                                  return TextButton(
-                                    child: Text('CONFIRM'),
-                                    onPressed: null,
-                                  );
+                                      onPressed: null,
+                                    );
+                                  }
                                 }
-                              }
-                          ),
-                          TextButton(
-                              child: Text('DECLINE'),
-                              onPressed: () async{
-                                await showDialog(
-                                    context: context,
-                                    builder: (context) => StatefulBuilder(
-                                      builder: (context, setState){
-                                        return AlertDialog(
-                                          title: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                margin: EdgeInsets.only(right: 10),
-                                                child: Icon(
-                                                  Icons.cancel,
-                                                  color: Colors.redAccent,
+                            ),
+                            TextButton(
+                                child: Text('DECLINE'),
+                                onPressed: () async{
+                                  await showDialog(
+                                      context: context,
+                                      builder: (context) => StatefulBuilder(
+                                        builder: (context, setState){
+                                          return AlertDialog(
+                                            title: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(right: 10),
+                                                  child: Icon(
+                                                    Icons.cancel,
+                                                    color: Colors.redAccent,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text("Cancellation Reason"),
-                                            ],
-                                          ),
-                                          content: Form(
-                                            key: _keyCancel,
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextFormField(
-                                                    validator: (value){
-                                                      cancellationMessage = value;
-                                                      return value.isNotEmpty ? null : "Please provide a reason";
-                                                    },
-                                                    minLines: 3,
-                                                    maxLines: null,
-                                                    maxLength: 100,
-                                                    keyboardType: TextInputType.multiline,
-                                                    onChanged: (val) => setState(() => cancellationMessage = val),
-                                                    decoration:  InputDecoration(
-                                                      hintText: "Reason why",
-                                                      hintStyle: TextStyle(
-                                                          fontStyle: FontStyle.italic
-                                                      ),
-                                                      filled: true,
-                                                      border: InputBorder.none,
-                                                      fillColor: Colors.grey[300],
-                                                      contentPadding: const EdgeInsets.all(30),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: Colors.red,
-                                                          width: 2,
+                                                Text("Cancellation Reason"),
+                                              ],
+                                            ),
+                                            content: Form(
+                                              key: _keyCancel,
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    TextFormField(
+                                                      validator: (value){
+                                                        cancellationMessage = value;
+                                                        return value.isNotEmpty ? null : "Please provide a reason";
+                                                      },
+                                                      minLines: 3,
+                                                      maxLines: null,
+                                                      maxLength: 100,
+                                                      keyboardType: TextInputType.multiline,
+                                                      onChanged: (val) => setState(() => cancellationMessage = val),
+                                                      decoration:  InputDecoration(
+                                                        hintText: "Reason why",
+                                                        hintStyle: TextStyle(
+                                                            fontStyle: FontStyle.italic
                                                         ),
-                                                        borderRadius: BorderRadius.circular(10.0),
+                                                        filled: true,
+                                                        border: InputBorder.none,
+                                                        fillColor: Colors.grey[300],
+                                                        contentPadding: const EdgeInsets.all(30),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: Colors.red,
+                                                            width: 2,
+                                                          ),
+                                                          borderRadius: BorderRadius.circular(10.0),
+                                                        ),
+                                                        enabledBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(color: Colors.white),
+                                                          borderRadius: BorderRadius.circular(10.0),
+                                                        ),
                                                       ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(color: Colors.white),
-                                                        borderRadius: BorderRadius.circular(10.0),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          actions: <Widget> [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                ElevatedButton(
-                                                  child: Text("Discard"),
-                                                  style: ButtonStyle(
-                                                    backgroundColor: MaterialStateProperty.all(Colors.grey),
+                                            actions: <Widget> [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  ElevatedButton(
+                                                    child: Text("Discard"),
+                                                    style: ButtonStyle(
+                                                      backgroundColor: MaterialStateProperty.all(Colors.grey),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
                                                   ),
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                                ElevatedButton(
-                                                  child: Text("Send"),
-                                                  onPressed: () async {
-                                                    if(_keyCancel.currentState.validate()){
-                                                      await FirebaseFirestore.instance
-                                                          .collection('Couriers')
-                                                          .doc(widget.delivery.courierRef.id)
-                                                          .get()
-                                                          .then((DocumentSnapshot documentSnapshot) {
-                                                        if (documentSnapshot.exists) {
-                                                          notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} declined your request";
-                                                        }
-                                                      });
-
-                                                      await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Declined by Courier', 'Cancelled');
-                                                      await DatabaseService(uid: widget.delivery.uid).customerCancelRequest(cancellationMessage);
-                                                      await DatabaseService().createNotificationData(
-                                                          notifM,
-                                                          widget.delivery.courierRef,
-                                                          widget.delivery.customerRef,
-                                                          Timestamp.now(),
-                                                          isSeen,
-                                                          popsOnce
-                                                      );
-
-                                                      if (widget.delivery.paymentOption == 'Online Payment') {
-                                                        int currentBalance = 0;
-
+                                                  ElevatedButton(
+                                                    child: Text("Send"),
+                                                    onPressed: () async {
+                                                      if(_keyCancel.currentState.validate()){
                                                         await FirebaseFirestore.instance
-                                                            .collection('Customers')
-                                                            .doc(widget.delivery.customerRef.id)
+                                                            .collection('Couriers')
+                                                            .doc(widget.delivery.courierRef.id)
                                                             .get()
                                                             .then((DocumentSnapshot documentSnapshot) {
                                                           if (documentSnapshot.exists) {
-                                                            currentBalance = documentSnapshot['Wallet'];
+                                                            notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} declined your request";
                                                           }
                                                         });
 
-                                                        await DatabaseService(uid: widget.delivery.customerRef.id).updateCustomerWallet(currentBalance + widget.delivery.deliveryFee);
-                                                      }
+                                                        await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Declined by Courier', 'Cancelled');
+                                                        await DatabaseService(uid: widget.delivery.uid).customerCancelRequest(cancellationMessage);
+                                                        await DatabaseService().createNotificationData(
+                                                            notifM,
+                                                            widget.delivery.courierRef,
+                                                            widget.delivery.customerRef,
+                                                            Timestamp.now(),
+                                                            isSeen,
+                                                            popsOnce
+                                                        );
 
-                                                      Navigator.of(context).pop();
-                                                      showToast("Request cancelled");
-                                                    }
-                                                  },
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        );
-                                      },
-                                    )
-                                );
-                              }
-                          ),
-                        ],
-                      ),
-                    ],
+                                                        if (widget.delivery.paymentOption == 'Online Payment') {
+                                                          int currentBalance = 0;
+
+                                                          await FirebaseFirestore.instance
+                                                              .collection('Customers')
+                                                              .doc(widget.delivery.customerRef.id)
+                                                              .get()
+                                                              .then((DocumentSnapshot documentSnapshot) {
+                                                            if (documentSnapshot.exists) {
+                                                              currentBalance = documentSnapshot['Wallet'];
+                                                            }
+                                                          });
+
+                                                          await DatabaseService(uid: widget.delivery.customerRef.id).updateCustomerWallet(currentBalance + widget.delivery.deliveryFee);
+                                                        }
+
+                                                        Navigator.of(context).pop();
+                                                        showToast("Request cancelled");
+                                                      }
+                                                    },
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      )
+                                  );
+                                }
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
