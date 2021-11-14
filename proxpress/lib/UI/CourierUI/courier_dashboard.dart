@@ -656,12 +656,14 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                           vPhone = false;
                                                         });
                                                         showToast1("Your phone number is now verified");
-                                                        Future.delayed(const Duration(seconds: 3), () {
-                                                          setState(() {
-                                                            Navigator.pushNamed(context, '/template1');
-                                                          });
-                                                        });
+                                                        if(approved){
+                                                          Future.delayed(const Duration(seconds: 3), () {
+                                                            setState(() {
+                                                              Navigator.pushNamed(context, '/template1');
+                                                            });
 
+                                                          });
+                                                        }
                                                       }
                                                     });
                                                   } catch (e){
