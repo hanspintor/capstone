@@ -7,6 +7,7 @@ import 'package:proxpress/classes/view_delivery_details.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:intl/intl.dart';
 
 class TransactionTile extends StatefulWidget {
   final Delivery delivery;
@@ -42,78 +43,91 @@ class _TransactionTileState extends State<TransactionTile> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                     child: Card(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            isThreeLine: true,
-                            leading: Container(
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundImage: NetworkImage(customerData.avatarUrl),
-                                backgroundColor: Colors.white,
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(context, PageTransition(child: DeliveryDetails(
+                            customer: widget.delivery.customerRef,
+                            courier: widget.delivery.courierRef,
+                            pickupAddress: widget.delivery.pickupAddress,
+                            pickupGeoPoint: widget.delivery.pickupCoordinates,
+                            dropOffAddress: widget.delivery.dropOffAddress,
+                            dropOffGeoPoint: widget.delivery.dropOffCoordinates,
+                            itemDescription: widget.delivery.itemDescription,
+                            pickupPointPerson: widget.delivery.pickupPointPerson ,
+                            pickupContactNum: widget.delivery.pickupContactNum ,
+                            dropOffPointPerson: widget.delivery.dropoffPointPerson ,
+                            dropOffContactNum: widget.delivery.dropoffContactNum ,
+                            whoWillPay: widget.delivery.whoWillPay ,
+                            specificInstructions: widget.delivery.specificInstructions ,
+                            paymentOption: widget.delivery.paymentOption ,
+                            deliveryFee: widget.delivery.deliveryFee ,
+                          ),
+                              type: PageTransitionType.rightToLeftWithFade));
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10, left: 5),
+                                child: Text('${DateFormat.yMd().add_jm().format(widget.delivery.time.toDate())}', style: TextStyle(color: Colors.grey)),
                               ),
                             ),
-                            title: Text("${customerData.fName} ${customerData.lName}",
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
+                            Divider(
+                              color: Colors.grey,
+                              thickness: .5,
+                            ),
+                            ListTile(
+                              isThreeLine: true,
+                              leading: Container(
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: NetworkImage(customerData.avatarUrl),
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                              title: Text("${customerData.fName} ${customerData.lName}",
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
 
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      title: Text("Rating", style: TextStyle(fontWeight: FontWeight.bold),),
-                                      subtitle: Container(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: List.generate(5, (index) {
-                                            return Icon(
-                                              index < rating ? Icons.star : Icons.star_border, color: Colors.amber,
-                                            );
-                                          }),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        title: Text("Rating", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        subtitle: Container(
+                                          padding: EdgeInsets.only(top: 5),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: List.generate(5, (index) {
+                                              return Icon(
+                                                index < rating ? Icons.star : Icons.star_border, color: Colors.amber,
+                                              );
+                                            }),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Feedback:',style: TextStyle(color: Colors.black),),
-                                      Text(widget.delivery.feedback),
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            trailing: Icon(Icons.info_outline_rounded, color: Colors.red,),
-                            onTap: (){
-                              Navigator.push(context, PageTransition(child: DeliveryDetails(
-                                customer: widget.delivery.customerRef,
-                                courier: widget.delivery.courierRef,
-                                pickupAddress: widget.delivery.pickupAddress,
-                                pickupGeoPoint: widget.delivery.pickupCoordinates,
-                                dropOffAddress: widget.delivery.dropOffAddress,
-                                dropOffGeoPoint: widget.delivery.dropOffCoordinates,
-                                itemDescription: widget.delivery.itemDescription,
-                                pickupPointPerson: widget.delivery.pickupPointPerson ,
-                                pickupContactNum: widget.delivery.pickupContactNum ,
-                                dropOffPointPerson: widget.delivery.dropoffPointPerson ,
-                                dropOffContactNum: widget.delivery.dropoffContactNum ,
-                                whoWillPay: widget.delivery.whoWillPay ,
-                                specificInstructions: widget.delivery.specificInstructions ,
-                                paymentOption: widget.delivery.paymentOption ,
-                                deliveryFee: widget.delivery.deliveryFee ,
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Feedback:',style: TextStyle(color: Colors.black),),
+                                        Text(widget.delivery.feedback),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                                  type: PageTransitionType.rightToLeftWithFade));
-                            },
-                          ),
-                        ],
+                              trailing: Icon(Icons.info_outline_rounded, color: Colors.red,),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -142,60 +156,73 @@ class _TransactionTileState extends State<TransactionTile> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          isThreeLine: true,
-                          leading: Container(
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(customerData.avatarUrl),
-                              backgroundColor: Colors.white,
-                            ),
-                          ),
-                          title: Text("${customerData.fName} ${customerData.lName}",
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(status, style: TextStyle(color: Colors.red),),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Cancellation Reason:',style: TextStyle(color: Colors.black),),
-                                    Text(widget.delivery.cancellationMessage),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          trailing: Icon(Icons.info_outline_rounded, color: Colors.red,),
-                          onTap: (){
-                            Navigator.push(context, PageTransition(child: DeliveryDetails(
-                              customer: widget.delivery.customerRef,
-                              courier: widget.delivery.courierRef,
-                              pickupAddress: widget.delivery.pickupAddress,
-                              pickupGeoPoint: widget.delivery.pickupCoordinates,
-                              dropOffAddress: widget.delivery.dropOffAddress,
-                              dropOffGeoPoint: widget.delivery.dropOffCoordinates,
-                              itemDescription: widget.delivery.itemDescription,
-                              pickupPointPerson: widget.delivery.pickupPointPerson ,
-                              pickupContactNum: widget.delivery.pickupContactNum ,
-                              dropOffPointPerson: widget.delivery.dropoffPointPerson ,
-                              dropOffContactNum: widget.delivery.dropoffContactNum ,
-                              whoWillPay: widget.delivery.whoWillPay ,
-                              specificInstructions: widget.delivery.specificInstructions ,
-                              paymentOption: widget.delivery.paymentOption ,
-                              deliveryFee: widget.delivery.deliveryFee ,
-                            ),
-                                type: PageTransitionType.rightToLeftWithFade));
-                          },
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push(context, PageTransition(child: DeliveryDetails(
+                          customer: widget.delivery.customerRef,
+                          courier: widget.delivery.courierRef,
+                          pickupAddress: widget.delivery.pickupAddress,
+                          pickupGeoPoint: widget.delivery.pickupCoordinates,
+                          dropOffAddress: widget.delivery.dropOffAddress,
+                          dropOffGeoPoint: widget.delivery.dropOffCoordinates,
+                          itemDescription: widget.delivery.itemDescription,
+                          pickupPointPerson: widget.delivery.pickupPointPerson ,
+                          pickupContactNum: widget.delivery.pickupContactNum ,
+                          dropOffPointPerson: widget.delivery.dropoffPointPerson ,
+                          dropOffContactNum: widget.delivery.dropoffContactNum ,
+                          whoWillPay: widget.delivery.whoWillPay ,
+                          specificInstructions: widget.delivery.specificInstructions ,
+                          paymentOption: widget.delivery.paymentOption ,
+                          deliveryFee: widget.delivery.deliveryFee ,
                         ),
-                      ],
+                            type: PageTransitionType.rightToLeftWithFade));
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10, left: 5),
+                              child: Text('${DateFormat.yMd().add_jm().format(widget.delivery.time.toDate())}', style: TextStyle(color: Colors.grey)),
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                            thickness: .5,
+                          ),
+                          ListTile(
+                            isThreeLine: true,
+                            leading: Container(
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(customerData.avatarUrl),
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                            title: Text("${customerData.fName} ${customerData.lName}",
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
+
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(status, style: TextStyle(color: Colors.red),),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Cancellation Reason:',style: TextStyle(color: Colors.black),),
+                                      Text(widget.delivery.cancellationMessage),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            trailing: Icon(Icons.info_outline_rounded, color: Colors.red,),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

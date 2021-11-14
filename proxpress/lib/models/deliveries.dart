@@ -24,6 +24,7 @@ class Delivery{
   final String feedback;
   final bool isReported;
   final String cancellationMessage;
+  final Timestamp time;
 
   Delivery({
     this.uid,
@@ -49,5 +50,6 @@ class Delivery{
     this.feedback,
     this.isReported,
     this.cancellationMessage,
+    this.time,
   });
 }

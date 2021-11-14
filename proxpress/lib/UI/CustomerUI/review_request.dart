@@ -261,6 +261,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         '',
                         false,
                         '',
+                        Timestamp.now(),
                       );
                       await FirebaseFirestore.instance
                           .collection('Customers')

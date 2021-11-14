@@ -130,6 +130,7 @@ class DatabaseService {
     });
   }
 
+
   // Create/Update a Courier Document
   Future updateCourierData(String fname, String lname, String email,
       String contactNo, String password, String address, String status,
@@ -309,7 +310,7 @@ class DatabaseService {
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
       int deliveryFee, String courierApproval, String deliveryStatus,
-      GeoPoint courierLocation, int rating, String feedback, bool isReported, String message) async {
+      GeoPoint courierLocation, int rating, String feedback, bool isReported, String message, Timestamp time) async {
     await deliveryCollection
         .doc(uid)
         .set({
@@ -335,6 +336,7 @@ class DatabaseService {
       'Feedback': feedback,
       'Reported': isReported,
       'Cancellation Message': message,
+      'Time' : time,
     });
   }
 
@@ -437,6 +439,14 @@ class DatabaseService {
     });
   }
 
+  Future updateTime(Timestamp time) async {
+    await deliveryCollection
+        .doc(uid)
+        .update({
+      'Time': time,
+    });
+  }
+
   // Customer Model List Builder
   List<Customer> _customerDataListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
@@ -516,7 +526,8 @@ class DatabaseService {
         rating: (doc.data() as dynamic) ['Rating'] ?? '',
         feedback: (doc.data() as dynamic) ['Feedback'] ?? '',
         isReported: (doc.data() as dynamic) ['Reported'] ?? '',
-        cancellationMessage: (doc.data() as dynamic) ['Cancellation Message'] ?? ''
+        cancellationMessage: (doc.data() as dynamic) ['Cancellation Message'] ?? '',
+        time: (doc.data() as dynamic) ['Time'] ?? '',
       );
     }).toList();
   }
@@ -699,6 +710,7 @@ class DatabaseService {
       courierLocation: snapshot['Courier Location'],
       isReported: snapshot['Reported'],
       cancellationMessage: snapshot['Cancellation Message'],
+      time: snapshot['Time'],
     );
   }
 

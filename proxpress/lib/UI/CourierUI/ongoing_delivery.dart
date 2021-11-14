@@ -468,6 +468,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                       await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
                                                       await DatabaseService().createNotificationData(notifM, delivery.courierRef,
                                                           delivery.customerRef, cloud.Timestamp.now(), isSeen, popsOnce);
+                                                      await DatabaseService(uid: delivery.uid).updateTime(cloud.Timestamp.now());
                                                       Navigator.push(context, PageTransition(child: AppBarTemp1(currentPage: "Transaction",), type: PageTransitionType.rightToLeftWithFade));
                                                       showToast('Customer Notified');
                                                     },

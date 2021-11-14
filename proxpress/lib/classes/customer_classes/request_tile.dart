@@ -21,6 +21,7 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:proxpress/services/upload_file.dart';
+import 'package:intl/intl.dart';
 
 class RequestTile extends StatefulWidget {
   RequestTile({Key key,}) : super(key: key);
@@ -85,6 +86,17 @@ class _RequestTileState extends State<RequestTile> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10, left: 5),
+                            child: Text('${DateFormat.yMd().add_jm().format(delivery.time.toDate())}', style: TextStyle(color: Colors.grey)),
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                          thickness: .5,
+                        ),
                         ListTile(
                           isThreeLine: true,
                           leading: Container(
@@ -189,6 +201,17 @@ class _RequestTileState extends State<RequestTile> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10, left: 5),
+                              child: Text('${DateFormat.yMd().add_jm().format(delivery.time.toDate())}', style: TextStyle(color: Colors.grey)),
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                            thickness: .5,
+                          ),
                           ListTile(
                             isThreeLine: true,
                             leading: Container(
@@ -560,6 +583,17 @@ class _RequestTileState extends State<RequestTile> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10, left: 5),
+                            child: Text('${DateFormat.yMd().add_jm().format(delivery.time.toDate())}', style: TextStyle(color: Colors.grey)),
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                          thickness: .5,
+                        ),
                         ListTile(
                           isThreeLine: true,
                           leading: Container(
@@ -756,6 +790,17 @@ class _RequestTileState extends State<RequestTile> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10, left: 5),
+                            child: Text('${DateFormat.yMd().add_jm().format(delivery.time.toDate())}', style: TextStyle(color: Colors.grey)),
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                          thickness: .5,
+                        ),
                         ListTile(
                           isThreeLine: true,
                           leading: Container(

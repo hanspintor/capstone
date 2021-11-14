@@ -13,6 +13,7 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/notification.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:intl/intl.dart';
 
 class DeliveryTile extends StatefulWidget {
   final Delivery delivery;
@@ -126,6 +127,17 @@ class _DeliveryTileState extends State<DeliveryTile> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10, left: 5),
+                            child: Text('${DateFormat.yMd().add_jm().format(widget.delivery.time.toDate())}', style: TextStyle(color: Colors.grey)),
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                          thickness: .5,
+                        ),
                         ListTile(
                           isThreeLine: true,
                           leading: Container(
@@ -188,6 +200,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                           await DatabaseService().createNotificationData(notifM, widget.delivery.courierRef,
                                               widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
                                           await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
+                                          await DatabaseService(uid: widget.delivery.uid).updateTime(Timestamp.now());
                                         }
                                     );
                                   } else {
@@ -299,6 +312,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                             isSeen,
                                                             popsOnce
                                                         );
+                                                        await DatabaseService(uid: widget.delivery.uid).updateTime(Timestamp.now());
 
                                                         if (widget.delivery.paymentOption == 'Online Payment') {
                                                           int currentBalance = 0;
@@ -314,6 +328,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                           });
 
                                                           await DatabaseService(uid: widget.delivery.customerRef.id).updateCustomerWallet(currentBalance + widget.delivery.deliveryFee);
+                                                          await DatabaseService(uid: widget.delivery.uid).updateTime(Timestamp.now());
                                                         }
 
                                                         Navigator.of(context).pop();
