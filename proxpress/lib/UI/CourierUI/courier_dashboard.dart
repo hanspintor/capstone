@@ -596,7 +596,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                     )
                                 ),
                                 Visibility(
-                                  visible: rButton,
+                                  visible: user1.phoneNumber != null ? false : rButton,
                                   child: ElevatedButton(
                                     onPressed: (){
                                       setState(() {
@@ -654,6 +654,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                         print("works?");
                                                         setState(() {
                                                           vPhone = false;
+                                                          rButton = false;
                                                         });
                                                         showToast1("Your phone number is now verified");
                                                         if(approved){
