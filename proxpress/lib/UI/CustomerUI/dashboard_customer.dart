@@ -146,9 +146,9 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                                   itemCount: deliveryPrices.length,
                                   itemBuilder: (context, index) {
                                     return ListTile(
-                                      leading: Container(
-                                        child: Image.network(vehicleImages[index]),
-                                      ),
+                                      // leading: Container(
+                                      //   child: Image.network(vehicleImages[index]),
+                                      // ),
                                       title: Text(deliveryPrices[index].vehicleType, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                       subtitle: Container(
                                         padding: EdgeInsets.only(top: 5),

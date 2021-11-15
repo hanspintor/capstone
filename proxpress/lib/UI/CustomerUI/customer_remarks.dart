@@ -30,22 +30,36 @@ class CustomerRemarks extends StatefulWidget {
 class _CustomerRemarksState extends State<CustomerRemarks> {
   String itemDescription;
   String pickupPointPerson;
+  TextEditingController textPickupPointPerson = TextEditingController();
   String pickupContactNum;
+  TextEditingController textPickupContactNum = TextEditingController();
   String dropoffPointPerson;
+  TextEditingController textDropoffPointPerson = TextEditingController();
   String dropoffContactNum;
-  String whoWillPay;
+  TextEditingController textDropoffContactNum = TextEditingController();
+  String whoWillPay = 'Who Will Pay';
   String specificInstructions;
   String paymentOption = 'Choose Payment Option';
+  List<String> optionsCustomerIsPickUp = ['Me', 'Drop-off Point Person',];
+  List<String> optionsCustomerIsDropOff = ['Pick-up Point Person', 'Me',];
+  List<String> optionsCustomerNotBoth = ['Pick-up Point Person', 'Drop-off Point Person', 'Me'];
   String onlinePayment = '';
+
+  int currentStep = 0;
+  int step = 0;
+
+  bool customerIsPickUp = false;
+  bool customerIsDropOff = false;
 
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(),];
 
   Widget _buildItemDescription() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Item Description', prefixIcon: Icon(Icons.description_rounded,)),
+        decoration: InputDecoration(labelText: 'Item Description'),
         keyboardType: TextInputType.text,
         validator: (String value){
           if(value.isEmpty){
@@ -64,9 +78,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   }
   Widget _buildSenderName() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Pick Up Point Person', prefixIcon: Icon(Icons.person_rounded,)),
+        controller: textPickupPointPerson,
+        decoration: InputDecoration(labelText: 'Name'),
         keyboardType: TextInputType.name,
         validator: (String value){
           if(value.isEmpty){
@@ -85,10 +100,11 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   }
   Widget _buildSenderContactNum() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: TextFormField(
+        controller: textPickupContactNum,
         maxLength: 11,
-        decoration: InputDecoration(labelText: 'Pick Up Contact Number', prefixIcon: Icon(Icons.phone_rounded,)),
+        decoration: InputDecoration(labelText: 'Contact Number'),
         keyboardType: TextInputType.number,
         validator: (String value){
           if(value.length < 11 && value.length > 0){
@@ -110,9 +126,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   }
   Widget _buildReceiverName() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'Drop Off Point Person', prefixIcon: Icon(Icons.person_rounded,)),
+        controller: textDropoffPointPerson,
+        decoration: InputDecoration(labelText: 'Name'),
         keyboardType: TextInputType.name,
         validator: (String value){
           if(value.isEmpty){
@@ -131,10 +148,11 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   }
   Widget _buildReceiverContactNum() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: TextFormField(
+        controller: textDropoffContactNum,
         maxLength: 11,
-        decoration: InputDecoration(labelText: 'Drop Off Contact Number', prefixIcon: Icon(Icons.phone_rounded,)),
+        decoration: InputDecoration(labelText: 'Contact Number'),
         keyboardType: TextInputType.number,
         validator: (String value){
           if(value.length < 11 && value.length > 0){
@@ -156,32 +174,129 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   }
   Widget _buildWhoWillPay() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
-      child: TextFormField(
-        decoration: InputDecoration(labelText: 'Who Will Pay?', prefixIcon: Icon(Icons.person_pin_circle_rounded,)),
-        keyboardType: TextInputType.name,
-        validator: (String value){
-          if(value.isEmpty){
-            return 'Who will pay must be specified.';
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: DropdownButtonFormField<String>(
+        validator: (String value) {
+          if (value == 'Who Will Pay') {
+            return 'Please choose who will pay.';
+          } else if (value == null) {
+            return 'Please choose who will pay.';
           }
           else return null;
+        },
+        decoration: InputDecoration(labelText: 'Who Will Pay'),
+        elevation: 16,
+        onChanged: (String newValue) {
+          setState(() {
+            whoWillPay = null;
+            whoWillPay = newValue;
+          });
         },
         onSaved: (String value){
           whoWillPay = value;
         },
-        onChanged: (String value){
-          setState(() => whoWillPay = value);
-        },
+        items: optionsCustomerNotBoth.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
       ),
+
+      // customerIsPickUp ? DropdownButtonFormField<String>(
+      //   validator: (String value) {
+      //     if (value == 'Choose Payment Option') {
+      //       return 'Please choose a payment option.';
+      //     } else if (value == null) {
+      //       return 'Please choose a payment option.';
+      //     } else if (value == 'Cash on Delivery' && !customerIsPickUp && !customerIsDropOff && whoWillPay == 'Me') {
+      //       return 'You are not in the pick-up or drop-off location.';
+      //     }
+      //     else return null;
+      //   },
+      //   decoration: InputDecoration(labelText: 'Who Will Pay'),
+      //   elevation: 16,
+      //   onChanged: (String newValue) {
+      //     setState(() {
+      //       whoWillPay = null;
+      //       whoWillPay = newValue;
+      //     });
+      //   },
+      //   onSaved: (String value){
+      //     whoWillPay = value;
+      //   },
+      //   items: optionsCustomerIsPickUp.map<DropdownMenuItem<String>>((String value) {
+      //     return DropdownMenuItem<String>(
+      //       value: value,
+      //       child: Text(value),
+      //     );
+      //   }).toList(),
+      // ) : customerIsDropOff ? DropdownButtonFormField<String>(
+      //   validator: (String value) {
+      //     if (value == 'Choose Payment Option') {
+      //       return 'Please choose a payment option.';
+      //     } else if (value == null) {
+      //       return 'Please choose a payment option.';
+      //     } else if (value == 'Cash on Delivery' && !customerIsPickUp && !customerIsDropOff && whoWillPay == 'Me') {
+      //       return 'You are not in the pick-up or drop-off location.';
+      //     }
+      //     else return null;
+      //   },
+      //   decoration: InputDecoration(labelText: 'Who Will Pay'),
+      //   elevation: 16,
+      //   onChanged: (String newValue) {
+      //     setState(() {
+      //       whoWillPay = null;
+      //       whoWillPay = newValue;
+      //     });
+      //   },
+      //   onSaved: (String value){
+      //     whoWillPay = value;
+      //   },
+      //   items: optionsCustomerIsDropOff.map<DropdownMenuItem<String>>((String value) {
+      //     return DropdownMenuItem<String>(
+      //       value: value,
+      //       child: Text(value),
+      //     );
+      //   }).toList(),
+      // ) : !customerIsPickUp && !customerIsDropOff ? DropdownButtonFormField<String>(
+      //   validator: (String value) {
+      //     if (value == 'Choose Payment Option') {
+      //       return 'Please choose a payment option.';
+      //     } else if (value == null) {
+      //       return 'Please choose a payment option.';
+      //     } else if (value == 'Cash on Delivery' && !customerIsPickUp && !customerIsDropOff && whoWillPay == 'Me') {
+      //       return 'You are not in the pick-up or drop-off location.';
+      //     }
+      //     else return null;
+      //   },
+      //   decoration: InputDecoration(labelText: 'Who Will Pay'),
+      //   elevation: 16,
+      //   onChanged: (String newValue) {
+      //     setState(() {
+      //       whoWillPay = null;
+      //       whoWillPay = newValue;
+      //     });
+      //   },
+      //   onSaved: (String value){
+      //     whoWillPay = value;
+      //   },
+      //   items: optionsCustomerNotBoth.map<DropdownMenuItem<String>>((String value) {
+      //     return DropdownMenuItem<String>(
+      //       value: value,
+      //       child: Text(value),
+      //     );
+      //   }).toList(),
+      // ) : Container(),
     );
   }
   Widget _buildSpecificInstructions() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: TextFormField(
         maxLines: null,
         maxLength: 200,
-        decoration: InputDecoration(labelText: 'Specific Instructions', prefixIcon: Icon(Icons.workspaces_rounded,)),
+        decoration: InputDecoration(labelText: 'Specific Instructions'),
         keyboardType: TextInputType.text,
         validator: (String value){
           if(value.isEmpty){
@@ -200,13 +315,19 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
   }
   Widget _buildDropDown(){
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          labelText: 'Payment Method',
-          prefixIcon: Icon(Icons.payment_rounded),
-        ),
-        iconSize: 20,
+        validator: (String value) {
+          if (value == 'Choose Payment Option') {
+            return 'Please choose a payment option.';
+          } else if (value == null) {
+            return 'Please choose a payment option.';
+          } else if (value == 'Cash on Delivery' && !customerIsPickUp && !customerIsDropOff && whoWillPay == 'Me') {
+            return 'You are not in the pick-up or drop-off location.';
+          }
+          else return null;
+        },
+        decoration: InputDecoration(labelText: 'Payment Option'),
         elevation: 16,
         onChanged: (String newValue) {
           setState(() {
@@ -224,59 +345,6 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     );
   }
 
-  // Widget _buildRadioPayment(){
-  //   return Column(
-  //     children: [
-  //       ListTile(
-  //         title: Container(
-  //           child: Row(
-  //             children: [
-  //               Image.asset("assets/gcash.png", height: 50, width: 50,),
-  //               Text("GCash"),
-  //             ],
-  //           ),
-  //         ),
-  //         leading: Radio(
-  //           value: 'Gcash',
-  //           groupValue: onlinePayment,
-  //           onChanged: (value) {
-  //             setState(() {
-  //               onlinePayment = value;
-  //             });
-  //           },
-  //           activeColor: Color(0xfffb0d0d),
-  //         ),
-  //       ),
-  //       ListTile(
-  //         title: Container(
-  //           child: Row(
-  //             children: [
-  //               Container(
-  //                   margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-  //                   child: Image.asset("assets/paymaya.png", height: 25, width: 25,)
-  //               ),
-  //               Container(
-  //                   margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
-  //                   child: Text("Paymaya")
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         leading: Radio(
-  //           value: 'Paymaya',
-  //           groupValue: onlinePayment,
-  //           onChanged: (value) {
-  //             setState(() {
-  //               onlinePayment = value;
-  //             });
-  //           },
-  //           activeColor: Color(0xfffb0d0d),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -291,6 +359,9 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     GeoPoint pickupGeoPoint = GeoPoint(widget.pickupCoordinates.latitude, widget.pickupCoordinates.longitude);
     GeoPoint dropOffGeoPoint = GeoPoint(widget.dropOffCoordinates.latitude, widget.dropOffCoordinates.longitude);
 
+    final isLastStep = currentStep == getSteps(user.uid).length - 1;
+    final isFourthStep = currentStep == getSteps(user.uid).length - 2;
+
     return Scaffold(
         drawerEnableOpenDragGesture: false,
         endDrawerEnableOpenDragGesture: false,
@@ -299,30 +370,30 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
           actions: [
-            IconButton(icon: Icon(
-              Icons.help_outline,
-            ),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context){
-                      return AlertDialog(
-                        title: Text("Help"),
-                        content: Text('Sample Text Here'),
-                        actions: [
-                          TextButton(
-                            child: Text("OK"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    }
-                );
-              },
-              iconSize: 25,
-            ),
+            // IconButton(icon: Icon(
+            //   Icons.help_outline,
+            // ),
+            //   onPressed: () {
+            //     showDialog(
+            //         context: context,
+            //         builder: (BuildContext context){
+            //           return AlertDialog(
+            //             title: Text("Help"),
+            //             content: Text('Sample Text Here'),
+            //             actions: [
+            //               TextButton(
+            //                 child: Text("OK"),
+            //                 onPressed: () {
+            //                   Navigator.of(context).pop();
+            //                 },
+            //               ),
+            //             ],
+            //           );
+            //         }
+            //     );
+            //   },
+            //   iconSize: 25,
+            // ),
           ],
           flexibleSpace: Container(
             margin: EdgeInsets.only(top: 10),
@@ -353,71 +424,247 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                     ),
                   ],
                 ),
-                Container(
-                  margin: EdgeInsets.all(40),
-                  child: Form(
-                    key: locKey,
-                    child: Card(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                Stepper(
+                  type: StepperType.vertical,
+                  steps: getSteps(user.uid),
+                  currentStep: currentStep,
+                  physics: NeverScrollableScrollPhysics(),
+                  controlsBuilder: (context, ControlsDetails) {
+                    return Container(
+                      child: Row(
                         children: [
-                          SizedBox(height: 10),
-                          _buildItemDescription(),
-                          _buildSenderName(),
-                          _buildSenderContactNum(),
-                          _buildReceiverName(),
-                          _buildReceiverContactNum(),
-                          _buildWhoWillPay(),
-                          _buildSpecificInstructions(),
-                          _buildDropDown(),
-                          // paymentOption == 'Online Payment' ? _buildRadioPayment() : SizedBox(height: 5),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if(isLastStep){
+                                  if (formKeys[currentStep].currentState.validate()) {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: ReviewRequest(
+                                                customer: customer,
+                                                courier: courier,
+                                                pickupAddress: widget.pickupAddress,
+                                                pickupGeoPoint: pickupGeoPoint,
+                                                dropOffAddress: widget.dropOffAddress,
+                                                dropOffGeoPoint: dropOffGeoPoint,
+                                                itemDescription: itemDescription,
+                                                pickupPointPerson: pickupPointPerson ?? textPickupPointPerson.text,
+                                                pickupContactNum: pickupContactNum ?? textPickupContactNum.text,
+                                                dropOffPointPerson: dropoffPointPerson ?? textDropoffPointPerson.text,
+                                                dropOffContactNum: dropoffContactNum ?? textDropoffContactNum.text,
+                                                whoWillPay: whoWillPay,
+                                                specificInstructions: specificInstructions,
+                                                paymentOption: paymentOption,
+                                                deliveryFee: widget.deliveryFee),
+                                            type: PageTransitionType.bottomToTop
+                                        )
+                                    );
+                                  }
+                                }
+                                else {
+                                  if(formKeys[currentStep].currentState.validate()) {
+                                    setState(() => currentStep += 1);
+                                  }
+                                }
+                              },
+                              child: Text(isLastStep ? 'PROCEED' : 'NEXT'),
+                            ),
+                          ),
+                          const SizedBox(width: 12,),
+                          if(currentStep != 0)
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if(currentStep == 0){
+                                      return null;
+                                    }
+                                    else currentStep -= 1;
+                                  });
+                                  print(whoWillPay);
+                                },
+                                child: Text('BACK'),
+                              ),
+                            ),
                         ],
                       ),
-                      shadowColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-                ElevatedButton(
-                  child: Text(
-                    'Proceed',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                  style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                  onPressed: () async {
-                    if (locKey.currentState.validate()){
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                            child: ReviewRequest(
-                                customer: customer,
-                                courier: courier,
-                                pickupAddress: widget.pickupAddress,
-                                pickupGeoPoint: pickupGeoPoint,
-                                dropOffAddress: widget.dropOffAddress,
-                                dropOffGeoPoint: dropOffGeoPoint,
-                                itemDescription: itemDescription,
-                                pickupPointPerson: pickupPointPerson,
-                                pickupContactNum: pickupContactNum,
-                                dropOffPointPerson: dropoffPointPerson,
-                                dropOffContactNum: dropoffContactNum,
-                                whoWillPay: whoWillPay,
-                                specificInstructions: specificInstructions,
-                                paymentOption: paymentOption,
-                                deliveryFee: widget.deliveryFee),
-                            type: PageTransitionType.bottomToTop
-                        )
-                      );
-                    }
-                  }
-                ),
-                SizedBox(height: 50),
               ],
             ),
           ),
         )
     );
   }
+
+  List<Step> getSteps(String uid) => [
+    Step(
+      state: currentStep > 0 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 0,
+      title: Text('Item Description'),
+      content: Form(
+        key: formKeys[0],
+        child: Column(
+          children: [
+            _buildItemDescription(),
+          ],
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 1 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 1,
+      title: Text('Pick-up Point Person'),
+      content: Form(
+        key: formKeys[1],
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      side: customerIsPickUp ? BorderSide(color: Colors.red) : BorderSide(color: Colors.grey),
+                    ),
+                    onPressed: () async {
+                      String name = '';
+                      String num = '';
+
+                      await FirebaseFirestore.instance
+                          .collection('Customers')
+                          .doc(uid)
+                          .get()
+                          .then((DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists) {
+                          name = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']}";
+                          num = documentSnapshot['Contact No'];
+                        }
+                      });
+
+                      setState(() {
+                        textPickupPointPerson.text = name;
+                        textPickupContactNum.text = num;
+                        customerIsPickUp = true;
+                      });
+                    },
+                    child: Text('ME', style: TextStyle(color: customerIsPickUp ? Colors.red : Colors.grey)),
+                  ),
+                ),
+                const SizedBox(width: 12,),
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      side: !customerIsPickUp ? BorderSide(color: Colors.red) : BorderSide(color: Colors.grey),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        textPickupPointPerson.text = '';
+                        textPickupContactNum.text = '';
+                        customerIsPickUp = false;
+                      });
+                    },
+                    child: Text('OTHER', style: TextStyle(color: !customerIsPickUp ? Colors.red : Colors.grey)),
+                  ),
+                ),
+              ],
+            ),
+            _buildSenderName(),
+            _buildSenderContactNum(),
+          ],
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 2 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 2,
+      title: Text('Drop-off Point Person'),
+      content: Form(
+        key: formKeys[2],
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      side: customerIsDropOff ? BorderSide(color: Colors.red) : BorderSide(color: Colors.grey),
+                    ),
+                    onPressed: () async {
+                      String name = '';
+                      String num = '';
+
+                      await FirebaseFirestore.instance
+                          .collection('Customers')
+                          .doc(uid)
+                          .get()
+                          .then((DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists) {
+                          name = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']}";
+                          num = documentSnapshot['Contact No'];
+                        }
+                      });
+
+                      setState(() {
+                        textDropoffPointPerson.text = name;
+                        textDropoffContactNum.text = num;
+                        customerIsDropOff = true;
+                      });
+                    },
+                    child: Text('ME', style: TextStyle(color: customerIsDropOff ? Colors.red : Colors.grey)),
+                  ),
+                ),
+                const SizedBox(width: 12,),
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      side: !customerIsDropOff ? BorderSide(color: Colors.red) : BorderSide(color: Colors.grey),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        textDropoffPointPerson.text = '';
+                        textDropoffContactNum.text = '';
+                        customerIsDropOff = false;
+                      });
+                    },
+                    child: Text('OTHER', style: TextStyle(color: !customerIsDropOff ? Colors.red : Colors.grey)),
+                  ),
+                ),
+              ],
+            ),
+            _buildReceiverName(),
+            _buildReceiverContactNum(),
+          ],
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 3 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 3,
+      title: Text('Additional Information'),
+      content: Form(
+        key: formKeys[3],
+        child: Column(
+          children: [
+            _buildWhoWillPay(),
+            _buildSpecificInstructions(),
+          ],
+        ),
+      ),
+    ),
+    Step(
+      state: currentStep > 4 ? StepState.complete: StepState.indexed,
+      isActive: currentStep >= 4,
+      title: Text('Payment Option'),
+      content: Form(
+        key: formKeys[4],
+        child: Column(
+          children: [
+            _buildDropDown(),
+          ],
+        ),
+      ),
+    ),
+  ];
 }

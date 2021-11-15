@@ -267,31 +267,31 @@ class _ChatPageState extends State<ChatPage> {
             }
         ),
         actions: [
-          IconButton(icon: Icon(
-            Icons.help_outline,
-          ),
-            onPressed: (){
-
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return AlertDialog(
-                      title: Text("Help"),
-                      content: Text('Sample Text Here'),
-                      actions: [
-                        TextButton(
-                          child: Text("OK"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  }
-              );
-            },
-            iconSize: 25,
-          ),
+          // IconButton(icon: Icon(
+          //   Icons.help_outline,
+          // ),
+          //   onPressed: (){
+          //
+          //     showDialog(
+          //         context: context,
+          //         builder: (BuildContext context){
+          //           return AlertDialog(
+          //             title: Text("Help"),
+          //             content: Text('Sample Text Here'),
+          //             actions: [
+          //               TextButton(
+          //                 child: Text("OK"),
+          //                 onPressed: () {
+          //                   Navigator.of(context).pop();
+          //                 },
+          //               ),
+          //             ],
+          //           );
+          //         }
+          //     );
+          //   },
+          //   iconSize: 25,
+          // ),
         ],
         //title: Text("PROExpress"),
       ),

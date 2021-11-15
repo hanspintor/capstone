@@ -58,236 +58,243 @@ class _ReviewRequestState extends State<ReviewRequest> {
     User user = _auth.currentUser;
 
     print(widget.paymentOption);
-    return Scaffold(
-      drawerEnableOpenDragGesture: false,
-      endDrawerEnableOpenDragGesture: false,
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Color(0xfffb0d0d),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        return true;
+      },
+      child: Scaffold(
+        drawerEnableOpenDragGesture: false,
+        endDrawerEnableOpenDragGesture: false,
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Color(0xfffb0d0d),
+          ),
+          actions: [
+            // IconButton(icon: Icon(
+            //   Icons.help_outline,
+            // ),
+            //   onPressed: () {
+            //     showDialog(
+            //         context: context,
+            //         builder: (BuildContext context){
+            //           return AlertDialog(
+            //             title: Text("Help"),
+            //             content: Text('Sample Text Here'),
+            //             actions: [
+            //               TextButton(
+            //                 child: Text("OK"),
+            //                 onPressed: () {
+            //                   Navigator.of(context).pop();
+            //                 },
+            //               ),
+            //             ],
+            //           );
+            //         }
+            //     );
+            //   },
+            //   iconSize: 25,
+            // ),
+          ],
+          flexibleSpace: Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Image.asset(
+              "assets/PROExpress-logo.png",
+              height: 120,
+              width: 120,
+            ),
+          ),
+          //title: Text("PROExpress"),
         ),
-        actions: [
-          IconButton(icon: Icon(
-            Icons.help_outline,
-          ),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return AlertDialog(
-                      title: Text("Help"),
-                      content: Text('Sample Text Here'),
-                      actions: [
-                        TextButton(
-                          child: Text("OK"),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  }
-              );
-            },
-            iconSize: 25,
-          ),
-        ],
-        flexibleSpace: Container(
-          margin: EdgeInsets.only(top: 10),
-          child: Image.asset(
-            "assets/PROExpress-logo.png",
-            height: 120,
-            width: 120,
-          ),
-        ),
-        //title: Text("PROExpress"),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Column(
-              children: [
-                SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text("Review Request",
-                    style: TextStyle(
-                      fontSize: 25,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text("Review Request",
+                      style: TextStyle(
+                        fontSize: 25,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Card(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Icon(Icons.place_rounded),
-                        title: Text('Pickup Address'),
-                        subtitle: Text(widget.pickupAddress),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.location_searching_rounded),
-                        title: Text('Drop Off Address'),
-                        subtitle: Text(widget.dropOffAddress),
-                      ),
-                    ],
+                  SizedBox(height: 10),
+                  Card(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.place_rounded),
+                          title: Text('Pickup Address'),
+                          subtitle: Text(widget.pickupAddress),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.location_searching_rounded),
+                          title: Text('Drop Off Address'),
+                          subtitle: Text(widget.dropOffAddress),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                StreamBuilder<Courier>(
-                    stream: DatabaseService(uid: widget.courier.id).courierData,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        Courier chosenCourier = snapshot.data;
+                  StreamBuilder<Courier>(
+                      stream: DatabaseService(uid: widget.courier.id).courierData,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          Courier chosenCourier = snapshot.data;
 
-                        String courierDetails =
-                            "Name: ${chosenCourier.fName} ${chosenCourier.lName} "
-                            "\nVehicle Type: ${chosenCourier.vehicleType} "
-                            "\nDelivery Fee: ₱${widget.deliveryFee}";
+                          String courierDetails =
+                              "Name: ${chosenCourier.fName} ${chosenCourier.lName} "
+                              "\nVehicle Type: ${chosenCourier.vehicleType} "
+                              "\nDelivery Fee: ₱${widget.deliveryFee}";
 
-                        return Card(
-                          child: ListTile(
-                            leading: Icon(Icons.perm_contact_cal_outlined),
-                            title: Text('Chosen Courier'),
-                            subtitle: Text(courierDetails),
-                            isThreeLine: true,
-                          ),
-                        );
-                      } else {
-                        return Card(
-                          child: ListTile(
-                            leading: Icon(Icons.perm_contact_cal_outlined),
-                            title: Text('Chosen Courier'),
-                            subtitle: Text(""),
-                            isThreeLine: true,
-                          ),
-                        );
-                      }
-                    }
-                ),
-                Card(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Icon(Icons.description_rounded),
-                        title: Text('Item Description'),
-                        subtitle: Text(widget.itemDescription),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.person_rounded),
-                        title: Text('Pickup Point Person'),
-                        subtitle: Text("Name: ${widget.pickupPointPerson} \nContact Number: ${widget.pickupContactNum}"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.person_rounded),
-                        title: Text('Drop Off Point Person'),
-                        subtitle: Text("Name: ${widget.dropOffPointPerson} \nContact Number: ${widget.dropOffContactNum}"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.person_pin_circle_rounded),
-                        title: Text('Who Will Pay?'),
-                        subtitle: Text("Name: ${widget.whoWillPay}"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.workspaces_rounded),
-                        title: Text('Specific Instructions'),
-                        subtitle: Text("${widget.specificInstructions}"),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.payment_rounded),
-                        title: Text('Payment Option'),
-                        subtitle: Text("${widget.paymentOption}"),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton.icon(
-                  icon: _isLoading ? CircularProgressIndicator() : Icon(Icons.send),
-                  label: Text(
-                    _isLoading ? 'Sending...' : widget.paymentOption == 'Online Payment' ? 'Pay and Send Request' : 'Send Request',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                  style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-                  onPressed: _isLoading ? null : () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    if (widget.paymentOption == 'Online Payment') {
-                      int currentBalance = 0;
-
-                      await FirebaseFirestore.instance
-                          .collection('Customers')
-                          .doc(user.uid)
-                          .get()
-                          .then((DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists) {
-                          currentBalance = documentSnapshot['Wallet'];
+                          return Card(
+                            child: ListTile(
+                              leading: Icon(Icons.perm_contact_cal_outlined),
+                              title: Text('Chosen Courier'),
+                              subtitle: Text(courierDetails),
+                              isThreeLine: true,
+                            ),
+                          );
+                        } else {
+                          return Card(
+                            child: ListTile(
+                              leading: Icon(Icons.perm_contact_cal_outlined),
+                              title: Text('Chosen Courier'),
+                              subtitle: Text(""),
+                              isThreeLine: true,
+                            ),
+                          );
                         }
-                      });
-
-                      if (currentBalance >= widget.deliveryFee) {
-                        DatabaseService(uid: user.uid).updateCustomerWallet(currentBalance - widget.deliveryFee);
-                        paymentSuccess = true;
-                      } else {
-                        paymentSuccess = false;
                       }
-                    } else {
-                      paymentSuccess = true;
-                    }
-
-                    if (paymentSuccess) {
-                      await DatabaseService().updateDelivery(
-                        widget.customer,
-                        widget.courier,
-                        widget.pickupAddress,
-                        widget.pickupGeoPoint,
-                        widget.dropOffAddress,
-                        widget.dropOffGeoPoint,
-                        widget.itemDescription,
-                        widget.pickupPointPerson,
-                        widget.pickupContactNum,
-                        widget.dropOffPointPerson,
-                        widget.dropOffContactNum,
-                        widget.whoWillPay,
-                        widget.specificInstructions,
-                        widget.paymentOption,
-                        widget.deliveryFee,
-                        'Pending',
-                        'Pending',
-                        GeoPoint(13.621980880497976, 123.19477396693487),
-                        0,
-                        '',
-                        false,
-                        '',
-                        Timestamp.now(),
-                      );
-                      await FirebaseFirestore.instance
-                          .collection('Customers')
-                          .doc(widget.customer.id)
-                          .get()
-                          .then((DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists) {
-                          notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} requested a delivery";
-                        }
-                      });
-                      bool isSeen = false;
-                      bool popsOnce = true;
-                      await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier,
-                          Timestamp.now(), isSeen, popsOnce);
-                      Navigator.pushNamed(context, '/template');
-                      showToast('Your request has been sent.');
-                    } else {
+                  ),
+                  Card(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.description_rounded),
+                          title: Text('Item Description'),
+                          subtitle: Text(widget.itemDescription),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.person_rounded),
+                          title: Text('Pickup Point Person'),
+                          subtitle: Text("Name: ${widget.pickupPointPerson} \nContact Number: ${widget.pickupContactNum}"),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.person_rounded),
+                          title: Text('Drop Off Point Person'),
+                          subtitle: Text("Name: ${widget.dropOffPointPerson} \nContact Number: ${widget.dropOffContactNum}"),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.person_pin_circle_rounded),
+                          title: Text('Who Will Pay?'),
+                          subtitle: Text("${widget.whoWillPay}"),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.workspaces_rounded),
+                          title: Text('Specific Instructions'),
+                          subtitle: Text("${widget.specificInstructions}"),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.payment_rounded),
+                          title: Text('Payment Option'),
+                          subtitle: Text("${widget.paymentOption}"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    icon: _isLoading ? CircularProgressIndicator() : Icon(Icons.send),
+                    label: Text(
+                      _isLoading ? 'Sending...' : widget.paymentOption == 'Online Payment' ? 'Pay and Send Request' : 'Send Request',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                    onPressed: _isLoading ? null : () async {
                       setState(() {
-                        _isLoading = false;
+                        _isLoading = true;
                       });
-                      showToast('Insufficient wallet balance!');
-                    }
-                  },
-                ),
-                SizedBox(height: 20),
-              ],
+                      if (widget.paymentOption == 'Online Payment') {
+                        int currentBalance = 0;
+
+                        await FirebaseFirestore.instance
+                            .collection('Customers')
+                            .doc(user.uid)
+                            .get()
+                            .then((DocumentSnapshot documentSnapshot) {
+                          if (documentSnapshot.exists) {
+                            currentBalance = documentSnapshot['Wallet'];
+                          }
+                        });
+
+                        if (currentBalance >= widget.deliveryFee) {
+                          DatabaseService(uid: user.uid).updateCustomerWallet(currentBalance - widget.deliveryFee);
+                          paymentSuccess = true;
+                        } else {
+                          paymentSuccess = false;
+                        }
+                      } else {
+                        paymentSuccess = true;
+                      }
+
+                      if (paymentSuccess) {
+                        await DatabaseService().updateDelivery(
+                          widget.customer,
+                          widget.courier,
+                          widget.pickupAddress,
+                          widget.pickupGeoPoint,
+                          widget.dropOffAddress,
+                          widget.dropOffGeoPoint,
+                          widget.itemDescription,
+                          widget.pickupPointPerson,
+                          widget.pickupContactNum,
+                          widget.dropOffPointPerson,
+                          widget.dropOffContactNum,
+                          widget.whoWillPay,
+                          widget.specificInstructions,
+                          widget.paymentOption,
+                          widget.deliveryFee,
+                          'Pending',
+                          'Pending',
+                          GeoPoint(13.621980880497976, 123.19477396693487),
+                          0,
+                          '',
+                          false,
+                          '',
+                          Timestamp.now(),
+                        );
+                        await FirebaseFirestore.instance
+                            .collection('Customers')
+                            .doc(widget.customer.id)
+                            .get()
+                            .then((DocumentSnapshot documentSnapshot) {
+                          if (documentSnapshot.exists) {
+                            notifM = "${documentSnapshot['First Name']} ${documentSnapshot['Last Name']} requested a delivery";
+                          }
+                        });
+                        bool isSeen = false;
+                        bool popsOnce = true;
+                        await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier,
+                            Timestamp.now(), isSeen, popsOnce);
+                        Navigator.pushNamed(context, '/template');
+                        showToast('Your request has been sent.');
+                      } else {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        showToast('Insufficient wallet balance!');
+                      }
+                    },
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
