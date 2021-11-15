@@ -257,6 +257,12 @@ class _RequestTileState extends State<RequestTile> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               TextButton(
+                                child: Text('CHAT HISTORY'),
+                                onPressed: (){
+                                  Navigator.push(context, PageTransition(child: ChatPage(delivery: delivery), type: PageTransitionType.rightToLeftWithFade));
+                                },
+                              ),
+                              TextButton(
                                 child: Text('REPORT'),
                                 onPressed: delivery.isReported ==  true ? null : () async {
                                   await showDialog(

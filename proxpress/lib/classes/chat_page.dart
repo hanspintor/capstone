@@ -310,7 +310,7 @@ class _ChatPageState extends State<ChatPage> {
                   child: MessageListCombiner(isCustomer: isCustomer, scrollController: _scrollController),
                 ),
               ),
-              _buildMessageTextField(),
+              widget.delivery.deliveryStatus == 'Ongoing' ? _buildMessageTextField() : Container(),
             ]
         ),
       ),

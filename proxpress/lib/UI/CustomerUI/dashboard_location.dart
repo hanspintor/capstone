@@ -94,69 +94,69 @@ class _DashboardLocationState extends State<DashboardLocation>{
           return SingleChildScrollView(
             child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Stack(
+                    alignment: Alignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 50),
-                        child: Text("Welcome, ${customerData.fName}!",
-                          style: TextStyle(
-                            fontSize: 25,
-                          ),
+                      Text("Welcome, ${customerData.fName}!",
+                        style: TextStyle(
+                          fontSize: 25,
                         ),
                       ),
-                      IconButton(
-                        color: Colors.red,
-                        icon: Icon(Icons.help_outline,),
-                        iconSize: 25,
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context){
-                                return AlertDialog(
-                                  titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  title: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(0),
-                                        child: Container(
-                                          margin: EdgeInsets.all(0),
-                                          alignment: Alignment.topRight,
-                                          child: IconButton(
-                                            icon: const Icon(Icons.close_sharp),
-                                            color: Colors.redAccent,
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                          color: Colors.red,
+                          icon: Icon(Icons.help_outline,),
+                          iconSize: 25,
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context){
+                                  return AlertDialog(
+                                    titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    title: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(0),
+                                          child: Container(
+                                            margin: EdgeInsets.all(0),
+                                            alignment: Alignment.topRight,
+                                            child: IconButton(
+                                              icon: const Icon(Icons.close_sharp),
+                                              color: Colors.redAccent,
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(bottom: 15),
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(color: Colors.grey[500])
-                                            )
+                                        Container(
+                                          padding: EdgeInsets.only(bottom: 15),
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(color: Colors.grey[500])
+                                              )
+                                          ),
+                                          child: Center(
+                                              child: Text('Pinning the Locations')
+                                          ),
                                         ),
-                                        child: Center(
-                                            child: Text('Pinning the Locations')
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  content: Container(
-                                      width: double.maxFinite,
-                                      child: Text(
-                                        'There are two locations that we require from you: pick-up and drop-off location.\n\n'
-                                            'In case you don\'t know the exact location, just try to pin the location as near as possible, since our pricing depends on your given details.\n\n'
-                                            'Also, just give additional instructions to the courier if you don\'t know specifically where your desired location is.',
-                                        textAlign: TextAlign.justify,
-                                      )
-                                  ),
-                                );
-                              }
-                          );
-                        },
+                                      ],
+                                    ),
+                                    content: Container(
+                                        width: double.maxFinite,
+                                        child: Text(
+                                          'There are two locations that we require from you: pick-up and drop-off location.\n\n'
+                                              'In case you don\'t know the exact location, just try to pin the location as near as possible, since our pricing depends on your given details.\n\n'
+                                              'Also, just give additional instructions to the courier if you don\'t know specifically where your desired location is.',
+                                          textAlign: TextAlign.justify,
+                                        )
+                                    ),
+                                  );
+                                }
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),
