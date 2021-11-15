@@ -15,6 +15,7 @@ import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/classes/courier_classes/notif_counter_courier.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
+import 'package:proxpress/classes/view_delivery_details.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -496,79 +497,24 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                             labelStyle: TextStyle(color: Colors.white),
                                             label: 'Delivery Info',
                                             onTap: () {
-                                              showMaterialModalBottomSheet(
-                                                backgroundColor: Colors.white,
-                                                context: context,
-                                                builder: (context) => SingleChildScrollView(
-                                                  controller: ModalScrollController.of(context),
-                                                  child: Container(
-                                                    height: 500,
-                                                    child: Card(
-                                                      child: Column(
-                                                        children: [
-                                                          ListTile(
-                                                            leading: Icon(Icons.info_rounded, color: Colors.black,),
-                                                            title: Text("Delivery Information",
-                                                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                            ),
-                                                            subtitle: Text.rich(
-                                                              TextSpan(children: [
-                                                                TextSpan(text: '\n'),
-                                                                TextSpan(text: "Pick Up Address: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "${delivery.pickupAddress}\n", style: Theme.of(context).textTheme.bodyText2),
-                                                                TextSpan(text: "Drop Off Address: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "${delivery.dropOffAddress}\n", style: Theme.of(context).textTheme.bodyText2),
-                                                                TextSpan(text: '\n'),
-                                                                TextSpan(text: "Payment Method: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "${delivery.paymentOption}\n", style: Theme.of(context).textTheme.bodyText2),
-                                                                TextSpan(text: "Delivery Fee: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "\₱${delivery.deliveryFee}\n", style: Theme.of(context).textTheme.bodyText2),
-                                                              ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          ListTile(
-                                                            leading: Icon(Icons.phone_rounded,color: Colors.black,),
-                                                            title: Text("Contact Information",
-                                                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                            ),
-                                                            subtitle: Text.rich(
-                                                              TextSpan(children: [
-                                                                TextSpan(text: "Pickup Point Person: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "${delivery.pickupPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "${delivery.pickupContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                TextSpan(text: "\n"),
-                                                                TextSpan(text: "Drop Off Point Person: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "${delivery.dropoffPointPerson}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                TextSpan(text: "Contact Number: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                TextSpan(text: "${delivery.dropoffContactNum}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                              ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          ListTile(
-                                                            leading: Icon(Icons.description,color: Colors.black,),
-                                                            title: Text("Additional Information", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                                            subtitle: Container(
-                                                              padding: EdgeInsets.only(top: 5),
-                                                              child: Text.rich(
-                                                                TextSpan(children: [
-                                                                  TextSpan(text: "Item Description: ", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.itemDescription}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                  TextSpan(text: "Specific Instructions: \n", style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: "${delivery.specificInstructions}\n",style: Theme.of(context).textTheme.bodyText2),
-                                                                ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
+                                              Navigator.push(context, PageTransition(child: DeliveryDetails(
+                                                customer: delivery.customerRef,
+                                                courier: delivery.courierRef,
+                                                pickupAddress: delivery.pickupAddress,
+                                                pickupGeoPoint: delivery.pickupCoordinates,
+                                                dropOffAddress: delivery.dropOffAddress,
+                                                dropOffGeoPoint: delivery.dropOffCoordinates,
+                                                itemDescription: delivery.itemDescription,
+                                                pickupPointPerson: delivery.pickupPointPerson ,
+                                                pickupContactNum: delivery.pickupContactNum ,
+                                                dropOffPointPerson: delivery.dropoffPointPerson ,
+                                                dropOffContactNum: delivery.dropoffContactNum ,
+                                                whoWillPay: delivery.whoWillPay ,
+                                                specificInstructions: delivery.specificInstructions ,
+                                                paymentOption: delivery.paymentOption ,
+                                                deliveryFee: delivery.deliveryFee ,
+                                              ),
+                                                  type: PageTransitionType.rightToLeftWithFade));
                                             }
                                         ),
                                       ],
