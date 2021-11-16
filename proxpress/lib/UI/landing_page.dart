@@ -21,79 +21,81 @@ class _LandingPageState extends State<LandingPage>{
       child: Scaffold(
         backgroundColor: Colors.white,
           body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Image.asset(
-                        "assets/PROExpress-logo.png",
-                        height: 150,
-                        width: 300,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Image.asset(
+                          "assets/PROExpress-logo.png",
+                          height: 150,
+                          width: 300,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30, bottom: 30),
-                      child: Lottie.asset('assets/landing.json'),
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 15,
-                        width: MediaQuery.of(context).size.width / 1.1,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            showMaterialModalBottomSheet(
-                              backgroundColor: Colors.red[700],
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 30, bottom: 30),
+                        child: Lottie.asset('assets/landing.json'),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 15,
+                          width: MediaQuery.of(context).size.width / 1.1,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              showMaterialModalBottomSheet(
+                                backgroundColor: Colors.red[700],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
                                 ),
+                                context: context,
+                                builder: (context) => Container(height: 130, child: _userChoice()),
+                              );
+                            },
+                            child: Text(
+                              "GET STARTED",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18
                               ),
-                              context: context,
-                              builder: (context) => Container(height: 130, child: _userChoice()),
-                            );
-                          },
-                          child: Text(
-                            "GET STARTED",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Color(0xfffb0d0d),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xfffb0d0d),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/loginScreen');
+                          },
+                          child: Text(
+                            "Already have an account?",
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/loginScreen');
-                        },
-                        child: Text(
-                          "Already have an account?",
-                          style: TextStyle(
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           )
       ),
