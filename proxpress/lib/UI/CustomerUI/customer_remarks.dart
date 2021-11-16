@@ -449,10 +449,10 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                                                 dropOffAddress: widget.dropOffAddress,
                                                 dropOffGeoPoint: dropOffGeoPoint,
                                                 itemDescription: itemDescription,
-                                                pickupPointPerson: pickupPointPerson ?? textPickupPointPerson.text,
-                                                pickupContactNum: pickupContactNum ?? textPickupContactNum.text,
-                                                dropOffPointPerson: dropoffPointPerson ?? textDropoffPointPerson.text,
-                                                dropOffContactNum: dropoffContactNum ?? textDropoffContactNum.text,
+                                                pickupPointPerson: pickupPointPerson,
+                                                pickupContactNum: pickupContactNum,
+                                                dropOffPointPerson: dropoffPointPerson,
+                                                dropOffContactNum: dropoffContactNum,
                                                 whoWillPay: whoWillPay,
                                                 specificInstructions: specificInstructions,
                                                 paymentOption: paymentOption,
@@ -546,6 +546,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textPickupPointPerson.text = name;
                         textPickupContactNum.text = num;
+                        pickupPointPerson = name;
+                        pickupContactNum = num;
                         customerIsPickUp = true;
                       });
                     },
@@ -562,6 +564,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textPickupPointPerson.text = '';
                         textPickupContactNum.text = '';
+                        dropoffPointPerson = '';
+                        dropoffContactNum = '';
                         customerIsPickUp = false;
                       });
                     },
@@ -609,6 +613,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textDropoffPointPerson.text = name;
                         textDropoffContactNum.text = num;
+                        dropoffPointPerson = name;
+                        dropoffContactNum = num;
                         customerIsDropOff = true;
                       });
                     },
@@ -625,6 +631,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textDropoffPointPerson.text = '';
                         textDropoffContactNum.text = '';
+                        dropoffPointPerson = '';
+                        dropoffContactNum = '';
                         customerIsDropOff = false;
                       });
                     },
