@@ -70,128 +70,133 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? UserLoading() : Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50),
-                child: Image.asset(
-                  "assets/PROExpress-logo.png",
-                  height: 160,
-                  width: 300,
+    return loading ? UserLoading() : WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 50),
+                  child: Image.asset(
+                    "assets/PROExpress-logo.png",
+                    height: 160,
+                    width: 300,
+                  ),
                 ),
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
-                      child: _buildUsername(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
-                      child: _buildPassword(),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20,),
-              Visibility(
-                  visible: visibleE,
-                  child: Text(
-                    error,
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-
-                  )
-              ),
-              SizedBox(height: 5,),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 15,
-                  width: MediaQuery.of(context).size.width / 1.35,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()){
-                        setState(() => loading = true); // loading = true;
-                        dynamic result = await _auth.SignInCustomer(email, password);
-                        if(result == null){
-                          setState((){
-                            error = 'Invalid email or password';
-                            loading = false;
-                            visibleE = true;
-                          });
-                        }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xfffb0d0d),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
-
-                    child: Text(
-                      "LOGIN",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: _buildUsername(),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: _buildPassword(),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context, builder: (BuildContext context) => AlertDialog(
-                      content: (_alertmessage()),
+                SizedBox(height: 20,),
+                Visibility(
+                    visible: visibleE,
+                    child: Text(
+                      error,
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+
                     )
-                    );
-                  },
-                  child: Text(
-                    "Forgot Password?",
-                    style: TextStyle(
-                      color: Color(0xffFD3F40),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: InkWell(
-                  onTap: () {
-                    showMaterialModalBottomSheet(
-                      backgroundColor: Colors.red[700],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
+                SizedBox(height: 5,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 15,
+                    width: MediaQuery.of(context).size.width / 1.35,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()){
+                          setState(() => loading = true); // loading = true;
+                          dynamic result = await _auth.SignInCustomer(email, password);
+                          if(result == null){
+                            setState((){
+                              error = 'Invalid email or password';
+                              loading = false;
+                              visibleE = true;
+                            });
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xfffb0d0d),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+
+                      child: Text(
+                        "LOGIN",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18
                         ),
                       ),
-                      context: context,
-                      builder: (context) => Container(height: 130, child: _userChoice()),
-                    );
-                  },
-                  child: Text(
-                    "Don't have an account?",
-                    style: TextStyle(
-                      color: Color(0xffFD3F40),
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                          context: context, builder: (BuildContext context) => AlertDialog(
+                        content: (_alertmessage()),
+                      )
+                      );
+                    },
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                        color: Color(0xffFD3F40),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: InkWell(
+                    onTap: () {
+                      showMaterialModalBottomSheet(
+                        backgroundColor: Colors.red[700],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        context: context,
+                        builder: (context) => Container(height: 130, child: _userChoice()),
+                      );
+                    },
+                    child: Text(
+                      "Don't have an account?",
+                      style: TextStyle(
+                        color: Color(0xffFD3F40),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
