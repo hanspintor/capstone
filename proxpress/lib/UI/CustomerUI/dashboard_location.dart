@@ -238,7 +238,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                               showToast("Your phone number is now verified");
                                               Future.delayed(const Duration(seconds: 3), () {
                                                 setState(() {
-                                                  Navigator.pushNamed(context, '/template1');
+                                                  Navigator.pushNamed(context, '/template');
                                                 });
                                               });
 
