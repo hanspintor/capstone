@@ -163,7 +163,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   ),
                 ),
                 onPressed: driversLicenseFrontFileName != 'No File Selected' || driversLicenseFront != null ? null : () async{
-                  final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                  final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                   final path = result.files.single.path;
                   setState(() {
                     driversLicenseFront = File(path);
@@ -190,7 +190,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   ),
                 ),
                 onPressed: driversLicenseBackFileName != 'No File Selected' || driversLicenseBack != null ? null : () async{
-                  final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                  final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                   final path = result.files.single.path;
                   setState(() {
                     driversLicenseBack = File(path);
@@ -217,7 +217,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   ),
                 ),
                 onPressed: nbiClearancePhotoFileName != 'No File Selected' || nbiClearancePhoto != null ? null : () async{
-                  final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                  final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                   final path = result.files.single.path;
                   setState(() {
                     nbiClearancePhoto = File(path);
@@ -245,7 +245,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   ),
                 ),
                 onPressed: vehicleRegistrationORFileName != 'No File Selected' || vehicleRegistrationOR != null ? null : () async{
-                  final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                  final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                   final path = result.files.single.path;
                   setState(() {
                     vehicleRegistrationOR = File(path);
@@ -273,7 +273,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   ),
                 ),
                 onPressed: vehicleRegistrationCRFileName != 'No File Selected' || vehicleRegistrationCR != null ? null : () async{
-                  final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                  final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                   final path = result.files.single.path;
                   setState(() {
                     vehicleRegistrationCR = File(path);
@@ -304,7 +304,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   ),
                 ),
                 onPressed: vehiclePhotoFileName != 'No File Selected' || vehiclePhoto != null ? null : () async{
-                  final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                  final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                   final path = result.files.single.path;
                   setState(() {
                     vehiclePhoto = File(path);

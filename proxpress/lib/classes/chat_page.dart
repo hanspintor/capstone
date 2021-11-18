@@ -94,7 +94,7 @@ class _ChatPageState extends State<ChatPage> {
 
 
                       String datetime = DateTime.now().toString();
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                       final pathProfiePicUploaded = result.files.single.path;
                       setState(() {
                         profilePicture = File(pathProfiePicUploaded);

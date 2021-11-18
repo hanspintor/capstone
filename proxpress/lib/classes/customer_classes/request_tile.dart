@@ -487,7 +487,7 @@ class _RequestTileState extends State<RequestTile> {
                                                           ),
                                                           onPressed: reportAttachmentFileName != 'No File Selected' || reportAttachment != null ? null : () async{
                                                             String datetime = DateTime.now().toString();
-                                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                                                             final path = result.files.single.path;
                                                             setState(() {
                                                               reportAttachment = File(path);
