@@ -256,6 +256,47 @@ class _RequestTileState extends State<RequestTile> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
+                              StreamBuilder<Customer>(
+                                  stream: DatabaseService(uid: delivery.customerRef.id).customerData,
+                                  builder: (context, snapshot) {
+                                    if(snapshot.hasData){
+                                      Customer customerData = snapshot.data;
+
+                                      if (customerData.courier_ref != {}) {
+                                        localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
+                                      } else {
+                                        localAddMap = {};
+                                      }
+
+                                      localAddMap = {'Courier_Ref${localMap.length}' : delivery.courierRef};
+
+                                      localMap.forEach((key, value){
+                                        if (value == delivery.courierRef) {
+                                          isFavorite = true;
+                                        }
+                                      });
+
+                                      return Padding(
+                                        padding: const EdgeInsets.only(right: 60),
+                                        child: Container(
+                                          child:  FavoriteButton(
+                                            isFavorite: isFavorite,
+                                            iconSize: 40,
+                                            valueChanged: (_isFavorite) {
+                                              isFavorite = _isFavorite;
+
+                                              if (isFavorite) {
+                                                localMap.addAll(localAddMap);
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    }else {
+                                      return Container();
+                                    }
+                                  }
+                              ),
                               TextButton(
                                 child: Text('CHAT HISTORY'),
                                 onPressed: (){
@@ -868,56 +909,16 @@ class _RequestTileState extends State<RequestTile> {
             title: Row(
               children: [
                 Text('How\'s My Service?'),
-                StreamBuilder<Customer>(
-                    stream: DatabaseService(uid: delivery.customerRef.id).customerData,
-                    builder: (context, snapshot) {
-                      if(snapshot.hasData){
-                        Customer customerData = snapshot.data;
-
-                        if (customerData.courier_ref != {}) {
-                          localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
-                        } else {
-                          localAddMap = {};
-                        }
-
-                        localAddMap = {'Courier_Ref${localMap.length}' : delivery.courierRef};
-
-                        localMap.forEach((key, value){
-                          if (value == delivery.courierRef) {
-                            isFavorite = true;
-                          }
-                        });
-
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 170),
-                          child: Container(
-                            child:  FavoriteButton(
-                              isFavorite: isFavorite,
-                              iconSize: 30,
-                              valueChanged: (_isFavorite) {
-                                isFavorite = _isFavorite;
-
-                                if (isFavorite) {
-                                  localMap.addAll(localAddMap);
-                                }
-                              },
-                            ),
-                          ),
-                        );
-                      }else {
-                        return Container();
-                      }
-                    }
-                ),
               ],
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(height: 10,),
                 RatingBar.builder(
                   minRating: 1,
-                  itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                  itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber,),
                   updateOnDrag: true,
                   onRatingUpdate: (rating) => setState((){
                     this.rating = rating;
@@ -927,32 +928,32 @@ class _RequestTileState extends State<RequestTile> {
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(height: 10),
+                TextFormField(
+                  maxLines: 2,
+                  maxLength: 200,
+                  decoration: InputDecoration(
+                    hintText: 'Leave a Feedback',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  onChanged: (val) => setState(() => feedback = val),
+                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: TextFormField(
-                    maxLines: 2,
-                    maxLength: 200,
-                    decoration: InputDecoration(
-                      hintText: 'Leave a Feedback',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.multiline,
-                    onChanged: (val) => setState(() => feedback = val),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                      child: Text('OK'),
-                      onPressed: () async{
-                        await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
-                        if (isFavorite) {
-                          localMap.addAll(localAddMap);
-                          DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: TextButton(
+                        child: Text('OK'),
+                        onPressed: () async{
+                          await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
+                          if (isFavorite) {
+                            localMap.addAll(localAddMap);
+                            DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
+                          }
+                          Navigator.pop(context);
+                          showToast('Feedback Sent');
                         }
-                        Navigator.pop(context);
-                        showToast('Feedback Sent');
-                      }
+                    ),
                   ),
                 ),
               ],
