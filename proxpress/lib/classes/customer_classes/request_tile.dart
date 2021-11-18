@@ -287,6 +287,7 @@ class _RequestTileState extends State<RequestTile> {
 
                                               if (isFavorite) {
                                                 localMap.addAll(localAddMap);
+                                                DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
                                               }
                                             },
                                           ),
@@ -946,10 +947,6 @@ class _RequestTileState extends State<RequestTile> {
                         child: Text('OK'),
                         onPressed: () async{
                           await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
-                          if (isFavorite) {
-                            localMap.addAll(localAddMap);
-                            DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
-                          }
                           Navigator.pop(context);
                           showToast('Feedback Sent');
                         }
