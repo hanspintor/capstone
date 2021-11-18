@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 import 'package:path/path.dart' as Path;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -253,8 +254,7 @@ class _RequestTileState extends State<RequestTile> {
                             color: Colors.grey,
                             thickness: .5,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                          Wrap(
                             children: <Widget>[
                               StreamBuilder<Customer>(
                                   stream: DatabaseService(uid: delivery.customerRef.id).customerData,
@@ -281,7 +281,7 @@ class _RequestTileState extends State<RequestTile> {
                                         child: Container(
                                           child:  FavoriteButton(
                                             isFavorite: isFavorite,
-                                            iconSize: 40,
+                                            iconSize: 50,
                                             valueChanged: (_isFavorite) {
                                               isFavorite = _isFavorite;
 
@@ -293,6 +293,7 @@ class _RequestTileState extends State<RequestTile> {
                                           ),
                                         ),
                                       );
+
                                     }else {
                                       return Container();
                                     }

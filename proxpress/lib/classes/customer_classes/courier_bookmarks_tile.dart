@@ -219,8 +219,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                               color: Colors.grey,
                                               thickness: .5,
                                             ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                            Wrap(
                                               children: [
                                                 Padding(
                                                   padding: const EdgeInsets.only(right: 100),
