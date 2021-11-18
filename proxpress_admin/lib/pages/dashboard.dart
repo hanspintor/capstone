@@ -165,7 +165,6 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 type: PlutoColumnType.text(),
                 renderer: (rendererContext) {
                   List<String> images = rendererContext.cell.value.split(' ');
-
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,

@@ -170,6 +170,41 @@ class _ReportsPageState extends State<ReportsPage> {
                 field: 'time_reported',
                 type: PlutoColumnType.time(),
               ),
+              PlutoColumn(
+                enableEditingMode: false,
+                title: 'Attachment',
+                field: 'attachment',
+                type: PlutoColumnType.text(),
+                renderer: (rendererContext){
+                  return InkWell(
+                    child: Text('Attachment', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,),),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => StatefulBuilder(
+                            builder: (context, setState){
+                              return AlertDialog(
+                                  content: Container(
+                                    height: MediaQuery.of(context).size.height/.1,
+                                    width: MediaQuery.of(context).size.width/.1,
+                                    child: Image.network(rendererContext.cell.value),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text("OK"),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ]
+                              );
+                            },
+                          )
+                      );
+                    },
+                  );
+                }
+              ),
             ];
 
             List<DocumentReference> couriers = [];
@@ -196,7 +231,8 @@ class _ReportsPageState extends State<ReportsPage> {
                         'customer_name': PlutoCell(value: combinedNames[0][index]),
                         'courier_name': PlutoCell(value: combinedNames[1][index]),
                         'complaint': PlutoCell(value: reports[index].reportMessage),
-                        'time_reported': PlutoCell(value: DateFormat.yMMMMd('en_US').format(reports[index].time.toDate())),
+                        'time_reported': PlutoCell(value: DateFormat.yMd().add_jm().format(reports[index].time.toDate())),
+                        'attachment' : PlutoCell(value: reports[index].reportURL),
                       },
                     );
                   });
@@ -206,12 +242,6 @@ class _ReportsPageState extends State<ReportsPage> {
                     child: PlutoGrid(
                         columns: columns,
                         rows: rows,
-                        // onChanged: (PlutoGridOnChangedEvent event) {
-                        //   //print(event);
-                        //   // setState(() {
-                        //   //   event.value
-                        //   // });
-                        // },
                         onLoaded: (PlutoGridOnLoadedEvent event) {
                           //print(event);
                         },
