@@ -116,6 +116,11 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                         zoomLevel = 16 - log(scale) / log(2);
                       }
                       zoomLevel = num.parse(zoomLevel.toStringAsFixed(2));
+                      if (zoomLevel < 2) {
+                        zoomLevel = 2;
+                      } else if (zoomLevel > 19) {
+                        zoomLevel = 19;
+                      }
                       return zoomLevel;
                     }
 
