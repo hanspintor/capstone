@@ -295,8 +295,30 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
 
                             });
                           }: () async {
-                            await DatabaseService(uid: couriers[renderContext.rowIdx].uid).approveCourier(true);
-                            Navigator.pushNamed(context, '/dashboard');
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => StatefulBuilder(
+                                  builder: (context, setState){
+                                    return AlertDialog(
+                                        content: Text('Are you sure you want to proceed?'),
+                                        actions: [
+                                          ElevatedButton(
+                                            child: Text("YES"),
+                                            onPressed: () async {
+                                              await DatabaseService(uid: couriers[renderContext.rowIdx].uid).approveCourier(true);
+                                              Navigator.pushNamed(context, '/dashboard');
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text("NO"),
+                                            onPressed: () async {
+                                              Navigator.pushNamed(context, '/dashboard');
+                                            },
+                                          ),
+                                        ]);
+                                  },
+                                )
+                            );
                             },
                       ),
                       !approved ? IconButton(
@@ -419,6 +441,30 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   );
                 }
               ),
+              PlutoColumn(
+                enableEditingMode: true,
+                title: 'Status',
+                field: 'status',
+                type: PlutoColumnType.text(),
+                renderer: (renderContext){
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Column(
+                        children: [
+                          if(renderContext.cell.value == true)...[
+                            Text('Accepted', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),),
+                          ]
+                          else ...[
+                            Text('Account Disabled', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+                          ]
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              ),
             ];
 
             List<PlutoRow> rows = List.generate(couriers.length, (index) {
@@ -437,7 +483,8 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   'vehicle_type': PlutoCell(value: couriers[index].vehicleType),
                   'vehicle_color': PlutoCell(value: couriers[index].vehicleColor),
                   'credentials': PlutoCell(value: credentials,),
-                  'commands' : PlutoCell(value: couriers[index].approved)
+                  'commands' : PlutoCell(value: couriers[index].approved),
+                  'status' : PlutoCell(value: couriers[index].approved)
                 },
               );
             });

@@ -138,16 +138,32 @@ class _CashOutsState extends State<CashOuts> {
                           TextButton(
                             child: Text('Cash-out'),
                             onPressed: () async {
-                              await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateRequestCashOut(0,false);
-                              Navigator.pushNamed(context, '/cashouts');
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => StatefulBuilder(
+                                    builder: (context, setState){
+                                      return AlertDialog(
+                                          content: Text('Are you sure you want to proceed?'),
+                                          actions: [
+                                            ElevatedButton(
+                                              child: Text("YES"),
+                                              onPressed: () async {
+                                                await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateRequestCashOut(0,false);
+                                                Navigator.pushNamed(context, '/cashouts');
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: Text("NO"),
+                                              onPressed: () async {
+                                                Navigator.pushNamed(context, '/cashouts');
+                                              },
+                                            ),
+                                          ]);
+                                    },
+                                  )
+                              );
                             },
                           ),
-                          // IconButton(
-                          //     onPressed: (){
-                          //
-                          //     },
-                          //     icon: Icon(Icons.check_circle_rounded, color: Colors.green)
-                          // ),
                         ],
                       );
                     }
