@@ -185,6 +185,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                           itemCount: 6,
                                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                                             itemBuilder: (context, index){
+                                            print(images[index]);
                                               return Column(
                                                 children: [
                                                   Container(
