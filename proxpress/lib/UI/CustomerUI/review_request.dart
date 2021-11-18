@@ -2,8 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:proxpress/UI/CustomerUI/top_up_page.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/services/database.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ReviewRequest extends StatefulWidget {
   final DocumentReference customer;
@@ -283,6 +288,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         _isLoading = false;
                       });
                       showToast('Insufficient wallet balance!');
+                      topUp();
                     }
                   },
                 ),
@@ -298,4 +304,58 @@ class _ReviewRequestState extends State<ReviewRequest> {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
+
+  Future topUp(){
+    return showMaterialModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (context) => Container(
+        height: 250,
+        child: Padding(
+          padding: const EdgeInsets.all(50),
+          child: Container(
+            child: StreamBuilder<Customer>(
+                stream: DatabaseService(uid: widget.customer.id).customerData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    Customer customer = snapshot.data;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Balance', style: TextStyle(color: Colors.grey),),
+                        Text('\₱${customer.wallet}', style: TextStyle(fontSize: 40),), // ${customer.wallet}
+                        ElevatedButton(
+                          onPressed: () async {
+                            dynamic result = await Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: TopUpPage(),
+                                    type: PageTransitionType.bottomToTop
+                                )
+                            );
+
+                            if (result != null) {
+                              // add value to customer wallet
+                              DatabaseService(uid: widget.customer.id).updateCustomerWallet(customer.wallet + result);
+                            }
+                          },
+                          child: Text('+ Top-up'),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
+                }
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

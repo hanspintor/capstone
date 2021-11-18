@@ -93,6 +93,7 @@ class DatabaseService {
         reportTo: (doc.data() as dynamic) ['Report To'] ?? '',
         reportMessage: (doc.data() as dynamic) ['Report Message'] ?? '',
         time: (doc.data() as dynamic) ['Time Reported'] ?? '',
+        reportURL: (doc.data() as dynamic) ['Report Url'] ?? '',
 
       );
     }).toList();
