@@ -108,7 +108,6 @@ class DatabaseService {
         .update({
       'Bookmarks': reference
     }).then((_) {
-      print("success!");
     });
   }
 
@@ -118,7 +117,6 @@ class DatabaseService {
         .update({
       'Wallet': wallet
     }).then((_) {
-      print("success!");
     });
   }
 

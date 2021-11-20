@@ -10,7 +10,6 @@ class AuthService {
   FileStorage customerStorage = FileStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
   Future ResetPassword(String email) async {
     return _auth.sendPasswordResetEmail(email: email);
   }
@@ -24,31 +23,25 @@ class AuthService {
       UserCredential result ;
       if(temp == "09"){
         String contactNo = "+63" + email.substring(1);
-        print(contactNo);
         ConfirmationResult confirmationResult = await _auth.signInWithPhoneNumber(contactNo, RecaptchaVerifier(
           container: 'recaptcha',
           size: RecaptchaVerifierSize.compact,
           theme: RecaptchaVerifierTheme.dark,
         ));
 
-
       } else{
         result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
       }
 
-
       User user = result.user;
       await DatabaseService(uid: user.uid).AuthupdateCustomerPassword(password);
       await DatabaseService(uid: user.uid).AuthupdateCourierPassword(password);
-      print(user.uid);
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
-
 
   // Creates user obj based on FirebaseUser
   TheUser _userFromFirebaseUser(User user) {
@@ -69,7 +62,6 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-
       // FirebaseUser before
       User user = result.user;
       //await FileStorage(uid: user.uid);
@@ -87,7 +79,6 @@ class AuthService {
           wallet);
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -118,11 +109,9 @@ class AuthService {
           wallet);
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
-
 
   // Sign Up email and password for Courier
   Future SignUpCourier(String email, String password, String Fname,
@@ -171,7 +160,6 @@ class AuthService {
       );
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -181,7 +169,6 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -197,7 +184,6 @@ class AuthService {
           .reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -212,11 +198,9 @@ class AuthService {
           .reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
-      print(e);
       return false;
     }
   }
-
 
   //validates the password of the courier
   Future<bool> validateCourierPassword(String password) async {
@@ -229,7 +213,6 @@ class AuthService {
           .reauthenticateWithCredential(authCredentials);
       return authResult.user != null;
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -263,8 +246,6 @@ class AuthService {
           (value) => message = 'Success',
     ).catchError((onError) => message = 'error');
   }
-// Future<void> uploadProfilePicture(File image) async{
-//   customer.avatarUrl = await customerStorage.uploadFile(image);
-// }
+
 }
 

@@ -19,6 +19,7 @@ class FirestoreServicePackage<T> {
     if(query.length != 0){
       query = query[0].toUpperCase() + query.substring(1);
     }
+
     return collectionReference
         .where(searchBy, isGreaterThanOrEqualTo: query)
         .where(searchBy, isLessThan: query + 'z')
