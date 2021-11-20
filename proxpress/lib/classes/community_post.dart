@@ -64,7 +64,6 @@ class _CommunityPostState extends State<CommunityPost> {
                 },
               ),
               border: OutlineInputBorder(
-                //borderSide: BorderSide(width: 0),
                 gapPadding: 10,
               ),
             ),

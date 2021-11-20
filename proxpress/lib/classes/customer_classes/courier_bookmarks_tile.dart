@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,7 +12,6 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CourierBookmarkTile extends StatefulWidget {
@@ -277,7 +275,6 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                 TextButton(
                                                   child: const Text('PIN LOCATION'),
                                                   onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
-                                                    print("check ${widget.appear}");
                                                     await showMaterialModalBottomSheet(
                                                       context: context,
                                                       builder: (context) => Container(
@@ -298,17 +295,11 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                       LocalDataBookmark localDataBookmark = value;
                                                       if(value != null){
                                                         show = localDataBookmark.appear;
-                                                        print("Outside then: ${show}");
                                                         tempD = localDataBookmark.distance;
-                                                        print("Outside then: ${tempD}");
                                                         tempPA = localDataBookmark.pickupAddress;
-                                                        print("Outside then: ${tempPA}");
                                                         tempPC = localDataBookmark.pickupCoordinates;
-                                                        print("Outside then: ${tempPC}");
                                                         tempDA = localDataBookmark.dropOffAddress;
-                                                        print("Outside then: ${tempDA}");
                                                         tempDC = localDataBookmark.dropOffCoordinates;
-                                                        print("Outside then: ${tempDC}");
                                                       }
                                                     });
 

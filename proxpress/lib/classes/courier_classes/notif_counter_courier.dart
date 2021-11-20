@@ -27,11 +27,9 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
 
-
   @override
   void initState(){
     super.initState();
-
     tz.initializeTimeZones();
   }
 
@@ -43,14 +41,12 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
     int flag = 0;
     int cont = 0;
 
-
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
     Stream<List<Notifications>> notifList = FirebaseFirestore.instance
         .collection('Notifications')
         .where('Sent To', isEqualTo: courier)
         .snapshots()
         .map(DatabaseService().notifListFromSnapshot);
-
 
     return StreamBuilder<List<Notifications>>(
       stream: notifList,
@@ -61,7 +57,6 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
          String title = "";
 
          for(int x = 0; x<n.length; x++){
-           print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
            if(n[x].seen == false){
              viewable = true;
              break;
@@ -80,7 +75,6 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
                DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
              }
              flag++;
-
            }
            cont = flag;
          }
@@ -95,11 +89,9 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
                icon: Icon(Icons.notifications_none_rounded),
                onPressed: !widget.approved || !user.emailVerified && user.phoneNumber == null ? null : () async{
                  _openEndDrawer();
-
                  n.forEach((element) async {
                    await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
                  });
-
                },
                iconSize: 25,
              ),
@@ -133,7 +125,6 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
        }else{
          return Container();
        }
-
       }
     );
   }

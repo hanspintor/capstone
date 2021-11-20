@@ -90,7 +90,6 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.limitOfRetrievedData);
     return Column(
       children: [
         Row(
@@ -139,7 +138,6 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
   void updateSearchQuery(String newQuery) {
     setState(() {
       searchQuery = newQuery;
-      print(searchQuery);
     });
   }
 

@@ -57,7 +57,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           String title = "";
 
           for(int x = 0; x<n.length; x++){
-            print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
             if(n[x].seen == false){
               viewable = true;
               break;
@@ -65,6 +64,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
               viewable = false;
             }
           }
+
           for(int i = 0; i<n.length; i++){
             if(n[i].seen == false){
               if(n[i].notifMessage.contains("successfully")){
@@ -83,11 +83,12 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
             }
             cont = flag;
           }
+
           cont = cont ~/ 2;
           if(notif.length == 0 || cont == 0){
             viewable = false;
           }
-          print("cont ${cont}");
+
           return Stack(
 
             children: [
@@ -101,6 +102,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                 },
 
               ),
+
               Visibility(
                 maintainSize: true,
                 maintainAnimation: true,

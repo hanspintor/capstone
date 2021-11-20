@@ -47,13 +47,11 @@ class DeliveryDetails extends StatefulWidget {
 class _DeliveryDetailsState extends State<DeliveryDetails> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool _isLoading = false;
   String notifM = "";
   bool paymentSuccess = false;
 
   @override
   Widget build(BuildContext context) {
-    print(widget.paymentOption);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawerEnableOpenDragGesture: false,
@@ -180,6 +178,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
       ),
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);

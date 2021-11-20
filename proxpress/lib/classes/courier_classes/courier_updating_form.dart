@@ -13,7 +13,6 @@ import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/user.dart';
-import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -46,15 +45,12 @@ class _CourierUpdateState extends State<CourierUpdate> {
   String _newPassword;
   String _confirmPassword;
   bool checkCurrentPassword = true;
-  // String _vehicleType;
-  // String _vehicleColor;
 
   File profilePicture;
   bool uploadedNewPic = false;
   String savedUrl = '';
   String saveDestination = '';
 
-  // bool _isLoading = false;
   String fetchedUrl;
   String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
@@ -90,8 +86,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
           ),
             onPressed: (){
               Navigator.pop(context, false);
-
-              // Navigator.pushNamed(context, '/customerProfile');
             },
             iconSize: 25,
           ),
@@ -429,10 +423,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                             }
                                                           }
 
-
-                                                          print("database ${user1.email}");
-                                                          print ("verify ? ${user1.emailVerified}");
-                                                          print("_currentEmail ${_currentEmail}");
                                                         },
                                                       ),
                                                     ),
@@ -560,7 +550,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                           } else
                                                             return null;
                                                         },
-                                                        //initialValue: "${customerData.password}",
                                                         onChanged: (val) => setState(() => _currentPassword = val),
                                                       ),
                                                     ),
@@ -669,6 +658,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
         )
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.grey, textColor: Colors.black);

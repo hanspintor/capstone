@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -322,8 +321,6 @@ class _PinLocationState extends State<PinLocation> {
                   GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
 
                   Directions _infoFetch = await DirectionsRepository().getDirections(origin: LatLng(pickupCoordinates_.latitude, pickupCoordinates_.longitude), destination: LatLng(dropOffCoordinates_.latitude, dropOffCoordinates_.longitude));
-
-                  print(_infoFetch.totalDistance);
 
                   if(!widget.isBookmarks){
                     Navigator.push(

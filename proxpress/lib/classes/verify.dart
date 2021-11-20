@@ -39,12 +39,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   Future<void> checkEmailVerified() async {
-    print("verifying..");
     user = auth.currentUser;
     await user.reload();
     if(user.emailVerified){
       timer.cancel();
-      print("verified");
       ScaffoldMessenger.of(context)..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text("Your email is now verified")));
 
@@ -60,7 +58,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
           }
         }
       );
-      //Navigator.pushNamed(context, '/dashboardLocation');
     }
   }
 }

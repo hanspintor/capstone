@@ -46,8 +46,7 @@ class _CommunityTileState extends State<CommunityTile> {
                 if(snapshot.hasData){
                   Customer customer = snapshot.data;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
                     child: Card(
                       child: InkWell(
                         onTap: (){

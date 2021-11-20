@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 import 'package:path/path.dart' as Path;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,7 +43,6 @@ class _RequestTileState extends State<RequestTile> {
 
   @override
   Widget build(BuildContext context) {
-
 
     final delivery = Provider.of<Delivery>(context);
     final auth = FirebaseAuth.instance;
@@ -391,7 +387,6 @@ class _RequestTileState extends State<RequestTile> {
                                                             setState(() {
                                                               reason = newValue;
                                                             });
-                                                            print(reason);
                                                           },
                                                           items: <String>['Parcel damaged or mishandled', 'Utterly long delivery time', 'Rudeness or harassment', 'Asking price beyond stated fee', 'Others',]
                                                               .map<DropdownMenuItem<String>>((String value) {
@@ -481,7 +476,6 @@ class _RequestTileState extends State<RequestTile> {
                                                                   reportAttachment = null;
                                                                   attachmentEmpty = false;
                                                                 });
-                                                                print(reportAttachment);
                                                               },
                                                             ),
                                                           ),
@@ -524,16 +518,13 @@ class _RequestTileState extends State<RequestTile> {
                                                     ),
                                                   ),
 
-
                                                 ],
                                               ),
                                               actions: <Widget> [
                                                 ElevatedButton(
                                                   child: Text("Report"),
                                                   onPressed: () async {
-                                                    print("not in");
                                                     if(_key.currentState.validate() && reportAttachmentFileName != 'No File Selected'){
-                                                      print("in");
                                                       setState((){
                                                         attachmentEmpty = false;
 
@@ -548,24 +539,29 @@ class _RequestTileState extends State<RequestTile> {
                                                       setState(() {
                                                         fetchedUrl = savedUrl;
                                                       });
-                                                      print(fetchedUrl);
-                                                      DatabaseService().createReportData(_description, delivery.customerRef,
-                                                          delivery.courierRef, Timestamp.now(), reason , fetchedUrl);
+                                                      DatabaseService().createReportData(
+                                                          _description,
+                                                          delivery.customerRef,
+                                                          delivery.courierRef,
+                                                          Timestamp.now(),
+                                                          reason ,
+                                                          fetchedUrl);
+
                                                       DatabaseService(uid: delivery.uid).updateReport(true);
+
                                                       Navigator.of(context).pop();
                                                       showToast('Report sent.');
+
                                                       setState(() {
                                                         reportAttachment = null;
                                                       });
 
                                                     } else{
                                                       if(reportAttachmentFileName == 'No File Selected'){
-                                                        print("Attachment is required");
                                                         setState((){
                                                           attachmentEmpty = true;
                                                         });
                                                       }
-
                                                     }
                                                   },
                                                 )
@@ -961,6 +957,7 @@ class _RequestTileState extends State<RequestTile> {
       ),
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);

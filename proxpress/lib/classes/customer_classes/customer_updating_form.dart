@@ -78,7 +78,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     final user = Provider.of<TheUser>(context);
 
     final auth = FirebaseAuth.instance;
-    User user1 = auth.currentUser;
 
     return user == null ? LoginScreen() : Scaffold(
         drawerEnableOpenDragGesture: false,
@@ -92,7 +91,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
           ),
             onPressed: (){
               Navigator.pop(context, false);
-              // Navigator.pushNamed(context, '/customerProfile');
             },
             iconSize: 25,
           ),
@@ -420,10 +418,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                               Navigator.pop(context);
                                                             }
                                                           }
-
-                                                          print("database ${user1.email}");
-                                                          print ("verify ? ${user1.emailVerified}");
-                                                          print("_currentEmail ${_currentEmail}");
                                                         },
                                                       ),
                                                     ),
@@ -549,7 +543,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                             } else
                                                               return null;
                                                           },
-                                                          //initialValue: "${customerData.password}",
                                                           onChanged: (val) => setState(() => _currentPassword = val),
                                                         ),
                                                       ),
@@ -659,6 +652,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
         )
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.grey, textColor: Colors.black);

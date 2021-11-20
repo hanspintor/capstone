@@ -16,9 +16,6 @@ class _NotifTileCourierState extends State<NotifTileCourier> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Card(
       child: ListTile(
         selected: view,
@@ -37,7 +34,6 @@ class _NotifTileCourierState extends State<NotifTileCourier> {
             view = false;
           });
         },
-
       ),
     );
   }

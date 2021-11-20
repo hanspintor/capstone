@@ -347,11 +347,6 @@ class ViewCourierProfile extends StatelessWidget {
                                                                   _buildStars(1),
                                                                 ],
                                                               ),
-                                                              // ListTile(
-                                                              //   title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                                              //   trailing: Text("\₱${fee}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
-                                                              //   ),
-                                                              // ),
                                                             ],
                                                           ),
                                                         ),
@@ -538,11 +533,6 @@ class ViewCourierProfile extends StatelessWidget {
                                                                   _buildStars(1),
                                                                 ],
                                                               ),
-                                                              // ListTile(
-                                                              //   title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                                              //   trailing: Text("\₱${fee}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
-                                                              //   ),
-                                                              // ),
                                                             ],
                                                           ),
                                                         ),
@@ -555,7 +545,6 @@ class ViewCourierProfile extends StatelessWidget {
                                                     title: Text('Feedbacks', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                                     subtitle: Column(
                                                       children: [
-
                                                       ],
                                                     ),
                                                   ),
@@ -731,11 +720,6 @@ class ViewCourierProfile extends StatelessWidget {
                                                                 _buildStars(1),
                                                               ],
                                                             ),
-                                                            // ListTile(
-                                                            //   title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                                            //   trailing: Text("\₱${fee}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
-                                                            //   ),
-                                                            // ),
                                                           ],
                                                         ),
                                                       ),
