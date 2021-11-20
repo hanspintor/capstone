@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-// Load Screen Code can be transferable into another file
 class LoadScreen extends StatefulWidget{
 
   @override
@@ -10,17 +9,14 @@ class LoadScreen extends StatefulWidget{
 
 class _LoadScreenState extends State<LoadScreen> {
 
-
-
   @override
   void initState(){
     super.initState();
     Timer(Duration(seconds: 3), () {
-      // move to next screen / page
-      //widget.LoadScreenAppearance();
       Navigator.pushNamed(context, '/wrapper');
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
