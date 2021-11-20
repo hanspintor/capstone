@@ -5,7 +5,6 @@ import 'package:proxpress/services/file_storage.dart';
 import 'package:proxpress/models/customers.dart';
 
 class AuthService {
-
   Customer customer;
   FileStorage customerStorage = FileStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -21,15 +20,14 @@ class AuthService {
       temp = email[0] + email[1];
 
       UserCredential result ;
-      if(temp == "09"){
+      if(temp == "09") {
         String contactNo = "+63" + email.substring(1);
         ConfirmationResult confirmationResult = await _auth.signInWithPhoneNumber(contactNo, RecaptchaVerifier(
           container: 'recaptcha',
           size: RecaptchaVerifierSize.compact,
           theme: RecaptchaVerifierTheme.dark,
         ));
-
-      } else{
+      } else {
         result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
       }
@@ -246,6 +244,4 @@ class AuthService {
           (value) => message = 'Success',
     ).catchError((onError) => message = 'error');
   }
-
 }
-

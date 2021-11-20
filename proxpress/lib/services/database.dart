@@ -83,7 +83,6 @@ class DatabaseService {
     });
   }
 
-
   // Update Customer Password in Auth
   Future<void> AuthupdateCustomerPassword(String password) {
     return customerCollection
@@ -127,7 +126,6 @@ class DatabaseService {
       'Avatar URL': avatarUrl,
     });
   }
-
 
   // Create/Update a Courier Document
   Future updateCourierData(String fname, String lname, String email,
@@ -424,7 +422,6 @@ class DatabaseService {
       'Password' : password,
     });
   }
-
 
   // Create a Message Document
   Future createMessageData(String messageContent, Timestamp timeSent,
@@ -828,14 +825,14 @@ class DatabaseService {
   }
 }
 
-  class CourToCustomer {
+class CourToCustomer {
   final List<Message> value;
 
   CourToCustomer({ this.value });
-  }
+}
 
-  class CustomerToCour {
+class CustomerToCour {
   final List<Message> value;
 
   CustomerToCour({ this.value });
-  }
+}
