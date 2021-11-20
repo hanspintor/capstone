@@ -29,30 +29,30 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
   String currentPage = "Dashboard";
   bool actionButton = false;
 
-  pagePicker(){
-    if(widget.currentPage != null) {
+  pagePicker() {
+    if (widget.currentPage != null) {
       currentPage = widget.currentPage;
       print(currentPage);
       if (currentPage == "Dashboard") {
         return CourierDashboard();
       }
-      else if(currentPage == "Profile"){
+      else if (currentPage == "Profile") {
         return CourierProfile();
       }
-      else if(currentPage == "Ongoing"){
+      else if (currentPage == "Ongoing") {
        // return CourierBookmarks();
       }
-      else if(currentPage == "Transaction"){
+      else if (currentPage == "Transaction") {
        return TransactionHistory();
       }
-      else if(currentPage == "Community Hub"){
+      else if (currentPage == "Community Hub") {
         actionButton = true;
         return CourierCommunityHub();
       }
-      else if(currentPage == "Wallet"){
+      else if (currentPage == "Wallet") {
         return CourierWallet();
       }
-    } else{
+    } else {
       if (currentPage == "Dashboard") {
         return CourierDashboard();
       }
@@ -64,11 +64,11 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
 
-    if(user != null) {
+    if (user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          builder: (context,snapshot) {
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
               approved = courierData.approved;
 

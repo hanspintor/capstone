@@ -51,9 +51,9 @@ class _CourierUpdateState extends State<CourierUpdate> {
 
   String fetchedUrl;
 
-  String dots(int dotLength){
+  String dots(int dotLength) {
     String dot = "•";
-    for(var i = 0; i < dotLength; i++){
+    for(var i = 0; i < dotLength; i++) {
       dot += "•";
     }
     return dot;
@@ -78,7 +78,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
           leading: IconButton(icon: Icon(
             Icons.arrow_back,
           ),
-            onPressed: (){
+            onPressed: () {
               Navigator.pop(context, false);
             },
             iconSize: 25,
@@ -87,7 +87,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
             IconButton(icon: Icon(
               Icons.notifications_none_rounded,
             ),
-              onPressed: (){
+              onPressed: () {
                 _openEndDrawer();
               },
               iconSize: 25,
@@ -107,8 +107,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
           child: SingleChildScrollView(
             child: StreamBuilder<Courier>(
                 stream: DatabaseService(uid: user.uid).courierData,
-                builder: (context,snapshot){
-                  if(snapshot.hasData){
+                builder: (context,snapshot) {
+                  if (snapshot.hasData) {
                     Courier courierData = snapshot.data;
                     fetchedUrl = courierData.avatarUrl;
 
@@ -162,7 +162,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
 
                                             final profilePictureDestination = 'Couriers/${user.uid}/profilepic_${user.uid}_$datetime';
 
-                                            setState((){
+                                            setState(() {
                                               saveDestination = profilePictureDestination.toString();
                                               if (saveDestination != null && saveDestination.length > 0) {
                                                 saveDestination = saveDestination.substring(0, saveDestination.length - 1);
@@ -235,8 +235,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                             ),
                                                           ),
                                                           onChanged: (val) => setState(() => _currentFName = val),
-                                                          validator: (String val){
-                                                            if(val.isEmpty){
+                                                          validator: (String val) {
+                                                            if (val.isEmpty) {
                                                               return null;
                                                             }
                                                             else return null;
@@ -379,11 +379,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                             color: Colors.black
                                                         ),
                                                       ),
-                                                      validator: (String val){
-                                                        if(val.isEmpty){
+                                                      validator: (String val) {
+                                                        if (val.isEmpty) {
                                                           return null;
                                                         }
-                                                        else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)){
+                                                        else if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(val)) {
                                                           return 'Please Enter a Valid Email Address';
                                                         }
                                                         else
@@ -411,7 +411,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                               Timer(Duration(seconds: 2), () {
                                                                 Navigator.popAndPushNamed(context, '/template1');
                                                               });
-                                                            }else{
+                                                            } else {
                                                               Navigator.pop(context);
                                                             }
                                                           }
@@ -434,7 +434,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   subtitle: Text("${courierData.contactNo}"),
                                   trailing: Icon(Icons.chevron_right_rounded),
                                 ),
-                                onPressed: (){
+                                onPressed: () {
                                   showMaterialModalBottomSheet(
                                     context: context,
                                     builder: (context) => SingleChildScrollView(
@@ -459,8 +459,8 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                     ),
                                                     maxLength: 11,
                                                     keyboardType: TextInputType.number,
-                                                    validator: (String val){
-                                                      if(val.length < 11 && val.length > 0){
+                                                    validator: (String val) {
+                                                      if (val.length < 11 && val.length > 0) {
                                                         return 'Your contact number should be 11 digits';
                                                       }
                                                       else
@@ -534,7 +534,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                               color: Colors.black
                                                           ),
                                                         ),
-                                                        validator: (String val){
+                                                        validator: (String val) {
                                                           if (val.length < 8 && val.length > 0) {
                                                             return 'Password should be 8 characters long';
                                                           } else if (val != courierData.password) {
@@ -557,11 +557,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                             color: Colors.black,
                                                           ),
                                                         ),
-                                                        validator: (String val){
-                                                          if(val.length < 8 && val.length > 0){
+                                                        validator: (String val) {
+                                                          if (val.length < 8 && val.length > 0) {
                                                             return 'Password should be 8 characters long';
-                                                          } else if(_currentPassword != null){
-                                                            if(val.isEmpty){
+                                                          } else if (_currentPassword != null) {
+                                                            if (val.isEmpty) {
                                                               return 'Kindly provide your new password';
                                                             } else {
                                                               return null;
@@ -585,11 +585,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                               color: Colors.black
                                                           ),
                                                         ),
-                                                        validator: (String val){
-                                                          if(_currentPassword != null){
-                                                            if(val.isEmpty){
+                                                        validator: (String val) {
+                                                          if (_currentPassword != null) {
+                                                            if (val.isEmpty) {
                                                               return "Kindly provide repeat password for verification";
-                                                            } else if(_newPassword != _confirmPassword){
+                                                            } else if (_newPassword != _confirmPassword) {
                                                               return "Password does not match";
                                                             } else {
                                                               return null;
@@ -614,7 +614,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                           onPressed: () async {
                                                             if (_passKey.currentState.validate()) {
                                                               checkCurrentPassword = await validCourier.validateCurrentPassword(_currentPassword);
-                                                              if(_newPassword != null && checkCurrentPassword) {
+                                                              if (_newPassword != null && checkCurrentPassword) {
                                                                 await DatabaseService(uid:user.uid).updateCourierPassword(_newPassword);
                                                                 validCourier.updateCurrentPassword(_newPassword);
                                                                 processDone();
@@ -641,7 +641,7 @@ class _CourierUpdateState extends State<CourierUpdate> {
                       ],
                     );
                   }
-                  else{
+                  else {
                     return UserLoading();
                   }
                 }

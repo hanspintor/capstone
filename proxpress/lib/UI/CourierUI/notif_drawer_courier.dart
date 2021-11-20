@@ -25,7 +25,7 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
   Widget build(BuildContext context) {
     bool approved = false;
     final user = Provider.of<TheUser>(context);
-    if(flag <= 0){
+    if (flag <= 0) {
       isClear = true;
       caption = "No data found";
       flag++;
@@ -33,8 +33,8 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
 
     return user == null ? LoginScreen() : StreamBuilder<Courier>(
       stream: DatabaseService(uid: user.uid).courierData,
-       builder: (context, snapshot){
-        if(snapshot.hasData){
+       builder: (context, snapshot) {
+        if (snapshot.hasData) {
           Courier courierData = snapshot.data;
           approved = courierData.approved;
 

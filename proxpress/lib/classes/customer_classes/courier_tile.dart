@@ -81,15 +81,15 @@ class _CourierTileState extends State<CourierTile> {
                             StreamBuilder <List<Delivery>>(
                                 stream: DatabaseService().deliveryList,
                                 builder: (context, snapshot) {
-                                  if(snapshot.hasData){
+                                  if (snapshot.hasData) {
                                     List<Delivery> deliveryData = snapshot.data;
                                     double rating = 0.0;
                                     double total = 0.0;
                                     double stars = 0;
 
-                                    for(int i = 0; i < deliveryData.length; i++){
-                                      if(deliveryData[i].courierRef.id == widget.courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
-                                        if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
+                                    for(int i = 0; i < deliveryData.length; i++) {
+                                      if (deliveryData[i].courierRef.id == widget.courier.uid && deliveryData[i].deliveryStatus == 'Delivered') {
+                                        if (deliveryData[i].rating != 0 && deliveryData[i].feedback != '') {
                                           rating += deliveryData[i].rating;
                                           total++;
                                         }
@@ -115,7 +115,7 @@ class _CourierTileState extends State<CourierTile> {
                             ),
                           ],
                         ),
-                        onTap : (){
+                        onTap : () {
                           Navigator.push(context, PageTransition(
                               child: ViewCourierProfile(
                                   courierUID: widget.courier.uid,

@@ -61,49 +61,49 @@ class _SignupCourierState extends State<SignupCourier> {
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
   final GlobalKey<FormState> dropKey = GlobalKey<FormState>();
 
-  Widget _buildFName(){
+  Widget _buildFName() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * .4,
       child: TextFormField(
         decoration: InputDecoration(labelText: 'First Name'),
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'First Name is Required';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           fName = value;
         },
-        onChanged: (val){
+        onChanged: (val) {
           setState(() => fName = val);
         },
       ),
     );
   }
 
-  Widget _buildLName(){
+  Widget _buildLName() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * .4,
       child: TextFormField(
         decoration: InputDecoration(labelText: 'Last Name'),
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'Last Name is Required';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           lName = value;
         },
-        onChanged: (val){
+        onChanged: (val) {
           setState(() => lName = val);
         },
       ),
     );
   }
 
-  Widget _buildEmail(){
+  Widget _buildEmail() {
     return StreamBuilder<List<Customer>>(
         stream: DatabaseService().customerList,
         builder: (context, snapshot) {
@@ -116,38 +116,38 @@ class _SignupCourierState extends State<SignupCourier> {
                   List<Courier> couriers = snapshot.data;
                   return TextFormField(
                     decoration: InputDecoration(labelText: 'Email'),
-                    validator: (String value){
-                      if(value.isEmpty){
+                    validator: (String value) {
+                      if (value.isEmpty) {
                         return 'Email is Required';
                       }
-                      if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
+                      if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)) {
                         return 'Please Enter a Valid Email Address';
                       }
                       bool emailTaken = false;
                       bool emailTakenCus = false;
 
                       customers.forEach((element) {
-                        if (element.email == value){
+                        if (element.email == value) {
                           emailTaken = true;
                         }
                       });
                       couriers.forEach((element) {
-                        if (element.email == value){
+                        if (element.email == value) {
                           emailTakenCus = true;
                         }
                       });
                       print(emailTaken);
                       print(emailTakenCus);
 
-                      if (emailTaken || emailTakenCus){
+                      if (emailTaken || emailTakenCus) {
                         return 'Email already taken';
                       }
                       else return null;
                     },
-                    onSaved: (String value){
+                    onSaved: (String value) {
                       email = value;
                     },
-                    onChanged: (val){
+                    onChanged: (val) {
                       setState(() => email = val);
                     },
                   );
@@ -217,37 +217,37 @@ class _SignupCourierState extends State<SignupCourier> {
     );
   }
 
-  Widget _buildPassword(){
+  Widget _buildPassword() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Password'),
       obscureText: true,
-      validator: (String value){
-        if(value.length < 8 && value.length > 0){
+      validator: (String value) {
+        if (value.length < 8 && value.length > 0) {
           return 'Password should be 8 characters long';
         }
-        else if(value.isEmpty){
+        else if (value.isEmpty) {
           return 'Password is Required';
         }
         else return null;
       },
-      onSaved: (String value){
+      onSaved: (String value) {
         password = value;
       },
-      onChanged: (val){
+      onChanged: (val) {
         setState(() => password = val);
       },
     );
   }
 
-  Widget _buildConfirmPassword(){
+  Widget _buildConfirmPassword() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Confirm Password'),
       obscureText: true,
-      validator: (String value){
-        if(password != null){
-          if(value.isEmpty){
+      validator: (String value) {
+        if (password != null) {
+          if (value.isEmpty) {
             return "Password does not match";
-          } else if(confirmPassword != password){
+          } else if (confirmPassword != password) {
             return "Password does not match";
           } else {
             return null;
@@ -256,35 +256,35 @@ class _SignupCourierState extends State<SignupCourier> {
         else
           return null;
       },
-      onSaved: (String value){
+      onSaved: (String value) {
         confirmPassword = value;
       },
-      onChanged: (val){
+      onChanged: (val) {
         setState(() => confirmPassword = val);
       },
     );
   }
 
-  Widget _buildAddress(){
+  Widget _buildAddress() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Home Address'),
       keyboardType: TextInputType.streetAddress,
-      validator: (String value){
-        if(value.isEmpty){
+      validator: (String value) {
+        if (value.isEmpty) {
           return 'Home Address is Required';
         }
         else return null;
       },
-      onSaved: (String value){
+      onSaved: (String value) {
         address = value;
       },
-      onChanged: (val){
+      onChanged: (val) {
         setState(() => address = val);
       },
     );
   }
 
-  Future<bool> _backPressed(){
+  Future<bool> _backPressed() {
     return showDialog(context: context, builder: (context)
     =>AlertDialog(
       title: Text("Are you sure you want to go back? All data you placed will be loss."),
@@ -332,7 +332,7 @@ class _SignupCourierState extends State<SignupCourier> {
               Icons.arrow_back,
               color: Colors.black,
             ),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context, false);
               },
               iconSize: 25,
@@ -367,8 +367,8 @@ class _SignupCourierState extends State<SignupCourier> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: isLastStep && (!agree || !slide) ? null :() async {
-                          if(isLastStep){
+                        onPressed: isLastStep && (!agree || !slide) ? null : () async {
+                          if (isLastStep) {
                             String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
                             await FirebaseFirestore.instance
                                 .collection('Delivery Prices')
@@ -386,8 +386,8 @@ class _SignupCourierState extends State<SignupCourier> {
                                 "This is to ensure that you are qualified to be a courier in our app.";
 
                             dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0, welcomeMessage, adminCredentialsResponse, 0, false);
-                            if(result == null){
-                              setState((){
+                            if (result == null) {
+                              setState(() {
                                 error = 'Email already taken';
                                 loading = false;
                               });
@@ -441,14 +441,14 @@ class _SignupCourierState extends State<SignupCourier> {
                               }
                             }
                           }
-                          else if(currentStep == 1) {
-                            if(!picsLoaded){
+                          else if (currentStep == 1) {
+                            if (!picsLoaded) {
                               setState(() => notValid = picsLoaded);
                             } else {
                               setState(() => currentStep += 1);
                             }
                           } else {
-                            if(regKey.currentState.validate()) {
+                            if (regKey.currentState.validate()) {
                               setState(() => currentStep += 1);
                             }
                           }
@@ -457,12 +457,12 @@ class _SignupCourierState extends State<SignupCourier> {
                       ),
                     ),
                     const SizedBox(width: 12,),
-                    if(currentStep != 0)
+                    if (currentStep != 0)
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: (){
+                          onPressed: () {
                             setState(() {
-                              if(currentStep == 0){
+                              if (currentStep == 0) {
                                 return null;
                               }
                               else currentStep -= 1;
@@ -529,7 +529,7 @@ class _SignupCourierState extends State<SignupCourier> {
                 subtitle: Text(driversLicenseFrontFileName),
                 trailing: IconButton(
                   icon: Icon(driversLicenseFrontFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                  onPressed:  driversLicenseFrontFileName == 'No File Selected' || driversLicenseFront == null ? null :(){
+                  onPressed:  driversLicenseFrontFileName == 'No File Selected' || driversLicenseFront == null ? null : () {
                     setState(() {
                       driversLicenseFront = null;
                     });
@@ -553,7 +553,7 @@ class _SignupCourierState extends State<SignupCourier> {
                 subtitle: Text(driversLicenseBackFileName),
                 trailing: IconButton(
                   icon: Icon(driversLicenseBackFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                  onPressed:  driversLicenseBackFileName == 'No File Selected' || driversLicenseBack == null ? null :(){
+                  onPressed:  driversLicenseBackFileName == 'No File Selected' || driversLicenseBack == null ? null : () {
                     setState(() {
                       driversLicenseBack = null;
                     });
@@ -577,7 +577,7 @@ class _SignupCourierState extends State<SignupCourier> {
                 subtitle: Text(nbiClearancePhotoFileName),
                 trailing: IconButton(
                   icon: Icon(nbiClearancePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                  onPressed:  nbiClearancePhotoFileName == 'No File Selected' || nbiClearancePhoto == null ? null :(){
+                  onPressed:  nbiClearancePhotoFileName == 'No File Selected' || nbiClearancePhoto == null ? null : () {
                     setState(() {
                       nbiClearancePhoto = null;
                     });
@@ -602,7 +602,7 @@ class _SignupCourierState extends State<SignupCourier> {
                 subtitle: Text(vehicleRegistrationORFileName),
                 trailing: IconButton(
                   icon: Icon(vehicleRegistrationORFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                  onPressed:  vehicleRegistrationORFileName == 'No File Selected' || vehicleRegistrationOR == null ? null :(){
+                  onPressed:  vehicleRegistrationORFileName == 'No File Selected' || vehicleRegistrationOR == null ? null : () {
                     setState(() {
                       vehicleRegistrationOR = null;
                     });
@@ -628,7 +628,7 @@ class _SignupCourierState extends State<SignupCourier> {
                 subtitle: Text(vehicleRegistrationCRFileName),
                 trailing: IconButton(
                   icon: Icon(vehicleRegistrationCRFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                  onPressed:  vehicleRegistrationCRFileName == 'No File Selected' || vehicleRegistrationCR == null ? null :(){
+                  onPressed:  vehicleRegistrationCRFileName == 'No File Selected' || vehicleRegistrationCR == null ? null : () {
                     setState(() {
                       vehicleRegistrationCR = null;
                     });
@@ -655,7 +655,7 @@ class _SignupCourierState extends State<SignupCourier> {
                   padding: const EdgeInsets.only(left: 38),
                   child: IconButton(
                     icon: Icon(vehiclePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                    onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null :(){
+                    onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null : () {
                       setState(() {
                         vehiclePhoto = null;
                       });
@@ -819,7 +819,7 @@ class _SignupCourierState extends State<SignupCourier> {
             ),
           ),
           Text('Driver\'s License (Front)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-          if(driversLicenseFront != null)
+          if (driversLicenseFront != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Image.file(driversLicenseFront),
@@ -827,7 +827,7 @@ class _SignupCourierState extends State<SignupCourier> {
           else Container(),
 
           Text('Driver\'s License (Back)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-          if(driversLicenseBack != null)
+          if (driversLicenseBack != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Image.file(driversLicenseBack),
@@ -835,7 +835,7 @@ class _SignupCourierState extends State<SignupCourier> {
           else Container(),
 
           Text('NBI Clearance', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-          if(nbiClearancePhoto != null)
+          if (nbiClearancePhoto != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Image.file(nbiClearancePhoto),
@@ -843,7 +843,7 @@ class _SignupCourierState extends State<SignupCourier> {
           else Container(),
 
           Text('Vehicle Official Receipt (OR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-          if(vehicleRegistrationOR != null)
+          if (vehicleRegistrationOR != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Image.file(vehicleRegistrationOR),
@@ -851,7 +851,7 @@ class _SignupCourierState extends State<SignupCourier> {
           else Container(),
 
           Text('Vehicle Official Receipt (CR)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-          if(vehicleRegistrationCR != null)
+          if (vehicleRegistrationCR != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Image.file(vehicleRegistrationCR),
@@ -859,7 +859,7 @@ class _SignupCourierState extends State<SignupCourier> {
           else Container(),
 
           Text('Vehicle Photo', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-          if(vehiclePhoto != null)
+          if (vehiclePhoto != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Image.file(vehiclePhoto),
@@ -872,7 +872,7 @@ class _SignupCourierState extends State<SignupCourier> {
                 Container(
                   child: Checkbox(
                       value: agree,
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
                           agree = value;
                         });
@@ -920,7 +920,7 @@ class _SignupCourierState extends State<SignupCourier> {
                 height:60,
                 sliderRotate: true,
                 sliderButtonIconPadding: 13,
-                onSubmit: (){
+                onSubmit: () {
                   confirm(true);
                 },
               ),
@@ -936,12 +936,12 @@ class _SignupCourierState extends State<SignupCourier> {
       builder: (context) => AlertDialog(
         title: Text('Choose a color'),
         content: StatefulBuilder(
-            builder: (context, setState){
+            builder: (context, setState) {
               return CircleColorPicker(
                   size: const Size(240, 240),
                   strokeWidth: 4,
                   thumbSize: 36,
-                  onChanged: (color){
+                  onChanged: (color) {
                     setState(() => this.color = color);
                   },
                   controller: CircleColorPickerController(initialColor: Colors.grey,)

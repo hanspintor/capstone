@@ -21,13 +21,13 @@ class MessageList extends StatefulWidget {
 
 class _MessageListState extends State<MessageList> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(widget.messageList.length != 0){
+    if (widget.messageList.length != 0) {
       return widget.messageList == null ? UserLoading() : Flexible(
         child: ListView.builder(
           shrinkWrap: true,

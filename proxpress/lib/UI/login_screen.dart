@@ -20,42 +20,42 @@ class _LoginScreenState extends State<LoginScreen> {
   bool visibleE = false;
   bool loading = false;
 
-  Widget _alertmessage(){
+  Widget _alertmessage() {
     return ForgotPassword();
   }
 
-  Widget _buildUsername(){
+  Widget _buildUsername() {
     return TextFormField(
         autofillHints: [AutofillHints.email],
         validator: (val) => val.isEmpty ? 'Email is Required': null,
         decoration: InputDecoration(
           labelText: "Email",
         ),
-        onSaved: (String value){
+        onSaved: (String value) {
           email = value;
         },
-        onChanged: (val){
+        onChanged: (val) {
           setState(() => email = val);
         }
     );
   }
 
-  Widget _buildPassword(){
+  Widget _buildPassword() {
     return TextFormField(
         obscureText: true,
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'Password is Required';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           password = value;
         },
         decoration: InputDecoration(
           labelText: "Password",
         ),
-        onChanged: (val){
+        onChanged: (val) {
           setState(() => password = val);
         }
 
@@ -119,11 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: MediaQuery.of(context).size.width / 1.35,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (_formKey.currentState.validate()){
+                        if (_formKey.currentState.validate()) {
                           setState(() => loading = true); // loading = true;
                           dynamic result = await _auth.SignInCustomer(email, password);
-                          if(result == null){
-                            setState((){
+                          if (result == null) {
+                            setState(() {
                               error = 'Invalid email or password';
                               loading = false;
                               visibleE = true;
@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _userChoice(){
+  _userChoice() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -218,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPrimary: Colors.red, // foreground
                 ),
                 child: Text('CUSTOMER', style: TextStyle(fontSize: 18)),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pushNamed(context, '/signupCustomer');
                 },
               ),
@@ -235,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPrimary: Colors.red, // foreground
                 ),
                 child: Text('COURIER', style: TextStyle(fontSize: 18)),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pushNamed(context, '/signupCourier');
                 },
               ),

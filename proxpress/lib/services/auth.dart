@@ -20,7 +20,7 @@ class AuthService {
       temp = email[0] + email[1];
 
       UserCredential result ;
-      if(temp == "09") {
+      if (temp == "09") {
         String contactNo = "+63" + email.substring(1);
         ConfirmationResult confirmationResult = await _auth.signInWithPhoneNumber(contactNo, RecaptchaVerifier(
           container: 'recaptcha',

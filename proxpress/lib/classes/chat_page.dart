@@ -105,7 +105,7 @@ class _ChatPageState extends State<ChatPage> {
                         }
                         _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
 
-                        await messageCollection.orderBy("Time Sent", descending: true).limit(1).get().then((value){
+                        await messageCollection.orderBy("Time Sent", descending: true).limit(1).get().then((value) {
                            MessageUid = value.docs.first.id;
                          });
 
@@ -162,7 +162,7 @@ class _ChatPageState extends State<ChatPage> {
     User user = _auth.currentUser;
 
     if (widget.delivery.customerRef.id == user.uid) {
-      setState((){
+      setState(() {
         isCustomer = true;
       });
     }

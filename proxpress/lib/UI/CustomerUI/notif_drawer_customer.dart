@@ -25,7 +25,7 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
     final auth = FirebaseAuth.instance;
     User user = auth.currentUser;
 
-    if(flag <= 0){
+    if (flag <= 0) {
       isClear = true;
       caption = "No data found";
       flag++;

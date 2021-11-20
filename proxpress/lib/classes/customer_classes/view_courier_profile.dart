@@ -17,7 +17,7 @@ class ViewCourierProfile extends StatelessWidget {
 
   }) : super(key: key);
 
-  Widget _buildStars(int rate){
+  Widget _buildStars(int rate) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
@@ -28,7 +28,7 @@ class ViewCourierProfile extends StatelessWidget {
     );
   }
 
-  Widget _welcomeMessage(String adminMessage){
+  Widget _welcomeMessage(String adminMessage) {
     return Column(
       children: [
         Container(
@@ -66,7 +66,7 @@ class ViewCourierProfile extends StatelessWidget {
       body: StreamBuilder<Courier>(
           stream: DatabaseService(uid: courierUID).courierData,
           builder: (context, snapshot) {
-            if(snapshot.hasData) {
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
@@ -156,7 +156,7 @@ class ViewCourierProfile extends StatelessWidget {
                             StreamBuilder <List<Delivery>>(
                                 stream:   deliveryList,
                                 builder: (context, snapshot) {
-                                  if(snapshot.hasData && snapshot.data.length != 0){
+                                  if (snapshot.hasData && snapshot.data.length != 0) {
                                     List<Delivery> deliveryData = snapshot.data;
                                     List<Delivery> toRemove = [];
 
@@ -177,16 +177,16 @@ class ViewCourierProfile extends StatelessWidget {
                                       double star4 = 0;
                                       double star5 = 0;
 
-                                      for(int i = 0; i < deliveryData.length; i++){
-                                        if(deliveryData[i].courierRef.id == courierData.uid && deliveryData[i].deliveryStatus == 'Delivered'){
-                                          if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
+                                      for(int i = 0; i < deliveryData.length; i++) {
+                                        if (deliveryData[i].courierRef.id == courierData.uid && deliveryData[i].deliveryStatus == 'Delivered') {
+                                          if (deliveryData[i].rating != 0 && deliveryData[i].feedback != '') {
                                             rating += deliveryData[i].rating;
                                             total++;
-                                            if(deliveryData[i].rating == 1) star1++;
-                                            else if(deliveryData[i].rating == 2) star2++;
-                                            else if(deliveryData[i].rating == 3) star3++;
-                                            else if(deliveryData[i].rating == 4) star4++;
-                                            else if(deliveryData[i].rating == 5) star5++;
+                                            if (deliveryData[i].rating == 1) star1++;
+                                            else if (deliveryData[i].rating == 2) star2++;
+                                            else if (deliveryData[i].rating == 3) star3++;
+                                            else if (deliveryData[i].rating == 4) star4++;
+                                            else if (deliveryData[i].rating == 5) star5++;
                                           }
                                         }
                                       };

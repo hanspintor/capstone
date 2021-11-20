@@ -38,7 +38,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
   int counter = 0;
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     mapController.dispose();
   }
@@ -51,7 +51,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
 
-    if(user != null) {
+    if (user != null) {
       Future<String> deliveryOngoing = cloud.FirebaseFirestore.instance.collection('Deliveries')
           .where('Courier Approval', isEqualTo: 'Approved')
           .where('Delivery Status', isEqualTo: 'Ongoing')
@@ -66,8 +66,8 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
 
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          builder: (context,snapshot) {
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
               approved = courierData.approved;
               cloud.DocumentReference courier = cloud.FirebaseFirestore.instance.collection('Couriers').doc(user.uid);
@@ -115,7 +115,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                               if (deliveryOngoingUID != '') {
                                 return FutureBuilder<cloud.DocumentSnapshot>(
                                   future: cloud.FirebaseFirestore.instance.collection('Deliveries').doc(deliveryOngoingUID).get(),
-                                  builder: (context, AsyncSnapshot<dynamic> snapshot){
+                                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
                                     if (snapshot.hasData) {
                                       Map<String, dynamic> data = snapshot.data.data() as Map<String, dynamic>;
 
@@ -415,18 +415,18 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                 ),
                 floatingActionButton: FutureBuilder<String>(
                   future:deliveryOngoing,
-                  builder: (context, AsyncSnapshot<dynamic> snapshot){
-                    if(snapshot.hasData){
+                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData) {
                       String deliveryOngoingUID = snapshot.data;
 
-                      if(deliveryOngoingUID != ""){
+                      if (deliveryOngoingUID != "") {
                         return StreamBuilder<Delivery>(
                           stream: DatabaseService(uid:deliveryOngoingUID).deliveryData,
-                          builder: (context, snapshot){
-                            if(snapshot.hasData){
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
                               Delivery delivery = snapshot.data;
 
-                              if(delivery.deliveryStatus == "Ongoing"){
+                              if (delivery.deliveryStatus == "Ongoing") {
                                 return Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -490,7 +490,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                             label: 'Message Customer',
                                             onTap: () async {
                                               await Navigator.push(context, PageTransition(child: ChatPage(delivery: delivery), type: PageTransitionType.rightToLeftWithFade));
-                                              setState((){});
+                                              setState(() {});
                                             }
                                         ),
                                         SpeedDialChild(

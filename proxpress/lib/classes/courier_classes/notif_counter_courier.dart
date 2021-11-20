@@ -28,7 +28,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     tz.initializeTimeZones();
   }
@@ -56,8 +56,8 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
 
            String title = "";
 
-           for(int x = 0; x<n.length; x++){
-             if(n[x].seen == false){
+           for(int x = 0; x<n.length; x++) {
+             if (n[x].seen == false) {
                viewable = true;
                break;
              } else {
@@ -65,12 +65,12 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
              }
            }
 
-           for(int i = 0; i<n.length; i++){
-             if(n[i].seen == false){
-               if(n[i].notifMessage.contains("requested")){
+           for(int i = 0; i<n.length; i++) {
+             if (n[i].seen == false) {
+               if (n[i].notifMessage.contains("requested")) {
                  title = "Customer Request";
                }
-               if(n[i].popsOnce == true){
+               if (n[i].popsOnce == true) {
                  NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
                  DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
                }
@@ -80,7 +80,7 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
            }
 
            cont = cont ~/ 2;
-           if(notif.length == 0 || cont == 0){
+           if (notif.length == 0 || cont == 0) {
              viewable = false;
            }
            return Stack(

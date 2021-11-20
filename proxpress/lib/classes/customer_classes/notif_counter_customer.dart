@@ -29,7 +29,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     tz.initializeTimeZones();
   }
@@ -52,14 +52,14 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
 
     return StreamBuilder <List<Notifications>>(
       stream: notifList,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
           List<Notifications> n = snapshot.data;
 
           String title = "";
 
-          for(int x = 0; x<n.length; x++){
-            if(n[x].seen == false){
+          for(int x = 0; x<n.length; x++) {
+            if (n[x].seen == false) {
               viewable = true;
               break;
             } else {
@@ -67,17 +67,17 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
             }
           }
 
-          for(int i = 0; i<n.length; i++){
-            if(n[i].seen == false){
-              if(n[i].notifMessage.contains("successfully")){
+          for(int i = 0; i<n.length; i++) {
+            if (n[i].seen == false) {
+              if (n[i].notifMessage.contains("successfully")) {
                 title = "Item Delivered";
-              } else if(n[i].notifMessage.contains("declined")){
+              } else if (n[i].notifMessage.contains("declined")) {
                 title = "Request Declined";
-              } else if(n[i].notifMessage.contains("accepted")){
+              } else if (n[i].notifMessage.contains("accepted")) {
                 title = "Request Accepted";
               }
 
-              if(n[i].popsOnce == true){
+              if (n[i].popsOnce == true) {
                 NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
                 DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
               }
@@ -87,7 +87,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
 
           cont = cont ~/ 2;
-          if(notif.length == 0 || cont == 0){
+          if (notif.length == 0 || cont == 0) {
             viewable = false;
           }
 

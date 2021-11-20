@@ -13,7 +13,7 @@ class CourierCommunityHub extends StatefulWidget {
 }
 
 class _CourierCommunityHubState extends State<CourierCommunityHub> {
-  Widget _welcomeMessage(String adminMessage){
+  Widget _welcomeMessage(String adminMessage) {
     return Column(
       children: [
         Container(

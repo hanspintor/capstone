@@ -33,7 +33,7 @@ class _MessageTileState extends State<MessageTile> {
       child: StreamBuilder<Message>(
         stream: DatabaseService(uid: widget.message.uid).messageData,
         builder: (context, snapshot) {
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             Message message = snapshot.data;
             String time = DateFormat.jm().format(message.timeSent.toDate());
             bool _validURL = Uri.parse(message.messageContent).isAbsolute;
@@ -49,7 +49,7 @@ class _MessageTileState extends State<MessageTile> {
                     isSender: true,
                     text: '${message.messageContent}',
                   ) : GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                         context,
                         PageTransition(child: HeroPage(url: message.messageContent,), type: PageTransitionType.fade),
@@ -77,7 +77,7 @@ class _MessageTileState extends State<MessageTile> {
                     isSender: false,
                     text: '${message.messageContent}',
                   ) : GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                         context,
                         PageTransition(child: HeroPage(url: message.messageContent,), type: PageTransitionType.fade),

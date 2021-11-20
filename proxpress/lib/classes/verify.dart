@@ -14,7 +14,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Timer timer;
 
   @override
-  void initState(){
+  void initState() {
     user = auth.currentUser;
     user.sendEmailVerification();
 
@@ -39,7 +39,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Future<void> checkEmailVerified() async {
     user = auth.currentUser;
     await user.reload();
-    if(user.emailVerified){
+    if (user.emailVerified) {
       timer.cancel();
       ScaffoldMessenger.of(context)..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text("Your email is now verified")));

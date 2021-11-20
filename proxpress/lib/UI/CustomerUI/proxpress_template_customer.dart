@@ -36,31 +36,31 @@ class _AppBarTempState extends State<AppBarTemp>{
   final GlobalKey<FormState> locKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  pagePicker(){
-    if(widget.currentPage != null) {
+  pagePicker() {
+    if (widget.currentPage != null) {
       currentPage = widget.currentPage;
       print(currentPage);
       if (currentPage == "Dashboard") {
         return DashboardLocation();
       }
-      else if(currentPage == "Profile"){
+      else if (currentPage == "Profile") {
         return CustomerProfile();
       }
-      else if(currentPage == "Bookmarks"){
+      else if (currentPage == "Bookmarks") {
         return CourierBookmarks();
       }
-      else if(currentPage == "Requests"){
+      else if (currentPage == "Requests") {
         return MyRequests();
       }
-      else if(currentPage == "Community Hub"){
+      else if (currentPage == "Community Hub") {
         actionButton = true;
         return CustomerCommunityHub();
       }
-      else if(currentPage == "Wallet"){
+      else if (currentPage == "Wallet") {
         return CustomerWallet();
       }
-    } else{
-      if (currentPage == "Dashboard"){
+    } else {
+      if (currentPage == "Dashboard") {
         return DashboardLocation();
       }
     }
@@ -72,7 +72,7 @@ class _AppBarTempState extends State<AppBarTemp>{
     User user = auth.currentUser;
     bool approved = true;
 
-    if(user != null){
+    if (user != null) {
       DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
       Stream<List<Notifications>> notifList = FirebaseFirestore.instance
           .collection('Notifications')
@@ -124,7 +124,7 @@ class _AppBarTempState extends State<AppBarTemp>{
             floatingActionButton: Visibility(visible: actionButton,
             child: FloatingActionButton(
               child: Icon(Icons.post_add_rounded),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pushNamed(context, '/customerCreatePost');
               },
             ),

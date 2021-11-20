@@ -34,7 +34,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
   String searched = '';
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
   }
@@ -78,7 +78,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context){
+                    builder: (BuildContext context) {
                       return AlertDialog(
                         titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                         title: Column(

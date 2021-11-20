@@ -68,7 +68,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
               courierRefs = [];
             }
 
-            if(courierRefs.length == 0){
+            if (courierRefs.length == 0) {
               return Row(
                 children: [
                   Expanded(
@@ -110,15 +110,15 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                               builder: (context, snapshot) {
                                 DeliveryPrice deliveryPriceData = snapshot.data;
 
-                                if(temp)
+                                if (temp)
                                   deliveryFee = (deliveryPriceData.baseFare.toDouble() + (deliveryPriceData.farePerKM.toDouble() * distance));
 
-                                if(snapshot.hasData){
+                                if (snapshot.hasData) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child:Card(
                                       child: InkWell(
-                                        onTap : (){
+                                        onTap : () {
                                           Navigator.push(context, PageTransition(
                                               child: ViewCourierProfile(
                                                 courierUID: courier.uid,
@@ -151,16 +151,16 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                   StreamBuilder <List<Delivery>>(
                                                       stream: DatabaseService().deliveryList,
                                                       builder: (context, snapshot) {
-                                                        if(snapshot.hasData){
+                                                        if (snapshot.hasData) {
                                                           List<Delivery> deliveryData = snapshot.data;
                                                           double rating = 0.0;
                                                           double total = 0.0;
                                                           double stars = 0;
 
 
-                                                          for(int i = 0; i < deliveryData.length; i++){
-                                                            if(deliveryData[i].courierRef.id == courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
-                                                              if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
+                                                          for(int i = 0; i < deliveryData.length; i++) {
+                                                            if (deliveryData[i].courierRef.id == courier.uid && deliveryData[i].deliveryStatus == 'Delivered') {
+                                                              if (deliveryData[i].rating != 0 && deliveryData[i].feedback != '') {
                                                                 rating += deliveryData[i].rating;
                                                                 total++;
                                                               }
@@ -226,7 +226,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                     onPressed: () {
                                                       showDialog(
                                                           context: context,
-                                                          builder: (BuildContext context){
+                                                          builder: (BuildContext context) {
                                                             return AlertDialog(
                                                               content: Text('Are you sure you want to remove this courier from your bookmarks?'),
                                                               actions: [
@@ -293,7 +293,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                       ),
                                                     ).then((value) {
                                                       LocalDataBookmark localDataBookmark = value;
-                                                      if(value != null){
+                                                      if (value != null) {
                                                         show = localDataBookmark.appear;
                                                         tempD = localDataBookmark.distance;
                                                         tempPA = localDataBookmark.pickupAddress;
@@ -315,7 +315,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                 ),
                                                 TextButton(
                                                   child: const Text('REQUEST'),
-                                                  onPressed: !temp ? null :() {
+                                                  onPressed: !temp ? null : () {
                                                     Navigator.push(context, PageTransition(
                                                         child: CustomerRemarks(
                                                           courierUID: courierRefs[index].id,

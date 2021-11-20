@@ -26,7 +26,7 @@ class Wrapper extends StatelessWidget {
           print('customer document found');
 
           print("Customer $count");
-          if(count <= 0) {
+          if (count <= 0) {
             Navigator.pushNamed(context, '/template');
             count++;
           }
@@ -34,7 +34,7 @@ class Wrapper extends StatelessWidget {
           print('no customer document found');
           print("Courier $count");
           DatabaseService(uid: user.uid).updateStatus(status);
-          if(count <= 0) {
+          if (count <= 0) {
             Navigator.pushNamed(context, '/template1');
             count++;
           }

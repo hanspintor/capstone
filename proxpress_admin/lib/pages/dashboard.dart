@@ -1,15 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
-import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
-import 'package:proxpress/reports.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../auth.dart';
 
 class Dashboard extends StatefulWidget {
@@ -26,9 +21,6 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-
-
-
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
 
@@ -104,7 +96,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
       body: StreamBuilder<List<Courier>>(
           stream: DatabaseService().courierList,
         builder: (context, snapshot) {
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             List<Courier> couriers = snapshot.data;
 
             List<PlutoColumn> columns = [
@@ -138,8 +130,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 title: 'Vehicle Color',
                 field: 'vehicle_color',
                 type: PlutoColumnType.text(),
-                renderer: (rendererContext){
-                  //print(rendererContext.cell.value);
+                renderer: (rendererContext) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -157,7 +148,6 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                   );
                 }
               ),
-
               PlutoColumn(
                 enableEditingMode: false,
                 title: 'Credentials',
@@ -175,7 +165,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => StatefulBuilder(
-                                builder: (context, setState){
+                                builder: (context, setState) {
                                   return AlertDialog(
                                       content: Container(
                                         height: MediaQuery.of(context).size.height/.1,
@@ -183,7 +173,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                         child: GridView.builder(
                                           itemCount: 6,
                                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                                            itemBuilder: (context, index){
+                                            itemBuilder: (context, index) {
                                             print(images[index]);
                                               return Column(
                                                 children: [
@@ -192,7 +182,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                                     width: 600,
                                                     child: Image.network(images[index]),
                                                   ),
-                                                  if(images[index] == images[0])...[
+                                                  if (images[index] == images[0])...[
                                                     Text('Driver\'s License Front', style: TextStyle(fontWeight: FontWeight.bold),),
                                                   ]
                                                   else if (images[index] == images[1])...[
@@ -239,7 +229,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 title: 'Commands',
                 field: 'commands',
                 type: PlutoColumnType.text(),
-                renderer: (renderContext){
+                renderer: (renderContext) {
                   bool approved = couriers[renderContext.rowIdx].approved;
 
                   return Row(
@@ -251,7 +241,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) => StatefulBuilder(
-                                  builder: (context, setState){
+                                  builder: (context, setState) {
                                     return AlertDialog(
                                         content: Column(
                                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -282,7 +272,6 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                             onPressed: () async {
                                               await DatabaseService(uid: couriers[renderContext.rowIdx].uid).approveCourier(false);
                                               await DatabaseService(uid: couriers[renderContext.rowIdx].uid).updateCourierMessage(_adminMessage);
-                                              //Navigator.pop(context);
                                               Navigator.pushNamed(context, '/dashboard');
                                             },
                                           ),
@@ -291,14 +280,12 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                   },
                                 )
                             );
-                            setState(() {
-
-                            });
-                          }: () async {
+                            setState(() {});
+                          } : () async {
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) => StatefulBuilder(
-                                  builder: (context, setState){
+                                  builder: (context, setState) {
                                     return AlertDialog(
                                         content: Text('Are you sure you want to proceed?'),
                                         actions: [
@@ -319,7 +306,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                   },
                                 )
                             );
-                            },
+                          },
                       ),
                       !approved ? IconButton(
                           icon: Icon(Icons.announcement_rounded, color: Colors.red,),
@@ -336,7 +323,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) => StatefulBuilder(
-                                  builder: (context, setState){
+                                  builder: (context, setState) {
                                     return AlertDialog(
                                         content: Column(
                                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -421,7 +408,6 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                             ),
                                           ],
                                         ),
-
                                         actions: [
                                           TextButton(
                                             child: Text("Send"),
@@ -431,12 +417,13 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                               Navigator.pushNamed(context, '/dashboard');
                                             },
                                           ),
-                                        ]);
+                                        ]
+                                    );
                                   },
                                 )
                             );
                           }
-                      ): Container(),
+                      ) : Container(),
                     ],
                   );
                 }
@@ -446,14 +433,14 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                 title: 'Status',
                 field: 'status',
                 type: PlutoColumnType.text(),
-                renderer: (renderContext){
+                renderer: (renderContext) {
                   return Padding(
                     padding: const EdgeInsets.all(10),
                     child: Align(
                       alignment: Alignment.bottomLeft,
                       child: Column(
                         children: [
-                          if(renderContext.cell.value == true)...[
+                          if (renderContext.cell.value == true)...[
                             Text('Accepted', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),),
                           ]
                           else ...[
@@ -468,7 +455,6 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
             ];
 
             List<PlutoRow> rows = List.generate(couriers.length, (index) {
-
               String credentials = couriers[index].driversLicenseFront_+ ' ' +
                   couriers[index].driversLicenseBack_+ ' ' +
                   couriers[index].nbiClearancePhoto_+ ' ' +
@@ -494,7 +480,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
               child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                createHeader: (PlutoGridStateManager){
+                createHeader: (PlutoGridStateManager) {
                     return Container(
                         color: Color(0xFFEEEEEE),
                         child: Align(
@@ -505,7 +491,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                         )
                     );
                 },
-                createFooter: (PlutoGridStateManager){
+                createFooter: (PlutoGridStateManager) {
                   return Container(
                       color: Color(0xFFEEEEEE),
                       child: Align(

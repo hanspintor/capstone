@@ -2,9 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/auth.dart';
-import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
 import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
@@ -95,7 +93,7 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
       body: StreamBuilder<List<DeliveryPrice>>(
           stream: DatabaseService().deliveryPriceList,
           builder: (context, snapshot) {
-            if(snapshot.hasData){
+            if (snapshot.hasData) {
               List<DeliveryPrice> price = snapshot.data;
               print(price[0].baseFare);
 
@@ -133,7 +131,6 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
                 );
               });
 
-              //print(rows.toString());
               return Padding(
                 padding: EdgeInsets.all(100),
                 child: PlutoGrid(
@@ -141,14 +138,11 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
                     rows: rows,
                     onChanged: (PlutoGridOnChangedEvent event) async{
 
-                      if(event.columnIdx == 1){
+                      if (event.columnIdx == 1) {
                         await DatabaseService(uid: priceUIDs[event.rowIdx]).updateBaseFare(event.value);
-                      }
-                      else await DatabaseService(uid: priceUIDs[event.rowIdx]).updateFarePerKM(event.value);
-                      // int val;
-                      //   price[event.rowIdx].baseFare = event.value;
+                      } else await DatabaseService(uid: priceUIDs[event.rowIdx]).updateFarePerKM(event.value);
                     },
-                  createHeader: (PlutoGridStateManager){
+                  createHeader: (PlutoGridStateManager) {
                     return Container(
                         color: Color(0xFFEEEEEE),
                         child: Align(
@@ -159,7 +153,7 @@ class _DeliveryPricesPageState extends State<DeliveryPricesPage> {
                         )
                     );
                   },
-                  createFooter: (PlutoGridStateManager){
+                  createFooter: (PlutoGridStateManager) {
                     return Container(
                         color: Color(0xFFEEEEEE),
                         child: Align(

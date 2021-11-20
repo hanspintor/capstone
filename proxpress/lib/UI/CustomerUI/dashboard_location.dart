@@ -47,27 +47,27 @@ class _DashboardLocationState extends State<DashboardLocation>{
           verificationCompleted: (PhoneAuthCredential credential) async{
             await FirebaseAuth.instance.signInWithCredential(credential).
             then((value) async {
-              if(value.user != null){
+              if (value.user != null) {
                 print('verified naaaaa');
               }
             });
           },
-          verificationFailed: (FirebaseAuthException e){
+          verificationFailed: (FirebaseAuthException e) {
             print(e.message);
           },
-          codeSent: (String verificationID, int resendToken){
+          codeSent: (String verificationID, int resendToken) {
             setState(() {
               _verificationCode = verificationID;
             });
           },
-          codeAutoRetrievalTimeout: (String verificationID){
+          codeAutoRetrievalTimeout: (String verificationID) {
             setState(() {
               _verificationCode = verificationID;
             });
           },
           timeout: Duration(seconds: remainingTime)
       );
-    } catch (e){
+    } catch (e) {
       print(e);
     }
   }
@@ -81,7 +81,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
     return  StreamBuilder<Customer>(
       stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot) {
-        if(snapshot.hasData){
+        if (snapshot.hasData) {
           Customer customerData = snapshot.data;
           contactNo = customerData.contactNo;
 
@@ -105,7 +105,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                           onPressed: () {
                             showDialog(
                                 context: context,
-                                builder: (BuildContext context){
+                                builder: (BuildContext context) {
                                   return AlertDialog(
                                     titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                                     title: Column(
@@ -167,7 +167,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         Visibility(
                           visible: rButton,
                           child: ElevatedButton(
-                            onPressed: (){
+                            onPressed: () {
                               setState(() {
                                 vPhone = true;
                                 rButton = false;
@@ -218,7 +218,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                           await user.linkWithCredential(
                                               PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin)
                                           ).then((value) async {
-                                            if(value.user != null){
+                                            if (value.user != null) {
                                               print("works?");
                                               setState(() {
                                                 vPhone = false;
@@ -273,9 +273,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                           Countdown(
                                             controller: _controller,
                                             seconds: remainingTime,
-                                            build: (_, double time){
+                                            build: (_, double time) {
                                               Color color1 = Colors.green;
-                                              if(time.toInt() <= 60){
+                                              if (time.toInt() <= 60) {
                                                 color1 = Colors.red;
                                               }
                                               return Text(
@@ -323,7 +323,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                             color: Colors.redAccent
                                         ),
                                       ),
-                                      onTap: (){
+                                      onTap: () {
                                         showToast("We have sent a new OTP");
                                         verifyPhone(contactNo);
                                         _controller.restart();

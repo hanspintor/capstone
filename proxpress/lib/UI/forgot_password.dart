@@ -27,7 +27,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   child: IconButton(
                     icon: Icon(Icons.close_rounded,
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context, false);
                     },
                   ),
@@ -65,10 +65,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email_rounded),
                     ),
-                    onSaved: (String value){
+                    onSaved: (String value) {
                       email = value;
                     },
-                    onChanged: (val){
+                    onChanged: (val) {
                       setState(() => email = val);
                     }
                 ),

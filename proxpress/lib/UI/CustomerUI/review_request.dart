@@ -278,7 +278,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 
-  Future topUp(){
+  Future topUp() {
     return showMaterialModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(

@@ -53,7 +53,7 @@ class _CourierListState extends State<CourierList> {
 
           List<String> excludeCouriers = [];
 
-          pending.forEach((delivery){
+          pending.forEach((delivery) {
             excludeCouriers.add(delivery.courierRef.id);
           });
 

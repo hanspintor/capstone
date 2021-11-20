@@ -43,7 +43,7 @@ class _TransactionTileState extends State<TransactionTile> {
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                     child: Card(
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(context, PageTransition(child: DeliveryDetails(
                             customer: widget.delivery.customerRef,
                             courier: widget.delivery.courierRef,
@@ -138,8 +138,8 @@ class _TransactionTileState extends State<TransactionTile> {
           padding: const EdgeInsets.all(8.0),
           child: StreamBuilder<Customer>(
             stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
-            builder: (context,snapshot){
-              if(snapshot.hasData){
+            builder: (context,snapshot) {
+              if (snapshot.hasData) {
                 Customer customerData = snapshot.data;
 
                 String status = '';
@@ -154,7 +154,7 @@ class _TransactionTileState extends State<TransactionTile> {
                   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Card(
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(context, PageTransition(child: DeliveryDetails(
                           customer: widget.delivery.customerRef,
                           courier: widget.delivery.courierRef,

@@ -52,10 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       labelText: "Email",
                                       prefixIcon: Icon(Icons.email_rounded),
                                     ),
-                                    onSaved: (String value){
+                                    onSaved: (String value) {
                                       email = value;
                                     },
-                                    onChanged: (val){
+                                    onChanged: (val) {
                                       setState(() => email = val);
                                     }
                                 ),
@@ -64,20 +64,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: TextFormField(
                                     textInputAction: TextInputAction.next,
                                     obscureText: true,
-                                    validator: (String value){
-                                      if(value.isEmpty){
+                                    validator: (String value) {
+                                      if (value.isEmpty) {
                                         return 'Password is Required';
                                       }
                                       else return null;
                                     },
-                                    onSaved: (String value){
+                                    onSaved: (String value) {
                                       password = value;
                                     },
                                     decoration: InputDecoration(
                                       labelText: "Password",
                                       prefixIcon: Icon(Icons.lock),
                                     ),
-                                    onChanged: (val){
+                                    onChanged: (val) {
                                       setState(() => password = val);
                                     }
                                 ),
@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: EdgeInsets.only(top: 15),
                           child: ElevatedButton(
                             onPressed: () async {
-                              if (_formKey.currentState.validate()){
+                              if (_formKey.currentState.validate()) {
                                 dynamic result = await _auth.SignIn(email, password);
                                 if (result == null) {
                                   setState(() {
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .then((DocumentSnapshot documentSnapshot) {
                                     if (documentSnapshot.exists) {
                                       print('customer document found');
-                                      setState((){
+                                      setState(() {
                                         error = 'Account is not an admin';
                                       });
                                       _auth.signOut();
@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           .then((DocumentSnapshot documentSnapshot) {
                                         if (documentSnapshot.exists) {
                                           print('courier document found');
-                                          setState((){
+                                          setState(() {
                                             error = 'Account is not an admin';
                                           });
                                           _auth.signOut();

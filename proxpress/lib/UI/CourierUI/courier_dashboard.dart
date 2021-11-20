@@ -79,7 +79,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
             verificationCompleted: (PhoneAuthCredential credential) async {
               await FirebaseAuth.instance.signInWithCredential(credential).
               then((value) async {
-                if(value.user != null) {
+                if (value.user != null) {
                   print('verified naaaaa');
                 }
               });
@@ -106,8 +106,8 @@ class _CourierDashboardState extends State<CourierDashboard> {
 
     return StreamBuilder<Courier>(
       stream: DatabaseService(uid: user.uid).courierData,
-      builder: (context,snapshot){
-        if(snapshot.hasData){
+      builder: (context,snapshot) {
+        if (snapshot.hasData) {
           Courier courierData = snapshot.data;
           approved = courierData.approved;
           notifPopUpStatus = courierData.NotifPopStatus;
@@ -151,7 +151,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   subtitle: Text(driversLicenseFrontFileName),
                   trailing: IconButton(
                     icon: Icon(driversLicenseFrontFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                    onPressed:  driversLicenseFrontFileName == 'No File Selected' || driversLicenseFront == null ? null :(){
+                    onPressed:  driversLicenseFrontFileName == 'No File Selected' || driversLicenseFront == null ? null : () {
                       setState(() {
                         driversLicenseFront = null;
                       });
@@ -178,7 +178,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   subtitle: Text(driversLicenseBackFileName),
                   trailing: IconButton(
                     icon: Icon(driversLicenseBackFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                    onPressed:  driversLicenseBackFileName == 'No File Selected' || driversLicenseBack == null ? null :(){
+                    onPressed:  driversLicenseBackFileName == 'No File Selected' || driversLicenseBack == null ? null : () {
                       setState(() {
                         driversLicenseBack = null;
                       });
@@ -204,7 +204,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   subtitle: Text(nbiClearancePhotoFileName),
                   trailing: IconButton(
                     icon: Icon(nbiClearancePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                    onPressed:  nbiClearancePhotoFileName == 'No File Selected' || nbiClearancePhoto == null ? null :(){
+                    onPressed:  nbiClearancePhotoFileName == 'No File Selected' || nbiClearancePhoto == null ? null : () {
                       setState(() {
                         nbiClearancePhoto = null;
                       });
@@ -232,7 +232,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   subtitle: Text(vehicleRegistrationORFileName),
                   trailing: IconButton(
                     icon: Icon(vehicleRegistrationORFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                    onPressed:  vehicleRegistrationORFileName == 'No File Selected' || vehicleRegistrationOR == null ? null :(){
+                    onPressed:  vehicleRegistrationORFileName == 'No File Selected' || vehicleRegistrationOR == null ? null : () {
                       setState(() {
                         vehicleRegistrationOR = null;
                       });
@@ -260,7 +260,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   subtitle: Text(vehicleRegistrationCRFileName),
                   trailing: IconButton(
                     icon: Icon(vehicleRegistrationCRFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                    onPressed:  vehicleRegistrationCRFileName == 'No File Selected' || vehicleRegistrationCR == null ? null :(){
+                    onPressed:  vehicleRegistrationCRFileName == 'No File Selected' || vehicleRegistrationCR == null ? null : () {
                       setState(() {
                         vehicleRegistrationCR = null;
                       });
@@ -290,7 +290,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                     padding: const EdgeInsets.only(left: 38),
                     child: IconButton(
                       icon: Icon(vehiclePhotoFileName == 'No File Selected' ? Icons.attach_file_rounded: Icons.cancel_rounded, color: Color(0xfffb0d0d),),
-                      onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null :(){
+                      onPressed:  vehiclePhotoFileName == 'No File Selected' || vehiclePhoto == null ? null : () {
                         setState(() {
                           vehiclePhoto = null;
                         });
@@ -319,23 +319,23 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   primary: Color(0xfffb0d0d),
                 ),
                 onPressed: () async {
-                  bool picsLoaded(){
-                    if(courierData.adminCredentialsResponse[0] && driversLicenseFront != null){
+                  bool picsLoaded() {
+                    if (courierData.adminCredentialsResponse[0] && driversLicenseFront != null) {
                       return true;
-                    }else if(courierData.adminCredentialsResponse[1] && driversLicenseBack != null){
+                    } else if (courierData.adminCredentialsResponse[1] && driversLicenseBack != null) {
                       return true;
-                    }else if(courierData.adminCredentialsResponse[2] && nbiClearancePhoto != null){
+                    } else if (courierData.adminCredentialsResponse[2] && nbiClearancePhoto != null) {
                       return true;
-                    }else if(courierData.adminCredentialsResponse[3] && vehicleRegistrationOR != null){
+                    } else if (courierData.adminCredentialsResponse[3] && vehicleRegistrationOR != null) {
                       return true;
-                    }else if(courierData.adminCredentialsResponse[4] && vehicleRegistrationCR != null){
+                    } else if (courierData.adminCredentialsResponse[4] && vehicleRegistrationCR != null) {
                       return true;
-                    }else if(courierData.adminCredentialsResponse[5] && vehiclePhoto != null){
+                    } else if (courierData.adminCredentialsResponse[5] && vehiclePhoto != null) {
                       return true;
-                    }else return false;
+                    } else return false;
                   }
 
-                  if (picsLoaded()){
+                  if (picsLoaded()) {
                       final FirebaseAuth auth = FirebaseAuth.instance;
                       final User user = auth.currentUser;
 
@@ -348,64 +348,64 @@ class _CourierDashboardState extends State<CourierDashboard> {
                         final vehiclePhotoDestination = 'Couriers/${user.uid}/$vehiclePhotoFileName';
 
                         try {
-                          if(courierData.adminCredentialsResponse[0]){
+                          if (courierData.adminCredentialsResponse[0]) {
                             print('1');
                             await UploadFile.uploadFile(driversLicenseFrontDestination, driversLicenseFront);
                             driversLicenseFront_ = await firebase_storage.FirebaseStorage.instance
                                 .ref(driversLicenseFrontDestination)
                                 .getDownloadURL();
                           }
-                          if(courierData.adminCredentialsResponse[1]){
+                          if (courierData.adminCredentialsResponse[1]) {
                             print('2');
                             await UploadFile.uploadFile(driversLicenseBackDestination, driversLicenseBack);
                             driversLicenseBack_ = await firebase_storage.FirebaseStorage.instance
                                 .ref(driversLicenseBackDestination)
                                 .getDownloadURL();
                           }
-                          if(courierData.adminCredentialsResponse[2]){
+                          if (courierData.adminCredentialsResponse[2]) {
                             print('3');
                             await UploadFile.uploadFile(nbiClearancePhotoDestination, nbiClearancePhoto);
                             nbiClearancePhoto_ = await firebase_storage.FirebaseStorage.instance
                                 .ref(nbiClearancePhotoDestination)
                                 .getDownloadURL();
                           }
-                          if(courierData.adminCredentialsResponse[3]){
+                          if (courierData.adminCredentialsResponse[3]) {
                             print('4');
                             await UploadFile.uploadFile(vehicleRegistrationORDestination, vehicleRegistrationOR);
                             vehicleRegistrationOR_ = await firebase_storage.FirebaseStorage.instance
                                 .ref(vehicleRegistrationORDestination)
                                 .getDownloadURL();
                           }
-                          if(courierData.adminCredentialsResponse[4]){
+                          if (courierData.adminCredentialsResponse[4]) {
                             print('5');
                             await UploadFile.uploadFile(vehicleRegistrationCRDestination, vehicleRegistrationCR);
                             vehicleRegistrationCR_ = await firebase_storage.FirebaseStorage.instance
                                 .ref(vehicleRegistrationCRDestination)
                                 .getDownloadURL();
                           }
-                          if(courierData.adminCredentialsResponse[5]){
+                          if (courierData.adminCredentialsResponse[5]) {
                             print('6');
                             await UploadFile.uploadFile(vehiclePhotoDestination, vehiclePhoto);
                             vehiclePhoto_ = await firebase_storage.FirebaseStorage.instance
                                 .ref(vehiclePhotoDestination)
                                 .getDownloadURL();
                           }
-                          if(driversLicenseFront_ == null || driversLicenseFront_ == ''){
+                          if (driversLicenseFront_ == null || driversLicenseFront_ == '') {
                             driversLicenseFront_ = courierData.driversLicenseFront_;
                           }
-                          if(driversLicenseBack_ == null || driversLicenseBack_ == ''){
+                          if (driversLicenseBack_ == null || driversLicenseBack_ == '') {
                             driversLicenseBack_ = courierData.driversLicenseBack_;
                           }
-                          if(nbiClearancePhoto_ == null || nbiClearancePhoto_ == ''){
+                          if (nbiClearancePhoto_ == null || nbiClearancePhoto_ == '') {
                             nbiClearancePhoto_ = courierData.nbiClearancePhoto_;
                           }
-                          if(vehicleRegistrationOR_ == null || vehicleRegistrationOR_ == ''){
+                          if (vehicleRegistrationOR_ == null || vehicleRegistrationOR_ == '') {
                             vehicleRegistrationOR_ = courierData.vehicleRegistrationOR_;
                           }
-                          if(vehicleRegistrationCR_ == null || vehicleRegistrationCR_ == ''){
+                          if (vehicleRegistrationCR_ == null || vehicleRegistrationCR_ == '') {
                             vehicleRegistrationCR_ = courierData.vehicleRegistrationCR_;
                           }
-                          if(vehiclePhoto_ == null || vehiclePhoto_ == ''){
+                          if (vehiclePhoto_ == null || vehiclePhoto_ == '') {
                             vehiclePhoto_ = courierData.vehiclePhoto_;
                           }
 
@@ -476,7 +476,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                 Visibility(
                                   visible: user1.phoneNumber != null ? false : rButton,
                                   child: ElevatedButton(
-                                    onPressed: (){
+                                    onPressed: () {
                                       setState(() {
                                         vPhone = true;
                                         rButton = false;
@@ -528,14 +528,14 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                     await user1.linkWithCredential(
                                                         PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin)
                                                     ).then((value) async {
-                                                      if(value.user != null){
+                                                      if (value.user != null) {
                                                         print("works?");
                                                         setState(() {
                                                           vPhone = false;
                                                           rButton = false;
                                                         });
                                                         showToast1("Your phone number is now verified");
-                                                        if(approved){
+                                                        if (approved) {
                                                           Future.delayed(const Duration(seconds: 3), () {
                                                             setState(() {
                                                               Navigator.pushNamed(context, '/template1');
@@ -545,7 +545,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                         }
                                                       }
                                                     });
-                                                  } catch (e){
+                                                  } catch (e) {
                                                     FocusScope.of(context).unfocus();
                                                     print("invalid otp");
                                                   }
@@ -587,9 +587,9 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                     Countdown(
                                                       controller: _controller,
                                                       seconds: remainingTime,
-                                                      build: (_, double time){
+                                                      build: (_, double time) {
                                                         Color color1 = Colors.green;
-                                                        if(time.toInt() <= 60){
+                                                        if (time.toInt() <= 60) {
                                                           color1 = Colors.red;
                                                         }
                                                         return Text(
@@ -637,7 +637,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                       color: Colors.redAccent
                                                   ),
                                                 ),
-                                                onTap: (){
+                                                onTap: () {
                                                   showToast1("We have sent a new OTP");
                                                   verifyPhone(contactNo);
                                                   print("resending");

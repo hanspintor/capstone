@@ -13,9 +13,9 @@ class MainDrawerCourier extends StatefulWidget {
   _MainDrawerCourierState createState() => _MainDrawerCourierState();
 }
 
-void selectedItem(BuildContext context, int index){
+void selectedItem(BuildContext context, int index) {
   Navigator.of(context).pop();
-  switch (index){
+  switch (index) {
     case 0:
       Navigator.push(
         context,
@@ -76,7 +76,7 @@ class _MainDrawerCourierState extends State<MainDrawerCourier> {
       child: StreamBuilder<Courier>(
         stream: DatabaseService(uid: user.uid).courierData,
         builder: (context, snapshot) {
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             Courier courierData = snapshot.data;
 
             approved = courierData.approved;

@@ -24,11 +24,11 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
 
-    if(user != null) {
+    if (user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          builder: (context,snapshot) {
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
               approved = courierData.approved;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance

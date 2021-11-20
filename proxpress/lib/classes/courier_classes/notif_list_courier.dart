@@ -17,7 +17,7 @@ class _NotifListCourierState extends State<NotifListCourier> {
     notif.sort((a, b) => b.time.compareTo(a.time));
     return notif == null ? UserLoading() : ListView.builder(
       itemCount: notif.length,
-      itemBuilder: (context, index){
+      itemBuilder: (context, index) {
         return NotifTileCourier(notif: notif[index]);
       },
     );

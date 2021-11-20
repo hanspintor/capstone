@@ -22,13 +22,13 @@ class Customer{
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCustomerPassword(password);
   }
-  void updateCurrentPassword(String password){
+  void updateCurrentPassword(String password) {
     _auth.updateCustomerPassword(password);
   }
   Future<bool> validateCurrentEmail(String email) async {
     return await _auth.validateCustomerEmail(email);
   }
-  void updateCurrentEmail(String email){
+  void updateCurrentEmail(String email) {
     _auth.updateCustomerEmail(email);
   }
 }

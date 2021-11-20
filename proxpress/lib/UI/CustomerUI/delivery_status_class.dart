@@ -17,7 +17,7 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    if(user != null) {
+    if (user != null) {
       Stream<List<Delivery>> deliveryRequestPending = FirebaseFirestore.instance
           .collection('Deliveries')
           .where('Courier Approval', isEqualTo: 'Pending')

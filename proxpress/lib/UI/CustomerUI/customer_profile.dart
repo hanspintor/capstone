@@ -15,12 +15,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    if(user != null) {
+    if (user != null) {
       return user == null ? LoginScreen() : SingleChildScrollView(
         child: StreamBuilder<Customer>(
           stream: DatabaseService(uid: user.uid).customerData,
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          builder: (context,snapshot) {
+            if (snapshot.hasData) {
               Customer customerData = snapshot.data;
 
               return Column(
@@ -49,7 +49,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                 ),
                                 side: MaterialStateProperty.all(BorderSide(color: Colors.red))
                             ),
-                            onPressed: (){
+                            onPressed: () {
                               Navigator.pushNamed(context, '/customerUpdate');
                             },
                           ),
@@ -91,7 +91,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   ),
                 ],
               );
-            } else{
+            } else {
               return UserLoading();
             }
           }

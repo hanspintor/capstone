@@ -18,7 +18,7 @@ class _NotifListCustomerState extends State<NotifListCustomer> {
 
     return notif == null ? UserLoading() : ListView.builder(
       itemCount: notif.length,
-      itemBuilder: (context, index){
+      itemBuilder: (context, index) {
         return NotifTileCustomer(notif: notif[index]);
       },
     );

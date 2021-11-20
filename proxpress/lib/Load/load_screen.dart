@@ -8,7 +8,7 @@ class LoadScreen extends StatefulWidget{
 
 class _LoadScreenState extends State<LoadScreen> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
       Navigator.pushNamed(context, '/wrapper');

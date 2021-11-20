@@ -14,7 +14,7 @@ class TransactionHistory extends StatefulWidget {
 }
 
 class _TransactionHistoryState extends State<TransactionHistory> {
-  Widget _welcomeMessage(String adminMessage){
+  Widget _welcomeMessage(String adminMessage) {
     return Column(
       children: [
         Container(

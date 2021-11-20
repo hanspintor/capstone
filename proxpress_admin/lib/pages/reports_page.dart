@@ -3,11 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 import 'package:proxpress/auth.dart';
-import 'package:proxpress/couriers.dart';
 import 'package:proxpress/database.dart';
-import 'package:proxpress/delivery_prices.dart';
 import 'package:proxpress/login_screen.dart';
 import 'package:proxpress/reports.dart';
 import 'package:intl/intl.dart';
@@ -136,7 +133,7 @@ class _ReportsPageState extends State<ReportsPage> {
       body: StreamBuilder<List<Reports>>(
         stream: DatabaseService().reportList,
         builder: (context, snapshot) {
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             List<Reports> reports = snapshot.data;
 
             List<PlutoColumn> columns = [
@@ -175,14 +172,14 @@ class _ReportsPageState extends State<ReportsPage> {
                 title: 'Attachment',
                 field: 'attachment',
                 type: PlutoColumnType.text(),
-                renderer: (rendererContext){
+                renderer: (rendererContext) {
                   return InkWell(
                     child: Text('Attachment', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,),),
                     onTap: () {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => StatefulBuilder(
-                            builder: (context, setState){
+                            builder: (context, setState) {
                               return AlertDialog(
                                   content: Container(
                                     height: MediaQuery.of(context).size.height/.1,
@@ -245,7 +242,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         onLoaded: (PlutoGridOnLoadedEvent event) {
                           //print(event);
                         },
-                      createHeader: (PlutoGridStateManager){
+                      createHeader: (PlutoGridStateManager) {
                         return Container(
                             color: Color(0xFFEEEEEE),
                             child: Align(
@@ -256,7 +253,7 @@ class _ReportsPageState extends State<ReportsPage> {
                             )
                         );
                       },
-                      createFooter: (PlutoGridStateManager){
+                      createFooter: (PlutoGridStateManager) {
                         return Container(
                             color: Color(0xFFEEEEEE),
                             child: Align(

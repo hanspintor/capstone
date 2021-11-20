@@ -61,16 +61,16 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       child: TextFormField(
         decoration: InputDecoration(labelText: 'Item Description'),
         keyboardType: TextInputType.text,
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'Item description is required.';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           itemDescription = value;
         },
-        onChanged: (String value){
+        onChanged: (String value) {
           setState(() => itemDescription = value);
         },
       ),
@@ -84,16 +84,16 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         controller: textPickupPointPerson,
         decoration: InputDecoration(labelText: 'Name'),
         keyboardType: TextInputType.name,
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'Pick up point person is required.';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           pickupPointPerson = value;
         },
-        onChanged: (String value){
+        onChanged: (String value) {
           setState(() => pickupPointPerson = value);
         },
       ),
@@ -108,19 +108,19 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         maxLength: 11,
         decoration: InputDecoration(labelText: 'Contact Number'),
         keyboardType: TextInputType.number,
-        validator: (String value){
-          if(value.length < 11 && value.length > 0){
+        validator: (String value) {
+          if (value.length < 11 && value.length > 0) {
             return 'Pick up contact number should be 11 digits.';
           }
-          else if(value.isEmpty){
+          else if (value.isEmpty) {
             return 'Pick up contact number is required.';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           pickupContactNum = value;
         },
-        onChanged: (String value){
+        onChanged: (String value) {
           setState(() => pickupContactNum = value);
         },
       ),
@@ -134,16 +134,16 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         controller: textDropoffPointPerson,
         decoration: InputDecoration(labelText: 'Name'),
         keyboardType: TextInputType.name,
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'Drop off point person is required.';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           dropoffPointPerson = value;
         },
-        onChanged: (String value){
+        onChanged: (String value) {
           setState(() => dropoffPointPerson = value);
         },
       ),
@@ -158,19 +158,19 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         maxLength: 11,
         decoration: InputDecoration(labelText: 'Contact Number'),
         keyboardType: TextInputType.number,
-        validator: (String value){
-          if(value.length < 11 && value.length > 0){
+        validator: (String value) {
+          if (value.length < 11 && value.length > 0) {
             return 'Drop off contact number should be 11 digits.';
           }
-          else if(value.isEmpty){
+          else if (value.isEmpty) {
             return 'Drop off contact number is required.';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           dropoffContactNum = value;
         },
-        onChanged: (String value){
+        onChanged: (String value) {
           setState(() => dropoffContactNum = value);
         },
       ),
@@ -197,7 +197,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
             whoWillPay = newValue;
           });
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           whoWillPay = value;
         },
         items: optionsCustomerNotBoth.map<DropdownMenuItem<String>>((String value) {
@@ -218,23 +218,23 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         maxLength: 200,
         decoration: InputDecoration(labelText: 'Specific Instructions'),
         keyboardType: TextInputType.text,
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'Item description is required.';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           specificInstructions = value;
         },
-        onChanged: (String value){
+        onChanged: (String value) {
           setState(() => specificInstructions = value);
         },
       ),
     );
   }
 
-  Widget _buildDropDown(){
+  Widget _buildDropDown() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: DropdownButtonFormField<String>(
@@ -332,7 +332,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () async {
-                                if(isLastStep){
+                                if (isLastStep) {
                                   if (formKeys[currentStep].currentState.validate()) {
                                     Navigator.push(
                                         context,
@@ -358,7 +358,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                                     );
                                   }
                                 } else {
-                                  if(formKeys[currentStep].currentState.validate()) {
+                                  if (formKeys[currentStep].currentState.validate()) {
                                     setState(() => currentStep += 1);
                                   }
                                 }
@@ -367,12 +367,12 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                             ),
                           ),
                           const SizedBox(width: 12,),
-                          if(currentStep != 0)
+                          if (currentStep != 0)
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    if(currentStep == 0){
+                                    if (currentStep == 0) {
                                       return null;
                                     }
                                     else currentStep -= 1;

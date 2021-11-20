@@ -80,7 +80,7 @@ class _AlertTermsConditionsState extends State<AlertTermsConditions> {
                 child: Text(
                   'OK', style: TextStyle(fontSize:15),
                 ),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pop(context);
                 }
             ),

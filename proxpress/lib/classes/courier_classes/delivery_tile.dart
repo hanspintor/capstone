@@ -40,7 +40,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
   String notifM = "";
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     tz.initializeTimeZones();
   }
@@ -74,14 +74,14 @@ class _DeliveryTileState extends State<DeliveryTile> {
               String name = "${customerData.fName} ${customerData.lName}";
               String notifDescrip = "have requested a delivery";
 
-              if(widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true){
+              if (widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true) {
                 NotificationService().showNotification(widget.lengthDelivery, name, notifDescrip, 1);
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Card(
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(context, PageTransition(child: DeliveryDetails(
                         customer: widget.delivery.customerRef,
                         courier: widget.delivery.courierRef,
@@ -192,7 +192,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                   await showDialog(
                                       context: context,
                                       builder: (context) => StatefulBuilder(
-                                        builder: (context, setState){
+                                        builder: (context, setState) {
                                           return AlertDialog(
                                             title: Row(
                                               mainAxisSize: MainAxisSize.min,
@@ -215,7 +215,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                   mainAxisSize: MainAxisSize.min,
                                                   children: [
                                                     TextFormField(
-                                                      validator: (value){
+                                                      validator: (value) {
                                                         cancellationMessage = value;
                                                         return value.isNotEmpty ? null : "Please provide a reason";
                                                       },
@@ -266,7 +266,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                   ElevatedButton(
                                                     child: Text("Send"),
                                                     onPressed: () async {
-                                                      if(_keyCancel.currentState.validate()){
+                                                      if (_keyCancel.currentState.validate()) {
                                                         await FirebaseFirestore.instance
                                                             .collection('Couriers')
                                                             .doc(widget.delivery.courierRef.id)
