@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -52,7 +51,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
   String saveDestination = '';
 
   String fetchedUrl;
-  String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
   String dots(int dotLength){
     String dot = "•";
@@ -70,9 +68,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
     }
 
     final user = Provider.of<TheUser>(context);
-
-    final auth = FirebaseAuth.instance;
-    User user1 = auth.currentUser;
 
     return user == null ? LoginScreen() : Scaffold(
         drawerEnableOpenDragGesture: false,
@@ -107,7 +102,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
               width: 120,
             ),
           ),
-          //title: Text("PROExpress"),
         ),
         endDrawer: NotifDrawerCourier(),
         body: LoaderOverlay(
@@ -422,7 +416,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                               Navigator.pop(context);
                                                             }
                                                           }
-
                                                         },
                                                       ),
                                                     ),

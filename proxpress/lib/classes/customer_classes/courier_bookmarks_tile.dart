@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +166,9 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                               }
                                                             }
                                                           };
+
                                                           stars = (rating/total);
+
                                                           return Column(
                                                             children: [
                                                               Row(
@@ -180,8 +181,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                               ),
                                                             ],
                                                           );
-                                                        }
-                                                        else return Container();
+                                                        } else return Container();
                                                       }
                                                   ),
                                                 ],

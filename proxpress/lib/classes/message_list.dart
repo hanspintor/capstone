@@ -27,7 +27,6 @@ class _MessageListState extends State<MessageList> {
 
   @override
   Widget build(BuildContext context) {
-
     if(widget.messageList.length != 0){
       return widget.messageList == null ? UserLoading() : Flexible(
         child: ListView.builder(

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/classes/courier_classes/feedback_list.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -8,7 +7,6 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
-
 
 class ViewCourierProfile extends StatelessWidget {
   final String courierUID;
@@ -76,6 +74,7 @@ class ViewCourierProfile extends StatelessWidget {
                   .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
+
               return !courierData.approved ? _welcomeMessage(courierData.adminMessage) : DefaultTabController(
                 length: 2,
                 child: SingleChildScrollView(
@@ -191,7 +190,9 @@ class ViewCourierProfile extends StatelessWidget {
                                           }
                                         }
                                       };
+
                                       stars = (rating/total);
+
                                       return Column(
                                         children: [
                                           TabBar(
@@ -555,8 +556,7 @@ class ViewCourierProfile extends StatelessWidget {
                                         ],
                                       );
                                     }
-                                  }
-                                  else {
+                                  } else {
                                     double total = 0.0;
                                     double stars = 0;
                                     double star1 = 0;
@@ -731,9 +731,7 @@ class ViewCourierProfile extends StatelessWidget {
                                                 child: ListTile(
                                                   title: Text('Feedbacks', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                                   subtitle: Column(
-                                                    children: [
-
-                                                    ],
+                                                    children: [],
                                                   ),
                                                 ),
                                               ),

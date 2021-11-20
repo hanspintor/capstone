@@ -19,7 +19,7 @@ class _CommunityListState extends State<CommunityList> {
 
     final community = Provider.of<List<Community>>(context);
 
-    if(community.length != 0){
+    if(community.length != 0) {
       community.sort((a, b) => b.timeSent.compareTo(a.timeSent));
       return community == null ? UserLoading() : ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -29,8 +29,7 @@ class _CommunityListState extends State<CommunityList> {
           return CommunityTile(community: community[index], isCustomer: widget.isCustomer,);
         },
       );
-    }
-    else{
+    } else {
       return Row(
         children: [
           Expanded(

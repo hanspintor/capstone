@@ -3,14 +3,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/Load/user_load.dart';
-import 'package:proxpress/UI/CustomerUI/proxpress_template_customer.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
@@ -38,7 +35,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
 
   final Customer validCustomer = Customer();
 
-
   String _currentFName;
   String _currentLName;
   String _currentAddress;
@@ -56,9 +52,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
   String savedUrl = '';
   String saveDestination = '';
 
-  // bool _isLoading = false;
   String fetchedUrl;
-  String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
   String dots(int dotLength){
     String dot = "•";
@@ -76,8 +70,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
     }
 
     final user = Provider.of<TheUser>(context);
-
-    final auth = FirebaseAuth.instance;
 
     return user == null ? LoginScreen() : Scaffold(
         drawerEnableOpenDragGesture: false,
@@ -642,8 +634,7 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                         )
                       ],
                     );
-                  }
-                  else{
+                  } else {
                     return UserLoading();
                   }
                 }

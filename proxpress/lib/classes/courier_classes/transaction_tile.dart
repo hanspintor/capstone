@@ -88,7 +88,6 @@ class _TransactionTileState extends State<TransactionTile> {
                               ),
                               title: Text("${customerData.fName} ${customerData.lName}",
                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -130,8 +129,7 @@ class _TransactionTileState extends State<TransactionTile> {
                       ),
                     ),
                   );
-                }
-                else return Container();
+                } else return Container();
               }
           ),
         );
@@ -201,7 +199,6 @@ class _TransactionTileState extends State<TransactionTile> {
                             ),
                             title: Text("${customerData.fName} ${customerData.lName}",
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

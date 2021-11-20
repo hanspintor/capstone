@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AlertTermsConditions extends StatefulWidget {
-
   @override
   _AlertTermsConditionsState createState() => _AlertTermsConditionsState();
 }
@@ -20,12 +19,10 @@ class _AlertTermsConditionsState extends State<AlertTermsConditions> {
               "\n \u2022 Download or send out viruses, worms, trojans or harmful programs of all types."
               "\n \u2022 Renting, leasing, sub-licensing or distributing to third parties copies of the Software or the Software license. "
               "\n \u2022 Modify, adapt, reverse engineer, decompile, disassemble, translate or generate software-based derivatives.", textAlign: TextAlign.justify),
-
           Container(
             margin: EdgeInsets.only(top: 20),
             child: Text("A Customer shall agree to be bound by this contract of private transport of parcel, by the PROXpress, of the computing fees and charges of that particular request, and by its acceptance by the Courier of that request; hereby agree that it will be bound by the following private carriage of terms and conditions: ", textAlign: TextAlign.justify),
           ),
-
           Container(
             margin: EdgeInsets.only(top:20, right: 46),
             child: Text("1. Definitions and Interpretations", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -76,7 +73,6 @@ class _AlertTermsConditionsState extends State<AlertTermsConditions> {
               "\nb. Governing Law. In line with the laws of the Philippines, this contract is regulated and interpreted."
               "\nc. Severability. If any provision of this Contract is invalid or becoming illegal or non-performing, the remaining provisions shall remain in full force and effect, and a valid, legal and enforceable provision which shall be as similar as possible to the economic and business aims intended by the parties shall be replaced by the invalid, illegal or unperforming provision."
               "\nd. Courier’s Limited Liability.  Couriers liability to the Customer for loss or destruction of the Shipment shall be limited to One Thousand Five Hundred Pesos (PHP 1,500) for delivery where is through motorcycle and Three Thousand Pesos (PHP 3,000) for delivery where is through a 4-wheeled vehicle. The Customer shall bear the risk of loss if he/she requests the delivery services with a value of exceeding this amount. Any claims for any loss or destruction of the parcel by the Courier must, within a period of  two (2) days of the calendar day, be made by the Courier, if the delivery is in the possession of the Courier and ten (10) calendar days if not in the possession of the Courier for delivery. A claim lodged by the Customer after 10 days shall be regarded to have been waived. The Customer and Courier acknowledge that PROXpress is not a part of these delivery services and consequently shall, for any reason whatsoever, be not liable for any loss of or damage to the delivery.", textAlign: TextAlign.justify),
-
           Container(
             margin: EdgeInsets.only(left: 200, top: 30),
             width: MediaQuery.of(context).size.width / 7,

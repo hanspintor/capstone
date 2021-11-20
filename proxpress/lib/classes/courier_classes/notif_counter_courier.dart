@@ -51,80 +51,79 @@ class _NotifCounterCourierState extends State<NotifCounterCourier> {
     return StreamBuilder<List<Notifications>>(
       stream: notifList,
       builder: (context, snapshot) {
-       if(snapshot.hasData){
-         List<Notifications> n = snapshot.data;
+         if (snapshot.hasData) {
+           List<Notifications> n = snapshot.data;
 
-         String title = "";
+           String title = "";
 
-         for(int x = 0; x<n.length; x++){
-           if(n[x].seen == false){
-             viewable = true;
-             break;
-           } else {
+           for(int x = 0; x<n.length; x++){
+             if(n[x].seen == false){
+               viewable = true;
+               break;
+             } else {
+               viewable = false;
+             }
+           }
+
+           for(int i = 0; i<n.length; i++){
+             if(n[i].seen == false){
+               if(n[i].notifMessage.contains("requested")){
+                 title = "Customer Request";
+               }
+               if(n[i].popsOnce == true){
+                 NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
+                 DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
+               }
+               flag++;
+             }
+             cont = flag;
+           }
+
+           cont = cont ~/ 2;
+           if(notif.length == 0 || cont == 0){
              viewable = false;
            }
-         }
-
-         for(int i = 0; i<n.length; i++){
-           if(n[i].seen == false){
-             if(n[i].notifMessage.contains("requested")){
-               title = "Customer Request";
-             }
-             if(n[i].popsOnce == true){
-               NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
-               DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
-             }
-             flag++;
-           }
-           cont = flag;
-         }
-
-         cont = cont ~/ 2;
-         if(notif.length == 0 || cont == 0){
-           viewable = false;
-         }
-         return Stack(
-           children: [
-             IconButton(
-               icon: Icon(Icons.notifications_none_rounded),
-               onPressed: !widget.approved || !user.emailVerified && user.phoneNumber == null ? null : () async{
-                 _openEndDrawer();
-                 n.forEach((element) async {
-                   await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
-                 });
-               },
-               iconSize: 25,
-             ),
-             Visibility(
-               maintainSize: true,
-               maintainAnimation: true,
-               maintainState: true,
-               visible: viewable,
-               child: Container(
-                 margin: EdgeInsets.only(left: 25, top: 5),
-                 height: 20,
-                 width: 30,
-                 decoration: BoxDecoration(
-                     shape: BoxShape.circle,
-                     color: Colors.red
-                 ),
-                 child: Center(
-                   child: Text(
-                     "${cont.toString()}",
-                     style: TextStyle(
-                         color: Colors.white,
-                         fontWeight: FontWeight.bold
+           return Stack(
+             children: [
+               IconButton(
+                 icon: Icon(Icons.notifications_none_rounded),
+                 onPressed: !widget.approved || !user.emailVerified && user.phoneNumber == null ? null : () async{
+                   _openEndDrawer();
+                   n.forEach((element) async {
+                     await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
+                   });
+                 },
+                 iconSize: 25,
+               ),
+               Visibility(
+                 maintainSize: true,
+                 maintainAnimation: true,
+                 maintainState: true,
+                 visible: viewable,
+                 child: Container(
+                   margin: EdgeInsets.only(left: 25, top: 5),
+                   height: 20,
+                   width: 30,
+                   decoration: BoxDecoration(
+                       shape: BoxShape.circle,
+                       color: Colors.red
+                   ),
+                   child: Center(
+                     child: Text(
+                       "${cont.toString()}",
+                       style: TextStyle(
+                           color: Colors.white,
+                           fontWeight: FontWeight.bold
+                       ),
                      ),
                    ),
                  ),
-               ),
-             )
-           ],
-         );
-
-       }else{
-         return Container();
-       }
+               )
+             ],
+           );
+         } else {
+           return Container();
+         }
       }
     );
   }

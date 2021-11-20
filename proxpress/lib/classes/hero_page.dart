@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class HeroPage extends StatefulWidget {
   final String url;
 

@@ -18,7 +18,6 @@ class DeliveryTile extends StatefulWidget {
   final bool notifPopUpStatus;
   final int notifPopUpCounter;
 
-
   DeliveryTile({
     Key key,
     @required this.delivery,
@@ -39,10 +38,10 @@ class _DeliveryTileState extends State<DeliveryTile> {
   bool isSeen = false;
   bool popsOnce = true;
   String notifM = "";
+
   @override
   void initState(){
     super.initState();
-
     tz.initializeTimeZones();
   }
 
@@ -127,7 +126,6 @@ class _DeliveryTileState extends State<DeliveryTile> {
                           ),
                           title: Text("${customerData.fName} ${customerData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

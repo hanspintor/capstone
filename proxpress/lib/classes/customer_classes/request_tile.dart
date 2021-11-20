@@ -43,7 +43,6 @@ class _RequestTileState extends State<RequestTile> {
 
   @override
   Widget build(BuildContext context) {
-
     final delivery = Provider.of<Delivery>(context);
     final auth = FirebaseAuth.instance;
     User user = auth.currentUser;
@@ -105,7 +104,6 @@ class _RequestTileState extends State<RequestTile> {
                           ),
                           title: Text("${courierData.fName} ${courierData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -158,8 +156,7 @@ class _RequestTileState extends State<RequestTile> {
                   ),
                 ),
               );
-            }
-            else return Container();
+            } else return Container();
           }
         ),
       );
@@ -220,7 +217,6 @@ class _RequestTileState extends State<RequestTile> {
                             ),
                             title: Text("${courierData.fName} ${courierData.lName}",
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -289,8 +285,7 @@ class _RequestTileState extends State<RequestTile> {
                                           ),
                                         ),
                                       );
-
-                                    }else {
+                                    } else {
                                       return Container();
                                     }
                                   }
@@ -343,7 +338,6 @@ class _RequestTileState extends State<RequestTile> {
                                                     ),
                                                   ),
                                                 ],
-
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -370,7 +364,6 @@ class _RequestTileState extends State<RequestTile> {
                                                     child: Column(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-
                                                         DropdownButtonFormField<String>(
                                                           validator: (value) => value == null ? 'Please choose a reason' : null,
                                                           decoration: InputDecoration(
@@ -404,17 +397,13 @@ class _RequestTileState extends State<RequestTile> {
                                                               reason = value;
                                                               return value.isNotEmpty ? null : "Please provide a reason";
                                                             },
-                                                            onChanged: (value) {
-
-                                                            },
+                                                            onChanged: (value) {},
                                                             decoration:  InputDecoration(
                                                               hintText: "Reason",
                                                               hintStyle: TextStyle(
                                                                   fontStyle: FontStyle.italic
                                                               ),
                                                               filled: true,
-
-
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderSide: BorderSide(
                                                                   color: Colors.red,
@@ -422,8 +411,6 @@ class _RequestTileState extends State<RequestTile> {
                                                                 ),
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               ),
-
-
                                                             ),
                                                           ),
                                                         ),
@@ -437,9 +424,7 @@ class _RequestTileState extends State<RequestTile> {
                                                           maxLines: null,
                                                           maxLength: 100,
                                                           keyboardType: TextInputType.multiline,
-                                                          onChanged: (value) {
-
-                                                          },
+                                                          onChanged: (value) {},
                                                           decoration:  InputDecoration(
                                                             hintText: "More details",
                                                             hintStyle: TextStyle(
@@ -448,7 +433,6 @@ class _RequestTileState extends State<RequestTile> {
                                                             filled: true,
                                                             border: InputBorder.none,
                                                             fillColor: Colors.grey[300],
-
                                                             contentPadding: const EdgeInsets.all(30),
                                                             focusedBorder: OutlineInputBorder(
                                                               borderSide: BorderSide(
@@ -461,7 +445,6 @@ class _RequestTileState extends State<RequestTile> {
                                                               borderSide: BorderSide(color: Colors.white),
                                                               borderRadius: BorderRadius.circular(10.0),
                                                             ),
-
                                                           ),
                                                         ),
                                                         SizedBox(height: 10,),
@@ -495,7 +478,6 @@ class _RequestTileState extends State<RequestTile> {
                                                                 saveDestination = saveDestination.substring(0, saveDestination.length - 1);
                                                               }
                                                             });
-
                                                           },
                                                         ),
                                                         SizedBox(height: 5,),
@@ -517,17 +499,15 @@ class _RequestTileState extends State<RequestTile> {
                                                       ],
                                                     ),
                                                   ),
-
                                                 ],
                                               ),
                                               actions: <Widget> [
                                                 ElevatedButton(
                                                   child: Text("Report"),
                                                   onPressed: () async {
-                                                    if(_key.currentState.validate() && reportAttachmentFileName != 'No File Selected'){
+                                                    if (_key.currentState.validate() && reportAttachmentFileName != 'No File Selected') {
                                                       setState((){
                                                         attachmentEmpty = false;
-
                                                       });
 
                                                       await UploadFile.uploadFile(saveDestination, reportAttachment);
@@ -555,9 +535,8 @@ class _RequestTileState extends State<RequestTile> {
                                                       setState(() {
                                                         reportAttachment = null;
                                                       });
-
-                                                    } else{
-                                                      if(reportAttachmentFileName == 'No File Selected'){
+                                                    } else {
+                                                      if (reportAttachmentFileName == 'No File Selected') {
                                                         setState((){
                                                           attachmentEmpty = true;
                                                         });
@@ -571,7 +550,6 @@ class _RequestTileState extends State<RequestTile> {
                                         },
                                       )
                                   );
-                                  // report a courier
                                 }
                               ),
                               TextButton(
@@ -588,12 +566,11 @@ class _RequestTileState extends State<RequestTile> {
                     ),
                   ),
                 );
-              }
-              else return Container();
+              } else return Container();
             }
         ),
       );
-    } else if(delivery.courierApproval == 'Pending' || delivery.deliveryStatus == 'Pending') {
+    } else if (delivery.courierApproval == 'Pending' || delivery.deliveryStatus == 'Pending') {
       return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: StreamBuilder<Courier>(
@@ -650,7 +627,6 @@ class _RequestTileState extends State<RequestTile> {
                           ),
                           title: Text("${courierData.fName} ${courierData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -787,8 +763,7 @@ class _RequestTileState extends State<RequestTile> {
                   ),
                 ),
               );
-            }
-            else return Container();
+            } else return Container();
           }
         ),
       );
@@ -808,6 +783,7 @@ class _RequestTileState extends State<RequestTile> {
               } else {
                 status = delivery.courierApproval;
               }
+
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Card(
@@ -857,7 +833,6 @@ class _RequestTileState extends State<RequestTile> {
                           ),
                           title: Text("${courierData.fName} ${courierData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

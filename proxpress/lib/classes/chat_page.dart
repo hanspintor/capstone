@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/message_list.dart';
@@ -40,6 +38,7 @@ class _ChatPageState extends State<ChatPage> {
   String saveDestination = '';
   String fetchedUrl;
   ScrollController _scrollController = new ScrollController();
+
   Widget _buildMessageTextField() {
     return Container(
         decoration: BoxDecoration(
@@ -63,9 +62,7 @@ class _ChatPageState extends State<ChatPage> {
           enableSuggestions: true,
           decoration: InputDecoration(
             filled: true,
-
             hintText: 'Type your message',
-
             suffixIcon: _controller.text != '' ? IconButton(
               icon: Icon(Icons.send, color: Colors.red),
               onPressed: _controller.text == '' ? null : () async {
@@ -144,7 +141,6 @@ class _ChatPageState extends State<ChatPage> {
                       });
                     },
                   ),
-
                 ],
               ),
             ),
@@ -179,8 +175,6 @@ class _ChatPageState extends State<ChatPage> {
         .collection('Messages')
         .where('Sent By', isEqualTo: customer)
         .where('Sent To', isEqualTo: courier)
-
-    //.orderBy('Time Sent', descending: false)
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot3);
 
@@ -188,7 +182,6 @@ class _ChatPageState extends State<ChatPage> {
         .collection('Messages')
         .where('Sent By', isEqualTo: courier)
         .where('Sent To', isEqualTo: customer)
-    //.orderBy('Time Sent', descending: false)
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot2);
 
@@ -254,7 +247,6 @@ class _ChatPageState extends State<ChatPage> {
               }
             }
         ),
-        //title: Text("PROExpress"),
       ),
       body: SingleChildScrollView(
         child: Column(

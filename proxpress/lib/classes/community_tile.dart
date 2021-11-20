@@ -99,8 +99,7 @@ class _CommunityTileState extends State<CommunityTile> {
                       ),
                     ),
                   );
-                }
-                else return Container();
+                } else return Container();
               }
             );
           } else if (widget.community.sentBy.toString().contains('Couriers')) {
@@ -164,14 +163,12 @@ class _CommunityTileState extends State<CommunityTile> {
                       ),
                     ),
                   );
-                }
-                else return Container();
+                } else return Container();
               }
             );
           }
           return Container();
-        }
-        else {
+        } else {
           return Container();
         }
       },

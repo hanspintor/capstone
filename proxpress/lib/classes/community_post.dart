@@ -146,8 +146,7 @@ class _CommunityPostState extends State<CommunityPost> {
                                 ),
                               ),
                             );
-                          }
-                          else return Container();
+                          } else return Container();
                         }
                     );
                   } else if (widget.community.sentBy.toString().contains('Couriers')) {
@@ -201,8 +200,7 @@ class _CommunityPostState extends State<CommunityPost> {
                                 ),
                               ),
                             );
-                          }
-                          else return Container();
+                          } else return Container();
                         }
                     );
                   }

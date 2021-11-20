@@ -24,5 +24,3 @@ class _NotifListCustomerState extends State<NotifListCustomer> {
     );
   }
 }
-
-

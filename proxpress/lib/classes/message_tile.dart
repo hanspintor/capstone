@@ -48,7 +48,6 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.white),
                     isSender: true,
                     text: '${message.messageContent}',
-
                   ) : GestureDetector(
                     onTap: (){
                       Navigator.push(
@@ -77,7 +76,6 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.black),
                     isSender: false,
                     text: '${message.messageContent}',
-
                   ) : GestureDetector(
                     onTap: (){
                       Navigator.push(
@@ -90,7 +88,6 @@ class _MessageTileState extends State<MessageTile> {
                       child: Image.network(
                         message.messageContent,
                         width: 200,
-
                       ),
                     ),
                   ),
@@ -110,7 +107,6 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.white),
                     isSender: true,
                     text: '${message.messageContent}',
-
                   ) : Hero(
                     tag: message.uid,
                     child: Image.network(
@@ -131,7 +127,6 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.black),
                     isSender: false,
                     text: '${message.messageContent}',
-
                   ) : Hero(
                     tag: message.uid,
                     child: Image.network(

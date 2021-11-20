@@ -39,36 +39,12 @@ class _CourierTileState extends State<CourierTile> {
   String deliveryPriceUid;
   double deliveryFee = 0.0;
 
-  Widget _buildStars(int rate){
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(5, (index) {
-        return Icon(
-          index < rate ? Icons.star : Icons.star_border, color: Colors.amber,
-        );
-      }),
-    );
-  }
   @override
   Widget build(BuildContext context) {
     deliveryPriceUid = widget.courier.deliveryPriceRef.id;
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-
-    var color;
-    if (widget.courier.status == "Offline") {
-      color = Colors.redAccent;
-    } else {
-      color = Colors.green;
-    }
-
-    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-        .collection('Deliveries')
-        .where('Delivery Status', isEqualTo: 'Delivered')
-        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(widget.courier.uid))
-        .snapshots()
-        .map(DatabaseService().deliveryDataListFromSnapshot);
 
     if (user != null) {
       return StreamBuilder<DeliveryPrice>(
@@ -112,7 +88,6 @@ class _CourierTileState extends State<CourierTile> {
                                     double total = 0.0;
                                     double stars = 0;
 
-
                                     for(int i = 0; i < deliveryData.length; i++){
                                       if(deliveryData[i].courierRef.id == widget.courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
                                         if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
@@ -121,7 +96,9 @@ class _CourierTileState extends State<CourierTile> {
                                         }
                                       }
                                     };
+
                                     stars = (rating/total);
+
                                     return Column(
                                       children: [
                                         Row(
@@ -134,8 +111,7 @@ class _CourierTileState extends State<CourierTile> {
                                         ),
                                       ],
                                     );
-                                  }
-                                  else return Container();
+                                  } else return Container();
                                 }
                             ),
                           ],

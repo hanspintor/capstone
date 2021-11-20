@@ -10,6 +10,7 @@ import 'package:proxpress/services/notification.dart';
 class NotifCounterCustomer extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final approved;
+
   NotifCounterCustomer({
     Key key,
     @required this.scaffoldKey,
@@ -22,16 +23,17 @@ class NotifCounterCustomer extends StatefulWidget {
 
 class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
   int detector = 0;
+
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
-
 
   @override
   void initState(){
     super.initState();
     tz.initializeTimeZones();
   }
+
   @override
   Widget build(BuildContext context) {
     final notif = Provider.of<List<Notifications>>(context);
@@ -74,12 +76,12 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
               } else if(n[i].notifMessage.contains("accepted")){
                 title = "Request Accepted";
               }
+
               if(n[i].popsOnce == true){
                 NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
                 DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
               }
               flag++;
-
             }
             cont = flag;
           }
@@ -90,7 +92,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
           }
 
           return Stack(
-
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
@@ -100,9 +101,7 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                     await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
                   });
                 },
-
               ),
-
               Visibility(
                 maintainSize: true,
                 maintainAnimation: true,
