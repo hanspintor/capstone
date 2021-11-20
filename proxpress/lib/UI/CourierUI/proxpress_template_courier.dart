@@ -28,9 +28,6 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String currentPage = "Dashboard";
   bool actionButton = false;
-  // void _openEndDrawer() {
-  //   _scaffoldKey.currentState.openEndDrawer();
-  // }
 
   pagePicker(){
     if(widget.currentPage != null) {
@@ -62,12 +59,10 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
-
 
     if(user != null) {
       return StreamBuilder<Courier>(
@@ -95,7 +90,6 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                     key: _scaffoldKey,
                     appBar: AppBar(
                       leading: Stack(
-
                         children: [
                           IconButton(
                             icon: Icon(Icons.menu, size: 25,), // change this size and style
@@ -105,7 +99,6 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                       ),
                       backgroundColor: Colors.white,
                       iconTheme: IconThemeData(color: Color(0xfffb0d0d)
-
                       ),
                       actions: <Widget>[
                         StreamProvider<List<Notifications>>.value(
@@ -113,7 +106,6 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                           initialData: [],
                           child:  NotifCounterCourier(scaffoldKey: _scaffoldKey,approved: approved,),
                         )
-
                       ],
                       flexibleSpace: Container(
                         margin: EdgeInsets.only(top: 10),
@@ -137,7 +129,6 @@ class _AppBarTemp1State extends State<AppBarTemp1> {
                     ),
                   ),
               );
-
             } else {
               return UserLoading();
             }

@@ -1,5 +1,4 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -114,8 +113,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-
-                                  //Text("Standard Rates")
                               ),
                             ),
                           ],
@@ -146,9 +143,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                                   itemCount: deliveryPrices.length,
                                   itemBuilder: (context, index) {
                                     return ListTile(
-                                      // leading: Container(
-                                      //   child: Image.network(vehicleImages[index]),
-                                      // ),
                                       title: Text(deliveryPrices[index].vehicleType, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                       subtitle: Container(
                                         padding: EdgeInsets.only(top: 5),
@@ -188,7 +182,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                 width: 120,
               ),
             ),
-            //title: Text("PROExpress"),
           ),
           body: SingleChildScrollView(
             child: Container(

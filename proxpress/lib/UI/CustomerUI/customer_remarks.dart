@@ -76,6 +76,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       ),
     );
   }
+
   Widget _buildSenderName() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -98,6 +99,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       ),
     );
   }
+
   Widget _buildSenderContactNum() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -124,6 +126,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       ),
     );
   }
+
   Widget _buildReceiverName() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -146,6 +149,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       ),
     );
   }
+
   Widget _buildReceiverContactNum() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -172,6 +176,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       ),
     );
   }
+
   Widget _buildWhoWillPay() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -202,94 +207,9 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           );
         }).toList(),
       ),
-
-      // customerIsPickUp ? DropdownButtonFormField<String>(
-      //   validator: (String value) {
-      //     if (value == 'Choose Payment Option') {
-      //       return 'Please choose a payment option.';
-      //     } else if (value == null) {
-      //       return 'Please choose a payment option.';
-      //     } else if (value == 'Cash on Delivery' && !customerIsPickUp && !customerIsDropOff && whoWillPay == 'Me') {
-      //       return 'You are not in the pick-up or drop-off location.';
-      //     }
-      //     else return null;
-      //   },
-      //   decoration: InputDecoration(labelText: 'Who Will Pay'),
-      //   elevation: 16,
-      //   onChanged: (String newValue) {
-      //     setState(() {
-      //       whoWillPay = null;
-      //       whoWillPay = newValue;
-      //     });
-      //   },
-      //   onSaved: (String value){
-      //     whoWillPay = value;
-      //   },
-      //   items: optionsCustomerIsPickUp.map<DropdownMenuItem<String>>((String value) {
-      //     return DropdownMenuItem<String>(
-      //       value: value,
-      //       child: Text(value),
-      //     );
-      //   }).toList(),
-      // ) : customerIsDropOff ? DropdownButtonFormField<String>(
-      //   validator: (String value) {
-      //     if (value == 'Choose Payment Option') {
-      //       return 'Please choose a payment option.';
-      //     } else if (value == null) {
-      //       return 'Please choose a payment option.';
-      //     } else if (value == 'Cash on Delivery' && !customerIsPickUp && !customerIsDropOff && whoWillPay == 'Me') {
-      //       return 'You are not in the pick-up or drop-off location.';
-      //     }
-      //     else return null;
-      //   },
-      //   decoration: InputDecoration(labelText: 'Who Will Pay'),
-      //   elevation: 16,
-      //   onChanged: (String newValue) {
-      //     setState(() {
-      //       whoWillPay = null;
-      //       whoWillPay = newValue;
-      //     });
-      //   },
-      //   onSaved: (String value){
-      //     whoWillPay = value;
-      //   },
-      //   items: optionsCustomerIsDropOff.map<DropdownMenuItem<String>>((String value) {
-      //     return DropdownMenuItem<String>(
-      //       value: value,
-      //       child: Text(value),
-      //     );
-      //   }).toList(),
-      // ) : !customerIsPickUp && !customerIsDropOff ? DropdownButtonFormField<String>(
-      //   validator: (String value) {
-      //     if (value == 'Choose Payment Option') {
-      //       return 'Please choose a payment option.';
-      //     } else if (value == null) {
-      //       return 'Please choose a payment option.';
-      //     } else if (value == 'Cash on Delivery' && !customerIsPickUp && !customerIsDropOff && whoWillPay == 'Me') {
-      //       return 'You are not in the pick-up or drop-off location.';
-      //     }
-      //     else return null;
-      //   },
-      //   decoration: InputDecoration(labelText: 'Who Will Pay'),
-      //   elevation: 16,
-      //   onChanged: (String newValue) {
-      //     setState(() {
-      //       whoWillPay = null;
-      //       whoWillPay = newValue;
-      //     });
-      //   },
-      //   onSaved: (String value){
-      //     whoWillPay = value;
-      //   },
-      //   items: optionsCustomerNotBoth.map<DropdownMenuItem<String>>((String value) {
-      //     return DropdownMenuItem<String>(
-      //       value: value,
-      //       child: Text(value),
-      //     );
-      //   }).toList(),
-      // ) : Container(),
     );
   }
+
   Widget _buildSpecificInstructions() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -313,6 +233,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       ),
     );
   }
+
   Widget _buildDropDown(){
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -360,7 +281,6 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
     GeoPoint dropOffGeoPoint = GeoPoint(widget.dropOffCoordinates.latitude, widget.dropOffCoordinates.longitude);
 
     final isLastStep = currentStep == getSteps(user.uid).length - 1;
-    final isFourthStep = currentStep == getSteps(user.uid).length - 2;
 
     return Scaffold(
         drawerEnableOpenDragGesture: false,
@@ -437,8 +357,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                                         )
                                     );
                                   }
-                                }
-                                else {
+                                } else {
                                   if(formKeys[currentStep].currentState.validate()) {
                                     setState(() => currentStep += 1);
                                   }

@@ -27,7 +27,6 @@ import 'package:proxpress/models/user.dart';
 import 'package:proxpress/wrapper.dart';
 import 'package:proxpress/classes/customer_classes/customer_updating_form.dart';
 import 'package:flutter/services.dart';
-
 import 'UI/CustomerUI/proxpress_template_customer.dart';
 
 Future<void> main() async {

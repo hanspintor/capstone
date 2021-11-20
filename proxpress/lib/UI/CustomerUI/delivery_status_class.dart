@@ -46,7 +46,6 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
           .snapshots()
           .map(DatabaseService().deliveryDataListFromSnapshot);
 
-      // https://stackoverflow.com/questions/54642710/tabbarview-with-dynamic-container-height
       return DefaultTabController(
         length: 4,
         child: NestedScrollView(

@@ -160,7 +160,6 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                 areaLimit: BoundingBox( east: 123.975219, north: 14.129017, south: 13.261474, west: 122.547888,),
                                               );
 
-                                              // thanks to gavrbhat from Stackoverflow
                                               double getZoomLevel(double radius) {
                                                 double zoomLevel = 11;
                                                 if (radius > 0) {
@@ -289,7 +288,6 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                           } else {
                                                             return Container();
                                                           }
-
                                                         }
                                                     ),
                                                   ],
@@ -526,10 +524,8 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                     ),
                                   ],
                                 );
-                              }
-                              else return Container();
-                            }
-                            else return Container();
+                              } else return Container();
+                            } else return Container();
                           },
                         );
                       }
@@ -539,8 +535,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                         backgroundColor: Colors.grey,
                         heroTag: 'null',
                       );
-                    }
-                    else return Container();
+                    } else return Container();
                   }
                 ),
               );
@@ -549,9 +544,9 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
             }
           }
       );
-    }
-    else return LoginScreen();
+    } else return LoginScreen();
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);

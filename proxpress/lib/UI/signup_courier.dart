@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path/path.dart' as Path;
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/terms_conditions.dart';
@@ -15,7 +14,6 @@ import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:slide_to_act/slide_to_act.dart';
-import 'package:image_picker/image_picker.dart';
 
 class SignupCourier extends StatefulWidget{
   @override
@@ -161,6 +159,7 @@ class _SignupCourierState extends State<SignupCourier> {
         }
     );
   }
+
   Widget _buildContactNo() {
     return StreamBuilder<List<Courier>>(
         stream: DatabaseService().courierList,
@@ -217,6 +216,7 @@ class _SignupCourierState extends State<SignupCourier> {
         }
     );
   }
+
   Widget _buildPassword(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Password'),
@@ -238,6 +238,7 @@ class _SignupCourierState extends State<SignupCourier> {
       },
     );
   }
+
   Widget _buildConfirmPassword(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Confirm Password'),
@@ -263,6 +264,7 @@ class _SignupCourierState extends State<SignupCourier> {
       },
     );
   }
+
   Widget _buildAddress(){
     return TextFormField(
       decoration: InputDecoration(labelText: 'Home Address'),
@@ -439,16 +441,13 @@ class _SignupCourierState extends State<SignupCourier> {
                               }
                             }
                           }
-                          else if(currentStep == 1){
+                          else if(currentStep == 1) {
                             if(!picsLoaded){
                               setState(() => notValid = picsLoaded);
-                            }
-                            else {
+                            } else {
                               setState(() => currentStep += 1);
                             }
-                          }
-                          else
-                          {
+                          } else {
                             if(regKey.currentState.validate()) {
                               setState(() => currentStep += 1);
                             }

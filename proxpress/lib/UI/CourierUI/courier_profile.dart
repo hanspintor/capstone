@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/classes/courier_classes/feedback_list.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -8,7 +7,6 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
-
 
 class CourierProfile extends StatelessWidget {
   Widget _buildStars(int rate){
@@ -55,6 +53,7 @@ class CourierProfile extends StatelessWidget {
               .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
               .snapshots()
               .map(DatabaseService().deliveryDataListFromSnapshot);
+
           return !courierData.approved ? _welcomeMessage(courierData.adminMessage) : DefaultTabController(
             length: 2,
             child: SingleChildScrollView(
@@ -185,7 +184,9 @@ class CourierProfile extends StatelessWidget {
                                       }
                                     }
                                   };
+
                                   stars = (rating/total);
+
                                   return Column(
                                     children: [
                                       TabBar(
@@ -341,11 +342,6 @@ class CourierProfile extends StatelessWidget {
                                                               _buildStars(1),
                                                             ],
                                                           ),
-                                                          // ListTile(
-                                                          //   title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                                          //   trailing: Text("\₱${fee}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
-                                                          //   ),
-                                                          // ),
                                                         ],
                                                       ),
                                                     ),
@@ -532,11 +528,6 @@ class CourierProfile extends StatelessWidget {
                                                               _buildStars(1),
                                                             ],
                                                           ),
-                                                          // ListTile(
-                                                          //   title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                                          //   trailing: Text("\₱${fee}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
-                                                          //   ),
-                                                          // ),
                                                         ],
                                                       ),
                                                     ),
@@ -548,9 +539,7 @@ class CourierProfile extends StatelessWidget {
                                               child: ListTile(
                                                 title: Text('Feedbacks', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                                 subtitle: Column(
-                                                  children: [
-
-                                                  ],
+                                                  children: [],
                                                 ),
                                               ),
                                             ),
@@ -725,11 +714,6 @@ class CourierProfile extends StatelessWidget {
                                                             _buildStars(1),
                                                           ],
                                                         ),
-                                                        // ListTile(
-                                                        //   title: Text('Total Earnings', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                                        //   trailing: Text("\₱${fee}", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black)
-                                                        //   ),
-                                                        // ),
                                                       ],
                                                     ),
                                                   ),
@@ -741,9 +725,7 @@ class CourierProfile extends StatelessWidget {
                                             child: ListTile(
                                               title: Text('Feedbacks', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                                               subtitle: Column(
-                                                children: [
-
-                                                ],
+                                                children: [],
                                               ),
                                             ),
                                           ),

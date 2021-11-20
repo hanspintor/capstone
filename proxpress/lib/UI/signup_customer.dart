@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:isolate';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -135,6 +132,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
       }
     );
   }
+
   Widget _buildContactNo() {
     return StreamBuilder<List<Courier>>(
         stream: DatabaseService().courierList,
@@ -258,6 +256,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
       },
     );
   }
+
   Future<bool> _backPressed(){
     return showDialog(context: context, builder: (context)
     =>AlertDialog(
@@ -280,7 +279,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
       slide = value;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -316,7 +314,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     steps: getSteps(),
                     currentStep: currentStep,
                     physics: NeverScrollableScrollPhysics(),
-
                     controlsBuilder: (context, ControlsDetails) {
                       return Container(
                         margin: EdgeInsets.only(top: 30),
@@ -333,21 +330,15 @@ class _SignupCustomerState extends State<SignupCustomer> {
                                       dynamic result = await _auth.SignUpCustomer(email, password, fName, lName,
                                           contactNo, address, defaultProfilePic, false, 0, {}, 0);
 
-
                                       if(result == null){
                                         setState((){
                                           error = 'Email already taken';
                                           slide = false;
                                           loading = false;
                                         });
-                                      } else{
-                                        // ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-                                        //   ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
                                       }
                                     }
-                                  }
-                                  else
-                                  {
+                                  } else {
                                     if(formKeys[currentStep].currentState.validate()) {
                                       setState(() => currentStep += 1);
                                     }
@@ -383,6 +374,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
       ),
     );
   }
+
   List<Step> getSteps() => [
     Step(
       state: currentStep > 0 ? StepState.complete: StepState.indexed,
@@ -582,6 +574,3 @@ class _SignupCustomerState extends State<SignupCustomer> {
     ),
   ];
 }
-
-
-

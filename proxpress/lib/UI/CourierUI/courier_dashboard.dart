@@ -11,7 +11,6 @@ import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
-import 'package:proxpress/classes/verify.dart';
 import 'package:path/path.dart' as Path;
 import 'package:file_picker/file_picker.dart';
 import 'package:proxpress/services/upload_file.dart';
@@ -53,6 +52,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
   );
   final _pinPutController = TextEditingController();
   final _pinPutFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -69,40 +69,37 @@ class _CourierDashboardState extends State<CourierDashboard> {
     bool notifPopUpStatus = false;
     int notifCounter = 0;
 
-
-
-
-    verifyPhone(String contact) async{
+    verifyPhone(String contact) async {
       contact = "+63" + contact.substring(1);
       print("sending ${contact}");
-      try{
+      try {
         await auth.verifyPhoneNumber
           (
             phoneNumber: contact,
-            verificationCompleted: (PhoneAuthCredential credential) async{
+            verificationCompleted: (PhoneAuthCredential credential) async {
               await FirebaseAuth.instance.signInWithCredential(credential).
               then((value) async {
-                if(value.user != null){
+                if(value.user != null) {
                   print('verified naaaaa');
                 }
               });
             },
-            verificationFailed: (FirebaseAuthException e){
+            verificationFailed: (FirebaseAuthException e) {
               print(e.message);
             },
-            codeSent: (String verificationID, int resendToken){
+            codeSent: (String verificationID, int resendToken) {
               setState(() {
                 _verificationCode = verificationID;
               });
             },
-            codeAutoRetrievalTimeout: (String verificationID){
+            codeAutoRetrievalTimeout: (String verificationID) {
               setState(() {
                 _verificationCode = verificationID;
               });
             },
             timeout: Duration(seconds: remainingTime)
         );
-      } catch (e){
+      } catch (e) {
         print(e);
       }
     }
@@ -129,8 +126,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
               courierData.adminCredentialsResponse[4] == false &&
               courierData.adminCredentialsResponse[5] == false ? true : false;
 
-
-          Widget _welcomeMessage(){
+          Widget _welcomeMessage() {
             String welcomeMessage = courierData.adminMessage;
             print(welcomeMessage);
             return Container(
@@ -146,7 +142,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
             );
           }
 
-          Widget _updateCredential1(){
+          Widget _updateCredential1() {
             return Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: OutlinedButton(
@@ -173,7 +169,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
             );
           }
 
-          Widget _updateCredential2(){
+          Widget _updateCredential2() {
             return Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: OutlinedButton(
@@ -199,7 +195,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
               ),
             );
           }
-          Widget _updateCredential3(){
+          Widget _updateCredential3() {
             return Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: OutlinedButton(
@@ -227,7 +223,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
             );
           }
 
-          Widget _updateCredential4(){
+          Widget _updateCredential4() {
             return Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: OutlinedButton(
@@ -255,7 +251,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
             );
           }
 
-          Widget _updateCredential5(){
+          Widget _updateCredential5() {
             return Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: OutlinedButton(
@@ -283,7 +279,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
             );
           }
 
-          Widget _updateCredential6(){
+          Widget _updateCredential6() {
             return Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: OutlinedButton(
@@ -314,7 +310,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
             );
           }
 
-          Widget _updateCredentialButton(){
+          Widget _updateCredentialButton() {
             return ElevatedButton(
                 child: Text(
                   'Update Credentials', style: TextStyle(color: Colors.white, fontSize:18),
@@ -323,7 +319,6 @@ class _CourierDashboardState extends State<CourierDashboard> {
                   primary: Color(0xfffb0d0d),
                 ),
                 onPressed: () async {
-
                   bool picsLoaded(){
                     if(courierData.adminCredentialsResponse[0] && driversLicenseFront != null){
                       return true;
@@ -339,6 +334,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                       return true;
                     }else return false;
                   }
+
                   if (picsLoaded()){
                       final FirebaseAuth auth = FirebaseAuth.instance;
                       final User user = auth.currentUser;
@@ -429,12 +425,6 @@ class _CourierDashboardState extends State<CourierDashboard> {
             );
           }
 
-          // bool allCredentialsValid = courierData.adminCredentialsResponse[0]  == false &&
-          //     courierData.adminCredentialsResponse[1] == false &&
-          //     courierData.adminCredentialsResponse[2] == false &&
-          //     courierData.adminCredentialsResponse[3] == false &&
-          //     courierData.adminCredentialsResponse[4] == false &&
-          //     courierData.adminCredentialsResponse[5] == false ? true : false;
           contactNo = courierData.contactNo;
           return StreamProvider<List<Delivery>>.value(
             initialData: [],
@@ -558,9 +548,7 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                   } catch (e){
                                                     FocusScope.of(context).unfocus();
                                                     print("invalid otp");
-
                                                   }
-
                                                 },
                                                 focusNode: _pinPutFocusNode,
                                                 controller: _pinPutController,
@@ -582,7 +570,6 @@ class _CourierDashboardState extends State<CourierDashboard> {
                                                     fontSize: 15,
                                                     fontStyle: FontStyle.italic,
                                                     fontWeight: FontWeight.bold
-
                                                 ),
                                               ),
                                               SizedBox(height: 10,),
@@ -685,10 +672,12 @@ class _CourierDashboardState extends State<CourierDashboard> {
       }
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.red, textColor: Colors.white);
   }
+
   Future showToast1(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);

@@ -54,32 +54,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Color(0xfffb0d0d),),
-        actions: [
-          // IconButton(icon: Icon(
-          //   Icons.help_outline,
-          // ),
-          //   onPressed: (){
-          //     showDialog(
-          //         context: context,
-          //         builder: (BuildContext context){
-          //           return AlertDialog(
-          //             title: Text("Help"),
-          //             content: Text('Sample Text Here'),
-          //             actions: [
-          //               TextButton(
-          //                 child: Text("OK"),
-          //                 onPressed: () {
-          //                   Navigator.of(context).pop();
-          //                 },
-          //               ),
-          //             ],
-          //           );
-          //         }
-          //     );
-          //   },
-          //   iconSize: 25,
-          // ),
-        ],
         flexibleSpace: Container(
           margin: EdgeInsets.only(top: 10),
           child: Image.asset(
@@ -107,7 +81,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                       areaLimit: BoundingBox( east: 123.975219, north: 14.129017, south: 13.261474, west: 122.547888,),
                     );
 
-                    // thanks to gavrbhat from Stackoverflow
                     double getZoomLevel(double radius) {
                       double zoomLevel = 11;
                       if (radius > 0) {
@@ -237,31 +210,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   label: Text('Courier Location'),
-      //   icon: Container(
-      //       height: 20,
-      //       width: 20,
-      //       child: Image.asset('assets/courier.png')
-      //   ),
-      //   onPressed: () {
-      //     setState((){
-      //       // print("${delivery.courierLocation.latitude}, ${delivery.courierLocation.longitude}");
-      //
-      //       // _courierLoc = GeoPoint(latitude: delivery.courierLocation.latitude, longitude: delivery.courierLocation.longitude);
-      //       // courierLoc = StaticPositionGeoPoint(
-      //       //     'courierLoc',
-      //       //     MarkerIcon(
-      //       //       icon: Icon(
-      //       //         Icons.location_on_rounded,
-      //       //         size: 100,
-      //       //       ),
-      //       //     ),
-      //       //     [_courierLoc]
-      //       // );
-      //     });
-      //   }
-      // ),
     );
   }
 }

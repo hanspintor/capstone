@@ -1,22 +1,13 @@
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/forgot_password.dart';
-import 'package:proxpress/UI/landing_page.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/services/auth.dart';
 
 class LoginScreen extends StatefulWidget{
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-
-Widget _alertmessage(){
-  return ForgotPassword();
-}
-
-
 
 class _LoginScreenState extends State<LoginScreen> {
 
@@ -29,6 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool visibleE = false;
   bool loading = false;
 
+  Widget _alertmessage(){
+    return ForgotPassword();
+  }
 
   Widget _buildUsername(){
     return TextFormField(
@@ -202,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   _userChoice(){
     return Center(
       child: Column(

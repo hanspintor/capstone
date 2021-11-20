@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -9,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
 
 class CustomerProfile extends StatefulWidget {
-
   @override
   _CustomerProfileState createState() => _CustomerProfileState();
 }
@@ -17,19 +14,14 @@ class _CustomerProfileState extends State<CustomerProfile> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-    final auth = FirebaseAuth.instance;
-    User user1 = auth.currentUser;
 
     if(user != null) {
-
-
       return user == null ? LoginScreen() : SingleChildScrollView(
         child: StreamBuilder<Customer>(
           stream: DatabaseService(uid: user.uid).customerData,
           builder: (context,snapshot){
             if(snapshot.hasData){
               Customer customerData = snapshot.data;
-
 
               return Column(
                 children: [
@@ -99,8 +91,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   ),
                 ],
               );
-            }
-            else{
+            } else{
               return UserLoading();
             }
           }

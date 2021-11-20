@@ -9,10 +9,10 @@ import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
 
 class MainDrawerCourier extends StatefulWidget {
-
   @override
   _MainDrawerCourierState createState() => _MainDrawerCourierState();
 }
+
 void selectedItem(BuildContext context, int index){
   Navigator.of(context).pop();
   switch (index){

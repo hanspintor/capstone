@@ -25,7 +25,6 @@ class AppBarTemp extends StatefulWidget{
 }
 
 class _AppBarTempState extends State<AppBarTemp>{
-
   final bool notBookmarks = false;
   int duration = 60;
   int flag = 0;
@@ -73,7 +72,6 @@ class _AppBarTempState extends State<AppBarTemp>{
     User user = auth.currentUser;
     bool approved = true;
 
-
     if(user != null){
       DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
       Stream<List<Notifications>> notifList = FirebaseFirestore.instance
@@ -93,7 +91,6 @@ class _AppBarTempState extends State<AppBarTemp>{
             key: _scaffoldKey,
             appBar: AppBar(
               leading: Stack(
-
                  children: [
                    IconButton(
                      icon: Icon(Icons.menu, size: 25,), // change this size and style
@@ -120,7 +117,6 @@ class _AppBarTempState extends State<AppBarTemp>{
                   width: 120,
                 ),
               ),
-              //title: Text("PROExpress"),
             ),
             drawer: MainDrawerCustomer(),
             endDrawer: NotifDrawerCustomer(),
@@ -129,19 +125,12 @@ class _AppBarTempState extends State<AppBarTemp>{
             child: FloatingActionButton(
               child: Icon(Icons.post_add_rounded),
               onPressed: (){
-
                 Navigator.pushNamed(context, '/customerCreatePost');
               },
             ),
             ),
         ),
       );
-    } else
-        return LoginScreen();
+    } else return LoginScreen();
   }
 }
-
-
-
-
-

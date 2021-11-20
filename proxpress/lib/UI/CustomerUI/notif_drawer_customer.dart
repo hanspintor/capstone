@@ -18,6 +18,7 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
   bool isClear = false;
   String caption = "";
   int flag = 1;
+
   @override
   Widget build(BuildContext context) {
     bool approved = false;
@@ -81,6 +82,7 @@ class _NotifDrawerCustomerState extends State<NotifDrawerCustomer>{
       return LoginScreen();
     }
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);

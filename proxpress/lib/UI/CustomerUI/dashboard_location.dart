@@ -1,17 +1,14 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
-import 'package:proxpress/classes/verify.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-
 
 class DashboardLocation extends StatefulWidget{
   @override
@@ -39,7 +36,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
   final auth = FirebaseAuth.instance;
   bool vPhone = false;
   bool rButton = true;
-
 
   verifyPhone(String contact) async{
     contact = "+63" + contact.substring(1);
@@ -76,14 +72,12 @@ class _DashboardLocationState extends State<DashboardLocation>{
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     User user = auth.currentUser;
     print("Phone: ${user.phoneNumber}");
     print("Phone: ${user.uid}");
+
     return  StreamBuilder<Customer>(
       stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot) {
@@ -174,7 +168,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                           visible: rButton,
                           child: ElevatedButton(
                             onPressed: (){
-
                               setState(() {
                                 vPhone = true;
                                 rButton = false;
@@ -189,14 +182,12 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         Visibility(
                           visible: vPhone,
                           child: Card(
-
                             elevation: 5,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                             borderOnForeground: true,
                             child: Container(
-
                               child: Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: Column(
@@ -206,7 +197,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
-
                                       ),
                                     ),
                                     SizedBox(height: 20,),
@@ -215,8 +205,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                           "message with your code.",
                                       style: TextStyle(
                                           fontSize: 15,
-
-
                                       ),
                                     ),
                                 SizedBox(height: 15,),
@@ -241,15 +229,12 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                                   Navigator.pushNamed(context, '/template');
                                                 });
                                               });
-
                                             }
                                           });
-                                        } catch (e){
+                                        } catch (e) {
                                           FocusScope.of(context).unfocus();
                                           print("invalid otp");
-
                                         }
-
                                       },
                                       focusNode: _pinPutFocusNode,
                                       controller: _pinPutController,
@@ -271,7 +256,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                         fontSize: 15,
                                         fontStyle: FontStyle.italic,
                                         fontWeight: FontWeight.bold
-
                                       ),
                                     ),
                                     SizedBox(height: 10,),
@@ -352,9 +336,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                             ),
                           ),
                         ),
-
-                        //verifyCond(),
-                        //VerifyEmail()
                       ],
                     ),
                   ) : PinLocation(
@@ -371,20 +352,10 @@ class _DashboardLocationState extends State<DashboardLocation>{
         }
       }
     );
-
-
   }
-
-
 
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
-
 }
-
-
-
-
-
