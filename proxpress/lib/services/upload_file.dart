@@ -8,6 +8,7 @@ class UploadFile {
 
       return ref.putFile(file);
     } on FirebaseException catch (e) {
+      print(e);
       return null;
     }
   }

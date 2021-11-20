@@ -27,6 +27,7 @@ class AuthService {
           size: RecaptchaVerifierSize.compact,
           theme: RecaptchaVerifierTheme.dark,
         ));
+        print(confirmationResult);
       } else {
         result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
@@ -234,6 +235,7 @@ class AuthService {
     firebaseUser.updateEmail(email).then(
           (value) => message = 'Success',
     ).catchError((onError) => message = 'error');
+    print(message);
   }
 
   //updates the email of the courier
@@ -243,5 +245,6 @@ class AuthService {
     firebaseUser.updateEmail(email).then(
           (value) => message = 'Success',
     ).catchError((onError) => message = 'error');
+    print(message);
   }
 }

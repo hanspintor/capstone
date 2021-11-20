@@ -129,15 +129,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
                                 List<String> parcelWeights = ['20', '200', '500', '300', '700', '600'];
 
-                                List<String> vehicleImages = [
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                  'https://cdn-icons-png.flaticon.com/512/1819/1819494.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2554/2554969.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                ];
-
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: deliveryPrices.length,
