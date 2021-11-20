@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class LoadScreen extends StatefulWidget{
-
   @override
   _LoadScreenState createState() => _LoadScreenState();
 }
 
 class _LoadScreenState extends State<LoadScreen> {
-
   @override
   void initState(){
     super.initState();

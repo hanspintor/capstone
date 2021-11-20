@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class UserLoading extends StatelessWidget{
-    @override
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
@@ -14,6 +14,4 @@ class UserLoading extends StatelessWidget{
       ),
     );
   }
-
-
 }
