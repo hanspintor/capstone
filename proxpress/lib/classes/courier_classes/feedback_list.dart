@@ -18,8 +18,6 @@ class FeedbackList extends StatefulWidget {
 class _FeedbackListState extends State<FeedbackList> {
   @override
   Widget build(BuildContext context) {
-    //final delivery = Provider.of<List<Delivery>>(context);
-
     return widget.delivery == null ? UserLoading() : ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,

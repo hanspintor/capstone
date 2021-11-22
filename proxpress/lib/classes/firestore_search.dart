@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proxpress/services/firestore_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FirestoreSearchScaffold extends StatefulWidget {
@@ -90,7 +89,6 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.limitOfRetrievedData);
     return Column(
       children: [
         Row(
@@ -118,7 +116,6 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
         ),
         SingleChildScrollView(
           child: Container(
-
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height - 200,
             color: widget.searchBodyBackgroundColor,
@@ -139,7 +136,6 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
   void updateSearchQuery(String newQuery) {
     setState(() {
       searchQuery = newQuery;
-      print(searchQuery);
     });
   }
 

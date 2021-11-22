@@ -158,8 +158,8 @@ mixin PaymongoEventHandler<T extends StatefulWidget> on State<T> {
       billing: billing,
     );
     final result = await sdk.createSource(_source);
-    final paymentUrl = result.attributes?.redirect.checkoutUrl ?? '';
-    final successLink = result.attributes?.redirect.success ?? '';
+    final paymentUrl = result.attributes.redirect.checkoutUrl ?? '';
+    final successLink = result.attributes.redirect.success ?? '';
     if (paymentUrl.isNotEmpty) {
       final response = await Navigator.push(
         context,

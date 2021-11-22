@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/classes/view_delivery_details.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -20,7 +17,6 @@ class DeliveryTile extends StatefulWidget {
   final int lengthDelivery;
   final bool notifPopUpStatus;
   final int notifPopUpCounter;
-
 
   DeliveryTile({
     Key key,
@@ -42,10 +38,10 @@ class _DeliveryTileState extends State<DeliveryTile> {
   bool isSeen = false;
   bool popsOnce = true;
   String notifM = "";
-  @override
-  void initState(){
-    super.initState();
 
+  @override
+  void initState() {
+    super.initState();
     tz.initializeTimeZones();
   }
 
@@ -77,34 +73,15 @@ class _DeliveryTileState extends State<DeliveryTile> {
               Customer customerData = snapshot.data;
               String name = "${customerData.fName} ${customerData.lName}";
               String notifDescrip = "have requested a delivery";
-              // print("length ${widget.lengthDelivery}");
-              // print("flag ${flag}");
-              // NotificationService().showNotification(1, name, notifDescrip, 1);
-              // NotificationService().showNotification(2, name, notifDescrip, 1);
-              //print(name);
-              if(widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true){
-                NotificationService().showNotification(widget.lengthDelivery, name, notifDescrip, 1);
-                // NotificationService().showNotification(2, name, notifDescrip, 2);
-                // if(flag<widget.lengthDelivery){
-                //
-                //   flag++;
-                //   print("flag1 ${flag}");
-                //   print("length ${widget.lengthDelivery}");
-                //
-                //
-                // }
-                // else if(flag == widget.lengthDelivery){
-                //   print("hu ${widget.notifPopUpStatus}");
-                //   DatabaseService(uid: user.uid).updateNotifPopUpCounterCourier(flag);
-                //   DatabaseService(uid: user.uid).updateNotifPopUpStatusCourier(false);
-                // }
 
+              if (widget.delivery.courierApproval == "Pending" && widget.notifPopUpStatus == true) {
+                NotificationService().showNotification(widget.lengthDelivery, name, notifDescrip, 1);
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Card(
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(context, PageTransition(child: DeliveryDetails(
                         customer: widget.delivery.customerRef,
                         courier: widget.delivery.courierRef,
@@ -149,7 +126,6 @@ class _DeliveryTileState extends State<DeliveryTile> {
                           ),
                           title: Text("${customerData.fName} ${customerData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -179,7 +155,6 @@ class _DeliveryTileState extends State<DeliveryTile> {
                             FutureBuilder<bool>(
                                 future: gotOngoingDelivery,
                                 builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                                  print(gotOngoingDelivery);
                                   if (snapshot.hasData) {
                                     bool cantConfirm = snapshot.data;
 
@@ -217,7 +192,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                   await showDialog(
                                       context: context,
                                       builder: (context) => StatefulBuilder(
-                                        builder: (context, setState){
+                                        builder: (context, setState) {
                                           return AlertDialog(
                                             title: Row(
                                               mainAxisSize: MainAxisSize.min,
@@ -240,7 +215,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                   mainAxisSize: MainAxisSize.min,
                                                   children: [
                                                     TextFormField(
-                                                      validator: (value){
+                                                      validator: (value) {
                                                         cancellationMessage = value;
                                                         return value.isNotEmpty ? null : "Please provide a reason";
                                                       },
@@ -291,7 +266,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                   ElevatedButton(
                                                     child: Text("Send"),
                                                     onPressed: () async {
-                                                      if(_keyCancel.currentState.validate()){
+                                                      if (_keyCancel.currentState.validate()) {
                                                         await FirebaseFirestore.instance
                                                             .collection('Couriers')
                                                             .doc(widget.delivery.courierRef.id)

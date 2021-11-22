@@ -21,21 +21,13 @@ class MessageList extends StatefulWidget {
 
 class _MessageListState extends State<MessageList> {
   @override
-  void initState(){
-    // SchedulerBinding.instance.addPostFrameCallback((_) {
-    //   widget.scrollController.animateTo(
-    //     widget.scrollController.position.maxScrollExtent,
-    //     duration: const Duration(milliseconds: 10),
-    //     curve: Curves.easeOut,);
-    // });
+  void initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.messageList.length);
-
-    if(widget.messageList.length != 0){
+    if (widget.messageList.length != 0) {
       return widget.messageList == null ? UserLoading() : Flexible(
         child: ListView.builder(
           shrinkWrap: true,

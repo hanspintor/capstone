@@ -45,10 +45,10 @@ class Courier{
   Future<bool> validateCurrentPassword(String password) async {
     return await _auth.validateCourierPassword(password);
   }
-  void updateCurrentPassword(String password){
+  void updateCurrentPassword(String password) {
     _auth.updateCourierPassword(password);
   }
-  void updateCurrentEmail(String email){
+  void updateCurrentEmail(String email) {
     _auth.updateCourierEmail(email);
   }
 }

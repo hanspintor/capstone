@@ -10,8 +10,8 @@ class FileStorage {
     var storageRef = storage.ref().child("customer/profile/${uid}");
     print(uid);
     var uploadTask = storageRef.putFile(file);
-    var compleTask = await uploadTask;
-    String downloadUrl = await compleTask.ref.getDownloadURL();
+    var completeTask = await uploadTask;
+    String downloadUrl = await completeTask.ref.getDownloadURL();
     return downloadUrl;
   }
 }

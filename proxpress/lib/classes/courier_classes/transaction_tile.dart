@@ -1,4 +1,3 @@
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -44,7 +43,7 @@ class _TransactionTileState extends State<TransactionTile> {
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                     child: Card(
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(context, PageTransition(child: DeliveryDetails(
                             customer: widget.delivery.customerRef,
                             courier: widget.delivery.courierRef,
@@ -89,7 +88,6 @@ class _TransactionTileState extends State<TransactionTile> {
                               ),
                               title: Text("${customerData.fName} ${customerData.lName}",
                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -131,8 +129,7 @@ class _TransactionTileState extends State<TransactionTile> {
                       ),
                     ),
                   );
-                }
-                else return Container();
+                } else return Container();
               }
           ),
         );
@@ -141,8 +138,8 @@ class _TransactionTileState extends State<TransactionTile> {
           padding: const EdgeInsets.all(8.0),
           child: StreamBuilder<Customer>(
             stream: DatabaseService(uid: widget.delivery.customerRef.id).customerData,
-            builder: (context,snapshot){
-              if(snapshot.hasData){
+            builder: (context,snapshot) {
+              if (snapshot.hasData) {
                 Customer customerData = snapshot.data;
 
                 String status = '';
@@ -157,7 +154,7 @@ class _TransactionTileState extends State<TransactionTile> {
                   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Card(
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(context, PageTransition(child: DeliveryDetails(
                           customer: widget.delivery.customerRef,
                           courier: widget.delivery.courierRef,
@@ -202,7 +199,6 @@ class _TransactionTileState extends State<TransactionTile> {
                             ),
                             title: Text("${customerData.fName} ${customerData.lName}",
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

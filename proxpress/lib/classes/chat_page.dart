@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/classes/message_list.dart';
@@ -40,6 +38,7 @@ class _ChatPageState extends State<ChatPage> {
   String saveDestination = '';
   String fetchedUrl;
   ScrollController _scrollController = new ScrollController();
+
   Widget _buildMessageTextField() {
     return Container(
         decoration: BoxDecoration(
@@ -73,6 +72,7 @@ class _ChatPageState extends State<ChatPage> {
                   await DatabaseService().createMessageData(message, Timestamp.now(), widget.delivery.courierRef, widget.delivery.customerRef);
                 }
                 _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+
                 setState(() {
                   _controller.clear();
                 });
@@ -87,21 +87,15 @@ class _ChatPageState extends State<ChatPage> {
                       Icons.insert_photo,
                     ),
                     onPressed:  () async {
-                      print("picture here..");
-
                       CollectionReference messageCollection = FirebaseFirestore.instance.collection('Messages');
-
-
-
                       String datetime = DateTime.now().toString();
-                      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                      final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                       final pathProfiePicUploaded = result.files.single.path;
                       setState(() {
                         profilePicture = File(pathProfiePicUploaded);
                       });
 
                       String MessageUid = "";
-
 
                       if (profilePicture != null) {
                         if (isCustomer) {
@@ -111,23 +105,19 @@ class _ChatPageState extends State<ChatPage> {
                         }
                         _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
 
-                        await messageCollection.orderBy("Time Sent", descending: true).limit(1).get().then((value){
+                        await messageCollection.orderBy("Time Sent", descending: true).limit(1).get().then((value) {
                            MessageUid = value.docs.first.id;
                          });
 
-                         final profilePictureDestination = 'Messages/${MessageUid}/chatpic_${MessageUid}_$datetime';
+                        final profilePictureDestination = 'Messages/${MessageUid}/chatpic_${MessageUid}_$datetime';
 
-                         print(path.basename(profilePicture.path));
                         await UploadFile.uploadFile(profilePictureDestination, profilePicture);
 
                         savedUrl = await firebase_storage.FirebaseStorage.instance
                             .ref(profilePictureDestination)
                             .getDownloadURL();
 
-
-
                         if (savedUrl != null || savedUrl == 'null') {
-                            print(savedUrl);
                            await DatabaseService(uid: MessageUid).updateMessage(savedUrl);
                         }
 
@@ -135,10 +125,8 @@ class _ChatPageState extends State<ChatPage> {
                           fetchedUrl = savedUrl;
                         });
                       }
-
                     },
                   ),
-
                   IconButton(
                     icon: Icon(Icons.send, color: Colors.red),
                     onPressed: _controller.text == '' ? null : () async {
@@ -153,12 +141,10 @@ class _ChatPageState extends State<ChatPage> {
                       });
                     },
                   ),
-
                 ],
               ),
             ),
             border: OutlineInputBorder(
-              //borderSide: BorderSide(width: 0),
               gapPadding: 10,
               borderRadius: BorderRadius.circular(30),
             ),
@@ -176,23 +162,19 @@ class _ChatPageState extends State<ChatPage> {
     User user = _auth.currentUser;
 
     if (widget.delivery.customerRef.id == user.uid) {
-      setState((){
+      setState(() {
         isCustomer = true;
       });
     }
 
-    print("isCustomer?? $isCustomer");
-
     DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(widget.delivery.customerRef.id);
     DocumentReference courier = FirebaseFirestore.instance.collection('Couriers').doc(widget.delivery.courierRef.id);
-
 
     //ScrollDown();
     Stream<CustomerToCour> messageListCustomerToCour = FirebaseFirestore.instance
         .collection('Messages')
         .where('Sent By', isEqualTo: customer)
         .where('Sent To', isEqualTo: courier)
-    //.orderBy('Time Sent', descending: false)
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot3);
 
@@ -200,7 +182,6 @@ class _ChatPageState extends State<ChatPage> {
         .collection('Messages')
         .where('Sent By', isEqualTo: courier)
         .where('Sent To', isEqualTo: customer)
-    //.orderBy('Time Sent', descending: false)
         .snapshots()
         .map(DatabaseService().messageDataListFromSnapshot2);
 
@@ -266,34 +247,6 @@ class _ChatPageState extends State<ChatPage> {
               }
             }
         ),
-        actions: [
-          // IconButton(icon: Icon(
-          //   Icons.help_outline,
-          // ),
-          //   onPressed: (){
-          //
-          //     showDialog(
-          //         context: context,
-          //         builder: (BuildContext context){
-          //           return AlertDialog(
-          //             title: Text("Help"),
-          //             content: Text('Sample Text Here'),
-          //             actions: [
-          //               TextButton(
-          //                 child: Text("OK"),
-          //                 onPressed: () {
-          //                   Navigator.of(context).pop();
-          //                 },
-          //               ),
-          //             ],
-          //           );
-          //         }
-          //     );
-          //   },
-          //   iconSize: 25,
-          // ),
-        ],
-        //title: Text("PROExpress"),
       ),
       body: SingleChildScrollView(
         child: Column(

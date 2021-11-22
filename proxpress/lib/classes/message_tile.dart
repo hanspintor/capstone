@@ -33,12 +33,10 @@ class _MessageTileState extends State<MessageTile> {
       child: StreamBuilder<Message>(
         stream: DatabaseService(uid: widget.message.uid).messageData,
         builder: (context, snapshot) {
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             Message message = snapshot.data;
             String time = DateFormat.jm().format(message.timeSent.toDate());
-            //print('Message: ${message.messageContent} \nSent By: ${message.sentBy.toString()} \nSent To: ${message.sentTo.toString()} \nTime Sent: ${message.timeSent.toDate()}');
             bool _validURL = Uri.parse(message.messageContent).isAbsolute;
-            //print("Content ${message.messageContent} valid ? ${_validURL}");
           if (widget.isCustomer) {
             if (message.sentBy.toString().contains('Customers')) {
 
@@ -50,9 +48,8 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.white),
                     isSender: true,
                     text: '${message.messageContent}',
-
                   ) : GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                         context,
                         PageTransition(child: HeroPage(url: message.messageContent,), type: PageTransitionType.fade),
@@ -79,9 +76,8 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.black),
                     isSender: false,
                     text: '${message.messageContent}',
-
                   ) : GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                         context,
                         PageTransition(child: HeroPage(url: message.messageContent,), type: PageTransitionType.fade),
@@ -92,7 +88,6 @@ class _MessageTileState extends State<MessageTile> {
                       child: Image.network(
                         message.messageContent,
                         width: 200,
-
                       ),
                     ),
                   ),
@@ -112,7 +107,6 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.white),
                     isSender: true,
                     text: '${message.messageContent}',
-
                   ) : Hero(
                     tag: message.uid,
                     child: Image.network(
@@ -133,7 +127,6 @@ class _MessageTileState extends State<MessageTile> {
                     textStyle: TextStyle(color: Colors.black),
                     isSender: false,
                     text: '${message.messageContent}',
-
                   ) : Hero(
                     tag: message.uid,
                     child: Image.network(

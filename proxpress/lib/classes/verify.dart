@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class VerifyEmail extends StatefulWidget {
-
   @override
   _VerifyEmailState createState() => _VerifyEmailState();
 }
@@ -16,7 +14,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Timer timer;
 
   @override
-  void initState(){
+  void initState() {
     user = auth.currentUser;
     user.sendEmailVerification();
 
@@ -39,12 +37,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   Future<void> checkEmailVerified() async {
-    print("verifying..");
     user = auth.currentUser;
     await user.reload();
-    if(user.emailVerified){
+    if (user.emailVerified) {
       timer.cancel();
-      print("verified");
       ScaffoldMessenger.of(context)..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text("Your email is now verified")));
 
@@ -60,7 +56,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
           }
         }
       );
-      //Navigator.pushNamed(context, '/dashboardLocation');
     }
   }
 }

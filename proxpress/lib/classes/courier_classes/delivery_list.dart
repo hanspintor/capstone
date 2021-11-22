@@ -7,11 +7,13 @@ import 'package:proxpress/models/deliveries.dart';
 class DeliveryList extends StatefulWidget {
   final bool notifPopUpStatus;
   final int notifPopUpCounter;
+
   DeliveryList({
     Key key,
     @required this.notifPopUpStatus,
     @required this.notifPopUpCounter,
   }) : super(key: key);
+
   @override
   _DeliveryListState createState() => _DeliveryListState();
 }

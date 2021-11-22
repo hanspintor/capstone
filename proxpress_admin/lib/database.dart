@@ -18,8 +18,8 @@ class DatabaseService {
   final CollectionReference reportCollection = FirebaseFirestore.instance
       .collection('Reports');
 
-  List<Courier> courierDataListFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc){
+  List<Courier> courierDataListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
       return Courier(
         uid: doc.id,
         fName: (doc.data() as dynamic) ['First Name'] ?? '',
@@ -44,6 +44,7 @@ class DatabaseService {
       );
     }).toList();
   }
+
   // Get Courier Document Data using StreamBuilder
   Courier _courierDataFromSnapshot(DocumentSnapshot snapshot) {
     return Courier(
@@ -68,6 +69,7 @@ class DatabaseService {
       adminCredentialsResponse: snapshot['Credential Response'],
     );
   }
+
   // Customer Model List Builder
   List<Customer> _customerDataListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
@@ -85,8 +87,9 @@ class DatabaseService {
       );
     }).toList();
   }
-  List<Reports> _reportsDataListFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc){
+
+  List<Reports> _reportsDataListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
       return Reports(
         uid: doc.id,
         reportBy: (doc.data() as dynamic) ['Report By'] ?? '',
@@ -108,22 +111,28 @@ class DatabaseService {
       reportTo: snapshot['Report To'],
     );
   }
+
   Stream<Reports> get ReportsData {
     return reportCollection.doc(uid).snapshots().map(reportsDataFromSnapshot);
   }
+
   Stream<Customer> get customerData {
     return customerCollection.doc(uid).snapshots().map(
         _customerDataFromSnapshot);
   }
+
   Stream<Courier> get courierData {
     return courierCollection.doc(uid).snapshots().map(_courierDataFromSnapshot);
   }
+
   Stream<List<Courier>> get courierList {
     return courierCollection.snapshots().map(courierDataListFromSnapshot);
   }
+
   Stream<List<Reports>> get reportList {
     return reportCollection.snapshots().map(_reportsDataListFromSnapshot);
   }
+
   Future approveCourier(bool approve) async {
     await FirebaseFirestore.instance.collection('Couriers')
         .doc(uid)
@@ -131,6 +140,7 @@ class DatabaseService {
       'Admin Approved': approve,
     });
   }
+
   Future updateCredentials(List adminCredentialsResponse) async {
     await FirebaseFirestore.instance.collection('Couriers')
         .doc(uid)
@@ -138,6 +148,7 @@ class DatabaseService {
       'Credential Response': adminCredentialsResponse,
     });
   }
+
   Future updateRequestCashOut(int wallet, bool requestedCashOut) async {
     await FirebaseFirestore.instance.collection('Couriers')
         .doc(uid)
@@ -146,7 +157,6 @@ class DatabaseService {
       'Requested Cash-out': requestedCashOut,
     });
   }
-
 
   Future deleteCourierDocument() {
     return courierCollection.doc(uid).delete();
@@ -177,8 +187,8 @@ class DatabaseService {
     );
   }
 
-  List<DeliveryPrice> _deliveryPriceListFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc){
+  List<DeliveryPrice> _deliveryPriceListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
       return DeliveryPrice(
         uid: doc.id,
         vehicleType: (doc.data() as dynamic) ['Vehicle Type'] ?? '',
@@ -191,6 +201,7 @@ class DatabaseService {
   Stream<List<DeliveryPrice>> get deliveryPriceList {
     return deliveryPriceCollection.snapshots().map(_deliveryPriceListFromSnapshot);
   }
+
   Stream<List<Customer>> get customerList {
     return customerCollection.snapshots().map(_customerDataListFromSnapshot);
   }
@@ -202,6 +213,7 @@ class DatabaseService {
       'Base Fare': baseFare,
     });
   }
+
   Future updateFarePerKM(int farePerKM) async {
     await deliveryPriceCollection
         .doc(uid)

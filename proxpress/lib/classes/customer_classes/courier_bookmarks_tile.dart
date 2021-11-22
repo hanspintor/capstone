@@ -1,6 +1,4 @@
-import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,7 +11,6 @@ import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CourierBookmarkTile extends StatefulWidget {
@@ -71,7 +68,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
               courierRefs = [];
             }
 
-            if(courierRefs.length == 0){
+            if (courierRefs.length == 0) {
               return Row(
                 children: [
                   Expanded(
@@ -113,15 +110,15 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                               builder: (context, snapshot) {
                                 DeliveryPrice deliveryPriceData = snapshot.data;
 
-                                if(temp)
+                                if (temp)
                                   deliveryFee = (deliveryPriceData.baseFare.toDouble() + (deliveryPriceData.farePerKM.toDouble() * distance));
 
-                                if(snapshot.hasData){
+                                if (snapshot.hasData) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child:Card(
                                       child: InkWell(
-                                        onTap : (){
+                                        onTap : () {
                                           Navigator.push(context, PageTransition(
                                               child: ViewCourierProfile(
                                                 courierUID: courier.uid,
@@ -154,22 +151,24 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                   StreamBuilder <List<Delivery>>(
                                                       stream: DatabaseService().deliveryList,
                                                       builder: (context, snapshot) {
-                                                        if(snapshot.hasData){
+                                                        if (snapshot.hasData) {
                                                           List<Delivery> deliveryData = snapshot.data;
                                                           double rating = 0.0;
                                                           double total = 0.0;
                                                           double stars = 0;
 
 
-                                                          for(int i = 0; i < deliveryData.length; i++){
-                                                            if(deliveryData[i].courierRef.id == courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
-                                                              if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
+                                                          for(int i = 0; i < deliveryData.length; i++) {
+                                                            if (deliveryData[i].courierRef.id == courier.uid && deliveryData[i].deliveryStatus == 'Delivered') {
+                                                              if (deliveryData[i].rating != 0 && deliveryData[i].feedback != '') {
                                                                 rating += deliveryData[i].rating;
                                                                 total++;
                                                               }
                                                             }
                                                           };
+
                                                           stars = (rating/total);
+
                                                           return Column(
                                                             children: [
                                                               Row(
@@ -182,8 +181,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                               ),
                                                             ],
                                                           );
-                                                        }
-                                                        else return Container();
+                                                        } else return Container();
                                                       }
                                                   ),
                                                 ],
@@ -228,7 +226,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                     onPressed: () {
                                                       showDialog(
                                                           context: context,
-                                                          builder: (BuildContext context){
+                                                          builder: (BuildContext context) {
                                                             return AlertDialog(
                                                               content: Text('Are you sure you want to remove this courier from your bookmarks?'),
                                                               actions: [
@@ -277,7 +275,6 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                 TextButton(
                                                   child: const Text('PIN LOCATION'),
                                                   onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
-                                                    print("check ${widget.appear}");
                                                     await showMaterialModalBottomSheet(
                                                       context: context,
                                                       builder: (context) => Container(
@@ -296,19 +293,13 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                       ),
                                                     ).then((value) {
                                                       LocalDataBookmark localDataBookmark = value;
-                                                      if(value != null){
+                                                      if (value != null) {
                                                         show = localDataBookmark.appear;
-                                                        print("Outside then: ${show}");
                                                         tempD = localDataBookmark.distance;
-                                                        print("Outside then: ${tempD}");
                                                         tempPA = localDataBookmark.pickupAddress;
-                                                        print("Outside then: ${tempPA}");
                                                         tempPC = localDataBookmark.pickupCoordinates;
-                                                        print("Outside then: ${tempPC}");
                                                         tempDA = localDataBookmark.dropOffAddress;
-                                                        print("Outside then: ${tempDA}");
                                                         tempDC = localDataBookmark.dropOffCoordinates;
-                                                        print("Outside then: ${tempDC}");
                                                       }
                                                     });
 
@@ -324,7 +315,7 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                 ),
                                                 TextButton(
                                                   child: const Text('REQUEST'),
-                                                  onPressed: !temp ? null :() {
+                                                  onPressed: !temp ? null : () {
                                                     Navigator.push(context, PageTransition(
                                                         child: CustomerRemarks(
                                                           courierUID: courierRefs[index].id,

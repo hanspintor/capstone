@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 import 'package:path/path.dart' as Path;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,25 +43,23 @@ class _RequestTileState extends State<RequestTile> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final delivery = Provider.of<Delivery>(context);
     final auth = FirebaseAuth.instance;
     User user = auth.currentUser;
 
-    if(delivery.deliveryStatus == 'Ongoing'){
+    if (delivery.deliveryStatus == 'Ongoing') {
       return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: StreamBuilder<Courier>(
           stream: DatabaseService(uid: delivery.courierRef.id).courierData,
           builder: (context, snapshot) {
-            if(snapshot.hasData){
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Card(
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(context, PageTransition(child: DeliveryDetails(
                         customer: delivery.customerRef,
                         courier: delivery.courierRef,
@@ -109,7 +104,6 @@ class _RequestTileState extends State<RequestTile> {
                           ),
                           title: Text("${courierData.fName} ${courierData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -144,7 +138,7 @@ class _RequestTileState extends State<RequestTile> {
                           children: <Widget>[
                             TextButton(
                               child: Text('CHAT COURIER'),
-                              onPressed: (){
+                              onPressed: () {
                                 Navigator.push(context, PageTransition(child: ChatPage(delivery: delivery), type: PageTransitionType.rightToLeftWithFade));
                               },
                             ),
@@ -162,24 +156,23 @@ class _RequestTileState extends State<RequestTile> {
                   ),
                 ),
               );
-            }
-            else return Container();
+            } else return Container();
           }
         ),
       );
-    } else if(delivery.deliveryStatus == 'Delivered'){
+    } else if (delivery.deliveryStatus == 'Delivered') {
       return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: StreamBuilder<Courier>(
             stream: DatabaseService(uid: delivery.courierRef.id).courierData,
-            builder: (context,snapshot){
-              if(snapshot.hasData){
+            builder: (context,snapshot) {
+              if (snapshot.hasData) {
                 Courier courierData = snapshot.data;
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Card(
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(context, PageTransition(child: DeliveryDetails(
                           customer: delivery.customerRef,
                           courier: delivery.courierRef,
@@ -224,7 +217,6 @@ class _RequestTileState extends State<RequestTile> {
                             ),
                             title: Text("${courierData.fName} ${courierData.lName}",
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -259,7 +251,7 @@ class _RequestTileState extends State<RequestTile> {
                               StreamBuilder<Customer>(
                                   stream: DatabaseService(uid: delivery.customerRef.id).customerData,
                                   builder: (context, snapshot) {
-                                    if(snapshot.hasData){
+                                    if (snapshot.hasData) {
                                       Customer customerData = snapshot.data;
 
                                       if (customerData.courier_ref != {}) {
@@ -270,7 +262,7 @@ class _RequestTileState extends State<RequestTile> {
 
                                       localAddMap = {'Courier_Ref${localMap.length}' : delivery.courierRef};
 
-                                      localMap.forEach((key, value){
+                                      localMap.forEach((key, value) {
                                         if (value == delivery.courierRef) {
                                           isFavorite = true;
                                         }
@@ -293,15 +285,14 @@ class _RequestTileState extends State<RequestTile> {
                                           ),
                                         ),
                                       );
-
-                                    }else {
+                                    } else {
                                       return Container();
                                     }
                                   }
                               ),
                               TextButton(
                                 child: Text('CHAT HISTORY'),
-                                onPressed: (){
+                                onPressed: () {
                                   Navigator.push(context, PageTransition(child: ChatPage(delivery: delivery), type: PageTransitionType.rightToLeftWithFade));
                                 },
                               ),
@@ -311,7 +302,7 @@ class _RequestTileState extends State<RequestTile> {
                                   await showDialog(
                                       context: context,
                                       builder: (context) => StatefulBuilder(
-                                        builder: (context, setState){
+                                        builder: (context, setState) {
                                           String fetchedUrl = "";
                                           final reportAttachmentFileName =  reportAttachment != null ? Path.basename(reportAttachment.path) : 'No File Selected';
                                           return SingleChildScrollView(
@@ -338,7 +329,7 @@ class _RequestTileState extends State<RequestTile> {
                                                       color: Colors.redAccent,
                                                       onPressed: () {
                                                         Navigator.pop(context);
-                                                        setState((){
+                                                        setState(() {
                                                           reason = "";
                                                           reportAttachment = null;
                                                           attachmentEmpty = false;
@@ -347,7 +338,6 @@ class _RequestTileState extends State<RequestTile> {
                                                     ),
                                                   ),
                                                 ],
-
                                               ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -374,7 +364,6 @@ class _RequestTileState extends State<RequestTile> {
                                                     child: Column(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-
                                                         DropdownButtonFormField<String>(
                                                           validator: (value) => value == null ? 'Please choose a reason' : null,
                                                           decoration: InputDecoration(
@@ -391,7 +380,6 @@ class _RequestTileState extends State<RequestTile> {
                                                             setState(() {
                                                               reason = newValue;
                                                             });
-                                                            print(reason);
                                                           },
                                                           items: <String>['Parcel damaged or mishandled', 'Utterly long delivery time', 'Rudeness or harassment', 'Asking price beyond stated fee', 'Others',]
                                                               .map<DropdownMenuItem<String>>((String value) {
@@ -405,21 +393,17 @@ class _RequestTileState extends State<RequestTile> {
                                                         Visibility(
                                                           visible: reason == "Others" ? true : false,
                                                           child: TextFormField(
-                                                            validator: (value){
+                                                            validator: (value) {
                                                               reason = value;
                                                               return value.isNotEmpty ? null : "Please provide a reason";
                                                             },
-                                                            onChanged: (value) {
-
-                                                            },
+                                                            onChanged: (value) {},
                                                             decoration:  InputDecoration(
                                                               hintText: "Reason",
                                                               hintStyle: TextStyle(
                                                                   fontStyle: FontStyle.italic
                                                               ),
                                                               filled: true,
-
-
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderSide: BorderSide(
                                                                   color: Colors.red,
@@ -427,14 +411,12 @@ class _RequestTileState extends State<RequestTile> {
                                                                 ),
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               ),
-
-
                                                             ),
                                                           ),
                                                         ),
                                                         SizedBox(height: 10,),
                                                         TextFormField(
-                                                          validator: (value){
+                                                          validator: (value) {
                                                             _description = value;
                                                             return value.isNotEmpty ? null : "Please provide a reason";
                                                           },
@@ -442,9 +424,7 @@ class _RequestTileState extends State<RequestTile> {
                                                           maxLines: null,
                                                           maxLength: 100,
                                                           keyboardType: TextInputType.multiline,
-                                                          onChanged: (value) {
-
-                                                          },
+                                                          onChanged: (value) {},
                                                           decoration:  InputDecoration(
                                                             hintText: "More details",
                                                             hintStyle: TextStyle(
@@ -453,7 +433,6 @@ class _RequestTileState extends State<RequestTile> {
                                                             filled: true,
                                                             border: InputBorder.none,
                                                             fillColor: Colors.grey[300],
-
                                                             contentPadding: const EdgeInsets.all(30),
                                                             focusedBorder: OutlineInputBorder(
                                                               borderSide: BorderSide(
@@ -466,7 +445,6 @@ class _RequestTileState extends State<RequestTile> {
                                                               borderSide: BorderSide(color: Colors.white),
                                                               borderRadius: BorderRadius.circular(10.0),
                                                             ),
-
                                                           ),
                                                         ),
                                                         SizedBox(height: 10,),
@@ -476,18 +454,17 @@ class _RequestTileState extends State<RequestTile> {
                                                             subtitle: Text(reportAttachmentFileName),
                                                             trailing: IconButton(
                                                               icon: Icon(reportAttachmentFileName == 'No File Selected' ? Icons.attachment: Icons.cancel_outlined, color: Color(0xfffb0d0d),),
-                                                              onPressed:  reportAttachmentFileName == 'No File Selected' || reportAttachment == null ? null :(){
+                                                              onPressed:  reportAttachmentFileName == 'No File Selected' || reportAttachment == null ? null : () {
                                                                 setState(() {
                                                                   reportAttachment = null;
                                                                   attachmentEmpty = false;
                                                                 });
-                                                                print(reportAttachment);
                                                               },
                                                             ),
                                                           ),
                                                           onPressed: reportAttachmentFileName != 'No File Selected' || reportAttachment != null ? null : () async{
                                                             String datetime = DateTime.now().toString();
-                                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                                                            final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.image);
                                                             final path = result.files.single.path;
                                                             setState(() {
                                                               reportAttachment = File(path);
@@ -495,13 +472,12 @@ class _RequestTileState extends State<RequestTile> {
 
                                                             final attachmentDestination = 'Reports/${user.uid}/report_${user.uid}_$datetime';
 
-                                                            setState((){
+                                                            setState(() {
                                                               saveDestination = attachmentDestination.toString();
                                                               if (saveDestination != null && saveDestination.length > 0) {
                                                                 saveDestination = saveDestination.substring(0, saveDestination.length - 1);
                                                               }
                                                             });
-
                                                           },
                                                         ),
                                                         SizedBox(height: 5,),
@@ -523,20 +499,15 @@ class _RequestTileState extends State<RequestTile> {
                                                       ],
                                                     ),
                                                   ),
-
-
                                                 ],
                                               ),
                                               actions: <Widget> [
                                                 ElevatedButton(
                                                   child: Text("Report"),
                                                   onPressed: () async {
-                                                    print("not in");
-                                                    if(_key.currentState.validate() && reportAttachmentFileName != 'No File Selected'){
-                                                      print("in");
-                                                      setState((){
+                                                    if (_key.currentState.validate() && reportAttachmentFileName != 'No File Selected') {
+                                                      setState(() {
                                                         attachmentEmpty = false;
-
                                                       });
 
                                                       await UploadFile.uploadFile(saveDestination, reportAttachment);
@@ -548,24 +519,28 @@ class _RequestTileState extends State<RequestTile> {
                                                       setState(() {
                                                         fetchedUrl = savedUrl;
                                                       });
-                                                      print(fetchedUrl);
-                                                      DatabaseService().createReportData(_description, delivery.customerRef,
-                                                          delivery.courierRef, Timestamp.now(), reason , fetchedUrl);
+                                                      DatabaseService().createReportData(
+                                                          _description,
+                                                          delivery.customerRef,
+                                                          delivery.courierRef,
+                                                          Timestamp.now(),
+                                                          reason ,
+                                                          fetchedUrl);
+
                                                       DatabaseService(uid: delivery.uid).updateReport(true);
+
                                                       Navigator.of(context).pop();
                                                       showToast('Report sent.');
+
                                                       setState(() {
                                                         reportAttachment = null;
                                                       });
-
-                                                    } else{
-                                                      if(reportAttachmentFileName == 'No File Selected'){
-                                                        print("Attachment is required");
-                                                        setState((){
+                                                    } else {
+                                                      if (reportAttachmentFileName == 'No File Selected') {
+                                                        setState(() {
                                                           attachmentEmpty = true;
                                                         });
                                                       }
-
                                                     }
                                                   },
                                                 )
@@ -575,7 +550,6 @@ class _RequestTileState extends State<RequestTile> {
                                         },
                                       )
                                   );
-                                  // report a courier
                                 }
                               ),
                               TextButton(
@@ -592,24 +566,23 @@ class _RequestTileState extends State<RequestTile> {
                     ),
                   ),
                 );
-              }
-              else return Container();
+              } else return Container();
             }
         ),
       );
-    } else if(delivery.courierApproval == 'Pending' || delivery.deliveryStatus == 'Pending') {
+    } else if (delivery.courierApproval == 'Pending' || delivery.deliveryStatus == 'Pending') {
       return Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: StreamBuilder<Courier>(
           stream: DatabaseService(uid: delivery.courierRef.id).courierData,
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          builder: (context,snapshot) {
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Card(
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(context, PageTransition(child: DeliveryDetails(
                         customer: delivery.customerRef,
                         courier: delivery.courierRef,
@@ -654,7 +627,6 @@ class _RequestTileState extends State<RequestTile> {
                           ),
                           title: Text("${courierData.fName} ${courierData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -693,7 +665,7 @@ class _RequestTileState extends State<RequestTile> {
                                 await showDialog(
                                     context: context,
                                     builder: (context) => StatefulBuilder(
-                                      builder: (context, setState){
+                                      builder: (context, setState) {
                                         return AlertDialog(
                                           title: Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -716,7 +688,7 @@ class _RequestTileState extends State<RequestTile> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   TextFormField(
-                                                    validator: (value){
+                                                    validator: (value) {
                                                       cancellationMessage = value;
                                                       return value.isNotEmpty ? null : "Please provide a reason";
                                                     },
@@ -767,7 +739,7 @@ class _RequestTileState extends State<RequestTile> {
                                                 ElevatedButton(
                                                   child: Text("Send"),
                                                   onPressed: () async {
-                                                    if(_keyCancel.currentState.validate()){
+                                                    if (_keyCancel.currentState.validate()) {
                                                       await DatabaseService(uid: delivery.uid).customerCancelRequest(cancellationMessage);
                                                       Navigator.of(context).pop();
                                                       showToast("Request cancelled");
@@ -791,8 +763,7 @@ class _RequestTileState extends State<RequestTile> {
                   ),
                 ),
               );
-            }
-            else return Container();
+            } else return Container();
           }
         ),
       );
@@ -801,8 +772,8 @@ class _RequestTileState extends State<RequestTile> {
         padding: const EdgeInsets.only(bottom: 5),
         child: StreamBuilder<Courier>(
           stream: DatabaseService(uid: delivery.courierRef.id).courierData,
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          builder: (context,snapshot) {
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
 
               String status = '';
@@ -812,11 +783,12 @@ class _RequestTileState extends State<RequestTile> {
               } else {
                 status = delivery.courierApproval;
               }
+
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Card(
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(context, PageTransition(child: DeliveryDetails(
                         customer: delivery.customerRef,
                         courier: delivery.courierRef,
@@ -861,7 +833,6 @@ class _RequestTileState extends State<RequestTile> {
                           ),
                           title: Text("${courierData.fName} ${courierData.lName}",
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -902,7 +873,7 @@ class _RequestTileState extends State<RequestTile> {
   Map<String, DocumentReference> localAddMap;
   bool isFavorite = false;
 
-  void showFeedback(Delivery delivery){
+  void showFeedback(Delivery delivery) {
     showMaterialModalBottomSheet(
       context: context,
       builder: (context) => Container(
@@ -922,7 +893,7 @@ class _RequestTileState extends State<RequestTile> {
                   minRating: 1,
                   itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber,),
                   updateOnDrag: true,
-                  onRatingUpdate: (rating) => setState((){
+                  onRatingUpdate: (rating) => setState(() {
                     this.rating = rating;
                   }),
                 ),
@@ -961,6 +932,7 @@ class _RequestTileState extends State<RequestTile> {
       ),
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);

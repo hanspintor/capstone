@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:isolate';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/couriers.dart';
@@ -37,49 +34,49 @@ class _SignupCustomerState extends State<SignupCustomer> {
   final GlobalKey<FormState> regKey = GlobalKey<FormState>();
   List<GlobalKey<FormState>> formKeys = [GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>(),];
 
-  Widget _buildFName(){
+  Widget _buildFName() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * .35,
       child: TextFormField(
         decoration: InputDecoration(labelText: 'First Name'),
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'First Name is Required';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           fName = value;
         },
-        onChanged: (val){
+        onChanged: (val) {
           setState(() => fName = val);
         },
       ),
     );
   }
 
-  Widget _buildLName(){
+  Widget _buildLName() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * .35,
       child: TextFormField(
         decoration: InputDecoration(labelText: 'Last Name'),
-        validator: (String value){
-          if(value.isEmpty){
+        validator: (String value) {
+          if (value.isEmpty) {
             return 'Last Name is Required';
           }
           else return null;
         },
-        onSaved: (String value){
+        onSaved: (String value) {
           lName = value;
         },
-        onChanged: (val){
+        onChanged: (val) {
           setState(() => lName = val);
         },
       ),
     );
   }
 
-  Widget _buildEmail(){
+  Widget _buildEmail() {
     return StreamBuilder<List<Customer>>(
       stream: DatabaseService().customerList,
       builder: (context, snapshot) {
@@ -92,38 +89,38 @@ class _SignupCustomerState extends State<SignupCustomer> {
               List<Courier> couriers = snapshot.data;
               return TextFormField(
                   decoration: InputDecoration(labelText: 'Email'),
-                  validator: (String value){
-                    if(value.isEmpty){
+                  validator: (String value) {
+                    if (value.isEmpty) {
                       return 'Email is Required';
                     }
-                    if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)){
+                    if (!RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)) {
                       return 'Please Enter a Valid Email Address';
                     }
                     bool emailTaken = false;
                     bool emailTakenCus = false;
 
                     customers.forEach((element) {
-                      if (element.email == value){
+                      if (element.email == value) {
                         emailTaken = true;
                       }
                     });
                     couriers.forEach((element) {
-                      if (element.email == value){
+                      if (element.email == value) {
                        emailTakenCus = true;
                       }
                     });
                     print(emailTaken);
                     print(emailTakenCus);
 
-                    if (emailTaken || emailTakenCus){
+                    if (emailTaken || emailTakenCus) {
                       return 'Email already taken';
                     }
                     else return null;
                   },
-                  onSaved: (String value){
+                  onSaved: (String value) {
                     email = value;
                   },
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() => email = val);
                   },
               );
@@ -135,6 +132,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
       }
     );
   }
+
   Widget _buildContactNo() {
     return StreamBuilder<List<Courier>>(
         stream: DatabaseService().courierList,
@@ -192,37 +190,37 @@ class _SignupCustomerState extends State<SignupCustomer> {
     );
   }
 
-  Widget _buildPassword(){
+  Widget _buildPassword() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Password'),
       obscureText: true,
-      validator: (String value){
-        if(value.length < 8 && value.length > 0){
+      validator: (String value) {
+        if (value.length < 8 && value.length > 0) {
           return 'Password should be 8 characters long';
         }
-        else if(value.isEmpty){
+        else if (value.isEmpty) {
           return 'Password is Required';
         }
         else return null;
       },
-      onSaved: (String value){
+      onSaved: (String value) {
         password = value;
       },
-      onChanged: (val){
+      onChanged: (val) {
           setState(() => password = val);
       },
     );
   }
 
-  Widget _buildConfirmPassword(){
+  Widget _buildConfirmPassword() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Confirm Password'),
       obscureText: true,
-      validator: (String value){
-        if(password != null){
-          if(value.isEmpty){
+      validator: (String value) {
+        if (password != null) {
+          if (value.isEmpty) {
             return "Password does not match";
-          } else if(confirmPassword != password){
+          } else if (confirmPassword != password) {
             return "Password does not match";
           } else {
             return null;
@@ -231,34 +229,35 @@ class _SignupCustomerState extends State<SignupCustomer> {
         else
           return null;
       },
-      onSaved: (String value){
+      onSaved: (String value) {
         confirmPassword = value;
       },
-      onChanged: (val){
+      onChanged: (val) {
         setState(() => confirmPassword = val);
       },
     );
   }
 
-  Widget _buildAddress(){
+  Widget _buildAddress() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Home Address'),
       keyboardType: TextInputType.streetAddress,
-      validator: (String value){
-        if(value.isEmpty){
+      validator: (String value) {
+        if (value.isEmpty) {
           return 'Home Address is Required';
         }
         else return null;
       },
-      onSaved: (String value){
+      onSaved: (String value) {
        address = value;
       },
-      onChanged: (val){
+      onChanged: (val) {
         setState(() => address = val);
       },
     );
   }
-  Future<bool> _backPressed(){
+
+  Future<bool> _backPressed() {
     return showDialog(context: context, builder: (context)
     =>AlertDialog(
       title: Text("Are you sure you want to go back? All data you placed will be loss"),
@@ -281,7 +280,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final isLastStep = currentStep == getSteps().length - 1;
@@ -296,7 +294,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
               Icons.arrow_back,
               color: Colors.black,
             ),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context, false);
               },
               iconSize: 25,
@@ -316,7 +314,6 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     steps: getSteps(),
                     currentStep: currentStep,
                     physics: NeverScrollableScrollPhysics(),
-
                     controlsBuilder: (context, ControlsDetails) {
                       return Container(
                         margin: EdgeInsets.only(top: 30),
@@ -325,30 +322,24 @@ class _SignupCustomerState extends State<SignupCustomer> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: isLastStep && (!agree || !slide) ? null : () async {
-                                  if(isLastStep){
+                                  if (isLastStep) {
                                     String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/proxpress-629e3.appspot.com/o/profile-user.png?alt=media&token=6727618b-4289-4438-8a93-a4f14753d92e';
 
-                                    if (regKey.currentState.validate()){
+                                    if (regKey.currentState.validate()) {
                                       setState(() => loading = true);
                                       dynamic result = await _auth.SignUpCustomer(email, password, fName, lName,
                                           contactNo, address, defaultProfilePic, false, 0, {}, 0);
 
-
-                                      if(result == null){
-                                        setState((){
+                                      if (result == null) {
+                                        setState(() {
                                           error = 'Email already taken';
                                           slide = false;
                                           loading = false;
                                         });
-                                      } else{
-                                        // ScaffoldMessenger.of(context)..removeCurrentSnackBar()
-                                        //   ..showSnackBar(SnackBar(content: Text("We have sent you an email to ${email} kindly verify to complete the registration.")));
                                       }
                                     }
-                                  }
-                                  else
-                                  {
-                                    if(formKeys[currentStep].currentState.validate()) {
+                                  } else {
+                                    if (formKeys[currentStep].currentState.validate()) {
                                       setState(() => currentStep += 1);
                                     }
                                   }
@@ -357,12 +348,12 @@ class _SignupCustomerState extends State<SignupCustomer> {
                               ),
                             ),
                             const SizedBox(width: 12,),
-                            if(currentStep != 0)
+                            if (currentStep != 0)
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: (){
+                                onPressed: () {
                                   setState(() {
-                                    if(currentStep == 0){
+                                    if (currentStep == 0) {
                                       return null;
                                     }
                                     else currentStep -= 1;
@@ -383,6 +374,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
       ),
     );
   }
+
   List<Step> getSteps() => [
     Step(
       state: currentStep > 0 ? StepState.complete: StepState.indexed,
@@ -521,7 +513,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     Container(
                       child: Checkbox(
                           value: agree,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
                               agree = value;
                             });
@@ -569,7 +561,7 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     height:60,
                     sliderRotate: true,
                     sliderButtonIconPadding: 13,
-                    onSubmit: (){
+                    onSubmit: () {
                       confirm(true);
                     },
                   ),
@@ -582,6 +574,3 @@ class _SignupCustomerState extends State<SignupCustomer> {
     ),
   ];
 }
-
-
-

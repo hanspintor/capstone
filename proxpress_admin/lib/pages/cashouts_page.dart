@@ -9,7 +9,6 @@ import 'package:proxpress/database.dart';
 import 'package:proxpress/login_screen.dart';
 
 class CashOuts extends StatefulWidget {
-
   @override
   _CashOutsState createState() => _CashOutsState();
 }
@@ -102,12 +101,11 @@ class _CashOutsState extends State<CashOuts> {
       body: StreamBuilder<List<Courier>>(
           stream: courierList,
           builder: (context, snapshot) {
-            if(snapshot.hasData){
+            if (snapshot.hasData) {
               List<Courier> couriers = snapshot.data;
 
               List<PlutoColumn> columns = [
                 PlutoColumn(
-                  //enableRowChecked: true,
                   enableEditingMode: false,
                   title: 'Name',
                   field: 'name',
@@ -130,9 +128,7 @@ class _CashOutsState extends State<CashOuts> {
                     title: 'Commands',
                     field: 'commands',
                     type: PlutoColumnType.text(),
-                    renderer: (renderContext){
-                      bool requested = couriers[renderContext.rowIdx].requestedCashOut;
-
+                    renderer: (renderContext) {
                       return Row(
                         children: [
                           TextButton(
@@ -141,7 +137,7 @@ class _CashOutsState extends State<CashOuts> {
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) => StatefulBuilder(
-                                    builder: (context, setState){
+                                    builder: (context, setState) {
                                       return AlertDialog(
                                           content: Text('Are you sure you want to proceed?'),
                                           actions: [
@@ -187,7 +183,7 @@ class _CashOutsState extends State<CashOuts> {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  createHeader: (PlutoGridStateManager){
+                  createHeader: (PlutoGridStateManager) {
                     return Container(
                         color: Color(0xFFEEEEEE),
                         child: Align(
@@ -198,7 +194,7 @@ class _CashOutsState extends State<CashOuts> {
                         )
                     );
                   },
-                  createFooter: (PlutoGridStateManager){
+                  createFooter: (PlutoGridStateManager) {
                     return Container(
                         color: Color(0xFFEEEEEE),
                         child: Align(

@@ -1,23 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/services/auth.dart';
 
 
 class ForgotPassword extends StatefulWidget {
-
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
-
-
 class _ForgotPasswordState extends State<ForgotPassword> {
-
-
   String alert = '';
   String email;
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -32,13 +27,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   child: IconButton(
                     icon: Icon(Icons.close_rounded,
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context, false);
                     },
                   ),
                 ),
               ),
-
               Container(
                 margin: EdgeInsets.only(bottom: 5),
                 child:  Text("Reset Password",
@@ -71,17 +65,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email_rounded),
                     ),
-                    onSaved: (String value){
+                    onSaved: (String value) {
                       email = value;
                     },
-                    onChanged: (val){
+                    onChanged: (val) {
                       setState(() => email = val);
                     }
                 ),
               ),
               Container(
                 margin: EdgeInsets.only(top: 15),
-                //margin: EdgeInsets.only(top: 190),
                 height: MediaQuery.of(context).size.height / 15,
                 width: MediaQuery.of(context).size.width / 1.3,
                 child: ElevatedButton(

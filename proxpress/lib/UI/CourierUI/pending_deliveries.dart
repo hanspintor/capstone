@@ -16,19 +16,19 @@ class PendingDeliveries extends StatefulWidget {
   _PendingDeliveriesState createState() => _PendingDeliveriesState();
 }
 
-
-
 class _PendingDeliveriesState extends State<PendingDeliveries> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     bool approved = false;
-    if(user != null) {
+
+    if (user != null) {
       return StreamBuilder<Courier>(
           stream: DatabaseService(uid: user.uid).courierData,
-          builder: (context,snapshot){
-            if(snapshot.hasData){
+          builder: (context,snapshot) {
+            if (snapshot.hasData) {
               Courier courierData = snapshot.data;
               approved = courierData.approved;
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance

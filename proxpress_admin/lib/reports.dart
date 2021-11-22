@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Reports{
-
   final String uid;
   final String reportMessage;
   final DocumentReference reportBy;

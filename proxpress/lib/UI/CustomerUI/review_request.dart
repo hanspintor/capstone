@@ -8,7 +8,6 @@ import 'package:proxpress/UI/CustomerUI/top_up_page.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ReviewRequest extends StatefulWidget {
   final DocumentReference customer;
@@ -62,7 +61,6 @@ class _ReviewRequestState extends State<ReviewRequest> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    print(widget.paymentOption);
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       endDrawerEnableOpenDragGesture: false,
@@ -72,32 +70,6 @@ class _ReviewRequestState extends State<ReviewRequest> {
         iconTheme: IconThemeData(
           color: Color(0xfffb0d0d),
         ),
-        actions: [
-          // IconButton(icon: Icon(
-          //   Icons.help_outline,
-          // ),
-          //   onPressed: () {
-          //     showDialog(
-          //         context: context,
-          //         builder: (BuildContext context){
-          //           return AlertDialog(
-          //             title: Text("Help"),
-          //             content: Text('Sample Text Here'),
-          //             actions: [
-          //               TextButton(
-          //                 child: Text("OK"),
-          //                 onPressed: () {
-          //                   Navigator.of(context).pop();
-          //                 },
-          //               ),
-          //             ],
-          //           );
-          //         }
-          //     );
-          //   },
-          //   iconSize: 25,
-          // ),
-        ],
         flexibleSpace: Container(
           margin: EdgeInsets.only(top: 10),
           child: Image.asset(
@@ -300,12 +272,13 @@ class _ReviewRequestState extends State<ReviewRequest> {
       ),
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
 
-  Future topUp(){
+  Future topUp() {
     return showMaterialModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -357,5 +330,4 @@ class _ReviewRequestState extends State<ReviewRequest> {
       ),
     );
   }
-
 }

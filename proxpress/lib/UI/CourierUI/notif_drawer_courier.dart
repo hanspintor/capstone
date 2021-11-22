@@ -20,11 +20,12 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
   bool isClear = false;
   String caption = "";
   int flag = 1;
+
   @override
   Widget build(BuildContext context) {
     bool approved = false;
     final user = Provider.of<TheUser>(context);
-    if(flag <= 0){
+    if (flag <= 0) {
       isClear = true;
       caption = "No data found";
       flag++;
@@ -32,8 +33,8 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
 
     return user == null ? LoginScreen() : StreamBuilder<Courier>(
       stream: DatabaseService(uid: user.uid).courierData,
-       builder: (context, snapshot){
-        if(snapshot.hasData){
+       builder: (context, snapshot) {
+        if (snapshot.hasData) {
           Courier courierData = snapshot.data;
           approved = courierData.approved;
 
@@ -89,6 +90,7 @@ class _NotifDrawerCourierState extends State<NotifDrawerCourier> {
        },
     );
   }
+
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);

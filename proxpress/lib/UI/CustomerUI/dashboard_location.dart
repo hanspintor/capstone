@@ -1,17 +1,14 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
-import 'package:proxpress/classes/verify.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/customers.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-
 
 class DashboardLocation extends StatefulWidget{
   @override
@@ -40,7 +37,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
   bool vPhone = false;
   bool rButton = true;
 
-
   verifyPhone(String contact) async{
     contact = "+63" + contact.substring(1);
     print("sending ${contact}");
@@ -51,43 +47,41 @@ class _DashboardLocationState extends State<DashboardLocation>{
           verificationCompleted: (PhoneAuthCredential credential) async{
             await FirebaseAuth.instance.signInWithCredential(credential).
             then((value) async {
-              if(value.user != null){
+              if (value.user != null) {
                 print('verified naaaaa');
               }
             });
           },
-          verificationFailed: (FirebaseAuthException e){
+          verificationFailed: (FirebaseAuthException e) {
             print(e.message);
           },
-          codeSent: (String verificationID, int resendToken){
+          codeSent: (String verificationID, int resendToken) {
             setState(() {
               _verificationCode = verificationID;
             });
           },
-          codeAutoRetrievalTimeout: (String verificationID){
+          codeAutoRetrievalTimeout: (String verificationID) {
             setState(() {
               _verificationCode = verificationID;
             });
           },
           timeout: Duration(seconds: remainingTime)
       );
-    } catch (e){
+    } catch (e) {
       print(e);
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     User user = auth.currentUser;
     print("Phone: ${user.phoneNumber}");
     print("Phone: ${user.uid}");
+
     return  StreamBuilder<Customer>(
       stream: DatabaseService(uid: user.uid).customerData,
       builder: (context, snapshot) {
-        if(snapshot.hasData){
+        if (snapshot.hasData) {
           Customer customerData = snapshot.data;
           contactNo = customerData.contactNo;
 
@@ -111,7 +105,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                           onPressed: () {
                             showDialog(
                                 context: context,
-                                builder: (BuildContext context){
+                                builder: (BuildContext context) {
                                   return AlertDialog(
                                     titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                                     title: Column(
@@ -173,8 +167,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         Visibility(
                           visible: rButton,
                           child: ElevatedButton(
-                            onPressed: (){
-
+                            onPressed: () {
                               setState(() {
                                 vPhone = true;
                                 rButton = false;
@@ -189,14 +182,12 @@ class _DashboardLocationState extends State<DashboardLocation>{
                         Visibility(
                           visible: vPhone,
                           child: Card(
-
                             elevation: 5,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                             borderOnForeground: true,
                             child: Container(
-
                               child: Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: Column(
@@ -206,7 +197,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
-
                                       ),
                                     ),
                                     SizedBox(height: 20,),
@@ -215,8 +205,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                           "message with your code.",
                                       style: TextStyle(
                                           fontSize: 15,
-
-
                                       ),
                                     ),
                                 SizedBox(height: 15,),
@@ -230,7 +218,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                           await user.linkWithCredential(
                                               PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin)
                                           ).then((value) async {
-                                            if(value.user != null){
+                                            if (value.user != null) {
                                               print("works?");
                                               setState(() {
                                                 vPhone = false;
@@ -241,15 +229,12 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                                   Navigator.pushNamed(context, '/template');
                                                 });
                                               });
-
                                             }
                                           });
-                                        } catch (e){
+                                        } catch (e) {
                                           FocusScope.of(context).unfocus();
                                           print("invalid otp");
-
                                         }
-
                                       },
                                       focusNode: _pinPutFocusNode,
                                       controller: _pinPutController,
@@ -271,7 +256,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                         fontSize: 15,
                                         fontStyle: FontStyle.italic,
                                         fontWeight: FontWeight.bold
-
                                       ),
                                     ),
                                     SizedBox(height: 10,),
@@ -289,9 +273,9 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                           Countdown(
                                             controller: _controller,
                                             seconds: remainingTime,
-                                            build: (_, double time){
+                                            build: (_, double time) {
                                               Color color1 = Colors.green;
-                                              if(time.toInt() <= 60){
+                                              if (time.toInt() <= 60) {
                                                 color1 = Colors.red;
                                               }
                                               return Text(
@@ -339,7 +323,7 @@ class _DashboardLocationState extends State<DashboardLocation>{
                                             color: Colors.redAccent
                                         ),
                                       ),
-                                      onTap: (){
+                                      onTap: () {
                                         showToast("We have sent a new OTP");
                                         verifyPhone(contactNo);
                                         _controller.restart();
@@ -352,9 +336,6 @@ class _DashboardLocationState extends State<DashboardLocation>{
                             ),
                           ),
                         ),
-
-                        //verifyCond(),
-                        //VerifyEmail()
                       ],
                     ),
                   ) : PinLocation(
@@ -371,20 +352,10 @@ class _DashboardLocationState extends State<DashboardLocation>{
         }
       }
     );
-
-
   }
-
-
 
   Future showToast(String message) async {
     await Fluttertoast.cancel();
     Fluttertoast.showToast(msg: message, fontSize: 18, backgroundColor: Colors.green, textColor: Colors.white);
   }
-
 }
-
-
-
-
-

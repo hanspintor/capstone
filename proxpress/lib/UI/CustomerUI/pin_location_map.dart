@@ -103,55 +103,6 @@ class _SearchPageState extends State<SearchPage> {
       children: [
         CustomPickerLocation(
           controller: controller,
-
-          // appBarPicker: AppBar(
-          //   backgroundColor: Colors.white,
-          //   iconTheme: IconThemeData(
-          //       color: Colors.black
-          //   ),
-          //   centerTitle: true,
-          //   title: TextField(
-          //     controller: textEditingController,
-          //     onEditingComplete: () async {
-          //       FocusScope.of(context).requestFocus(new FocusNode());
-          //     },
-          //     decoration: InputDecoration(
-          //       prefixIcon: Icon(
-          //         Icons.search,
-          //         color: Colors.black,
-          //       ),
-          //       suffix: ValueListenableBuilder<TextEditingValue>(
-          //         valueListenable: textEditingController,
-          //         builder: (ctx, text, child) {
-          //           if (text.text.isNotEmpty) {
-          //             return child;
-          //           }
-          //           return SizedBox.shrink();
-          //         },
-          //         child: InkWell(
-          //           focusNode: FocusNode(),
-          //           onTap: () {
-          //             textEditingController.clear();
-          //             controller.setSearchableText("");
-          //             FocusScope.of(context).requestFocus(new FocusNode());
-          //           },
-          //           child: Icon(
-          //             Icons.close,
-          //             size: 12,
-          //             color: Colors.black,
-          //           ),
-          //         ),
-          //       ),
-          //       filled: true,
-          //       border: OutlineInputBorder(
-          //         //gapPadding: 10,
-          //         borderRadius: BorderRadius.circular(30),
-          //       ),
-          //       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30)), borderSide: BorderSide.none),
-          //       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30)), borderSide: BorderSide.none),
-          //     ),
-          //   ),
-          // ),
           topWidgetPicker: TopSearchWidget(),
           bottomWidgetPicker: Positioned(
             bottom: 12,
@@ -367,35 +318,3 @@ class _TopSearchWidgetState extends State<TopSearchWidget> {
     );
   }
 }
-
-// class PinLocationMap extends StatefulWidget {
-//   const PinLocationMap({Key key}) : super(key: key);
-//
-//   static final kInitialPosition = LatLng(13.621980880497976, 123.19477396693487);
-//
-//   @override
-//   _PinLocationMapState createState() => _PinLocationMapState();
-// }
-//
-// class _PinLocationMapState extends State<PinLocationMap> {
-//   PickResult selectedPlace;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return PlacePicker(
-//       apiKey: Secrets.API_KEY,
-//       initialPosition: PinLocationMap.kInitialPosition,
-//       useCurrentLocation: false, // switch to true if user activated GPS to track his current location
-//       selectInitialPosition: true,
-//       searchForInitialValue: true,
-//       usePlaceDetailSearch: true,
-//       region: 'ph',
-//       onPlacePicked: (result) {
-//         selectedPlace = result;
-//         LatLng selectedPlaceCoordinates = LatLng(selectedPlace.geometry.location.lat, selectedPlace.geometry.location.lng);
-//         Navigator.pop(context, LocationDetails(address: selectedPlace.formattedAddress, coordinates: selectedPlaceCoordinates));
-//         setState(() {});
-//       },
-//     );
-//   }
-// }

@@ -22,7 +22,7 @@ class _RequestListState extends State<RequestList> {
   Widget build(BuildContext context) {
     final delivery = Provider.of<List<Delivery>>(context);
 
-    if(delivery.length != 0){
+    if (delivery.length != 0) {
       return delivery == null ? UserLoading() : ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class HeroPage extends StatefulWidget {
   final String url;
 
@@ -13,7 +12,7 @@ class HeroPage extends StatefulWidget {
 class _HeroPageState extends State<HeroPage> {
   @override
   Widget build(BuildContext context) {
-    if(widget.url != null){
+    if (widget.url != null) {
       return Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
@@ -26,7 +25,7 @@ class _HeroPageState extends State<HeroPage> {
               )
           )
       );
-    } else{
+    } else {
       return Text("loading");
     }
   }

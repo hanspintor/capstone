@@ -1,14 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:proxpress/UI/CourierUI/courier_profile.dart';
-import 'package:proxpress/UI/CourierUI/proxpress_template_courier.dart';
 import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/UI/login_screen.dart';
-import 'package:proxpress/classes/courier_classes/feedback_list.dart';
 import 'package:proxpress/classes/customer_classes/view_courier_profile.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -43,36 +38,12 @@ class _CourierTileState extends State<CourierTile> {
   String deliveryPriceUid;
   double deliveryFee = 0.0;
 
-  Widget _buildStars(int rate){
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(5, (index) {
-        return Icon(
-          index < rate ? Icons.star : Icons.star_border, color: Colors.amber,
-        );
-      }),
-    );
-  }
   @override
   Widget build(BuildContext context) {
     deliveryPriceUid = widget.courier.deliveryPriceRef.id;
 
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-
-    var color;
-    if (widget.courier.status == "Offline") {
-      color = Colors.redAccent;
-    } else {
-      color = Colors.green;
-    }
-
-    Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
-        .collection('Deliveries')
-        .where('Delivery Status', isEqualTo: 'Delivered')
-        .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(widget.courier.uid))
-        .snapshots()
-        .map(DatabaseService().deliveryDataListFromSnapshot);
 
     if (user != null) {
       return StreamBuilder<DeliveryPrice>(
@@ -110,22 +81,23 @@ class _CourierTileState extends State<CourierTile> {
                             StreamBuilder <List<Delivery>>(
                                 stream: DatabaseService().deliveryList,
                                 builder: (context, snapshot) {
-                                  if(snapshot.hasData){
+                                  if (snapshot.hasData) {
                                     List<Delivery> deliveryData = snapshot.data;
                                     double rating = 0.0;
                                     double total = 0.0;
                                     double stars = 0;
 
-
-                                    for(int i = 0; i < deliveryData.length; i++){
-                                      if(deliveryData[i].courierRef.id == widget.courier.uid && deliveryData[i].deliveryStatus == 'Delivered'){
-                                        if(deliveryData[i].rating != 0 && deliveryData[i].feedback != ''){
+                                    for(int i = 0; i < deliveryData.length; i++) {
+                                      if (deliveryData[i].courierRef.id == widget.courier.uid && deliveryData[i].deliveryStatus == 'Delivered') {
+                                        if (deliveryData[i].rating != 0 && deliveryData[i].feedback != '') {
                                           rating += deliveryData[i].rating;
                                           total++;
                                         }
                                       }
                                     };
+
                                     stars = (rating/total);
+
                                     return Column(
                                       children: [
                                         Row(
@@ -138,13 +110,12 @@ class _CourierTileState extends State<CourierTile> {
                                         ),
                                       ],
                                     );
-                                  }
-                                  else return Container();
+                                  } else return Container();
                                 }
                             ),
                           ],
                         ),
-                        onTap : (){
+                        onTap : () {
                           Navigator.push(context, PageTransition(
                               child: ViewCourierProfile(
                                   courierUID: widget.courier.uid,

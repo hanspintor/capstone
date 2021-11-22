@@ -16,9 +16,10 @@ class FirestoreServicePackage<T> {
   Stream<List> searchData(String query) {
     final collectionReference = firebasefirestore.collection(collectionName);
 
-    if(query.length != 0){
+    if (query.length != 0) {
       query = query[0].toUpperCase() + query.substring(1);
     }
+
     return collectionReference
         .where(searchBy, isGreaterThanOrEqualTo: query)
         .where(searchBy, isLessThan: query + 'z')

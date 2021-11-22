@@ -1,4 +1,3 @@
-
 class Customer{
   final String uid;
   final String fName;
@@ -15,6 +14,4 @@ class Customer{
   Customer({this.uid, this.fName, this.lName, this.email,
     this.contactNo, this.password, this.address, this.avatarUrl,
     this.notifStatus, this.currentNotif, this.courier_ref});
-
-
 }

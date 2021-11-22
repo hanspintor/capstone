@@ -10,6 +10,7 @@ import 'package:proxpress/services/notification.dart';
 class NotifCounterCustomer extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final approved;
+
   NotifCounterCustomer({
     Key key,
     @required this.scaffoldKey,
@@ -22,16 +23,17 @@ class NotifCounterCustomer extends StatefulWidget {
 
 class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
   int detector = 0;
+
   void _openEndDrawer() {
     widget.scaffoldKey.currentState.openEndDrawer();
   }
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     tz.initializeTimeZones();
   }
+
   @override
   Widget build(BuildContext context) {
     final notif = Provider.of<List<Notifications>>(context);
@@ -50,46 +52,46 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
 
     return StreamBuilder <List<Notifications>>(
       stream: notifList,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
           List<Notifications> n = snapshot.data;
 
           String title = "";
 
-          for(int x = 0; x<n.length; x++){
-            print("${n[x].sentBy.id} ${n[x].seen} ${n.length}");
-            if(n[x].seen == false){
+          for(int x = 0; x<n.length; x++) {
+            if (n[x].seen == false) {
               viewable = true;
               break;
             } else {
               viewable = false;
             }
           }
-          for(int i = 0; i<n.length; i++){
-            if(n[i].seen == false){
-              if(n[i].notifMessage.contains("successfully")){
+
+          for(int i = 0; i<n.length; i++) {
+            if (n[i].seen == false) {
+              if (n[i].notifMessage.contains("successfully")) {
                 title = "Item Delivered";
-              } else if(n[i].notifMessage.contains("declined")){
+              } else if (n[i].notifMessage.contains("declined")) {
                 title = "Request Declined";
-              } else if(n[i].notifMessage.contains("accepted")){
+              } else if (n[i].notifMessage.contains("accepted")) {
                 title = "Request Accepted";
               }
-              if(n[i].popsOnce == true){
+
+              if (n[i].popsOnce == true) {
                 NotificationService().showNotification(i, title, n[i].notifMessage, i == 0? 1 : i);
                 DatabaseService(uid: n[i].uid).updateNotifNotchCourier(false);
               }
               flag++;
-
             }
             cont = flag;
           }
+
           cont = cont ~/ 2;
-          if(notif.length == 0 || cont == 0){
+          if (notif.length == 0 || cont == 0) {
             viewable = false;
           }
-          print("cont ${cont}");
-          return Stack(
 
+          return Stack(
             children: [
               IconButton(
                 icon: Icon(Icons.notifications_none_rounded),
@@ -99,7 +101,6 @@ class _NotifCounterCustomerState extends State<NotifCounterCustomer> {
                     await DatabaseService(uid: element.uid).updateNotifSeenCourier(true);
                   });
                 },
-
               ),
               Visibility(
                 maintainSize: true,

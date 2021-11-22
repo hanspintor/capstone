@@ -1,5 +1,4 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -35,7 +34,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
   String searched = '';
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
   }
@@ -79,7 +78,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context){
+                    builder: (BuildContext context) {
                       return AlertDialog(
                         titlePadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                         title: Column(
@@ -114,8 +113,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-
-                                  //Text("Standard Rates")
                               ),
                             ),
                           ],
@@ -132,23 +129,11 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
 
                                 List<String> parcelWeights = ['20', '200', '500', '300', '700', '600'];
 
-                                List<String> vehicleImages = [
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                  'https://cdn-icons-png.flaticon.com/512/1819/1819494.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2554/2554969.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                  'https://cdn-icons-png.flaticon.com/512/2107/2107174.png',
-                                ];
-
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: deliveryPrices.length,
                                   itemBuilder: (context, index) {
                                     return ListTile(
-                                      // leading: Container(
-                                      //   child: Image.network(vehicleImages[index]),
-                                      // ),
                                       title: Text(deliveryPrices[index].vehicleType, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                       subtitle: Container(
                                         padding: EdgeInsets.only(top: 5),
@@ -188,7 +173,6 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                 width: 120,
               ),
             ),
-            //title: Text("PROExpress"),
           ),
           body: SingleChildScrollView(
             child: Container(

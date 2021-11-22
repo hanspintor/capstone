@@ -43,14 +43,13 @@ class _CommunityTileState extends State<CommunityTile> {
             return StreamBuilder<Customer>(
               stream: DatabaseService(uid: widget.community.sentBy.id).customerData,
               builder: (context, snapshot) {
-                if(snapshot.hasData){
+                if (snapshot.hasData) {
                   Customer customer = snapshot.data;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
                     child: Card(
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(context, PageTransition(
                               child: CommunityPost(community: widget.community, isCustomer: widget.isCustomer),
                               type: PageTransitionType.bottomToTop
@@ -100,15 +99,14 @@ class _CommunityTileState extends State<CommunityTile> {
                       ),
                     ),
                   );
-                }
-                else return Container();
+                } else return Container();
               }
             );
           } else if (widget.community.sentBy.toString().contains('Couriers')) {
             return StreamBuilder<Courier>(
               stream: DatabaseService(uid: widget.community.sentBy.id).courierData,
               builder: (context, snapshot) {
-                if(snapshot.hasData){
+                if (snapshot.hasData) {
                   Courier courier = snapshot.data;
                   return Padding(
                     padding: const EdgeInsets.symmetric(
@@ -165,14 +163,12 @@ class _CommunityTileState extends State<CommunityTile> {
                       ),
                     ),
                   );
-                }
-                else return Container();
+                } else return Container();
               }
             );
           }
           return Container();
-        }
-        else {
+        } else {
           return Container();
         }
       },

@@ -64,7 +64,6 @@ class _CommunityPostState extends State<CommunityPost> {
                 },
               ),
               border: OutlineInputBorder(
-                //borderSide: BorderSide(width: 0),
                 gapPadding: 10,
               ),
             ),
@@ -100,7 +99,7 @@ class _CommunityPostState extends State<CommunityPost> {
                     return StreamBuilder<Customer>(
                         stream: DatabaseService(uid: widget.community.sentBy.id).customerData,
                         builder: (context, snapshot) {
-                          if(snapshot.hasData){
+                          if (snapshot.hasData) {
                             Customer customer = snapshot.data;
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -147,15 +146,14 @@ class _CommunityPostState extends State<CommunityPost> {
                                 ),
                               ),
                             );
-                          }
-                          else return Container();
+                          } else return Container();
                         }
                     );
                   } else if (widget.community.sentBy.toString().contains('Couriers')) {
                     return StreamBuilder<Courier>(
                         stream: DatabaseService(uid: widget.community.sentBy.id).courierData,
                         builder: (context, snapshot) {
-                          if(snapshot.hasData){
+                          if (snapshot.hasData) {
                             Courier courier = snapshot.data;
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -202,8 +200,7 @@ class _CommunityPostState extends State<CommunityPost> {
                                 ),
                               ),
                             );
-                          }
-                          else return Container();
+                          } else return Container();
                         }
                     );
                   }

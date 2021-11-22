@@ -34,7 +34,7 @@ class _FeedbackTileState extends State<FeedbackTile> {
           int rating = widget.delivery.rating;
           String feedback = widget.delivery.feedback;
 
-          if(widget.delivery.rating != 0 && widget.delivery.feedback != ""){
+          if (widget.delivery.rating != 0 && widget.delivery.feedback != "") {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<Customer>(

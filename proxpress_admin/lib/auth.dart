@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:proxpress/database.dart';
 import 'package:proxpress/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  TheUser _userFromFirebaseUser(User user){
+  TheUser _userFromFirebaseUser(User user) {
     return user != null ? TheUser(uid: user.uid) : null;
   }
   Stream<TheUser> get user {
@@ -19,7 +18,7 @@ class AuthService {
       print(user.uid);
       return _userFromFirebaseUser(user);
     }
-    catch(e){
+    catch(e) {
       print(e.toString());
       return null;
     }
@@ -29,7 +28,7 @@ class AuthService {
   Future signOut() async {
     try{
       return await _auth.signOut();
-    } catch (e){
+    } catch (e) {
       print(e.toString());
       return null;
     }

@@ -9,14 +9,13 @@ import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/customers.dart';
 
-
 class MainDrawerCustomer extends StatefulWidget {
   @override
   _MainDrawerCustomerState createState() => _MainDrawerCustomerState();
 }
 void selectedItem(BuildContext context, int index,) async {
   Navigator.of(context).pop();
-  switch (index){
+  switch (index) {
     case 0:
       Navigator.push(
         context,
@@ -74,8 +73,7 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
     final auth = FirebaseAuth.instance;
     User user1 = auth.currentUser;
     final user = Provider.of<TheUser>(context);
-    // print(user1.phoneNumber);
-    // print(user1.emailVerified);
+
     return user == null ? LoginScreen() : Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -86,8 +84,8 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                 DrawerHeader(
                   child: StreamBuilder<Customer>(
                     stream: DatabaseService(uid: user.uid).customerData,
-                    builder: (context, snapshot){
-                      if(snapshot.hasData){
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
                         Customer customerData = snapshot.data;
                         return Column(
                           children: [
@@ -111,14 +109,12 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                             Text('${customerData.fName} ${customerData.lName}', style: TextStyle(fontSize: 20)),
                           ],
                         );
-                      }
-                      else{
+                      } else {
                         return UserLoading();
                       }
                     }
                   ),
                   decoration: BoxDecoration(
-
                   ),
                 ),
                 ListTile(

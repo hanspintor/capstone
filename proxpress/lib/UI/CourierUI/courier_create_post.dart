@@ -23,7 +23,7 @@ class _CourierCreatePostState extends State<CourierCreatePost> {
         title: Text('Create a post', style: TextStyle(color: Colors.black)),
         leading: IconButton(
           icon: Icon(Icons.clear),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
         ),

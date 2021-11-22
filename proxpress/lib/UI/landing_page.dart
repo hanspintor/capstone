@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -101,7 +100,8 @@ class _LandingPageState extends State<LandingPage>{
       ),
     );
   }
-  _userChoice(){
+
+  _userChoice() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -122,7 +122,7 @@ class _LandingPageState extends State<LandingPage>{
                   onPrimary: Colors.red, // foreground
                 ),
                 child: Text('CUSTOMER', style: TextStyle(fontSize: 18)),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pushNamed(context, '/signupCustomer');
                 },
               ),
@@ -139,7 +139,7 @@ class _LandingPageState extends State<LandingPage>{
                   onPrimary: Colors.red, // foreground
                 ),
                 child: Text('COURIER', style: TextStyle(fontSize: 18)),
-                onPressed: (){
+                onPressed: () {
                   Navigator.pushNamed(context, '/signupCourier');
                 },
               ),

@@ -7,7 +7,6 @@ import 'package:proxpress/pages/cashouts_page.dart';
 import 'package:proxpress/pages/dashboard.dart';
 import 'package:proxpress/database.dart';
 import 'package:proxpress/pages/delivery_prices_page.dart';
-import 'package:proxpress/login_screen.dart';
 import 'package:proxpress/pages/reports_page.dart';
 
 Future<void> main() async {
@@ -29,8 +28,8 @@ class PROXpressApp extends StatelessWidget{
           primarySwatch: Colors.red,
         ),
         home: Dashboard(),
-        onGenerateRoute: (settings){
-          switch(settings.name){
+        onGenerateRoute: (settings) {
+          switch(settings.name) {
             case '/dashboard':
               return PageTransition(child: Dashboard(), type: PageTransitionType.fade);
               break;

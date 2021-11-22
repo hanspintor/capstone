@@ -17,7 +17,7 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    if(user != null) {
+    if (user != null) {
       Stream<List<Delivery>> deliveryRequestPending = FirebaseFirestore.instance
           .collection('Deliveries')
           .where('Courier Approval', isEqualTo: 'Pending')
@@ -46,7 +46,6 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
           .snapshots()
           .map(DatabaseService().deliveryDataListFromSnapshot);
 
-      // https://stackoverflow.com/questions/54642710/tabbarview-with-dynamic-container-height
       return DefaultTabController(
         length: 4,
         child: NestedScrollView(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -72,17 +71,17 @@ class _PinLocationState extends State<PinLocation> {
                         child: TextFormField(
                           decoration: InputDecoration(labelText: 'Address', prefixIcon: Icon(Icons.location_on_rounded), hintText: 'Type exact address'),
                           keyboardType: TextInputType.streetAddress,
-                          validator: (String value){
-                            if(value.isEmpty){
+                          validator: (String value) {
+                            if (value.isEmpty) {
                               return 'Pick up location is required';
                             } else {
                               return null;
                             }
                           },
-                          onSaved: (String value){
+                          onSaved: (String value) {
                             pickupAddress = value;
                           },
-                          onChanged: (String value){
+                          onChanged: (String value) {
                             setState(() => pickupAddress = value);
                           },
                         ),
@@ -103,7 +102,7 @@ class _PinLocationState extends State<PinLocation> {
                                     onPressed: pickupDetails != null ? null : () async {
                                       pickupDetails = await Navigator.push(context, PageTransition(child: SearchPage(), type: PageTransitionType.bottomToTop));
 
-                                      setState((){});
+                                      setState(() {});
 
                                       if (pickupDetails != null) {
                                         setState(() => errorPickup = '');
@@ -155,17 +154,17 @@ class _PinLocationState extends State<PinLocation> {
                         child: TextFormField(
                           decoration: InputDecoration(labelText: 'Address', prefixIcon: Icon(Icons.location_on_rounded), hintText: 'Type exact address'),
                           keyboardType: TextInputType.streetAddress,
-                          validator: (String value){
-                            if(value.isEmpty){
+                          validator: (String value) {
+                            if (value.isEmpty) {
                               return 'Drop-off location is required';
                             } else {
                               return null;
                             }
                           },
-                          onSaved: (String value){
+                          onSaved: (String value) {
                             dropOffAddress = value;
                           },
-                          onChanged: (String value){
+                          onChanged: (String value) {
                             setState(() => dropOffAddress = value);
                           },
                         ),
@@ -186,7 +185,7 @@ class _PinLocationState extends State<PinLocation> {
                                   onPressed: dropOffDetails != null ? null : () async {
                                     dropOffDetails = await Navigator.push(context, PageTransition(child: SearchPage(), type: PageTransitionType.bottomToTop));
 
-                                    setState((){});
+                                    setState(() {});
 
                                     if (dropOffDetails != null) {
                                       setState(() => errorDropOff = '');
@@ -269,7 +268,7 @@ class _PinLocationState extends State<PinLocation> {
                       )
                     );
                   } else {
-                    setState((){
+                    setState(() {
                       appear = true;
                       widget.textFieldPickup.clear();
                       widget.textFieldDropOff.clear();
@@ -323,9 +322,7 @@ class _PinLocationState extends State<PinLocation> {
 
                   Directions _infoFetch = await DirectionsRepository().getDirections(origin: LatLng(pickupCoordinates_.latitude, pickupCoordinates_.longitude), destination: LatLng(dropOffCoordinates_.latitude, dropOffCoordinates_.longitude));
 
-                  print(_infoFetch.totalDistance);
-
-                  if(!widget.isBookmarks){
+                  if (!widget.isBookmarks) {
                     Navigator.push(
                       context,
                       PageTransition(
