@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proxpress/services/auth.dart';
 
 class Customer{
@@ -30,5 +31,9 @@ class Customer{
   }
   void updateCurrentEmail(String email) {
     _auth.updateCustomerEmail(email);
+  }
+
+  void updateContactNo(PhoneAuthCredential contact) {
+    _auth.updateContactNo(contact);
   }
 }

@@ -8,6 +8,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:provider/provider.dart';
@@ -400,10 +401,6 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                             if (_currentEmail != null ) {
                                                               await DatabaseService(uid:user.uid).updateCustomerEmail(_currentEmail);
                                                               validCustomer.updateCurrentEmail(_currentEmail);
-                                                              showToast("Pleaser verify your ${_currentEmail}");
-                                                              Timer(Duration(seconds: 2), () {
-                                                                Navigator.popAndPushNamed(context, '/template');
-                                                              });
 
                                                             } else {
                                                               Navigator.pop(context);
@@ -440,28 +437,59 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                             padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
                                             child: Column(
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(
-                                                      hintText: "${customerData.contactNo}",
-                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                      labelStyle: TextStyle(
-                                                          fontStyle: FontStyle.italic,
-                                                          color: Colors.black
-                                                      ),
-                                                    ),
-                                                    maxLength: 11,
-                                                    keyboardType: TextInputType.number,
-                                                    validator: (String val) {
-                                                      if (val.length < 11 && val.length > 0) {
-                                                        return 'Your contact number should be 11 digits';
+                                                StreamBuilder<List<Courier>>(
+                                                  stream: DatabaseService().courierList,
+                                                  builder: (context, snapshot) {
+                                                    List<Courier> courier = snapshot.data;
+                                                    return StreamBuilder<List<Customer>>(
+                                                      stream: DatabaseService().customerList,
+                                                      builder: (context, snapshot) {
+                                                        List<Customer> customer = snapshot.data;
+                                                        return Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: "${customerData.contactNo}",
+                                                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                              labelStyle: TextStyle(
+                                                                  fontStyle: FontStyle.italic,
+                                                                  color: Colors.black
+                                                              ),
+                                                            ),
+                                                            maxLength: 11,
+                                                            keyboardType: TextInputType.number,
+                                                            validator: (String val) {
+                                                              if (val.length < 11 && val.length > 0) {
+                                                                return 'Your contact number should be 11 digits';
+                                                              }
+                                                              bool emailTaken = false;
+                                                              bool emailTakenCus = false;
+
+                                                              customer.forEach((element) {
+                                                                if (element.contactNo == val) {
+                                                                  emailTaken = true;
+                                                                }
+                                                              });
+                                                              courier.forEach((element) {
+                                                                if (element.contactNo == val) {
+                                                                  emailTakenCus = true;
+                                                                }
+                                                              });
+                                                              print(emailTaken);
+                                                              print(emailTakenCus);
+
+                                                              if (emailTaken || emailTakenCus) {
+                                                                return 'Contact no already taken';
+                                                              }
+                                                              else
+                                                                return null;
+                                                            },
+                                                            onChanged: (val) => setState(() => _currentContactNo = val),
+                                                          ),
+                                                        );
                                                       }
-                                                      else
-                                                        return null;
-                                                    },
-                                                    onChanged: (val) => setState(() => _currentContactNo = val),
-                                                  ),
+                                                    );
+                                                  }
                                                 ),
                                                 Container(
                                                   margin: EdgeInsets.only(right: 20),
@@ -475,8 +503,15 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                                       ),
                                                       onPressed: () async {
                                                         if (_contactNumKey.currentState.validate()) {
-                                                          await DatabaseService(uid:user.uid).updateCustomerContactNo(_currentContactNo == '' ? customerData.contactNo : _currentContactNo ?? customerData.contactNo);
-                                                          processDone();
+                                                            if(_currentContactNo != null){
+                                                              await DatabaseService(uid:user.uid).updateCustomerContactNo(_currentContactNo == '' ? customerData.contactNo : _currentContactNo ?? customerData.contactNo);
+                                                              showToast("Kindly verify your new contact number");
+                                                              Timer(Duration(seconds: 2), () {
+                                                                Navigator.popAndPushNamed(context, '/template');
+                                                              });
+                                                            } else{
+                                                              Navigator.pop(context);
+                                                            }
                                                         }
                                                       },
                                                     ),

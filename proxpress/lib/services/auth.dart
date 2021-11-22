@@ -237,6 +237,15 @@ class AuthService {
     ).catchError((onError) => message = 'error');
     print(message);
   }
+  //updates the email of the customer
+  Future<void> updateContactNo(PhoneAuthCredential contactNo) async {
+    var message;
+    var firebaseUser = await _auth.currentUser;
+    firebaseUser.updatePhoneNumber(contactNo).then(
+          (value) => message = 'Success',
+    ).catchError((onError) => message = 'error');
+    print(message);
+  }
 
   //updates the email of the courier
   Future<void> updateCourierEmail(String email) async {

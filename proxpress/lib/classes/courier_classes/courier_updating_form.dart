@@ -10,6 +10,7 @@ import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/UI/CourierUI/notif_drawer_courier.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/user.dart';
 import 'package:proxpress/services/database.dart';
 import 'package:proxpress/services/upload_file.dart';
@@ -407,7 +408,6 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                             if (_currentEmail != null) {
                                                               await DatabaseService(uid:user.uid).updateCourierEmail(_currentEmail);
                                                               validCourier.updateCurrentEmail(_currentEmail);
-                                                              showToast("Pleaser verify your ${_currentEmail}");
                                                               Timer(Duration(seconds: 2), () {
                                                                 Navigator.popAndPushNamed(context, '/template1');
                                                               });
@@ -446,28 +446,59 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                             padding: EdgeInsets.fromLTRB(8,8,8,MediaQuery.of(context).viewInsets.bottom),
                                             child: Column(
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(
-                                                      hintText: "${courierData.contactNo}",
-                                                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                      labelStyle: TextStyle(
-                                                          fontStyle: FontStyle.italic,
-                                                          color: Colors.black
-                                                      ),
-                                                    ),
-                                                    maxLength: 11,
-                                                    keyboardType: TextInputType.number,
-                                                    validator: (String val) {
-                                                      if (val.length < 11 && val.length > 0) {
-                                                        return 'Your contact number should be 11 digits';
-                                                      }
-                                                      else
-                                                        return null;
-                                                    },
-                                                    onChanged: (val) => setState(() => _currentContactNo = val),
-                                                  ),
+                                                StreamBuilder<List<Courier>>(
+                                                    stream: DatabaseService().courierList,
+                                                    builder: (context, snapshot) {
+                                                      List<Courier> courier = snapshot.data;
+                                                      return StreamBuilder<List<Customer>>(
+                                                          stream: DatabaseService().customerList,
+                                                          builder: (context, snapshot) {
+                                                            List<Customer> customer = snapshot.data;
+                                                            return Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: TextFormField(
+                                                                decoration: InputDecoration(
+                                                                  hintText: "${courierData.contactNo}",
+                                                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                                                  labelStyle: TextStyle(
+                                                                      fontStyle: FontStyle.italic,
+                                                                      color: Colors.black
+                                                                  ),
+                                                                ),
+                                                                maxLength: 11,
+                                                                keyboardType: TextInputType.number,
+                                                                validator: (String val) {
+                                                                  if (val.length < 11 && val.length > 0) {
+                                                                    return 'Your contact number should be 11 digits';
+                                                                  }
+                                                                  bool emailTaken = false;
+                                                                  bool emailTakenCus = false;
+
+                                                                  customer.forEach((element) {
+                                                                    if (element.contactNo == val) {
+                                                                      emailTaken = true;
+                                                                    }
+                                                                  });
+                                                                  courier.forEach((element) {
+                                                                    if (element.contactNo == val) {
+                                                                      emailTakenCus = true;
+                                                                    }
+                                                                  });
+                                                                  print(emailTaken);
+                                                                  print(emailTakenCus);
+
+                                                                  if (emailTaken || emailTakenCus) {
+                                                                    return 'Contact no already taken';
+                                                                  }
+                                                                  else
+                                                                    return null;
+                                                                },
+                                                                onChanged: (val) => setState(() => _currentContactNo = val),
+                                                              ),
+                                                            );
+                                                          }
+                                                      );
+                                                    }
                                                 ),
                                                 Container(
                                                   margin: EdgeInsets.only(right: 20),
@@ -481,8 +512,15 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                                       ),
                                                       onPressed: () async {
                                                         if (_contactNumKey.currentState.validate()) {
-                                                          await DatabaseService(uid:user.uid).updateCourierContactNo(_currentContactNo == '' ? courierData.contactNo : _currentContactNo ?? courierData.contactNo);
-                                                          processDone();
+                                                            if(_currentContactNo != null){
+                                                              await DatabaseService(uid:user.uid).updateCourierContactNo(_currentContactNo == '' ? courierData.contactNo : _currentContactNo ?? courierData.contactNo);
+                                                              showToast("Kindly verify your new contact number");
+                                                              Timer(Duration(seconds: 2), () {
+                                                                Navigator.popAndPushNamed(context, '/template1');
+                                                              });
+                                                            } else{
+                                                              Navigator.pop(context);
+                                                            }
                                                         }
                                                       },
                                                     ),
