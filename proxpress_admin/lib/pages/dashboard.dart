@@ -490,7 +490,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
             });
 
             return Padding(
-              padding: EdgeInsets.all(100),
+              padding: EdgeInsets.all(50),
               child: PlutoGrid(
                   columns: columns,
                   rows: rows,
