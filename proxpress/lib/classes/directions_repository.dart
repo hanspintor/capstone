@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:proxpress/classes/directions_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DirectionsRepository {
   // http://project-osrm.org/docs/v5.5.1/api/#general-options
@@ -13,8 +13,8 @@ class DirectionsRepository {
   DirectionsRepository({Dio dio}) : _dio = dio ?? Dio();
 
   Future<Directions> getDirections({
-    @required LatLng origin,
-    @required LatLng destination,
+    @required GeoPoint origin,
+    @required GeoPoint destination,
   }) async {
     final response = await _dio.get(
       _baseUrl + '${origin.longitude},${origin.latitude};${destination.longitude},${destination.latitude}',

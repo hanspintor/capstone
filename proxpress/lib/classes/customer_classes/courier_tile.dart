@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/customer_classes/view_courier_profile.dart';
 import 'package:proxpress/models/couriers.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/models/delivery_prices.dart';
 import 'package:proxpress/services/database.dart';
@@ -14,9 +14,9 @@ import 'package:proxpress/services/database.dart';
 class CourierTile extends StatefulWidget {
   final Courier courier;
   final String pickupAddress;
-  final LatLng pickupCoordinates;
+  final GeoPoint pickupCoordinates;
   final String dropOffAddress;
-  final LatLng dropOffCoordinates;
+  final GeoPoint dropOffCoordinates;
   final double distance;
 
   CourierTile({

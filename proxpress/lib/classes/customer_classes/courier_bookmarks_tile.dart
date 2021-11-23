@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/classes/customer_classes/pin_widget.dart';
@@ -36,14 +35,14 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
   final textFieldDropOff = TextEditingController();
   double distance = 0.0;
   String pickupAddress;
-  LatLng pickupCoordinates;
+  GeoPoint pickupCoordinates;
   String dropOffAddress;
-  LatLng dropOffCoordinates;
+  GeoPoint dropOffCoordinates;
   double tempD = 0.0;
   String tempPA;
-  LatLng tempPC;
+  GeoPoint tempPC;
   String tempDA;
-  LatLng tempDC;
+  GeoPoint tempDC;
 
   @override
   Widget build(BuildContext context) {
@@ -297,9 +296,9 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                         show = localDataBookmark.appear;
                                                         tempD = localDataBookmark.distance;
                                                         tempPA = localDataBookmark.pickupAddress;
-                                                        tempPC = localDataBookmark.pickupCoordinates;
+                                                        tempPC = GeoPoint(localDataBookmark.pickupCoordinates.latitude, localDataBookmark.pickupCoordinates.longitude);
                                                         tempDA = localDataBookmark.dropOffAddress;
-                                                        tempDC = localDataBookmark.dropOffCoordinates;
+                                                        tempDC = GeoPoint(localDataBookmark.dropOffCoordinates.latitude, localDataBookmark.dropOffCoordinates.longitude);
                                                       }
                                                     });
 

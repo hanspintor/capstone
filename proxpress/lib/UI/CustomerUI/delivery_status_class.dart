@@ -46,64 +46,69 @@ class _MyRequestsState extends State<MyRequests> with SingleTickerProviderStateM
           .snapshots()
           .map(DatabaseService().deliveryDataListFromSnapshot);
 
-      return DefaultTabController(
-        length: 4,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverToBoxAdapter(
-                child: Material(
-                  color: Colors.grey[100],
-                  child: TabBar(
-                    labelColor: Colors.red,
-                    unselectedLabelColor: Colors.grey[700],
-                    tabs: [
-                      Tab(child: Text("Pending")),
-                      Tab(child: Text("Ongoing")),
-                      Tab(child: Text("Finished")),
-                      Tab(child: Text("Cancelled")),
-                    ],
+      return WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: DefaultTabController(
+          length: 4,
+          child: NestedScrollView(
+            headerSliverBuilder: (context, value) {
+              return [
+                SliverToBoxAdapter(
+                  child: Material(
+                    color: Colors.grey[100],
+                    child: TabBar(
+                      labelColor: Colors.red,
+                      unselectedLabelColor: Colors.grey[700],
+                      tabs: [
+                        Tab(child: Text("Pending")),
+                        Tab(child: Text("Ongoing")),
+                        Tab(child: Text("Finished")),
+                        Tab(child: Text("Cancelled")),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ];
-          },
-          body: Container(
-            child: TabBarView(
-              children: [
-                StreamProvider<List<Delivery>>.value(
+              ];
+            },
+            body: Container(
+              child: TabBarView(
+                children: [
+                  StreamProvider<List<Delivery>>.value(
+                      initialData: [],
+                      value: deliveryRequestPending,
+                      child: Card(
+                        color: Colors.blueGrey[50],
+                        child: RequestList(message: 'You currently have no pending requests.',),
+                      )
+                  ),
+                  StreamProvider<List<Delivery>>.value(
                     initialData: [],
-                    value: deliveryRequestPending,
+                    value: deliveryListOngoing,
                     child: Card(
                       color: Colors.blueGrey[50],
-                      child: RequestList(message: 'You currently have no pending requests.',),
-                    )
-                ),
-                StreamProvider<List<Delivery>>.value(
-                  initialData: [],
-                  value: deliveryListOngoing,
-                  child: Card(
-                    color: Colors.blueGrey[50],
-                    child: RequestList(message: 'You currently have no ongoing deliveries.'),
+                      child: RequestList(message: 'You currently have no ongoing deliveries.'),
+                    ),
                   ),
-                ),
-                StreamProvider<List<Delivery>>.value(
-                  initialData: [],
-                  value: deliveryListDelivered,
-                  child: Card(
-                    color: Colors.blueGrey[50],
-                    child: RequestList(message: 'You have no finished transactions.'),
+                  StreamProvider<List<Delivery>>.value(
+                    initialData: [],
+                    value: deliveryListDelivered,
+                    child: Card(
+                      color: Colors.blueGrey[50],
+                      child: RequestList(message: 'You have no finished transactions.'),
+                    ),
                   ),
-                ),
-                StreamProvider<List<Delivery>>.value(
-                  initialData: [],
-                  value: deliveryListCancelled,
-                  child: Card(
-                    color: Colors.blueGrey[50],
-                    child: RequestList(message: 'You have no cancelled transactions.'),
+                  StreamProvider<List<Delivery>>.value(
+                    initialData: [],
+                    value: deliveryListCancelled,
+                    child: Card(
+                      color: Colors.blueGrey[50],
+                      child: RequestList(message: 'You have no cancelled transactions.'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

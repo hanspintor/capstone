@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CourierUI/menu_drawer_courier.dart';
@@ -176,7 +175,7 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                 return zoomLevel;
                                               }
 
-                                              Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: LatLng(_pickup.latitude, _pickup.longitude), destination: LatLng(_dropOff.latitude, _dropOff.longitude));
+                                              Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: _pickup, destination: _dropOff);
 
                                               return Expanded(
                                                 child: Stack(
@@ -468,7 +467,9 @@ class _OngoingDeliveryState extends State<OngoingDelivery> {
                                                       });
                                                       bool isSeen = false;
                                                       bool popsOnce = true;
-                                                      await DatabaseService(uid: user.uid).updateCourierWallet(courierData.wallet + delivery.deliveryFee);
+                                                      if (delivery.paymentOption == 'Online Payment') {
+                                                        await DatabaseService(uid: user.uid).updateCourierWallet(courierData.wallet + delivery.deliveryFee);
+                                                      }
                                                       await DatabaseService(uid: delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Delivered');
                                                       await DatabaseService().createNotificationData(notifM, delivery.courierRef,
                                                           delivery.customerRef, cloud.Timestamp.now(), isSeen, popsOnce);

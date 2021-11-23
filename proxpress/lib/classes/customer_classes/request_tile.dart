@@ -740,6 +740,23 @@ class _RequestTileState extends State<RequestTile> {
                                                   child: Text("Send"),
                                                   onPressed: () async {
                                                     if (_keyCancel.currentState.validate()) {
+                                                      if (delivery.paymentOption == 'Online Payment') {
+                                                        int currentBalance = 0;
+
+                                                        await FirebaseFirestore.instance
+                                                            .collection('Customers')
+                                                            .doc(delivery.customerRef.id)
+                                                            .get()
+                                                            .then((DocumentSnapshot documentSnapshot) {
+                                                          if (documentSnapshot.exists) {
+                                                            currentBalance = documentSnapshot['Wallet'];
+                                                          }
+                                                        });
+
+                                                        await DatabaseService(uid: delivery.customerRef.id).updateCustomerWallet(currentBalance + delivery.deliveryFee);
+                                                        await DatabaseService(uid: delivery.uid).updateTime(Timestamp.now());
+                                                      }
+
                                                       await DatabaseService(uid: delivery.uid).customerCancelRequest(cancellationMessage);
                                                       Navigator.of(context).pop();
                                                       showToast("Request cancelled");

@@ -8,13 +8,12 @@ import 'package:proxpress/classes/customer_classes/courier_tile.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CourierList extends StatefulWidget {
   final String pickupAddress;
-  final LatLng pickupCoordinates;
+  final GeoPoint pickupCoordinates;
   final String dropOffAddress;
-  final LatLng dropOffCoordinates;
+  final GeoPoint dropOffCoordinates;
   final double distance;
 
   CourierList({

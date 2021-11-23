@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
+import 'package:proxpress/UI/CustomerUI/proxpress_template_customer.dart';
 import 'package:proxpress/UI/CustomerUI/top_up_page.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/models/customers.dart';
@@ -253,7 +255,13 @@ class _ReviewRequestState extends State<ReviewRequest> {
                       bool popsOnce = true;
                       await DatabaseService().createNotificationData(notifM, widget.customer, widget.courier,
                           Timestamp.now(), isSeen, popsOnce);
-                      Navigator.pushNamed(context, '/template');
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                            child: AppBarTemp(currentPage: 'Requests', ),
+                            type: PageTransitionType.rightToLeftWithFade
+                          )
+                      );
                       showToast('Your request has been sent.');
                     } else {
                       setState(() {

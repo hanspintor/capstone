@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 class PinLocation extends StatefulWidget {
   final GlobalKey<FormState> locKey;
@@ -29,10 +29,10 @@ class _PinLocationState extends State<PinLocation> {
   MapController controller;
 
   String pickupAddress;
-  LatLng pickupCoordinates;
+  GeoPoint pickupCoordinates;
 
   String dropOffAddress;
-  LatLng dropOffCoordinates;
+  GeoPoint dropOffCoordinates;
 
   dynamic pickupDetails;
   dynamic dropOffDetails;
@@ -106,7 +106,7 @@ class _PinLocationState extends State<PinLocation> {
 
                                       if (pickupDetails != null) {
                                         setState(() => errorPickup = '');
-                                        pickupCoordinates = LatLng(pickupDetails.latitude, pickupDetails.longitude);
+                                        pickupCoordinates = GeoPoint(latitude: pickupDetails.latitude, longitude: pickupDetails.longitude);
                                       }
                                     },
                                   )
@@ -189,7 +189,7 @@ class _PinLocationState extends State<PinLocation> {
 
                                     if (dropOffDetails != null) {
                                       setState(() => errorDropOff = '');
-                                      dropOffCoordinates = LatLng(dropOffDetails.latitude, dropOffDetails.longitude);
+                                      dropOffCoordinates = GeoPoint(latitude: dropOffDetails.latitude, longitude: dropOffDetails.longitude);
                                     }
                                   },
                                 )
@@ -251,7 +251,7 @@ class _PinLocationState extends State<PinLocation> {
                   GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
                   GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
 
-                  Directions _infoFetch = await DirectionsRepository().getDirections(origin: LatLng(pickupCoordinates_.latitude, pickupCoordinates_.longitude), destination: LatLng(dropOffCoordinates_.latitude, dropOffCoordinates_.longitude));
+                  Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
 
                   if (!widget.isBookmarks) {
                     Navigator.push(
@@ -259,9 +259,9 @@ class _PinLocationState extends State<PinLocation> {
                       PageTransition(
                         child: DashboardCustomer(
                             pickupAddress: pickupAddress,
-                            pickupCoordinates: pickupCoordinates,
+                            pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
                             dropOffAddress: dropOffAddress,
-                            dropOffCoordinates: dropOffCoordinates,
+                            dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
                             distance: _infoFetch.totalDistance,
                         ),
                         type: PageTransitionType.bottomToTop
@@ -320,7 +320,7 @@ class _PinLocationState extends State<PinLocation> {
                   GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
                   GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
 
-                  Directions _infoFetch = await DirectionsRepository().getDirections(origin: LatLng(pickupCoordinates_.latitude, pickupCoordinates_.longitude), destination: LatLng(dropOffCoordinates_.latitude, dropOffCoordinates_.longitude));
+                  Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
 
                   if (!widget.isBookmarks) {
                     Navigator.push(
@@ -328,9 +328,9 @@ class _PinLocationState extends State<PinLocation> {
                       PageTransition(
                         child: DashboardCustomer(
                             pickupAddress: pickupAddress,
-                            pickupCoordinates: pickupCoordinates,
+                            pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
                             dropOffAddress: dropOffAddress,
-                            dropOffCoordinates: dropOffCoordinates,
+                            dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
                             distance: _infoFetch.totalDistance,
                           ),
                           type: PageTransitionType.bottomToTop
@@ -356,9 +356,9 @@ class LocalDataBookmark{
   bool appear;
   double distance;
   String pickupAddress;
-  LatLng pickupCoordinates;
+  GeoPoint pickupCoordinates;
   String dropOffAddress;
-  LatLng dropOffCoordinates;
+  GeoPoint dropOffCoordinates;
 
   LocalDataBookmark({
     this.appear,

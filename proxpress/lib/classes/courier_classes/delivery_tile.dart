@@ -307,7 +307,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                                         }
 
                                                         Navigator.of(context).pop();
-                                                        showToast("Request cancelled");
+                                                        showToast("Request declined");
                                                       }
                                                     },
                                                   ),

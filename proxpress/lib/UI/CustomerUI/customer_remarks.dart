@@ -3,14 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/review_request.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomerRemarks extends StatefulWidget {
   final String courierUID;
   final String pickupAddress;
-  final LatLng pickupCoordinates;
+  final GeoPoint pickupCoordinates;
   final String dropOffAddress;
-  final LatLng dropOffCoordinates;
+  final GeoPoint dropOffCoordinates;
   final int deliveryFee;
 
   CustomerRemarks({

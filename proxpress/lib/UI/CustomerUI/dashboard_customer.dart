@@ -1,4 +1,4 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
@@ -10,9 +10,9 @@ import 'package:proxpress/services/database.dart';
 
 class DashboardCustomer extends StatefulWidget{
   final String pickupAddress;
-  final LatLng pickupCoordinates;
+  final GeoPoint pickupCoordinates;
   final String dropOffAddress;
-  final LatLng dropOffCoordinates;
+  final GeoPoint dropOffCoordinates;
   final double distance;
 
   DashboardCustomer({

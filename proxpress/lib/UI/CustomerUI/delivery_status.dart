@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/models/deliveries.dart';
@@ -97,7 +96,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                       return zoomLevel;
                     }
 
-                    Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: LatLng(_pickup.latitude, _pickup.longitude), destination: LatLng(_dropOff.latitude, _dropOff.longitude));
+                    Future<Directions> _infoFetch = DirectionsRepository().getDirections(origin: _pickup, destination: _dropOff);
 
                     return Expanded(
                       child: Stack(
