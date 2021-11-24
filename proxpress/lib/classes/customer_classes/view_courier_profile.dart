@@ -5,8 +5,6 @@ import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/Load/user_load.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:proxpress/models/user.dart';
-import 'package:provider/provider.dart';
 
 class ViewCourierProfile extends StatelessWidget {
   final String courierUID;
@@ -48,8 +46,6 @@ class ViewCourierProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<TheUser>(context);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -71,7 +67,7 @@ class ViewCourierProfile extends StatelessWidget {
               Stream<List<Delivery>> deliveryList = FirebaseFirestore.instance
                   .collection('Deliveries')
                   .where('Delivery Status', isEqualTo: 'Delivered')
-                  .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(user.uid))
+                  .where('Courier Reference', isEqualTo: FirebaseFirestore.instance.collection('Couriers').doc(courierUID))
                   .snapshots()
                   .map(DatabaseService().deliveryDataListFromSnapshot);
 
@@ -153,8 +149,8 @@ class ViewCourierProfile extends StatelessWidget {
                         padding: EdgeInsets.all(25),
                         child: Column(
                           children: [
-                            StreamBuilder <List<Delivery>>(
-                                stream:   deliveryList,
+                            StreamBuilder<List<Delivery>>(
+                                stream: deliveryList,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData && snapshot.data.length != 0) {
                                     List<Delivery> deliveryData = snapshot.data;

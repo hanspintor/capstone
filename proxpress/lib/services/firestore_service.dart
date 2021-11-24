@@ -14,7 +14,9 @@ class FirestoreServicePackage<T> {
   final FirebaseFirestore firebasefirestore = FirebaseFirestore.instance;
 
   Stream<List> searchData(String query) {
-    final collectionReference = firebasefirestore.collection(collectionName);
+    final collectionReference = firebasefirestore.collection(collectionName)
+        .where('Admin Approved', isEqualTo: true)
+        .where('Active Status', isEqualTo: 'Active');
 
     if (query.length != 0) {
       query = query[0].toUpperCase() + query.substring(1);
