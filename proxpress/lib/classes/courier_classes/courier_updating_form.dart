@@ -208,6 +208,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ),
                                 onPressed: () {
                                   showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => Form(
                                       key: _fullNameKey,
@@ -298,6 +303,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ),
                                 onPressed: () {
                                   showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => Form(
                                       key: _addressKey,
@@ -359,6 +369,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                   ),
                                   onPressed: () {
                                     showMaterialModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20),
+                                        ),
+                                      ),
                                       context: context,
                                       builder: (context) => SingleChildScrollView(
                                         controller: ModalScrollController.of(context),
@@ -436,6 +451,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ),
                                 onPressed: () {
                                   showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => SingleChildScrollView(
                                       controller: ModalScrollController.of(context),
@@ -543,6 +563,11 @@ class _CourierUpdateState extends State<CourierUpdate> {
                                 ),
                                 onPressed: () {
                                   showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => SingleChildScrollView(
                                       controller: ModalScrollController.of(context),
