@@ -440,8 +440,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textPickupPointPerson.text = name;
                         textPickupContactNum.text = num;
-                        pickupPointPerson = name;
-                        pickupContactNum = num;
+                        pickupPointPerson = textPickupPointPerson.text;
+                        pickupContactNum = textPickupContactNum.text;
                         customerIsPickUp = true;
                       });
                     },
@@ -458,8 +458,6 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textPickupPointPerson.text = '';
                         textPickupContactNum.text = '';
-                        dropoffPointPerson = '';
-                        dropoffContactNum = '';
                         customerIsPickUp = false;
                       });
                     },
@@ -507,8 +505,8 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textDropoffPointPerson.text = name;
                         textDropoffContactNum.text = num;
-                        dropoffPointPerson = name;
-                        dropoffContactNum = num;
+                        dropoffPointPerson = textDropoffPointPerson.text;
+                        dropoffContactNum = textDropoffContactNum.text;
                         customerIsDropOff = true;
                       });
                     },
@@ -525,8 +523,6 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                       setState(() {
                         textDropoffPointPerson.text = '';
                         textDropoffContactNum.text = '';
-                        dropoffPointPerson = '';
-                        dropoffContactNum = '';
                         customerIsDropOff = false;
                       });
                     },
