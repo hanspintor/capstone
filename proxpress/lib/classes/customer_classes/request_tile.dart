@@ -265,8 +265,6 @@ class _RequestTileState extends State<RequestTile> {
                                       localMap.forEach((key, value) {
                                         if (value == delivery.courierRef) {
                                           isFavorite = true;
-                                        } else{
-                                          isFavorite = false;
                                         }
                                       });
 
