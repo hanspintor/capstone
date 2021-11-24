@@ -37,6 +37,13 @@ class _CourierListState extends State<CourierList> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
+    Stream<List<Courier>> listCour = FirebaseFirestore.instance
+        .collection('Couriers')
+        .where('Admin Approved', isEqualTo: true)
+        .where('Active Status', isEqualTo: 'Active')
+        .snapshots()
+        .map(DatabaseService().courierDataListFromSnapshot);
+
     Stream<List<Delivery>> deliveryRequestPending = FirebaseFirestore.instance
         .collection('Deliveries')
         .where('Courier Approval', isEqualTo: 'Pending')

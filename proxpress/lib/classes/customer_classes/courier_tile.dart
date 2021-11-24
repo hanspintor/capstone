@@ -45,6 +45,14 @@ class _CourierTileState extends State<CourierTile> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
+    Color color;
+    if(widget.courier.status == "Active"){
+      color = Colors.green;
+    } else{
+      color = Colors.red;
+    }
+
+
     if (user != null) {
       return StreamBuilder<DeliveryPrice>(
           stream: DatabaseService(uid: deliveryPriceUid).deliveryPriceData,

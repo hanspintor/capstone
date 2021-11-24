@@ -40,6 +40,7 @@ class _RequestTileState extends State<RequestTile> {
   String saveDestination = "";
   bool attachmentEmpty = false;
   String savedUrl = '';
+  int flag = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -261,27 +262,33 @@ class _RequestTileState extends State<RequestTile> {
                                       }
 
                                       localAddMap = {'Courier_Ref${localMap.length}' : delivery.courierRef};
-
                                       localMap.forEach((key, value) {
                                         if (value == delivery.courierRef) {
                                           isFavorite = true;
+                                        } else{
+                                          isFavorite = false;
                                         }
                                       });
 
                                       return Padding(
                                         padding: const EdgeInsets.only(right: 60),
                                         child: Container(
-                                          child:  FavoriteButton(
+                                          child:  !isFavorite ? FavoriteButton(
                                             isFavorite: isFavorite,
                                             iconSize: 50,
                                             valueChanged: (_isFavorite) {
                                               isFavorite = _isFavorite;
 
                                               if (isFavorite) {
+                                                flag = 1;
                                                 localMap.addAll(localAddMap);
                                                 DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
                                               }
                                             },
+                                          ) : Icon(
+                                            Icons.bookmark,
+                                            color: Colors.red,
+                                            size: 40,
                                           ),
                                         ),
                                       );
