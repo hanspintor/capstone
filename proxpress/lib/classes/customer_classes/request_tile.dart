@@ -906,58 +906,61 @@ class _RequestTileState extends State<RequestTile> {
 
   void showFeedback(Delivery delivery) {
     showMaterialModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
       context: context,
       builder: (context) => Container(
-        child: Card(
-          child: ListTile(
-            title: Row(
-              children: [
-                Text('How\'s My Service?'),
-              ],
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 10,),
-                RatingBar.builder(
-                  minRating: 1,
-                  itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber,),
-                  updateOnDrag: true,
-                  onRatingUpdate: (rating) => setState(() {
-                    this.rating = rating;
-                  }),
+        child: ListTile(
+          title: Row(
+            children: [
+              Text('How\'s My Service?'),
+            ],
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 10,),
+              RatingBar.builder(
+                minRating: 1,
+                itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber,),
+                updateOnDrag: true,
+                onRatingUpdate: (rating) => setState(() {
+                  this.rating = rating;
+                }),
+              ),
+              Text('Rate Me',
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                maxLines: 2,
+                maxLength: 200,
+                decoration: InputDecoration(
+                  hintText: 'Leave a Feedback',
+                  border: OutlineInputBorder(),
                 ),
-                Text('Rate Me',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  maxLines: 2,
-                  maxLength: 200,
-                  decoration: InputDecoration(
-                    hintText: 'Leave a Feedback',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  onChanged: (val) => setState(() => feedback = val),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: TextButton(
-                        child: Text('OK'),
-                        onPressed: () async{
-                          await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
-                          Navigator.pop(context);
-                          showToast('Feedback Sent');
-                        }
-                    ),
+                keyboardType: TextInputType.multiline,
+                onChanged: (val) => setState(() => feedback = val),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
+                      child: Text('OK'),
+                      onPressed: () async{
+                        await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
+                        Navigator.pop(context);
+                        showToast('Feedback Sent');
+                      }
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
