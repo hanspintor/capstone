@@ -224,69 +224,72 @@ class _PinLocationState extends State<PinLocation> {
         ),
         Visibility(
           visible: widget.isBookmarks,
-          child: Container(
-            width: double.infinity,
-            margin: EdgeInsets.fromLTRB(40, 10, 40, 40),
-            child: ElevatedButton(
-              child: Text(
-                'Save Locations',
-                style:
-                TextStyle(color: Colors.white, fontSize: 18),
-              ),
-              style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
-              onPressed: () async {
-                bool gotError = false;
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              width: double.infinity,
+              margin: EdgeInsets.fromLTRB(40, 10, 40, 0),
+              child: ElevatedButton(
+                child: Text(
+                  'Save Locations',
+                  style:
+                  TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                style: ElevatedButton.styleFrom(primary: Color(0xfffb0d0d)),
+                onPressed: () async {
+                  bool gotError = false;
 
-                if (pickupCoordinates == null) {
-                  gotError = true;
-                  setState(() => errorPickup = 'Please pin location');
-                }
-
-                if (dropOffCoordinates == null) {
-                  gotError = true;
-                  setState(() => errorDropOff = 'Please pin location');
-                }
-
-                if (widget.locKey.currentState.validate() && !gotError) {
-                  GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
-                  GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
-
-                  Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
-
-                  if (!widget.isBookmarks) {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        child: DashboardCustomer(
-                            pickupAddress: pickupAddress,
-                            pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
-                            dropOffAddress: dropOffAddress,
-                            dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
-                            distance: _infoFetch.totalDistance,
-                        ),
-                        type: PageTransitionType.bottomToTop
-                      )
-                    );
-                  } else {
-                    setState(() {
-                      appear = true;
-                      widget.textFieldPickup.clear();
-                      widget.textFieldDropOff.clear();
-                    });
-
-                    Navigator.pop(context,
-                      LocalDataBookmark(
-                        appear: appear,
-                        distance: _infoFetch.totalDistance,
-                        pickupAddress: pickupAddress,
-                        pickupCoordinates: pickupCoordinates,
-                        dropOffAddress: dropOffAddress,
-                        dropOffCoordinates: dropOffCoordinates
-                      )
-                    );
+                  if (pickupCoordinates == null) {
+                    gotError = true;
+                    setState(() => errorPickup = 'Please pin location');
                   }
-                }
-              },
+
+                  if (dropOffCoordinates == null) {
+                    gotError = true;
+                    setState(() => errorDropOff = 'Please pin location');
+                  }
+
+                  if (widget.locKey.currentState.validate() && !gotError) {
+                    GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
+                    GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
+
+                    Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
+
+                    if (!widget.isBookmarks) {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          child: DashboardCustomer(
+                              pickupAddress: pickupAddress,
+                              pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
+                              dropOffAddress: dropOffAddress,
+                              dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
+                              distance: _infoFetch.totalDistance,
+                          ),
+                          type: PageTransitionType.bottomToTop
+                        )
+                      );
+                    } else {
+                      setState(() {
+                        appear = true;
+                        widget.textFieldPickup.clear();
+                        widget.textFieldDropOff.clear();
+                      });
+
+                      Navigator.pop(context,
+                        LocalDataBookmark(
+                          appear: appear,
+                          distance: _infoFetch.totalDistance,
+                          pickupAddress: pickupAddress,
+                          pickupCoordinates: pickupCoordinates,
+                          dropOffAddress: dropOffAddress,
+                          dropOffCoordinates: dropOffCoordinates
+                        )
+                      );
+                    }
+                  }
+                },
+              ),
             ),
           ),
         ),

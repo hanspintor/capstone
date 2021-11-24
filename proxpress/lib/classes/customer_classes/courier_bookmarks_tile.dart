@@ -275,9 +275,14 @@ class _CourierBookmarkTileState extends State<CourierBookmarkTile> {
                                                   child: const Text('PIN LOCATION'),
                                                   onPressed: /*widget.courier.status == "Offline" ? null :*/ () async {
                                                     await showMaterialModalBottomSheet(
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.vertical(
+                                                          top: Radius.circular(20),
+                                                        ),
+                                                      ),
                                                       context: context,
                                                       builder: (context) => Container(
-                                                          height: MediaQuery.of(context).size.height * .8,
+                                                          height: MediaQuery.of(context).size.height,
                                                           child: Column(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: [
