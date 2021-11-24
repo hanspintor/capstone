@@ -944,7 +944,7 @@ class _SignupCourierState extends State<SignupCourier> {
                   onChanged: (color) {
                     setState(() => this.color = color);
                   },
-                  controller: CircleColorPickerController(initialColor: Colors.grey,)
+                  controller: CircleColorPickerController(initialColor: color,)
               );
             }
         ),
