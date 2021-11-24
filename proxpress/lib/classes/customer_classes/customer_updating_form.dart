@@ -210,6 +210,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 ),
                                 onPressed: () {
                                   showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => SingleChildScrollView(
                                       controller: ModalScrollController.of(context),
@@ -292,6 +297,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 ),
                                 onPressed: () {
                                   showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => SingleChildScrollView(
                                       controller: ModalScrollController.of(context),
@@ -353,6 +363,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                   ),
                                   onPressed: () {
                                     showMaterialModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20),
+                                        ),
+                                      ),
                                       context: context,
                                       builder: (context) => Form(
                                         key: _emailKey,
@@ -427,6 +442,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 ),
                                 onPressed: () {
                                   showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => SingleChildScrollView(
                                       controller: ModalScrollController.of(context),
@@ -534,6 +554,11 @@ class _CustomerUpdateState extends State<CustomerUpdate> {
                                 ),
                                 onPressed: () async {
                                   await showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
                                     context: context,
                                     builder: (context) => SingleChildScrollView(
                                       controller: ModalScrollController.of(context),
