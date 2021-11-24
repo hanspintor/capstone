@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:proxpress/UI/CourierUI/ongoing_delivery.dart';
 import 'package:proxpress/UI/login_screen.dart';
 import 'package:proxpress/classes/view_delivery_details.dart';
 import 'package:proxpress/models/customers.dart';
@@ -176,6 +177,13 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                               widget.delivery.customerRef, Timestamp.now(), isSeen, popsOnce);
                                           await DatabaseService(uid: widget.delivery.uid).updateApprovalAndDeliveryStatus('Approved', 'Ongoing');
                                           await DatabaseService(uid: widget.delivery.uid).updateTime(Timestamp.now());
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  child: OngoingDelivery(),
+                                                  type: PageTransitionType.rightToLeftWithFade
+                                              )
+                                          );
                                         }
                                     );
                                   } else {
