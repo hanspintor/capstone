@@ -34,10 +34,10 @@ class _CustomerCreatePostState extends State<CustomerCreatePost> {
         actions: [
           TextButton(
             child: Text('POST'),
-            onPressed: () async{
+            onPressed: (title == null || title == "") && (content == null || content == "") ? null : () async{
               await DatabaseService().createCommunity(title, content, customerID, Timestamp.now());
               Navigator.pop(context);
-            },
+            } ,
           )
         ],
       ),
