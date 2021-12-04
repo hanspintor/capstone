@@ -251,52 +251,6 @@ class _RequestTileState extends State<RequestTile> {
                           ),
                           Wrap(
                             children: <Widget>[
-                              StreamBuilder<Customer>(
-                                  stream: DatabaseService(uid: delivery.customerRef.id).customerData,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      Customer customerData = snapshot.data;
-
-                                      if (customerData.courier_ref != {}) {
-                                        localMap = Map<String, DocumentReference>.from(customerData.courier_ref);
-                                      } else {
-                                        localAddMap = {};
-                                      }
-
-                                      localAddMap = {'Courier_Ref${localMap.length}' : delivery.courierRef};
-                                      localMap.forEach((key, value) {
-                                        if (value == delivery.courierRef) {
-                                          isFavorite = true;
-                                        }
-                                      });
-
-                                      return Padding(
-                                        padding: const EdgeInsets.only(right: 60),
-                                        child: Container(
-                                          child:  !isFavorite ? FavoriteButton(
-                                            isFavorite: isFavorite,
-                                            iconSize: 50,
-                                            valueChanged: (_isFavorite) {
-                                              isFavorite = _isFavorite;
-
-                                              if (isFavorite) {
-                                                flag = 1;
-                                                localMap.addAll(localAddMap);
-                                                DatabaseService(uid: delivery.customerRef.id).updateCustomerCourierRef(localMap);
-                                              }
-                                            },
-                                          ) : Icon(
-                                            Icons.bookmark,
-                                            color: Colors.red,
-                                            size: 40,
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      return Container();
-                                    }
-                                  }
-                              ),
                               TextButton(
                                 child: Text('CHAT HISTORY'),
                                 onPressed: () {
