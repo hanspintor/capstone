@@ -148,8 +148,12 @@ class _SignupCustomerState extends State<SignupCustomer> {
                     maxLength: 11,
                     keyboardType: TextInputType.number,
                     validator: (String value) {
+                      String temp = value.substring(0,2);
                       if (value.length < 11 && value.length > 0) {
                         return 'Your contact number should be 11 digits';
+                      }
+                      else if(temp != "09" && temp != "08"){
+                        return 'Contact number should start with 09/08';
                       }
                       else if (value.isEmpty) {
                         return 'Contact Number is Required';

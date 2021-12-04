@@ -64,6 +64,9 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
           if (value.isEmpty) {
             return 'Item description is required.';
           }
+          else if(value.length < 3){
+            return 'Item description should be more than 3 characters';
+          }
           else return null;
         },
         onSaved: (String value) {
@@ -108,8 +111,12 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         decoration: InputDecoration(labelText: 'Contact Number'),
         keyboardType: TextInputType.number,
         validator: (String value) {
+          String temp = value.substring(0,2);
           if (value.length < 11 && value.length > 0) {
             return 'Pick up contact number should be 11 digits.';
+          }
+          else if(temp != "09" && temp != "08"){
+            return 'Contact number should start with 09/08';
           }
           else if (value.isEmpty) {
             return 'Pick up contact number is required.';
@@ -158,8 +165,12 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         decoration: InputDecoration(labelText: 'Contact Number'),
         keyboardType: TextInputType.number,
         validator: (String value) {
+          String temp = value.substring(0,2);
           if (value.length < 11 && value.length > 0) {
             return 'Drop off contact number should be 11 digits.';
+          }
+          else if(temp != "09" && temp != "08"){
+            return 'Contact number should start with 09/08';
           }
           else if (value.isEmpty) {
             return 'Drop off contact number is required.';

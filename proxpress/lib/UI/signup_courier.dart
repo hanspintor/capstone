@@ -195,8 +195,12 @@ class _SignupCourierState extends State<SignupCourier> {
                     });
                     print(contactNoTaken);
                     print(contactNoTakeCus);
+                    String temp = value.substring(0,2);
                     if (contactNoTaken || contactNoTakeCus) {
                       return "Contact number already taken";
+                    }
+                    else if(temp != "09" && temp != "08"){
+                      return 'Contact number should start with 09/08';
                     }
                     else
                       return null;

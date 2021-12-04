@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proxpress/UI/CustomerUI/courier_bookmarks.dart';
 import 'package:proxpress/UI/CustomerUI/customer_community_hub.dart';
+import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/UI/CustomerUI/customer_wallet.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
@@ -41,6 +42,14 @@ class _AppBarTempState extends State<AppBarTemp>{
       currentPage = widget.currentPage;
       print(currentPage);
       if (currentPage == "Dashboard") {
+        /// Use this for testing customer remarks
+        // return CustomerRemarks(
+        //   courierUID: "1aimUdZ2MybKA6jJCdxf22NdwiD2",
+        //   pickupAddress: "San Felipe, Naga City",
+        //   pickupCoordinates: cloud.GeoPoint(48.1, 21.1),
+        //   dropOffAddress: "JMR",
+        //   dropOffCoordinates: cloud.GeoPoint(99.1, 64.1),
+        //   deliveryFee: 75,);
         return DashboardLocation();
       }
       else if (currentPage == "Profile") {
@@ -61,6 +70,14 @@ class _AppBarTempState extends State<AppBarTemp>{
       }
     } else {
       if (currentPage == "Dashboard") {
+        /// Use this for testing customer remarks
+        // return CustomerRemarks(
+        //   courierUID: "1aimUdZ2MybKA6jJCdxf22NdwiD2",
+        //   pickupAddress: "San Felipe, Naga City",
+        //   pickupCoordinates: cloud.GeoPoint(48.1, 21.1),
+        //   dropOffAddress: "JMR",
+        //   dropOffCoordinates: cloud.GeoPoint(24.1, 64.1),
+        //   deliveryFee: 75,);
         return DashboardLocation();
       }
     }
@@ -73,8 +90,8 @@ class _AppBarTempState extends State<AppBarTemp>{
     bool approved = true;
 
     if (user != null) {
-      DocumentReference customer = FirebaseFirestore.instance.collection('Customers').doc(user.uid);
-      Stream<List<Notifications>> notifList = FirebaseFirestore.instance
+      cloud.DocumentReference customer = cloud.FirebaseFirestore.instance.collection('Customers').doc(user.uid);
+      Stream<List<Notifications>> notifList = cloud.FirebaseFirestore.instance
           .collection('Notifications')
           .where('Sent To', isEqualTo: customer)
           .snapshots()
