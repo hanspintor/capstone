@@ -3,6 +3,7 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:proxpress/UI/CustomerUI/pin_location_map.dart';
+import 'package:proxpress/classes/customer_classes/vehicle_type.dart';
 import 'package:proxpress/classes/directions_model.dart';
 import 'package:proxpress/classes/directions_repository.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_customer.dart';
@@ -307,54 +308,62 @@ class _PinLocationState extends State<PinLocation> {
             margin: EdgeInsets.fromLTRB(40, 0, 40, 40),
             child: ElevatedButton(
               child: Text(
-                'Select Courier',
+                'Select Vehicle',
                 style:
                 TextStyle(color: Colors.white, fontSize: 18),
               ),
               style: ElevatedButton.styleFrom(
                   primary: Color(0xfffb0d0d)),
               onPressed: () async {
-                bool gotError = false;
+                // bool gotError = false;
+                //
+                // if (pickupCoordinates == null) {
+                //   gotError = true;
+                //   setState(() => errorPickup = 'Please pin location');
+                // }
+                //
+                // if (dropOffCoordinates == null) {
+                //   gotError = true;
+                //   setState(() => errorDropOff = 'Please pin location');
+                // }
+                //
+                // if (widget.locKey.currentState.validate() && !gotError) {
+                //   context.loaderOverlay.show();
+                //   GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
+                //   GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
+                //
+                //   Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
+                //
+                //   if (!widget.isBookmarks) {
+                //     context.loaderOverlay.hide();
+                //     Navigator.push(
+                //       context,
+                //       PageTransition(
+                //         child: DashboardCustomer(
+                //             pickupAddress: pickupAddress,
+                //             pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
+                //             dropOffAddress: dropOffAddress,
+                //             dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
+                //             distance: _infoFetch.totalDistance,
+                //           ),
+                //           type: PageTransitionType.bottomToTop
+                //       )
+                //     );
+                //   }
+                //
+                //   setState(() {
+                //     errorPickup = '';
+                //     errorDropOff = '';
+                //   });
+                // }
 
-                if (pickupCoordinates == null) {
-                  gotError = true;
-                  setState(() => errorPickup = 'Please pin location');
-                }
-
-                if (dropOffCoordinates == null) {
-                  gotError = true;
-                  setState(() => errorDropOff = 'Please pin location');
-                }
-
-                if (widget.locKey.currentState.validate() && !gotError) {
-                  context.loaderOverlay.show();
-                  GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
-                  GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
-
-                  Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
-
-                  if (!widget.isBookmarks) {
-                    context.loaderOverlay.hide();
                     Navigator.push(
                       context,
                       PageTransition(
-                        child: DashboardCustomer(
-                            pickupAddress: pickupAddress,
-                            pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
-                            dropOffAddress: dropOffAddress,
-                            dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
-                            distance: _infoFetch.totalDistance,
-                          ),
+                        child: VehicleType(),
                           type: PageTransitionType.bottomToTop
                       )
                     );
-                  }
-
-                  setState(() {
-                    errorPickup = '';
-                    errorDropOff = '';
-                  });
-                }
               },
             ),
           ),
