@@ -42,21 +42,13 @@ class _AppBarTempState extends State<AppBarTemp>{
       currentPage = widget.currentPage;
       print(currentPage);
       if (currentPage == "Dashboard") {
-        /// Use this for testing customer remarks
-        // return CustomerRemarks(
-        //   courierUID: "1aimUdZ2MybKA6jJCdxf22NdwiD2",
-        //   pickupAddress: "San Felipe, Naga City",
-        //   pickupCoordinates: cloud.GeoPoint(48.1, 21.1),
-        //   dropOffAddress: "JMR",
-        //   dropOffCoordinates: cloud.GeoPoint(99.1, 64.1),
-        //   deliveryFee: 75,);
         return DashboardLocation();
       }
       else if (currentPage == "Profile") {
         return CustomerProfile();
       }
-      else if (currentPage == "Bookmarks") {
-        return CourierBookmarks();
+      else if (currentPage == "Rated Couriers") {
+        return ratedCouriers();
       }
       else if (currentPage == "Requests") {
         return MyRequests();
@@ -70,14 +62,6 @@ class _AppBarTempState extends State<AppBarTemp>{
       }
     } else {
       if (currentPage == "Dashboard") {
-        /// Use this for testing customer remarks
-        // return CustomerRemarks(
-        //   courierUID: "1aimUdZ2MybKA6jJCdxf22NdwiD2",
-        //   pickupAddress: "San Felipe, Naga City",
-        //   pickupCoordinates: cloud.GeoPoint(48.1, 21.1),
-        //   dropOffAddress: "JMR",
-        //   dropOffCoordinates: cloud.GeoPoint(24.1, 64.1),
-        //   deliveryFee: 75,);
         return DashboardLocation();
       }
     }

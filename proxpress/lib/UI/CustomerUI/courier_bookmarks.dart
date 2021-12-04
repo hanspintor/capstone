@@ -7,12 +7,12 @@ import 'package:proxpress/classes/customer_classes/courier_bookmarks_tile.dart';
 import 'package:proxpress/models/couriers.dart';
 import 'package:proxpress/services/database.dart';
 
-class CourierBookmarks extends StatefulWidget {
+class ratedCouriers extends StatefulWidget {
   @override
-  _CourierBookmarksState createState() => _CourierBookmarksState();
+  _ratedCouriersState createState() => _ratedCouriersState();
 }
 
-class _CourierBookmarksState extends State<CourierBookmarks> {
+class _ratedCouriersState extends State<ratedCouriers> {
   String deliveryPriceUid;
   double deliveryFee = 0.0;
   bool notBookmarks = true;
@@ -36,13 +36,13 @@ class _CourierBookmarksState extends State<CourierBookmarks> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child:  Text(
-                  "Bookmarked Couriers",
+                  "Rated Couriers",
                   style: TextStyle(
                     fontSize: 25,
                   ),
                 ),
               ),
-              CourierBookmarkTile(appear: false,),
+
             ],
           ),
         ),

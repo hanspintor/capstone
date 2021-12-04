@@ -36,7 +36,7 @@ void selectedItem(BuildContext context, int index,) async {
       Navigator.push(
         context,
         PageTransition(child: AppBarTemp(
-          currentPage: "Bookmarks",
+          currentPage: "Rated Couriers",
         ), type: PageTransitionType.rightToLeft),
       );
       break;
@@ -133,7 +133,7 @@ class _MainDrawerCustomerState extends State<MainDrawerCustomer> {
                 ),
                 ListTile(
                   leading: Icon(Icons.bookmark, color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey),
-                  title: Text('Courier Bookmarks', style: TextStyle(color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
+                  title: Text('Rated Couriers', style: TextStyle(color: user1.emailVerified || user1.phoneNumber != null ? Color(0xfffb0d0d): Colors.grey)),
                   onTap: !user1.emailVerified && user1.phoneNumber == null ? null : () {
                     selectedItem(context, 2);
                   },

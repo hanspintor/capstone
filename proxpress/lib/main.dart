@@ -73,7 +73,7 @@ class PROXpressApp extends StatelessWidget{
               return PageTransition(child: DashboardLocation(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/courierBookmarks':
-              return PageTransition(child: CourierBookmarks(), type: PageTransitionType.rightToLeftWithFade);
+              return PageTransition(child: ratedCouriers(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/customerProfile':
               return PageTransition(child: CustomerProfile(), type: PageTransitionType.rightToLeftWithFade);
