@@ -54,8 +54,7 @@ class AuthService {
   // Sign Up email and password for Customer
   Future SignUpCustomer(String email, String password, String Fname,
       String Lname, String ContactNo, String Address,
-      String avatarUrl, bool notifStatus, int currentNotif,
-      Map courier_ref, int wallet) async {
+      String avatarUrl, int wallet) async {
     try {
       // AuthResult before
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -72,39 +71,6 @@ class AuthService {
           password,
           Address,
           avatarUrl,
-          notifStatus,
-          currentNotif,
-          courier_ref,
-          wallet);
-      return _userFromFirebaseUser(user);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  // Sign Up email and password for Customer
-  Future SignUpCustomerPhone(String email, String password, String Fname,
-      String Lname, String ContactNo, String Address,
-      String avatarUrl, bool notifStatus, int currentNotif,
-      Map courier_ref, int wallet) async {
-    try {
-      // AuthResult before
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      // FirebaseUser before
-      User user = result.user;
-      //await FileStorage(uid: user.uid);
-      await DatabaseService(uid: user.uid).updateCustomerData(
-          Fname,
-          Lname,
-          email,
-          ContactNo,
-          password,
-          Address,
-          avatarUrl,
-          notifStatus,
-          currentNotif,
-          courier_ref,
           wallet);
       return _userFromFirebaseUser(user);
     } catch (e) {
@@ -119,8 +85,7 @@ class AuthService {
       int vehicleColor, String driversLicenseFront_,
       String driversLicenseBack_, String nbiClearancePhoto_,
       vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_,
-      deliveryPriceRef, notifStatus, currentNotif, notifPopStatus,
-      notifPopCounter, String adminMessage,
+      deliveryPriceRef, String adminMessage,
       List adminCredentialsResponse, int wallet, bool requestedCashout) async {
     try {
       // AuthResult before
@@ -148,10 +113,6 @@ class AuthService {
           vehicleRegistrationCR_,
           vehiclePhoto_,
           deliveryPriceRef,
-          notifStatus,
-          currentNotif,
-          notifPopStatus,
-          notifPopCounter,
           adminMessage,
           adminCredentialsResponse,
           wallet,

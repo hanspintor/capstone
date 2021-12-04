@@ -389,7 +389,7 @@ class _SignupCourierState extends State<SignupCourier> {
                                 "Please wait for up to 24 hours for the admin to check and verify your uploaded credentials. "
                                 "This is to ensure that you are qualified to be a courier in our app.";
 
-                            dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, false, 0, false, 0, welcomeMessage, adminCredentialsResponse, 0, false);
+                            dynamic result = await _auth.SignUpCourier(email, password, fName, lName, contactNo, address, status, defaultProfilePic, approved, vehicleType, vehicleColor, driversLicenseFront_, driversLicenseBack_, nbiClearancePhoto_, vehicleRegistrationOR_, vehicleRegistrationCR_, vehiclePhoto_, deliveryPriceRef, welcomeMessage, adminCredentialsResponse, 0, false);
                             if (result == null) {
                               setState(() {
                                 error = 'Email already taken';

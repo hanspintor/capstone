@@ -49,10 +49,8 @@ class DatabaseService {
 
   // Create/Update a Customer Document
   Future updateCustomerData(String fname, String lname, String email,
-      String contactNo,
-      String password, String address, String avatarUrl, bool notifStatus,
-      int currentNotif,
-      Map courier_ref, int wallet) async {
+      String contactNo, String password, String address,
+      String avatarUrl, int wallet) async {
     return await customerCollection.doc(uid).set({
       'First Name': fname,
       'Last Name': lname,
@@ -61,9 +59,6 @@ class DatabaseService {
       'Password': password,
       'Address': address,
       'Avatar URL': avatarUrl,
-      'Notification Status': notifStatus,
-      'Current Notification': currentNotif,
-      'Bookmarks': courier_ref,
       'Wallet': wallet,
     });
   }
@@ -101,15 +96,6 @@ class DatabaseService {
     });
   }
 
-  Future updateCustomerCourierRef(Map reference) async {
-    await customerCollection
-        .doc(uid)
-        .update({
-      'Bookmarks': reference
-    }).then((_) {
-    });
-  }
-
   Future updateCustomerWallet(int wallet) async {
     await customerCollection
         .doc(uid)
@@ -134,9 +120,7 @@ class DatabaseService {
       int vehicleColor, String driversLicenseFront_,
       String driversLicenseBack_, String nbiClearancePhoto_,
       String vehicleRegistrationOR_, String vehicleRegistrationCR_,
-      String vehiclePhoto_, DocumentReference deliveryPriceRef,
-      bool notifStatus, int currentNotif, bool notifPopStatus,
-      int notifPopCounter, String adminMessage,
+      String vehiclePhoto_, DocumentReference deliveryPriceRef, String adminMessage,
       List adminCredentialsResponse, int wallet, bool requestedCashout) async {
     return await courierCollection.doc(uid).set({
       'First Name': fname,
@@ -157,10 +141,6 @@ class DatabaseService {
       'Vehicle CR URL': vehicleRegistrationCR_,
       'Vehicle Photo URL': vehiclePhoto_,
       'Delivery Price Reference': deliveryPriceRef,
-      'Notification Status': notifStatus,
-      'Current Notification': currentNotif,
-      'Notification Pop Up Status': notifPopStatus,
-      'Current Notification Pop Up': notifPopCounter,
       'Admin Message': adminMessage,
       'Credential Response': adminCredentialsResponse,
       'Wallet': wallet,
@@ -453,9 +433,6 @@ class DatabaseService {
           email: (doc.data() as dynamic) ['Email'] ?? '',
           address: (doc.data() as dynamic) ['Address'] ?? '',
           avatarUrl: (doc.data() as dynamic) ['Avatar URL'] ?? '',
-          notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
-          currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
-          courier_ref: (doc.data() as dynamic) ['Bookmarks'] ?? '',
           wallet: (doc.data() as dynamic) ['Wallet'] ?? ''
       );
     }).toList();
@@ -639,9 +616,6 @@ class DatabaseService {
         email: snapshot['Email'],
         address: snapshot['Address'],
         avatarUrl: snapshot['Avatar URL'],
-        notifStatus: snapshot['Notification Status'],
-        currentNotif: snapshot['Current Notification'],
-        courier_ref: snapshot['Bookmarks'],
         wallet: snapshot['Wallet']
     );
   }
@@ -668,10 +642,6 @@ class DatabaseService {
       vehicleRegistrationCR_: snapshot['Vehicle CR URL'],
       vehiclePhoto_: snapshot['Vehicle Photo URL'],
       deliveryPriceRef: snapshot['Delivery Price Reference'],
-      notifStatus: snapshot['Notification Status'],
-      currentNotif: snapshot['Current Notification'],
-      NotifPopStatus: snapshot['Notification Pop Up Status'],
-      NotifPopCounter: snapshot['Current Notification Pop Up'],
       adminMessage: snapshot['Admin Message'],
       adminCredentialsResponse: snapshot['Credential Response'],
       wallet: snapshot['Wallet'],

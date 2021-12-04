@@ -16,10 +16,8 @@ import 'package:proxpress/classes/view_delivery_details.dart';
 import 'package:proxpress/classes/chat_page.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status.dart';
 import 'package:proxpress/models/couriers.dart';
-import 'package:proxpress/models/customers.dart';
 import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:proxpress/services/upload_file.dart';
 import 'package:intl/intl.dart';
 
