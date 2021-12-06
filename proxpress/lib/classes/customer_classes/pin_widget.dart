@@ -356,12 +356,11 @@ class _PinLocationState extends State<PinLocation> {
                 //     errorDropOff = '';
                 //   });
                 // }
-
                     Navigator.push(
                       context,
                       PageTransition(
                         child: VehicleType(),
-                          type: PageTransitionType.bottomToTop
+                          type: PageTransitionType.rightToLeftWithFade
                       )
                     );
               },
