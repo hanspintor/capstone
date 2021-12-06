@@ -57,7 +57,7 @@ class _VehicleTypeState extends State<VehicleType> {
                   child: _buildCard(
                       'motorcycle.png',
                       'Motorcycle',
-                      '0.5 x 0.4 x 0.5 Meter',
+                      '0.5 x 0.4 x 0.5',
                       20,
                   ),
                 ),
@@ -73,7 +73,7 @@ class _VehicleTypeState extends State<VehicleType> {
                   child: _buildCard(
                     'sedan.png',
                     'Sedan',
-                    '1 x 0.6 x 0.7 Meter',
+                    '1 x 0.6 x 0.7',
                     200,
                   ),
                 ),
@@ -89,7 +89,7 @@ class _VehicleTypeState extends State<VehicleType> {
                   child: _buildCard(
                     'mpv.png',
                     'Multi-Purpose  Vehicle (MPV)',
-                    '1.2 x 1 x 0.9 Meter',
+                    '1.2 x 1 x 0.9',
                     300,
                   ),
                 ),
@@ -105,7 +105,7 @@ class _VehicleTypeState extends State<VehicleType> {
                   child: _buildCard(
                     'pickup-truck.png',
                     'Pickup Truck',
-                    '1.4 x 1.4 x 1.5 Meter',
+                    '1.4 x 1.4 x 1.5',
                     500,
                   ),
                 ),
@@ -121,7 +121,7 @@ class _VehicleTypeState extends State<VehicleType> {
                   child: _buildCard(
                     'van.png',
                     'Van',
-                    '2.1 x 1.2 x 1.2 Meter',
+                    '2.1 x 1.2 x 1.2',
                     600,
                   ),
                 ),
@@ -138,7 +138,7 @@ class _VehicleTypeState extends State<VehicleType> {
                   child: _buildCard(
                     'fb-type.png',
                     'Family Business Type Van',
-                    '2.2 x 1.5 x 1.3 Meter',
+                    '2.2 x 1.5 x 1.3',
                     700,
                   ),
                 ),
