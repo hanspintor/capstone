@@ -64,117 +64,119 @@ class _CourierTileState extends State<CourierTile> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child:Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        isThreeLine: true,
-                        leading: ClipOval(
-                          child: SizedBox(
-                            width: 48,
-                            height: 48,
-                            child: Container(
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundImage: NetworkImage(widget.courier.avatarUrl),
-                                backgroundColor: Colors.white,
+                  child: InkWell(
+                    onTap : () {
+                      Navigator.push(context, PageTransition(
+                          child: ViewCourierProfile(
+                            courierUID: widget.courier.uid,
+                          ),
+                          type: PageTransitionType.fade
+                      ));
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          isThreeLine: true,
+                          leading: ClipOval(
+                            child: SizedBox(
+                              width: 48,
+                              height: 48,
+                              child: Container(
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: NetworkImage(widget.courier.avatarUrl),
+                                  backgroundColor: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("${widget.courier.fName} ${widget.courier.lName}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                            StreamBuilder <List<Delivery>>(
-                                stream: DatabaseService().deliveryList,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    List<Delivery> deliveryData = snapshot.data;
-                                    double rating = 0.0;
-                                    double total = 0.0;
-                                    double stars = 0;
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${widget.courier.fName} ${widget.courier.lName}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                              StreamBuilder <List<Delivery>>(
+                                  stream: DatabaseService().deliveryList,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      List<Delivery> deliveryData = snapshot.data;
+                                      double rating = 0.0;
+                                      double total = 0.0;
+                                      double stars = 0;
 
-                                    for(int i = 0; i < deliveryData.length; i++) {
-                                      if (deliveryData[i].courierRef.id == widget.courier.uid && deliveryData[i].deliveryStatus == 'Delivered') {
-                                        if (deliveryData[i].rating != 0 && deliveryData[i].feedback != '') {
-                                          rating += deliveryData[i].rating;
-                                          total++;
+                                      for(int i = 0; i < deliveryData.length; i++) {
+                                        if (deliveryData[i].courierRef.id == widget.courier.uid && deliveryData[i].deliveryStatus == 'Delivered') {
+                                          if (deliveryData[i].rating != 0 && deliveryData[i].feedback != '') {
+                                            rating += deliveryData[i].rating;
+                                            total++;
+                                          }
                                         }
-                                      }
-                                    };
+                                      };
 
-                                    stars = (rating/total);
+                                      stars = (rating/total);
 
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: List.generate(5, (index) {
-                                            return Icon(
-                                              index < stars ? Icons.star : Icons.star_border, color: Colors.amber,
-                                            );
-                                          }),
-                                        ),
-                                      ],
-                                    );
-                                  } else return Container();
-                                }
-                            ),
-                          ],
-                        ),
-                        onTap : () {
-                          Navigator.push(context, PageTransition(
-                              child: ViewCourierProfile(
-                                  courierUID: widget.courier.uid,
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: List.generate(5, (index) {
+                                              return Icon(
+                                                index < stars ? Icons.star : Icons.star_border, color: Colors.amber,
+                                              );
+                                            }),
+                                          ),
+                                        ],
+                                      );
+                                    } else return Container();
+                                  }
                               ),
-                              type: PageTransitionType.fade
-                          ));
-                        },
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                            ],
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text('Vehicle Type: ', style: TextStyle(color: Colors.black),),
+                                  Text('${widget.courier.vehicleType}'),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text('Delivery Fee: ', style: TextStyle(color: Colors.black),),
+                                  Text('₱${deliveryFee.toInt()}.00', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          trailing: Icon(Icons.info_outline_rounded, color: Colors.red),
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                          thickness: .5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Row(
-                              children: [
-                                Text('Vehicle Type: ', style: TextStyle(color: Colors.black),),
-                                Text('${widget.courier.vehicleType}'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('Delivery Fee: ', style: TextStyle(color: Colors.black),),
-                                Text('₱${deliveryFee.toInt()}.00', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                              ],
+                            TextButton(
+                              child: const Text('REQUEST'),
+                              onPressed: /*widget.courier.status == "Offline" ? null :*/ () {
+                                Navigator.push(context, PageTransition(
+                                    child: CustomerRemarks(
+                                      courierUID: widget.courier.uid,
+                                      pickupAddress: widget.pickupAddress,
+                                      pickupCoordinates: widget.pickupCoordinates,
+                                      dropOffAddress: widget.dropOffAddress,
+                                      dropOffCoordinates: widget.dropOffCoordinates,
+                                      deliveryFee: deliveryFee.toInt(),),
+                                    type: PageTransitionType.bottomToTop
+                                ));
+                              },
                             ),
                           ],
                         ),
-                        trailing: Icon(Icons.info_outline_rounded, color: Colors.red),
-                      ),
-                      Divider(
-                        color: Colors.grey,
-                        thickness: .5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: const Text('REQUEST'),
-                            onPressed: /*widget.courier.status == "Offline" ? null :*/ () {
-                              Navigator.push(context, PageTransition(
-                                  child: CustomerRemarks(
-                                    courierUID: widget.courier.uid,
-                                    pickupAddress: widget.pickupAddress,
-                                    pickupCoordinates: widget.pickupCoordinates,
-                                    dropOffAddress: widget.dropOffAddress,
-                                    dropOffCoordinates: widget.dropOffCoordinates,
-                                    deliveryFee: deliveryFee.toInt(),),
-                                  type: PageTransitionType.bottomToTop
-                              ));
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
