@@ -14,6 +14,7 @@ class DashboardCustomer extends StatefulWidget{
   final String dropOffAddress;
   final GeoPoint dropOffCoordinates;
   final double distance;
+  final String vehicleType;
 
   DashboardCustomer({
     Key key,
@@ -22,6 +23,7 @@ class DashboardCustomer extends StatefulWidget{
     @required this.dropOffAddress,
     @required this.dropOffCoordinates,
     @required this.distance,
+    @required this.vehicleType,
   }) : super(key: key);
 
   @override
@@ -194,6 +196,7 @@ class _DashboardCustomerState extends State<DashboardCustomer> {
                     dropOffAddress: widget.dropOffAddress,
                     dropOffCoordinates: widget.dropOffCoordinates,
                     distance: widget.distance,
+                    vehicleType: widget.vehicleType,
                   ),
                 ],
               ),

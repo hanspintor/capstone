@@ -456,12 +456,6 @@ class DatabaseService {
         deliveryPriceRef: (doc
             .data() as dynamic) ['Delivery Price Reference'] ?? '',
         vehiclePhoto_: (doc.data() as dynamic) ['Vehicle Photo URL'] ?? '',
-        notifStatus: (doc.data() as dynamic) ['Notification Status'] ?? '',
-        currentNotif: (doc.data() as dynamic) ['Current Notification'] ?? '',
-        NotifPopStatus: (doc
-            .data() as dynamic) ['Notification Pop Up Status'] ?? '',
-        NotifPopCounter: (doc
-            .data() as dynamic) ['Current Notification Pop Up'] ?? '',
         wallet: (doc.data() as dynamic) ['Wallet'] ?? '',
         requestedCashout: (doc.data() as dynamic) ['Requested Cash-out'] ?? '',
       );

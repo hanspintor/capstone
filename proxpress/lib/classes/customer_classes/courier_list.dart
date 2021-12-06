@@ -15,6 +15,7 @@ class CourierList extends StatefulWidget {
   final String dropOffAddress;
   final GeoPoint dropOffCoordinates;
   final double distance;
+  final String vehicleType;
 
   CourierList({
     Key key,
@@ -23,6 +24,7 @@ class CourierList extends StatefulWidget {
     @required this.dropOffAddress,
     @required this.dropOffCoordinates,
     @required this.distance,
+    @required this.vehicleType,
   }) : super(key: key);
 
   @override
@@ -67,10 +69,11 @@ class _CourierListState extends State<CourierList> {
             firestoreCollectionName: 'Couriers',
             searchBy: 'First Name',
             dataListFromSnapshot: DatabaseService().courierDataListFromSnapshot,
+            vehicleType: widget.vehicleType,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final List<Courier> dataList = snapshot.data;
-
+                print(widget.vehicleType);
                 return ListView.builder(
                     itemCount: dataList.length ?? 0,
                     itemBuilder: (context, index) {

@@ -30,6 +30,7 @@ class FirestoreSearchScaffold extends StatefulWidget {
   final List Function(QuerySnapshot) dataListFromSnapshot;
   final Widget Function(BuildContext, AsyncSnapshot) builder;
   final int limitOfRetrievedData;
+  final String vehicleType;
 
   const FirestoreSearchScaffold({
     this.appBarBottom,
@@ -46,6 +47,7 @@ class FirestoreSearchScaffold extends StatefulWidget {
     this.searchIconColor,
     this.appBarTitle,
     this.appBarTitleColor,
+    this.vehicleType,
 
     /// Name of the cloud_firestore collection you
     /// want to search data from
@@ -124,7 +126,8 @@ class _FirestoreSearchScaffoldState extends State<FirestoreSearchScaffold> {
                     collectionName: widget.firestoreCollectionName,
                     searchBy: widget.searchBy ?? '',
                     dataListFromSnapshot: widget.dataListFromSnapshot,
-                    limitOfRetrievedData: widget.limitOfRetrievedData)
+                    limitOfRetrievedData: widget.limitOfRetrievedData,
+                vehicleType: widget.vehicleType)
                     .searchData(searchQuery),
                 builder: widget.builder),
           ),

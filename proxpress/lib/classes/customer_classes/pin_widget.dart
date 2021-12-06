@@ -315,54 +315,44 @@ class _PinLocationState extends State<PinLocation> {
               style: ElevatedButton.styleFrom(
                   primary: Color(0xfffb0d0d)),
               onPressed: () async {
-                // bool gotError = false;
-                //
-                // if (pickupCoordinates == null) {
-                //   gotError = true;
-                //   setState(() => errorPickup = 'Please pin location');
-                // }
-                //
-                // if (dropOffCoordinates == null) {
-                //   gotError = true;
-                //   setState(() => errorDropOff = 'Please pin location');
-                // }
-                //
-                // if (widget.locKey.currentState.validate() && !gotError) {
-                //   context.loaderOverlay.show();
-                //   GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
-                //   GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
-                //
-                //   Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
-                //
-                //   if (!widget.isBookmarks) {
-                //     context.loaderOverlay.hide();
-                //     Navigator.push(
-                //       context,
-                //       PageTransition(
-                //         child: DashboardCustomer(
-                //             pickupAddress: pickupAddress,
-                //             pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
-                //             dropOffAddress: dropOffAddress,
-                //             dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
-                //             distance: _infoFetch.totalDistance,
-                //           ),
-                //           type: PageTransitionType.bottomToTop
-                //       )
-                //     );
-                //   }
-                //
-                //   setState(() {
-                //     errorPickup = '';
-                //     errorDropOff = '';
-                //   });
-                // }
+                bool gotError = false;
+
+                if (pickupCoordinates == null) {
+                  gotError = true;
+                  setState(() => errorPickup = 'Please pin location');
+                }
+
+                if (dropOffCoordinates == null) {
+                  gotError = true;
+                  setState(() => errorDropOff = 'Please pin location');
+                }
+
+                if (widget.locKey.currentState.validate() && !gotError) {
+                  context.loaderOverlay.show();
+                  GeoPoint pickupCoordinates_ = GeoPoint(latitude: pickupCoordinates.latitude, longitude: pickupCoordinates.longitude);
+                  GeoPoint dropOffCoordinates_ = GeoPoint(latitude: dropOffCoordinates.latitude, longitude: dropOffCoordinates.longitude);
+
+                  Directions _infoFetch = await DirectionsRepository().getDirections(origin: pickupCoordinates_, destination: dropOffCoordinates_);
+
+                  if (!widget.isBookmarks) {
+                    context.loaderOverlay.hide();
                     Navigator.push(
-                      context,
-                      PageTransition(
-                        child: VehicleType(),
-                          type: PageTransitionType.rightToLeftWithFade
-                      )
+                        context, PageTransition(
+                        child: VehicleType(
+                          pickupAddress: pickupAddress,
+                          pickupCoordinates: cloud.GeoPoint(pickupCoordinates.latitude, pickupCoordinates.longitude),
+                          dropOffAddress: dropOffAddress,
+                          dropOffCoordinates: cloud.GeoPoint(dropOffCoordinates.latitude, dropOffCoordinates.longitude),
+                          distance: _infoFetch.totalDistance,),
+                        type: PageTransitionType.rightToLeftWithFade)
                     );
+                  }
+
+                  setState(() {
+                    errorPickup = '';
+                    errorDropOff = '';
+                  });
+                }
               },
             ),
           ),
