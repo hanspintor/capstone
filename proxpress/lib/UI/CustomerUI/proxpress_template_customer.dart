@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:proxpress/UI/CustomerUI/courier_bookmarks.dart';
+import 'package:proxpress/UI/CustomerUI/rated_couriers.dart';
 import 'package:proxpress/UI/CustomerUI/customer_community_hub.dart';
-import 'package:proxpress/UI/CustomerUI/customer_remarks.dart';
 import 'package:proxpress/UI/CustomerUI/customer_wallet.dart';
 import 'package:proxpress/UI/CustomerUI/dashboard_location.dart';
 import 'package:proxpress/UI/CustomerUI/delivery_status_class.dart';
@@ -48,7 +47,7 @@ class _AppBarTempState extends State<AppBarTemp>{
         return CustomerProfile();
       }
       else if (currentPage == "Rated Couriers") {
-        return ratedCouriers();
+        return RatedCouriers();
       }
       else if (currentPage == "Requests") {
         return MyRequests();

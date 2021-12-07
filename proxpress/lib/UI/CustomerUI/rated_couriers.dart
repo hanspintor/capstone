@@ -3,15 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/UI/login_screen.dart';
+import 'package:proxpress/classes/customer_classes/rated_couriers_list.dart';
 import 'package:proxpress/models/couriers.dart';
+import 'package:proxpress/models/deliveries.dart';
 import 'package:proxpress/services/database.dart';
 
-class ratedCouriers extends StatefulWidget {
+class RatedCouriers extends StatefulWidget {
   @override
-  _ratedCouriersState createState() => _ratedCouriersState();
+  _RatedCouriersState createState() => _RatedCouriersState();
 }
 
-class _ratedCouriersState extends State<ratedCouriers> {
+class _RatedCouriersState extends State<RatedCouriers> {
   String deliveryPriceUid;
   double deliveryFee = 0.0;
   bool notBookmarks = true;
@@ -24,9 +26,9 @@ class _ratedCouriersState extends State<ratedCouriers> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    return user == null ? LoginScreen() : StreamProvider<List<Courier>>.value(
+    return user == null ? LoginScreen() : StreamProvider<List<Delivery>>.value(
       initialData: [],
-      value: DatabaseService().courierList,
+      value: DatabaseService(uid: user.uid).deliveryListCustomer,
       child: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -41,7 +43,7 @@ class _ratedCouriersState extends State<ratedCouriers> {
                   ),
                 ),
               ),
-
+              RatedCourierList(),
             ],
           ),
         ),

@@ -584,6 +584,10 @@ class DatabaseService {
     return deliveryCollection.snapshots().map(deliveryDataListFromSnapshot);
   }
 
+  Stream<List<Delivery>> get deliveryListCustomer {
+    return deliveryCollection.where('Customer Reference', isEqualTo: FirebaseFirestore.instance.collection("Customers").doc(uid)).where('Rating', isNotEqualTo: 0).snapshots().map(deliveryDataListFromSnapshot);
+  }
+
   // Get list of data from Customers Collection
   Stream<List<DeliveryPrice>> get deliveryPriceList {
     return deliveryPriceCollection.snapshots().map(

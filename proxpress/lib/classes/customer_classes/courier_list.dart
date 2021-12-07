@@ -39,13 +39,6 @@ class _CourierListState extends State<CourierList> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
 
-    Stream<List<Courier>> listCour = FirebaseFirestore.instance
-        .collection('Couriers')
-        .where('Admin Approved', isEqualTo: true)
-        .where('Active Status', isEqualTo: 'Active')
-        .snapshots()
-        .map(DatabaseService().courierDataListFromSnapshot);
-
     Stream<List<Delivery>> deliveryRequestPending = FirebaseFirestore.instance
         .collection('Deliveries')
         .where('Courier Approval', isEqualTo: 'Pending')
@@ -73,8 +66,10 @@ class _CourierListState extends State<CourierList> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final List<Courier> dataList = snapshot.data;
-                print(widget.vehicleType);
-                return ListView.builder(
+                print(dataList.length);
+
+                if (dataList.length != 0) {
+                  return ListView.builder(
                     itemCount: dataList.length ?? 0,
                     itemBuilder: (context, index) {
                       if (!excludeCouriers.any((element) => dataList[index].uid == element)) {
@@ -89,7 +84,26 @@ class _CourierListState extends State<CourierList> {
                       } else {
                         return Container();
                       }
-                    });
+                    }
+                  );
+                } else {
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(
+                            'There are currently no couriers available.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
               }
               return Center(
                 child: CircularProgressIndicator(),

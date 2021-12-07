@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
 import 'package:path/path.dart' as Path;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +29,7 @@ class RequestTile extends StatefulWidget {
 
 class _RequestTileState extends State<RequestTile> {
   GlobalKey<FormState> _key = GlobalKey<FormState>();
+  GlobalKey<FormState> _feedbackKey = GlobalKey<FormState>();
   String _description = "";
   GlobalKey<FormState> _keyCancel = GlobalKey<FormState>();
   String cancellationMessage = "";
@@ -41,6 +41,7 @@ class _RequestTileState extends State<RequestTile> {
   bool attachmentEmpty = false;
   String savedUrl = '';
   int flag = 0;
+  bool courierRated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -518,11 +519,37 @@ class _RequestTileState extends State<RequestTile> {
                                   );
                                 }
                               ),
-                              TextButton(
-                                child: Text('RATE'),
-                                onPressed: !(delivery.rating == 0 && delivery.feedback == '') ? null : () {
-                                  showFeedback(delivery);
-                                },
+                              StreamBuilder<List<Delivery>>(
+                                stream: DatabaseService().deliveryCollection
+                                    .where('Customer Reference', isEqualTo: delivery.customerRef)
+                                    .where('Courier Reference', isEqualTo: delivery.courierRef)
+                                    .where('Rating', isNotEqualTo: 0)
+                                    .snapshots()
+                                    .map(DatabaseService().deliveryDataListFromSnapshot),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<Delivery> deliveries = snapshot.data;
+
+                                    print(deliveries.length);
+                                    if (deliveries.length == 0) {
+                                      courierRated = false;
+                                    } else {
+                                      courierRated = true;
+                                    }
+
+                                    return TextButton(
+                                      child: Text('RATE'),
+                                      onPressed: courierRated ? null : () {
+                                        showFeedback(delivery);
+                                      },
+                                    );
+                                  } else {
+                                    return TextButton(
+                                      child: Text('RATE'),
+                                      onPressed: null,
+                                    );
+                                  }
+                                }
                               ),
                               const SizedBox(width: 8),
                             ],
@@ -852,9 +879,6 @@ class _RequestTileState extends State<RequestTile> {
 
   double rating = 0.0;
   String feedback  = '';
-  Map<String, DocumentReference> localMap = {};
-  Map<String, DocumentReference> localAddMap;
-  bool isFavorite = false;
 
   void showFeedback(Delivery delivery) {
     showMaterialModalBottomSheet(
@@ -871,48 +895,62 @@ class _RequestTileState extends State<RequestTile> {
               Text('How\'s My Service?'),
             ],
           ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 10,),
-              RatingBar.builder(
-                minRating: 1,
-                itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber,),
-                updateOnDrag: true,
-                onRatingUpdate: (rating) => setState(() {
-                  this.rating = rating;
-                }),
-              ),
-              Text('Rate Me',
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                maxLines: 2,
-                maxLength: 200,
-                decoration: InputDecoration(
-                  hintText: 'Leave a Feedback',
-                  border: OutlineInputBorder(),
+          subtitle: Form(
+            key: _feedbackKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 10,),
+                RatingBar.builder(
+                  minRating: 1,
+                  itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber,),
+                  updateOnDrag: true,
+                  onRatingUpdate: (rating) => setState(() {
+                    this.rating = rating;
+                  }),
                 ),
-                keyboardType: TextInputType.multiline,
-                onChanged: (val) => setState(() => feedback = val),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                      child: Text('OK'),
-                      onPressed: () async{
-                        await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
-                        Navigator.pop(context);
-                        showToast('Feedback Sent');
-                      }
+                Text('Rate Me',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(height: 10),
+                TextFormField(
+                  validator: (String value) {
+                    if (value.isEmpty) {
+                      return 'Feedback is required.';
+                    }
+                    else if(value.length < 3){
+                      return 'Feedback should be more than 3 characters';
+                    }
+                    else return null;
+                  },
+                  maxLines: 2,
+                  maxLength: 200,
+                  decoration: InputDecoration(
+                    hintText: 'Leave a Feedback',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  onChanged: (val) => setState(() => feedback = val),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: TextButton(
+                        child: Text('OK'),
+                        onPressed: () async{
+                          if (_feedbackKey.currentState.validate()) {
+                            await DatabaseService(uid: delivery.uid).updateRatingFeedback(rating.toInt(), feedback);
+                            Navigator.pop(context);
+                            showToast('Feedback Sent');
+                          }
+                        }
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

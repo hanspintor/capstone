@@ -20,7 +20,7 @@ import 'package:proxpress/services/auth.dart';
 import 'package:proxpress/services/notification.dart';
 import 'UI/CourierUI/ongoing_delivery.dart';
 import 'UI/CourierUI/proxpress_template_courier.dart';
-import 'UI/CustomerUI/courier_bookmarks.dart';
+import 'UI/CustomerUI/rated_couriers.dart';
 import 'UI/CustomerUI/customer_profile.dart';
 import 'package:provider/provider.dart';
 import 'package:proxpress/models/user.dart';
@@ -73,7 +73,7 @@ class PROXpressApp extends StatelessWidget{
               return PageTransition(child: DashboardLocation(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/courierBookmarks':
-              return PageTransition(child: ratedCouriers(), type: PageTransitionType.rightToLeftWithFade);
+              return PageTransition(child: RatedCouriers(), type: PageTransitionType.rightToLeftWithFade);
               break;
             case '/customerProfile':
               return PageTransition(child: CustomerProfile(), type: PageTransitionType.rightToLeftWithFade);
