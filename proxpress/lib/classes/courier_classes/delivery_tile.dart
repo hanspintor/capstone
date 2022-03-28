@@ -132,6 +132,12 @@ class _DeliveryTileState extends State<DeliveryTile> {
                             children: [
                               Row(
                                 children: [
+                                  Text('Item Description: ', style: TextStyle(color: Colors.black),),
+                                  Text(widget.delivery.itemDescription),
+                                ],
+                              ),
+                              Row(
+                                children: [
                                   Text('Contact Number: ', style: TextStyle(color: Colors.black),),
                                   Text(customerData.contactNo),
                                 ],
