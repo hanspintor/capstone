@@ -157,7 +157,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Item Description: ${widget.itemDescription}"),
-                            Text('Item Weight: ${widget.itemWeight.toString()}'),
+                            Text('Item Weight: ${widget.itemWeight.toString()}kg'),
                           ],
                         )
                       ),

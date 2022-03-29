@@ -146,7 +146,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Item Description: ${widget.itemDescription}"),
-                            Text("Item Weight: ${widget.itemWeight.toString()}")
+                            Text("Item Weight: ${widget.itemWeight.toString()}kg")
                           ],
                         )
                       ),

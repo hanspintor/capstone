@@ -140,7 +140,7 @@ class _DeliveryTileState extends State<DeliveryTile> {
                               Row(
                                 children: [
                                   Text('Item Weight: ', style: TextStyle(color: Colors.black),),
-                                  Text(widget.delivery.itemWeight.toString()),
+                                  Text("${widget.delivery.itemWeight.toString()}kg"),
                                 ],
                               ),
                               Row(
