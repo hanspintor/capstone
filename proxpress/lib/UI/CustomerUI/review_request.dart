@@ -27,6 +27,7 @@ class ReviewRequest extends StatefulWidget {
   final String specificInstructions;
   final String paymentOption;
   final int deliveryFee;
+  final int itemWeight;
 
   ReviewRequest({
     Key key,
@@ -45,6 +46,7 @@ class ReviewRequest extends StatefulWidget {
     @required this.specificInstructions,
     @required this.paymentOption,
     @required this.deliveryFee,
+    @required this.itemWeight,
   }) : super(key: key);
 
   @override
@@ -150,8 +152,14 @@ class _ReviewRequestState extends State<ReviewRequest> {
                     children: [
                       ListTile(
                         leading: Icon(Icons.description_rounded),
-                        title: Text('Item Description'),
-                        subtitle: Text(widget.itemDescription),
+                        title: Text('About Item'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Item Description: ${widget.itemDescription}"),
+                            Text('Item Weight: ${widget.itemWeight.toString()}'),
+                          ],
+                        )
                       ),
                       ListTile(
                         leading: Icon(Icons.person_rounded),
@@ -233,6 +241,7 @@ class _ReviewRequestState extends State<ReviewRequest> {
                         widget.specificInstructions,
                         widget.paymentOption,
                         widget.deliveryFee,
+                        widget.itemWeight,
                         'Pending',
                         'Pending',
                         GeoPoint(13.621980880497976, 123.19477396693487),

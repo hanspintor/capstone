@@ -285,8 +285,9 @@ class DatabaseService {
       GeoPoint dropOffCoordinates, String itemDescription, String senderName,
       String senderContactNum, String receiverName, String receiverContactNum,
       String whoWillPay, String specificInstructions, String paymentOption,
-      int deliveryFee, String courierApproval, String deliveryStatus,
-      GeoPoint courierLocation, int rating, String feedback, bool isReported, String message, Timestamp time) async {
+      int deliveryFee, int itemWeight, String courierApproval, String deliveryStatus,
+      GeoPoint courierLocation, int rating, String feedback, bool isReported,
+      String message, Timestamp time) async {
     await deliveryCollection
         .doc(uid)
         .set({
@@ -305,6 +306,7 @@ class DatabaseService {
       'Specific Instructions': specificInstructions,
       'Payment Option': paymentOption,
       'Delivery Fee': deliveryFee,
+      'Item Weight' : itemWeight,
       'Courier Approval': courierApproval,
       'Delivery Status': deliveryStatus,
       'Courier Location': courierLocation,
@@ -485,6 +487,7 @@ class DatabaseService {
         specificInstructions: (doc
             .data() as dynamic) ['Specific Instructions'] ?? '',
         paymentOption: (doc.data() as dynamic) ['Payment Option'] ?? '',
+        itemWeight: (doc.data() as dynamic) ['Item Weight'] ?? '',
         deliveryFee: (doc.data() as dynamic) ['Delivery Fee'] ?? '',
         courierApproval: (doc.data() as dynamic) ['Courier Approval'] ?? '',
         deliveryStatus: (doc.data() as dynamic) ['Delivery Status'] ?? '',
@@ -666,6 +669,7 @@ class DatabaseService {
       specificInstructions: snapshot['Specific Instructions'],
       paymentOption: snapshot['Payment Option'],
       deliveryFee: snapshot['Delivery Fee'],
+      itemWeight: snapshot['Item Weight'],
       rating: snapshot['Rating'],
       feedback: snapshot['Feedback'],
       courierApproval: snapshot['Courier Approval'],

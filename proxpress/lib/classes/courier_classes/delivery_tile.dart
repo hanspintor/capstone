@@ -98,7 +98,8 @@ class _DeliveryTileState extends State<DeliveryTile> {
                         whoWillPay: widget.delivery.whoWillPay ,
                         specificInstructions: widget.delivery.specificInstructions ,
                         paymentOption: widget.delivery.paymentOption ,
-                        deliveryFee: widget.delivery.deliveryFee ,
+                        deliveryFee: widget.delivery.deliveryFee,
+                        itemWeight: widget.delivery.itemWeight,
                       ),
                           type: PageTransitionType.rightToLeftWithFade));
                     },
@@ -134,6 +135,12 @@ class _DeliveryTileState extends State<DeliveryTile> {
                                 children: [
                                   Text('Item Description: ', style: TextStyle(color: Colors.black),),
                                   Text(widget.delivery.itemDescription),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text('Item Weight: ', style: TextStyle(color: Colors.black),),
+                                  Text(widget.delivery.itemWeight.toString()),
                                 ],
                               ),
                               Row(

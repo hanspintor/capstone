@@ -28,6 +28,7 @@ class CustomerRemarks extends StatefulWidget {
 
 class _CustomerRemarksState extends State<CustomerRemarks> {
   String itemDescription;
+  int itemWeight;
   String pickupPointPerson;
   TextEditingController textPickupPointPerson = TextEditingController();
   String pickupContactNum;
@@ -78,7 +79,37 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
       ),
     );
   }
-
+  Widget _buildItemWeight() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: 'Item Weight',
+          hintText: "Weight should be in kg",
+          hintStyle: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontSize: 14
+          ),
+        ),
+        keyboardType: TextInputType.number,
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Item weight is required.';
+          }
+          else if(int.parse(value) <= 0){
+            return 'Item weight should not be less than or equal to 0';
+          }
+          else return null;
+        },
+        onSaved: (String value) {
+          itemWeight = int.parse(value);
+        },
+        onChanged: (String value) {
+          setState(() => itemWeight = int.parse(value));
+        },
+      ),
+    );
+  }
   Widget _buildSenderName() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -355,6 +386,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
                                                 dropOffAddress: widget.dropOffAddress,
                                                 dropOffGeoPoint: dropOffGeoPoint,
                                                 itemDescription: itemDescription,
+                                                itemWeight: itemWeight,
                                                 pickupPointPerson: pickupPointPerson,
                                                 pickupContactNum: pickupContactNum,
                                                 dropOffPointPerson: dropoffPointPerson,
@@ -414,6 +446,7 @@ class _CustomerRemarksState extends State<CustomerRemarks> {
         child: Column(
           children: [
             _buildItemDescription(),
+            _buildItemWeight(),
           ],
         ),
       ),

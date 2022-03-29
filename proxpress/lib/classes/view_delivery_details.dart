@@ -20,6 +20,7 @@ class DeliveryDetails extends StatefulWidget {
   final String specificInstructions;
   final String paymentOption;
   final int deliveryFee;
+  final int itemWeight;
 
   DeliveryDetails({
     Key key,
@@ -38,6 +39,7 @@ class DeliveryDetails extends StatefulWidget {
     @required this.specificInstructions,
     @required this.paymentOption,
     @required this.deliveryFee,
+    @required this.itemWeight,
   }) : super(key: key);
 
   @override
@@ -139,8 +141,14 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                     children: [
                       ListTile(
                         leading: Icon(Icons.description_rounded),
-                        title: Text('Item Description'),
-                        subtitle: Text(widget.itemDescription),
+                        title: Text('About Item'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Item Description: ${widget.itemDescription}"),
+                            Text("Item Weight: ${widget.itemWeight.toString()}")
+                          ],
+                        )
                       ),
                       ListTile(
                         leading: Icon(Icons.person_rounded),

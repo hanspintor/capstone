@@ -17,6 +17,7 @@ class Delivery{
   final String specificInstructions;
   final String paymentOption;
   final int deliveryFee;
+  final int itemWeight;
   final String courierApproval;
   final String deliveryStatus;
   final GeoPoint courierLocation;
@@ -43,6 +44,7 @@ class Delivery{
     this.specificInstructions,
     this.paymentOption,
     this.deliveryFee,
+    this.itemWeight,
     this.courierApproval,
     this.deliveryStatus,
     this.courierLocation,
