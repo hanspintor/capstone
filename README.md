@@ -2,7 +2,7 @@
 
 Authors : Anselmo Oduca, Hans Albrich Pintor, Scott Leo Reganit
 
-Emails : anoduca@gbox.adnu.edu.ph, hpintor@gbox.adnu.edu.ph, sreganit@gbox.adnu.edu.ph
+Emails : anselmood06@gmail.com, hans.pintor38@gmail.com, scottleoreganitt@gmail.com
 
 Course and Year : 4th Year BSIT
 ## About
